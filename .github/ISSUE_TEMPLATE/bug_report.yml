@@ -1,0 +1,64 @@
+name: Bug report
+description: Report a reproducible problem in the Android app
+title: "[Bug]: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve GTA FREE STEM. Do not post passwords, precise personal locations, children's information, or security exploit details. Follow SECURITY.md for vulnerabilities.
+  - type: textarea
+    id: summary
+    attributes:
+      label: What happened?
+      description: Describe the problem and what you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open ...
+        2. Tap ...
+        3. See ...
+    validations:
+      required: true
+  - type: input
+    id: app_version
+    attributes:
+      label: App version
+      placeholder: "For example: 1.0 (1)"
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: Device and Android version
+      placeholder: "For example: Galaxy Z Flip6, Android 16"
+    validations:
+      required: true
+  - type: dropdown
+    id: navigation
+    attributes:
+      label: System navigation mode
+      options:
+        - Gesture navigation
+        - Three-button navigation
+        - Two-button navigation
+        - Not sure
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Add privacy-safe screenshots, logs, foldable posture, theme, text size, and locale if relevant.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Safety check
+      options:
+        - label: I removed personal information and this is not a private security report.
+          required: true
