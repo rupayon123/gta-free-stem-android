@@ -2,7 +2,10 @@
 
 GTA FREE STEM is a native Android app for browsing free STEM opportunities. This project uses Kotlin, Jetpack Compose, the Gradle wrapper, and Java 17.
 
-> Release status: the repository includes setup and release-planning material, but it is not a statement that the app is ready for Google Play or has been published. Run the checks in this README and complete every gate in the release runbook before considering an upload.
+> Release status: version 1.0.1 is available only to configured Google Play
+> internal testers. This is not a production release or public-availability
+> claim. Complete every remaining gate in the release runbook before a broader
+> rollout.
 
 ## Current verified baseline
 
@@ -21,13 +24,13 @@ The exact public source root was also built as a signed 5.2 MiB AAB. Its JAR
 signature verified, and its public signing-certificate SHA-256 matched the
 locally protected upload key; the public-safe checksum is recorded in
 [`verification/VERIFICATION.md`](verification/VERIFICATION.md). This does not
-prove that version 1.0.1 has been uploaded to Google Play, installed from a
-Play-generated artifact, or passed on physical hardware. An earlier version 1
-build was accepted into restricted internal testing; that historical result is
-not evidence for the current candidate and is not public availability. An
-independent encrypted backup of the upload key also remains required. Tester
-invitations, numeric Play identifiers, account-contact details, identity
-evidence, and private signing material are intentionally not stored here.
+prove that version 1.0.1 has been installed from a Play-generated artifact or
+passed on physical hardware. Google Play accepted version 1.0.1 into restricted
+internal testing and reports it available to internal testers; that is not
+production or public availability. An independent encrypted backup of the
+upload key also remains required. Tester invitations, numeric Play identifiers,
+account-contact details, identity evidence, and private signing material are
+intentionally not stored here.
 
 The current app uses a five-destination adaptive shell: Home, Opportunities,
 High School, Support, and Account. It includes system-bar-safe insets for gesture

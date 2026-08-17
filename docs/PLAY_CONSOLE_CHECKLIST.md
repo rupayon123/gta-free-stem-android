@@ -8,16 +8,16 @@ repository.
 
 ## 1. Developer account
 
-- [ ] Correct developer account and current fee terms confirmed privately in the live Console.
+- [x] Correct developer account and current fee terms confirmed privately in the live Console.
 - [ ] Identity, payments-profile, contact, and device-verification requirements completed privately; no supporting documents are committed.
 - [ ] Public developer name and contact details reviewed for accuracy.
-- [ ] Android developer verification complete and `com.rupayonhaldar.gtafreestem` registered where requested.
+- [x] Android developer verification complete and `com.rupayonhaldar.gtafreestem` registered where requested.
 - [ ] September 30, 2026 developer-verification enforcement reviewed for the initially affected countries.
 - [ ] Current production-access testing requirements shown for the account are planned and tracked privately.
 
 ## 2. App identity and ownership
 
-- [ ] Play app entry ownership confirmed privately for the intended release owner.
+- [x] Play app entry ownership confirmed privately for the intended release owner.
 - [x] App name is GTA FREE STEM.
 - [x] Default language is English (Canada); App and Free were selected deliberately.
 - [x] Application ID is exactly `com.rupayonhaldar.gtafreestem`.
@@ -86,7 +86,7 @@ repository.
 ## 7. Testing tracks and production access
 
 - [x] Historical version 1 was accepted into restricted internal testing; no tester identity or invitation data is stored here.
-- [ ] Version 1.0.1 uploaded to the intended test track and verified there; no such upload is currently claimed.
+- [x] Version 1.0.1 uploaded to the internal-test track and shown as available to internal testers; no tester identity or invitation URL is stored here.
 - [ ] Closed test configured with the correct country and tester eligibility.
 - [ ] Current tester-count, duration, and production-access requirements shown by the live Console are completed and evidenced privately.
 - [ ] Production-access application answers describe real testing and feedback, without boilerplate or invented results.
@@ -99,7 +99,7 @@ repository.
 - [x] Exact source commit, AAB SHA-256, version, and upload certificate fingerprint independently cross-checked.
 - [ ] Privacy, support, terms, Data safety, content rating, target audience, and Families implications approved for the exact candidate.
 - [ ] Production rollout plan, monitoring owner, and halt criteria documented.
-- [ ] Authorized person explicitly approves the exact track and artifact.
+- [x] Authorized person explicitly approved this exact internal-test track and v1.0.1 artifact; this is not production approval.
 - [ ] No publication claim is made until Play Console shows the intended release live and it is independently checked from a public user context.
 
 ## Public evidence record
@@ -114,8 +114,8 @@ Application ID: com.rupayonhaldar.gtafreestem
 Version name / code: 1.0.1 / 2
 AAB SHA-256: 63cd724942ceed05e94321eaabeb485bfbec880c1ec4b423dfb87b9b9b4e6fbb
 Public upload-certificate SHA-256: 0D:8E:B2:CD:06:A1:89:B5:FF:7C:15:2A:B7:AE:72:C5:60:89:26:4C:FD:D5:64:95:E2:71:5B:BC:A7:DB:F7:B5
-CI run: https://github.com/rupayon123/gta-free-stem-android/actions/runs/31980604818 (passed)
-Restricted-track result (no invite URL or tester identities): v1.0.1 pending
+CI run: https://github.com/rupayon123/gta-free-stem-android/actions/runs/31981089197 (passed)
+Restricted-track result (no invite URL or tester identities): available to internal testers; one non-blocking native debug-symbol warning
 Physical devices / API levels: v1.0.1 pending; API 36 emulator evidence recorded above
 Play pre-launch report:
 Policy review notes:

@@ -26,6 +26,9 @@ permission: android.permission.INTERNET
   [`31980604818`](https://github.com/rupayon123/gta-free-stem-android/actions/runs/31980604818)
   completed successfully, including the static configuration verifier, JVM
   tests, debug/release lint, debug assembly, and unsigned release bundle.
+- Final workflow/evidence commit run
+  [`31981089197`](https://github.com/rupayon123/gta-free-stem-android/actions/runs/31981089197)
+  also completed successfully using the current pinned action releases.
 
 These are the recorded results for the current v1.0.1 source. They were not
 rerun merely to rewrite this document.
@@ -49,6 +52,20 @@ JarInputStream warnings; Google Play acceptance remains a separate required
 check. No private key, password, keystore, tester link, or Play identifier is
 stored in this repository.
 
+## Google Play internal-test result
+
+Google Play accepted the signed AAB as version `1.0.1` (`versionCode` 2) for
+the existing internal-testing track and reported it **Available to internal
+testers**. The tester opt-in page exposes a **Download test app** link and notes
+that already-installed test builds receive updates as they become available.
+Play reported API 26+, target SDK 36, a 2.9 MB new-install download, and a
+1.34 MB update download.
+
+Play emitted one non-blocking warning because the bundle contains native code
+from an AndroidX dependency without a native debug-symbol archive. No matching
+symbol archive was generated locally. This warning remains recorded for later
+crash-symbolication review; it did not block internal-test publication.
+
 ## Behavior covered by the current source
 
 - A five-destination adaptive shell provides Home, Opportunities, High School,
@@ -70,10 +87,10 @@ stored in this repository.
 
 This record does **not** establish that v1.0.1 has:
 
-- been uploaded to or accepted by Google Play
 - been installed from a Play-generated artifact
 - passed on a physical Galaxy Z Flip 6 or any other physical Android device
-- reached closed testing, production, or public availability
+- reached closed testing, production, or public availability outside the
+  configured internal-test group
 
 The PNG files in this directory document the earlier version-1 emulator
 baseline and its older three-tab interface. They are not current v1.0.1 visual
@@ -91,7 +108,6 @@ evidence.
 
 ## Remaining release and parity gates
 
-- upload the identified v1.0.1 candidate to the intended Play test track
 - install a Play-generated build on representative physical Android hardware
 - complete physical-device, TalkBack, large-text, foldable, offline, upgrade,
   link, save, and system-navigation checks against that artifact

@@ -7,6 +7,8 @@ that are appropriate for a public source repository.
 
 - The permanent package name is `com.rupayonhaldar.gtafreestem`.
 - The current source is version `1.0.1` (`versionCode` 2).
+- The live Console reports that all apps are successfully registered for the
+  current Android developer-verification requirements.
 - 105 JVM tests passed.
 - The full 11-test instrumentation suite passed on an API 36 emulator in
   three-button system-navigation mode.
@@ -20,10 +22,14 @@ that are appropriate for a public source repository.
   local full-record Current/Archive saves, local account/language/theme settings,
   and strict live/offline feed handling.
 
-This is local source, emulator, and signed-candidate evidence only. Version
-1.0.1 is not recorded here as uploaded to Google Play, accepted into a Play
-track, installed from a Play-generated artifact, or validated on physical
-hardware.
+Google Play accepted version 1.0.1 into restricted internal testing and reports
+it available to internal testers. The tester opt-in page provides a Download
+test app link. This does not establish a Play-generated installation, physical-
+device validation, closed testing, production, or public availability.
+
+Play also reported one non-blocking warning for native code without a native
+debug-symbol archive. The warning did not block internal testing and remains a
+follow-up before broader distribution.
 
 ## Historical version-1 Play evidence
 
@@ -49,23 +55,21 @@ The following are intentionally kept out of source control:
 
 ## Remaining before any public release
 
-1. Upload only after explicit review; do not describe the historical version-1
-   acceptance as a v1.0.1 upload.
-2. Install the Play-generated build on representative physical Android hardware
+1. Install the Play-generated build on representative physical Android hardware
    and record launch, offline, browse, save, link, large-text, TalkBack, foldable,
    and system-navigation results without publishing tester identity.
-3. Make and verify an independent encrypted backup of the upload key outside the
+2. Make and verify an independent encrypted backup of the upload key outside the
    repository.
-4. Investigate the native debug-symbol warning and review the Play pre-launch
+3. Investigate the native debug-symbol warning and review the Play pre-launch
    report.
-5. Finish the store listing, privacy, Data safety, content-rating, target-audience,
+4. Finish the store listing, privacy, Data safety, content-rating, target-audience,
    and policy declarations for the exact candidate.
-6. Complete whatever testing and production-access gates the live Play Console
+5. Complete whatever testing and production-access gates the live Play Console
    requires for the developer account at submission time.
-7. Keep the listing within the current feature boundary: map/nearby browsing,
+6. Keep the listing within the current feature boundary: map/nearby browsing,
    local match notifications, deep links, and some older translated copy remain
    parity work.
-8. Do not claim public availability until the intended production release is
+7. Do not claim public availability until the intended production release is
    independently visible to a normal Play Store user.
 
 Official references: [Play Console account setup](https://support.google.com/googleplay/android-developer/answer/6112435),
