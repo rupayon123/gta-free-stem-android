@@ -22,6 +22,10 @@ permission: android.permission.INTERNET
   API 36 emulator using gesture navigation.
 - Debug lint (`lintDebug`): zero issues.
 - Release lint (`lintRelease`): zero issues.
+- Public-root GitHub Actions run
+  [`31980604818`](https://github.com/rupayon123/gta-free-stem-android/actions/runs/31980604818)
+  completed successfully, including the static configuration verifier, JVM
+  tests, debug/release lint, debug assembly, and unsigned release bundle.
 
 These are the recorded results for the current v1.0.1 source. They were not
 rerun merely to rewrite this document.

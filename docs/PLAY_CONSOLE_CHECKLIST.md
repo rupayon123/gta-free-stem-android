@@ -73,7 +73,7 @@ repository.
 - [x] Focused system-navigation/inset regression passed: 1 of 1 test on API 36 with gesture navigation.
 - [x] Current debug and release lint completed with zero issues.
 - [x] Exact v1.0.1 release candidate built, signed, inspected, and identified without exposing secrets.
-- [ ] CI passes tests, debug lint, and debug assembly on the reviewed source commit.
+- [x] CI passes tests, debug/release lint, debug assembly, and unsigned release bundle on the reviewed public source root.
 - [x] Historical version-1 bundle was accepted into restricted internal testing; this is not v1.0.1 evidence.
 - [ ] Bundle contents, permissions, supported devices, native code, and download size inspected.
 - [ ] Release build tested on supported physical Android hardware, including API 26 behavior.
@@ -108,15 +108,15 @@ Do not add numeric Play app/account IDs, tester names or emails, invitation URLs
 identity/contact evidence, keystore paths, passwords, or secret-manager details.
 
 ```text
-Date:
-Source commit:
-Application ID:
-Version name / code:
-AAB SHA-256:
-Public upload-certificate SHA-256:
-CI run:
-Restricted-track result (no invite URL or tester identities):
-Physical devices / API levels:
+Date: August 16, 2026
+Source commit: 292c90256cda68393b603411f3f92297e0ad85ce
+Application ID: com.rupayonhaldar.gtafreestem
+Version name / code: 1.0.1 / 2
+AAB SHA-256: 63cd724942ceed05e94321eaabeb485bfbec880c1ec4b423dfb87b9b9b4e6fbb
+Public upload-certificate SHA-256: 0D:8E:B2:CD:06:A1:89:B5:FF:7C:15:2A:B7:AE:72:C5:60:89:26:4C:FD:D5:64:95:E2:71:5B:BC:A7:DB:F7:B5
+CI run: https://github.com/rupayon123/gta-free-stem-android/actions/runs/31980604818 (passed)
+Restricted-track result (no invite URL or tester identities): v1.0.1 pending
+Physical devices / API levels: v1.0.1 pending; API 36 emulator evidence recorded above
 Play pre-launch report:
 Policy review notes:
 Privacy/support/terms check:
