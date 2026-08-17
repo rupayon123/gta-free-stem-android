@@ -17,8 +17,11 @@ current recorded baseline includes:
 - strict validation of the 125-record feed and a bounded bundled/cache fallback
   when a healthy network snapshot is unavailable
 
-These results are local source and emulator evidence. They do not prove that
-version 1.0.1 has been signed, uploaded to Google Play, installed from a
+The exact public source root was also built as a signed 5.2 MiB AAB. Its JAR
+signature verified, and its public signing-certificate SHA-256 matched the
+locally protected upload key; the public-safe checksum is recorded in
+[`verification/VERIFICATION.md`](verification/VERIFICATION.md). This does not
+prove that version 1.0.1 has been uploaded to Google Play, installed from a
 Play-generated artifact, or passed on physical hardware. An earlier version 1
 build was accepted into restricted internal testing; that historical result is
 not evidence for the current candidate and is not public availability. An

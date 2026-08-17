@@ -26,14 +26,34 @@ permission: android.permission.INTERNET
 These are the recorded results for the current v1.0.1 source. They were not
 rerun merely to rewrite this document.
 
+## Signed candidate identity
+
+The signed candidate was built from the sanitized zero-parent public source
+commit `292c90256cda68393b603411f3f92297e0ad85ce`.
+
+```text
+AAB size: 5.2 MiB
+AAB SHA-256: 63cd724942ceed05e94321eaabeb485bfbec880c1ec4b423dfb87b9b9b4e6fbb
+Public upload-certificate SHA-256: 0D:8E:B2:CD:06:A1:89:B5:FF:7C:15:2A:B7:AE:72:C5:60:89:26:4C:FD:D5:64:95:E2:71:5B:BC:A7:DB:F7:B5
+```
+
+`jarsigner -verify` returned success and `jar verified`. The certificate read
+from the AAB and the certificate read from the protected local upload keystore
+had the same owner, issuer, validity window, and SHA-256 fingerprint. The
+verification also emitted self-signed-certificate, missing-timestamp, and
+JarInputStream warnings; Google Play acceptance remains a separate required
+check. No private key, password, keystore, tester link, or Play identifier is
+stored in this repository.
+
 ## Behavior covered by the current source
 
 - A five-destination adaptive shell provides Home, Opportunities, High School,
   Support, and Account on compact screens, with an adaptive rail on wider screens.
 - Safe drawing insets keep app navigation above Android gesture and three-button
   system-navigation areas.
-- Browse supports keyword, category, age, region/city, language, distance,
-  pathway, equity, accessibility, and sort controls.
+- Browse supports keyword, category, age, region/city, language, pathway,
+  equity, and sort controls. Nearby/distance and New Finds remain explicitly
+  unavailable in this Android version.
 - Saved opportunities persist full offline records and separate Current and
   Archive entries without claiming cloud sync.
 - Account provides an optional on-device display name, System/Light/Dark theme,
@@ -46,9 +66,7 @@ rerun merely to rewrite this document.
 
 This record does **not** establish that v1.0.1 has:
 
-- been signed as a release candidate
 - been uploaded to or accepted by Google Play
-- produced a reviewed artifact checksum or signing-certificate match
 - been installed from a Play-generated artifact
 - passed on a physical Galaxy Z Flip 6 or any other physical Android device
 - reached closed testing, production, or public availability
@@ -69,7 +87,7 @@ evidence.
 
 ## Remaining release and parity gates
 
-- build, sign, inspect, and independently identify the exact v1.0.1 candidate
+- upload the identified v1.0.1 candidate to the intended Play test track
 - install a Play-generated build on representative physical Android hardware
 - complete physical-device, TalkBack, large-text, foldable, offline, upgrade,
   link, save, and system-navigation checks against that artifact

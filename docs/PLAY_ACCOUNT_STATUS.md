@@ -3,7 +3,7 @@
 Last public-safe status review: August 16, 2026. This file records only facts
 that are appropriate for a public source repository.
 
-## Current v1.0.1 source evidence
+## Current v1.0.1 source and candidate evidence
 
 - The permanent package name is `com.rupayonhaldar.gtafreestem`.
 - The current source is version `1.0.1` (`versionCode` 2).
@@ -12,13 +12,18 @@ that are appropriate for a public source repository.
   three-button system-navigation mode.
 - A focused system-navigation/inset regression passed in gesture mode.
 - Debug and release lint completed with zero issues.
+- The exact sanitized public source root produced a signed 5.2 MiB AAB.
+- `jarsigner` verified the AAB, its public certificate fingerprint matched the
+  protected upload key, and the public-safe AAB checksum is recorded in
+  `verification/VERIFICATION.md`.
 - Current behavior includes the five-tab adaptive shell, expanded filters,
   local full-record Current/Archive saves, local account/language/theme settings,
   and strict live/offline feed handling.
 
-This is local source and emulator evidence only. Version 1.0.1 is not recorded
-here as signed, uploaded to Google Play, accepted into a Play track, installed
-from a Play-generated artifact, or validated on physical hardware.
+This is local source, emulator, and signed-candidate evidence only. Version
+1.0.1 is not recorded here as uploaded to Google Play, accepted into a Play
+track, installed from a Play-generated artifact, or validated on physical
+hardware.
 
 ## Historical version-1 Play evidence
 
@@ -44,25 +49,23 @@ The following are intentionally kept out of source control:
 
 ## Remaining before any public release
 
-1. Build, sign, inspect, and record public-safe identity evidence for the exact
-   v1.0.1 candidate without publishing private signing material.
-2. Upload only after explicit review; do not describe the historical version-1
+1. Upload only after explicit review; do not describe the historical version-1
    acceptance as a v1.0.1 upload.
-3. Install the Play-generated build on representative physical Android hardware
+2. Install the Play-generated build on representative physical Android hardware
    and record launch, offline, browse, save, link, large-text, TalkBack, foldable,
    and system-navigation results without publishing tester identity.
-4. Make and verify an independent encrypted backup of the upload key outside the
+3. Make and verify an independent encrypted backup of the upload key outside the
    repository.
-5. Investigate the native debug-symbol warning and review the Play pre-launch
+4. Investigate the native debug-symbol warning and review the Play pre-launch
    report.
-6. Finish the store listing, privacy, Data safety, content-rating, target-audience,
+5. Finish the store listing, privacy, Data safety, content-rating, target-audience,
    and policy declarations for the exact candidate.
-7. Complete whatever testing and production-access gates the live Play Console
+6. Complete whatever testing and production-access gates the live Play Console
    requires for the developer account at submission time.
-8. Keep the listing within the current feature boundary: map/nearby browsing,
+7. Keep the listing within the current feature boundary: map/nearby browsing,
    local match notifications, deep links, and some older translated copy remain
    parity work.
-9. Do not claim public availability until the intended production release is
+8. Do not claim public availability until the intended production release is
    independently visible to a normal Play Store user.
 
 Official references: [Play Console account setup](https://support.google.com/googleplay/android-developer/answer/6112435),
