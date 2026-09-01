@@ -1362,27 +1362,33 @@ private fun OpportunityDetailScreen(
     val localized = remember(opportunity, language, catalog) {
         OpportunityLocalization.resolve(opportunity, language, catalog)
     }
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxHeight()
-            .widthIn(max = AppScreenMaxWidth)
-            .testTag("opportunity-detail"),
-        contentPadding = PaddingValues(
-            start = AppScreenPadding,
-            top = AppScreenTopPadding,
-            end = AppScreenPadding,
-            bottom = 24.dp,
-        ),
-        verticalArrangement = Arrangement.spacedBy(14.dp),
+    BoxWithConstraints(
+        modifier = Modifier.fillMaxHeight(),
+        contentAlignment = Alignment.TopCenter,
     ) {
-        item {
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(AppCardRadius),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.7f)),
-                elevation = CardDefaults.cardElevation(defaultElevation = AppCardElevation),
-            ) {
+        LazyColumn(
+            modifier = Modifier
+                .widthIn(max = AppScreenMaxWidth)
+                .padding(horizontal = AppScreenPadding)
+                .fillMaxHeight()
+                .testTag("opportunity-detail"),
+            contentPadding = PaddingValues(
+                top = AppScreenTopPadding,
+                bottom = 24.dp,
+            ),
+            verticalArrangement = Arrangement.spacedBy(14.dp),
+        ) {
+            item {
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(AppCardRadius),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                    border = BorderStroke(
+                        1.dp,
+                        MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.7f),
+                    ),
+                    elevation = CardDefaults.cardElevation(defaultElevation = AppCardElevation),
+                ) {
                 Column(
                     modifier = Modifier.padding(18.dp),
                     verticalArrangement = Arrangement.spacedBy(10.dp),
@@ -1564,6 +1570,7 @@ private fun OpportunityDetailScreen(
                 }
             }
         }
+        }
     }
 }
 
@@ -1686,75 +1693,79 @@ private fun SupportScreen(text: (String, String) -> String) {
         ),
     )
 
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxHeight()
-            .widthIn(max = 760.dp)
-            .testTag("support-screen"),
-        contentPadding = PaddingValues(
-            start = AppScreenPadding,
-            top = AppScreenTopPadding,
-            end = AppScreenPadding,
-            bottom = 24.dp,
-        ),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(14.dp),
+    BoxWithConstraints(
+        modifier = Modifier.fillMaxHeight(),
+        contentAlignment = Alignment.TopCenter,
     ) {
-        item {
-            SupportHeroCard()
-        }
-        item {
-            Card(
-                shape = MaterialTheme.shapes.medium,
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.45f)),
-                elevation = CardDefaults.cardElevation(defaultElevation = AppCardElevation),
-            ) {
-                Column(
-                    modifier = Modifier.padding(horizontal = 18.dp, vertical = 14.dp),
-                    verticalArrangement = Arrangement.spacedBy(10.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
+        LazyColumn(
+            modifier = Modifier
+                .widthIn(max = 760.dp)
+                .padding(horizontal = AppScreenPadding)
+                .fillMaxHeight()
+                .testTag("support-screen"),
+            contentPadding = PaddingValues(
+                top = AppScreenTopPadding,
+                bottom = 24.dp,
+            ),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(14.dp),
+        ) {
+            item {
+                SupportHeroCard()
+            }
+            item {
+                Card(
+                    shape = MaterialTheme.shapes.medium,
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.45f)),
+                    elevation = CardDefaults.cardElevation(defaultElevation = AppCardElevation),
                 ) {
-                    Text(
-                        text("support", "Support and feedback"),
-                        style = MaterialTheme.typography.headlineSmall,
-                        modifier = Modifier.semantics { heading() },
-                    )
-                    Text(
-                        "Need help, found a listing that changed, or have an idea to make GTA FREE STEM better? Reach us through the support page.",
-                        style = MaterialTheme.typography.bodyLarge,
-                    )
+                    Column(
+                        modifier = Modifier.padding(horizontal = 18.dp, vertical = 14.dp),
+                        verticalArrangement = Arrangement.spacedBy(10.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                    ) {
+                        Text(
+                            text("support", "Support and feedback"),
+                            style = MaterialTheme.typography.headlineSmall,
+                            modifier = Modifier.semantics { heading() },
+                        )
+                        Text(
+                            "Need help, found a listing that changed, or have an idea to make GTA FREE STEM better? Reach us through the support page.",
+                            style = MaterialTheme.typography.bodyLarge,
+                        )
+                    }
                 }
             }
-        }
-        item {
-            DetailSection(
-                title = "Community-built",
-                body = "Feedback helps keep listings accurate, improve language support, and make the app easier for everyone to use.",
-            )
-        }
-        item {
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(10.dp),
-            ) {
-                supportActions.forEach {
-                    SupportActionCard(
-                        label = it.label,
-                        summary = it.summary,
-                        url = it.url,
-                        context = context,
-                    )
+            item {
+                DetailSection(
+                    title = "Community-built",
+                    body = "Feedback helps keep listings accurate, improve language support, and make the app easier for everyone to use.",
+                )
+            }
+            item {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(10.dp),
+                ) {
+                    supportActions.forEach {
+                        SupportActionCard(
+                            label = it.label,
+                            summary = it.summary,
+                            url = it.url,
+                            context = context,
+                        )
+                    }
                 }
             }
-        }
-        item {
-            Text(
-                "Tip: if something feels off, report it quickly and include your city, device version, and what you were doing.",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(bottom = 4.dp),
-            )
+            item {
+                Text(
+                    "Tip: if something feels off, report it quickly and include your city, device version, and what you were doing.",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(bottom = 4.dp),
+                )
+            }
         }
     }
 }
