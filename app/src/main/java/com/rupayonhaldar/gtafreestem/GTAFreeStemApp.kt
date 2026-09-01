@@ -702,120 +702,134 @@ private fun BrowseScreen(
         }
 
         item {
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(10.dp),
+            Card(
+                shape = MaterialTheme.shapes.medium,
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                border = BorderStroke(
+                    1.dp,
+                    MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.55f),
+                ),
+                elevation = CardDefaults.cardElevation(defaultElevation = AppCardElevation),
             ) {
-                OutlinedTextField(
-                    value = state.query,
-                    onValueChange = onQueryChanged,
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = MaterialTheme.shapes.small,
-                    label = { Text(shellText("search", "Search opportunities")) },
-                    placeholder = {
-                        Text(
-                            shellText(
-                                "searchPlaceholder",
-                                "Try robotics, coding, or Mississauga",
-                            ),
-                        )
-                    },
-                    singleLine = true,
-                    trailingIcon = {
-                        if (state.query.isNotBlank()) {
-                            TextButton(
-                                onClick = { onQueryChanged("") },
-                                modifier = Modifier.heightIn(min = 40.dp),
-                            ) {
-                                Text(shellText("reset", "Clear"))
-                            }
-                        }
-                    },
-                )
-
-                OutlinedButton(
-                    onClick = onOpenFilters,
+                Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .heightIn(min = 52.dp),
-                    shape = MaterialTheme.shapes.medium,
+                        .padding(horizontal = 16.dp, vertical = 14.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
-                    Text(
-                        text = if (activeFilterCount == 0) {
-                            shellText("filters", "Filters")
-                        } else {
-                            "${shellText("filters", "Filters")} ($activeFilterCount)"
+                    OutlinedTextField(
+                        value = state.query,
+                        onValueChange = onQueryChanged,
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = MaterialTheme.shapes.small,
+                        label = { Text(shellText("search", "Search opportunities")) },
+                        placeholder = {
+                            Text(
+                                shellText(
+                                    "searchPlaceholder",
+                                    "Try robotics, coding, or Mississauga",
+                                ),
+                            )
+                        },
+                        singleLine = true,
+                        trailingIcon = {
+                            if (state.query.isNotBlank()) {
+                                TextButton(
+                                    onClick = { onQueryChanged("") },
+                                    modifier = Modifier.heightIn(min = 40.dp),
+                                ) {
+                                    Text(shellText("reset", "Clear"))
+                                }
+                            }
                         },
                     )
-                }
 
-                if (state.categories.isNotEmpty()) {
-                    Row(
+                    OutlinedButton(
+                        onClick = onOpenFilters,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .horizontalScroll(rememberScrollState()),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            .heightIn(min = 52.dp),
+                        shape = MaterialTheme.shapes.medium,
                     ) {
-                        FilterChip(
-                            selected = state.selectedCategory == null,
-                            onClick = { onCategoryChanged(null) },
-                            label = { Text(shellText("all", "All")) },
-                            shape = MaterialTheme.shapes.small,
-                            colors = browseFilterChipColors(selected = state.selectedCategory == null),
+                        Text(
+                            text = if (activeFilterCount == 0) {
+                                shellText("filters", "Filters")
+                            } else {
+                                "${shellText("filters", "Filters")} ($activeFilterCount)"
+                            },
                         )
-                        state.categories.forEach { category ->
+                    }
+
+                    if (state.categories.isNotEmpty()) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .horizontalScroll(rememberScrollState()),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        ) {
                             FilterChip(
-                                selected = state.selectedCategory == category,
-                                onClick = { onCategoryChanged(category) },
+                                selected = state.selectedCategory == null,
+                                onClick = { onCategoryChanged(null) },
+                                label = { Text(shellText("all", "All")) },
                                 shape = MaterialTheme.shapes.small,
                                 colors = browseFilterChipColors(
+                                    selected = state.selectedCategory == null,
+                                ),
+                            )
+                            state.categories.forEach { category ->
+                                FilterChip(
                                     selected = state.selectedCategory == category,
-                                ),
-                                label = {
-                                    Text(
-                                        OpportunityLocalization.categoryName(
-                                            category,
-                                            language,
-                                            catalog,
-                                        ),
-                                    )
-                                },
-                            )
+                                    onClick = { onCategoryChanged(category) },
+                                    shape = MaterialTheme.shapes.small,
+                                    colors = browseFilterChipColors(
+                                        selected = state.selectedCategory == category,
+                                    ),
+                                    label = {
+                                        Text(
+                                            OpportunityLocalization.categoryName(
+                                                category,
+                                                language,
+                                                catalog,
+                                            ),
+                                        )
+                                    },
+                                )
+                            }
                         }
                     }
-                }
 
-                if (mode == BrowseMode.HIGH_SCHOOL) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .horizontalScroll(rememberScrollState()),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    ) {
-                        HighSchoolFocus.entries.forEach { focus ->
-                            val label = focus.catalogKey?.let { catalogKey ->
-                                shellText(catalogKey, focus.label)
-                            } ?: shellText("all", focus.label)
-                            FilterChip(
-                                selected = highSchoolFocus == focus,
-                                onClick = { onHighSchoolFocusChanged(focus) },
-                                shape = MaterialTheme.shapes.small,
-                                colors = browseFilterChipColors(
+                    if (mode == BrowseMode.HIGH_SCHOOL) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .horizontalScroll(rememberScrollState()),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        ) {
+                            HighSchoolFocus.entries.forEach { focus ->
+                                val label = focus.catalogKey?.let { catalogKey ->
+                                    shellText(catalogKey, focus.label)
+                                } ?: shellText("all", focus.label)
+                                FilterChip(
                                     selected = highSchoolFocus == focus,
-                                ),
-                                label = { Text(label) },
-                            )
+                                    onClick = { onHighSchoolFocusChanged(focus) },
+                                    shape = MaterialTheme.shapes.small,
+                                    colors = browseFilterChipColors(
+                                        selected = highSchoolFocus == focus,
+                                    ),
+                                    label = { Text(label) },
+                                )
+                            }
                         }
                     }
-                }
 
-                FeedStatusRow(
-                    snapshot = state.snapshot,
-                    isRefreshing = state.isRefreshing,
-                    resultCount = visibleOpportunities.size,
-                    onRefresh = onRefresh,
-                    text = shellText,
-                )
+                    FeedStatusRow(
+                        snapshot = state.snapshot,
+                        isRefreshing = state.isRefreshing,
+                        resultCount = visibleOpportunities.size,
+                        onRefresh = onRefresh,
+                        text = shellText,
+                    )
+                }
             }
         }
 
@@ -887,8 +901,9 @@ private fun BrandHeader(
         color = MaterialTheme.colorScheme.primaryContainer,
         modifier = Modifier
             .fillMaxWidth(),
-        shape = MaterialTheme.shapes.medium,
+        shape = RoundedCornerShape(AppCardRadius),
         tonalElevation = 2.dp,
+        shadowElevation = 1.dp,
     ) {
         Row(
             modifier = Modifier.padding(horizontal = 18.dp, vertical = 20.dp),
@@ -935,64 +950,64 @@ private fun FeedStatusRow(
         shape = MaterialTheme.shapes.medium,
         tonalElevation = 1.dp,
     ) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(10.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(10.dp),
-    ) {
-        Surface(
-            color = when (snapshot?.source) {
-                OpportunityFeedSource.PRIMARY_NETWORK,
-                OpportunityFeedSource.FALLBACK_NETWORK,
-                -> MaterialTheme.colorScheme.secondaryContainer
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(10.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
+        ) {
+            Surface(
+                color = when (snapshot?.source) {
+                    OpportunityFeedSource.PRIMARY_NETWORK,
+                    OpportunityFeedSource.FALLBACK_NETWORK,
+                    -> MaterialTheme.colorScheme.secondaryContainer
 
-                else -> MaterialTheme.colorScheme.surfaceVariant
-            },
-            shape = CircleShape,
-        ) {
-            Text(
-                text = feedLabel(snapshot, text),
-                style = MaterialTheme.typography.labelLarge,
-                modifier = Modifier.padding(horizontal = 12.dp, vertical = 7.dp),
-            )
-        }
-        Text(
-            text = resultSummary(snapshot, resultCount, text),
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.weight(1f),
-        )
-        TextButton(
-            onClick = onRefresh,
-            enabled = !isRefreshing,
-            modifier = Modifier.heightIn(min = 48.dp),
-            shape = MaterialTheme.shapes.small,
-        ) {
-            if (isRefreshing) {
-                CircularProgressIndicator(
-                    modifier = Modifier
-                        .size(20.dp)
-                        .semantics {
-                            contentDescription = text(
-                                "checkingLiveSources",
-                                "Refreshing opportunities",
-                            )
-                        },
-                    strokeWidth = 2.dp,
+                    else -> MaterialTheme.colorScheme.surfaceVariant
+                },
+                shape = CircleShape,
+            ) {
+                Text(
+                    text = feedLabel(snapshot, text),
+                    style = MaterialTheme.typography.labelLarge,
+                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 7.dp),
                 )
-                Spacer(Modifier.width(8.dp))
             }
             Text(
-                if (isRefreshing) {
-                    text("checkingLiveSources", "Refreshing")
-                } else {
-                    text("refreshResearch", "Refresh")
-                },
+                text = resultSummary(snapshot, resultCount, text),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.weight(1f),
             )
+            TextButton(
+                onClick = onRefresh,
+                enabled = !isRefreshing,
+                modifier = Modifier.heightIn(min = 48.dp),
+                shape = MaterialTheme.shapes.small,
+            ) {
+                if (isRefreshing) {
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .size(20.dp)
+                            .semantics {
+                                contentDescription = text(
+                                    "checkingLiveSources",
+                                    "Refreshing opportunities",
+                                )
+                            },
+                        strokeWidth = 2.dp,
+                    )
+                    Spacer(Modifier.width(8.dp))
+                }
+                Text(
+                    if (isRefreshing) {
+                        text("checkingLiveSources", "Refreshing")
+                    } else {
+                        text("refreshResearch", "Refresh")
+                    },
+                )
+            }
         }
-    }
     }
 }
 
@@ -1216,34 +1231,50 @@ private fun EmptyPanel(
     onClear: () -> Unit,
     text: (String, String) -> String,
 ) {
-    Column(
+    Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 28.dp, vertical = 44.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(10.dp),
+            .padding(horizontal = 2.dp),
+        shape = MaterialTheme.shapes.medium,
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.55f)),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.7.dp),
     ) {
-        Text(
-            text = when {
-                mode == BrowseMode.HIGH_SCHOOL -> text(
-                    "noOpportunities",
-                    "No matching high school opportunities",
-                )
-                else -> text("noOpportunities", "No matching opportunities")
-            },
-            style = MaterialTheme.typography.titleLarge,
-        )
-        Text(
-            text = when {
-                mode == BrowseMode.HIGH_SCHOOL ->
-                    "Try another pathway, broaden your search, or clear the category filter."
-                else -> "Try a broader search or clear the category filter."
-            },
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-        if (hasFilters) {
-            OutlinedButton(onClick = onClear) {
-                Text(text("reset", "Clear search and filters"))
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 28.dp, vertical = 44.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+        ) {
+            Text(
+                text = when {
+                    mode == BrowseMode.HIGH_SCHOOL -> text(
+                        "noOpportunities",
+                        "No matching high school opportunities",
+                    )
+                    else -> text("noOpportunities", "No matching opportunities")
+                },
+                style = MaterialTheme.typography.titleLarge,
+            )
+            Text(
+                text = when {
+                    mode == BrowseMode.HIGH_SCHOOL ->
+                        "Try another pathway, broaden your search, or clear the category filter."
+                    else -> "Try a broader search or clear the category filter."
+                },
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            if (hasFilters) {
+                OutlinedButton(
+                    onClick = onClear,
+                    modifier = Modifier
+                        .fillMaxWidth(0.85f)
+                        .heightIn(min = 48.dp),
+                    shape = MaterialTheme.shapes.medium,
+                ) {
+                    Text(text("reset", "Clear search and filters"))
+                }
             }
         }
     }
@@ -1277,58 +1308,65 @@ private fun OpportunityDetailScreen(
         verticalArrangement = Arrangement.spacedBy(14.dp),
     ) {
         item {
-            Row(
+            Card(
                 modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
+                shape = RoundedCornerShape(AppCardRadius),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.7f)),
+                elevation = CardDefaults.cardElevation(defaultElevation = AppCardElevation),
             ) {
-                TextButton(
-                    onClick = onBack,
-                    modifier = Modifier.heightIn(min = 48.dp),
-                ) { Text(text("back", "Back")) }
-                Spacer(Modifier.weight(1f))
-                OutlinedButton(
-                    onClick = onToggleFavorite,
-                    shape = MaterialTheme.shapes.small,
-                    modifier = Modifier
-                        .widthIn(max = 160.dp)
-                        .heightIn(min = 48.dp)
-                        .semantics {
-                            contentDescription = if (isFavorite) {
-                                "${text("saved", "Saved")}: ${localized.title}"
-                            } else {
-                                "${text("save", "Save")}: ${localized.title}"
-                            }
-                        },
+                Column(
+                    modifier = Modifier.padding(18.dp),
+                    verticalArrangement = Arrangement.spacedBy(10.dp),
                 ) {
-                    Text(if (isFavorite) text("saved", "Saved") else text("save", "Save"))
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        TextButton(
+                            onClick = onBack,
+                            modifier = Modifier.heightIn(min = 48.dp),
+                        ) { Text(text("back", "Back")) }
+                        Spacer(Modifier.weight(1f))
+                        OutlinedButton(
+                            onClick = onToggleFavorite,
+                            shape = MaterialTheme.shapes.small,
+                            modifier = Modifier
+                                .widthIn(max = 160.dp)
+                                .heightIn(min = 48.dp)
+                                .semantics {
+                                    contentDescription = if (isFavorite) {
+                                        "${text("saved", "Saved")}: ${localized.title}"
+                                    } else {
+                                        "${text("save", "Save")}: ${localized.title}"
+                                    }
+                                },
+                        ) {
+                            Text(if (isFavorite) text("saved", "Saved") else text("save", "Save"))
+                        }
+                    }
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        CategoryPill(localized.category)
+                        FreePill(text("freeShort", "FREE"))
+                    }
+                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Text(
+                            text = localized.title,
+                            style = MaterialTheme.typography.displaySmall,
+                            modifier = Modifier.semantics { heading() },
+                        )
+                        Text(
+                            text = localized.organization,
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.primary,
+                        )
+                        Text(
+                            text = localized.description,
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
                 }
-            }
-        }
-
-        item {
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                CategoryPill(localized.category)
-                FreePill(text("freeShort", "FREE"))
-            }
-        }
-
-        item {
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text(
-                    text = localized.title,
-                    style = MaterialTheme.typography.displaySmall,
-                    modifier = Modifier.semantics { heading() },
-                )
-                Text(
-                    text = localized.organization,
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.primary,
-                )
-                Text(
-                    text = localized.description,
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
             }
         }
 
@@ -1370,35 +1408,34 @@ private fun OpportunityDetailScreen(
         }
 
         item {
-            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                val registrationUrl = opportunity.registrationUrl ?: opportunity.sourceUrl
-                Button(
-                    shape = MaterialTheme.shapes.medium,
-                    onClick = {
-                        if (!openHttps(context, registrationUrl)) {
-                            Toast.makeText(
-                                context,
-                                text("registerApply", "This registration link is unavailable."),
-                                Toast.LENGTH_LONG,
-                            ).show()
-                        }
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .heightIn(min = 52.dp),
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = MaterialTheme.shapes.medium,
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                border = BorderStroke(
+                    1.dp,
+                    MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.55f),
+                ),
+                elevation = CardDefaults.cardElevation(defaultElevation = AppCardElevation),
+            ) {
+                Column(
+                    modifier = Modifier.padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(10.dp),
                 ) {
-                    Text(text("registerApply", "Open registration"))
-                }
+                    Text(
+                        text = text("support", "Opportunity actions"),
+                        style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier.semantics { heading() },
+                    )
 
-                if (opportunity.address != null ||
-                    (opportunity.latitude != null && opportunity.longitude != null)
-                ) {
-                    OutlinedButton(
+                    val registrationUrl = opportunity.registrationUrl ?: opportunity.sourceUrl
+                    Button(
+                        shape = MaterialTheme.shapes.medium,
                         onClick = {
-                            if (!openDirections(context, opportunity)) {
+                            if (!openHttps(context, registrationUrl)) {
                                 Toast.makeText(
                                     context,
-                                    text("directions", "Directions are unavailable on this device."),
+                                    text("registerApply", "This registration link is unavailable."),
                                     Toast.LENGTH_LONG,
                                 ).show()
                             }
@@ -1406,36 +1443,57 @@ private fun OpportunityDetailScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .heightIn(min = 52.dp),
-                        shape = MaterialTheme.shapes.medium,
                     ) {
-                        Text(text("directions", "Get directions"))
+                        Text(text("registerApply", "Open registration"))
                     }
-                }
 
-                TextButton(
-                    onClick = {
-                        if (!openHttps(context, opportunity.sourceUrl)) {
-                            Toast.makeText(
-                                context,
-                                text("sourceLink", "The source link is unavailable."),
-                                Toast.LENGTH_LONG,
-                            ).show()
+                    if (opportunity.address != null ||
+                        (opportunity.latitude != null && opportunity.longitude != null)
+                    ) {
+                        OutlinedButton(
+                            onClick = {
+                                if (!openDirections(context, opportunity)) {
+                                    Toast.makeText(
+                                        context,
+                                        text("directions", "Directions are unavailable on this device."),
+                                        Toast.LENGTH_LONG,
+                                    ).show()
+                                }
+                            },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .heightIn(min = 52.dp),
+                            shape = MaterialTheme.shapes.medium,
+                        ) {
+                            Text(text("directions", "Get directions"))
                         }
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .heightIn(min = 48.dp),
-                ) {
-                    Text(text("sourceLink", "View original source"))
+                    }
+
+                    TextButton(
+                        onClick = {
+                            if (!openHttps(context, opportunity.sourceUrl)) {
+                                Toast.makeText(
+                                    context,
+                                    text("sourceLink", "The source link is unavailable."),
+                                    Toast.LENGTH_LONG,
+                                ).show()
+                            }
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(min = 48.dp),
+                    ) {
+                        Text(text("sourceLink", "View original source"))
+                    }
+                    Text(
+                        text = text(
+                            "sourceDetails",
+                            "Details can change. Confirm dates, eligibility, and availability with the provider before registering.",
+                        ),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
                 }
-                Text(
-                    text = text(
-                        "sourceDetails",
-                        "Details can change. Confirm dates, eligibility, and availability with the provider before registering.",
-                    ),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
             }
         }
     }
