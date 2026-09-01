@@ -46,6 +46,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Bookmark
+import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.icons.outlined.BookmarkBorder
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -1159,8 +1162,8 @@ private fun OpportunityCard(
                 OutlinedButton(
                     onClick = onToggleFavorite,
                     modifier = Modifier
-                        .weight(1f)
-                        .heightIn(min = 48.dp)
+                        .weight(1.1f)
+                        .heightIn(min = 46.dp)
                         .semantics {
                             contentDescription = if (isFavorite) {
                                 "${text("saved", "Saved")}: ${localized.title}"
@@ -1169,13 +1172,22 @@ private fun OpportunityCard(
                             }
                         },
                 ) {
+                    Icon(
+                        imageVector = if (isFavorite) {
+                            Icons.Default.Bookmark
+                        } else {
+                            Icons.Outlined.BookmarkBorder
+                        },
+                        contentDescription = null,
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
                     Text(if (isFavorite) text("saved", "Saved") else text("save", "Save"))
                 }
                 Button(
                     onClick = onDetails,
                     modifier = Modifier
                         .weight(1f)
-                        .heightIn(min = 48.dp)
+                        .heightIn(min = 46.dp)
                         .semantics {
                             contentDescription = "${text("details", "View details")}: ${localized.title}"
                         },
@@ -1223,9 +1235,7 @@ private fun FreePill(label: String) {
 @Composable
 private fun LoadingPanel(text: (String, String) -> String) {
     Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 4.dp),
+        modifier = Modifier.fillMaxWidth(),
         shape = MaterialTheme.shapes.medium,
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant,
@@ -1268,13 +1278,18 @@ private fun ErrorBanner(
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.error.copy(alpha = 0.35f)),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 4.dp, vertical = 2.dp),
+            .padding(vertical = 2.dp),
     ) {
         Row(
             modifier = Modifier.padding(16.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(12.dp),
         ) {
+            Icon(
+                imageVector = Icons.Default.Warning,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onErrorContainer,
+            )
             Text(
                 text = message,
                 color = MaterialTheme.colorScheme.onErrorContainer,
@@ -1300,9 +1315,7 @@ private fun EmptyPanel(
     text: (String, String) -> String,
 ) {
     Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 2.dp),
+        modifier = Modifier.fillMaxWidth(),
         shape = MaterialTheme.shapes.medium,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.55f)),
