@@ -11,6 +11,7 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -35,12 +36,17 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -360,181 +366,185 @@ private fun HomeScreen(
             filters = OpportunitySearchFilters(),
         ).take(3)
     }
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxHeight()
-            .widthIn(max = AppScreenMaxWidth),
-        contentPadding = PaddingValues(
-            start = AppScreenPadding,
-            end = AppScreenPadding,
-            top = AppScreenTopPadding,
-            bottom = 24.dp,
-        ),
-        verticalArrangement = Arrangement.spacedBy(AppScreenSectionSpacing),
+    BoxWithConstraints(
+        modifier = Modifier.fillMaxHeight(),
+        contentAlignment = Alignment.TopCenter,
     ) {
-        item {
-            Surface(
-                color = MaterialTheme.colorScheme.primaryContainer,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 4.dp),
-                shape = MaterialTheme.shapes.medium,
-                tonalElevation = 2.dp,
-                shadowElevation = 1.dp,
-            ) {
-                Column(
-                    modifier = Modifier.padding(horizontal = 20.dp, vertical = 22.dp),
-                    verticalArrangement = Arrangement.spacedBy(14.dp),
+        LazyColumn(
+            modifier = Modifier
+                .widthIn(max = AppScreenMaxWidth)
+                .padding(horizontal = AppScreenPadding)
+                .fillMaxHeight(),
+            contentPadding = PaddingValues(
+                top = AppScreenTopPadding,
+                bottom = 24.dp,
+            ),
+            verticalArrangement = Arrangement.spacedBy(AppScreenSectionSpacing),
+        ) {
+            item {
+                Surface(
+                    color = MaterialTheme.colorScheme.primaryContainer,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 4.dp),
+                    shape = MaterialTheme.shapes.medium,
+                    tonalElevation = 2.dp,
+                    shadowElevation = 1.dp,
                 ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(14.dp),
+                    Column(
+                        modifier = Modifier.padding(horizontal = 20.dp, vertical = 22.dp),
+                        verticalArrangement = Arrangement.spacedBy(14.dp),
                     ) {
-                        Image(
-                            painter = painterResource(R.drawable.app_logo),
-                            contentDescription = null,
-                            contentScale = ContentScale.Fit,
-                            modifier = Modifier
-                                .size(72.dp)
-                                .clip(RoundedCornerShape(18.dp)),
-                        )
-                        Column(verticalArrangement = Arrangement.spacedBy(5.dp)) {
-                            Text(
-                                text = "GTA FREE STEM",
-                                style = MaterialTheme.typography.headlineSmall,
-                                color = MaterialTheme.colorScheme.onPrimaryContainer,
-                                modifier = Modifier.semantics { heading() },
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(14.dp),
+                        ) {
+                            Image(
+                                painter = painterResource(R.drawable.app_logo),
+                                contentDescription = null,
+                                contentScale = ContentScale.Fit,
+                                modifier = Modifier
+                                    .size(72.dp)
+                                    .clip(RoundedCornerShape(18.dp)),
                             )
-                            Surface(
-                                color = MaterialTheme.colorScheme.tertiary,
-                                contentColor = MaterialTheme.colorScheme.onTertiary,
-                                shape = CircleShape,
-                            ) {
+                            Column(verticalArrangement = Arrangement.spacedBy(5.dp)) {
                                 Text(
-                                    text = text(
-                                        "freeOnly",
-                                        "Everything here is free for everyone.",
-                                    ),
-                                    style = MaterialTheme.typography.labelMedium,
-                                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
+                                    text = "GTA FREE STEM",
+                                    style = MaterialTheme.typography.headlineSmall,
+                                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                                    modifier = Modifier.semantics { heading() },
                                 )
+                                Surface(
+                                    color = MaterialTheme.colorScheme.tertiary,
+                                    contentColor = MaterialTheme.colorScheme.onTertiary,
+                                    shape = CircleShape,
+                                ) {
+                                    Text(
+                                        text = text(
+                                            "freeOnly",
+                                            "Everything here is free for everyone.",
+                                        ),
+                                        style = MaterialTheme.typography.labelMedium,
+                                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
+                                    )
+                                }
                             }
                         }
+                        Text(
+                            text = text(
+                                "mission",
+                                "Find real free STEM programs, library events, volunteer hours, co-op, SHSM, and youth opportunities across the GTA.",
+                            ),
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        )
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(10.dp),
+                        ) {
+                            Button(
+                                onClick = onSearch,
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .heightIn(min = 52.dp),
+                            ) { Text(text("search", "Search")) }
+                            OutlinedButton(
+                                onClick = onHighSchool,
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .heightIn(min = 52.dp),
+                            ) { Text(text("highSchool", "High School")) }
+                        }
                     }
+                }
+            }
+
+            item {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(10.dp),
+                ) {
                     Text(
-                        text = text(
-                            "mission",
-                            "Find real free STEM programs, library events, volunteer hours, co-op, SHSM, and youth opportunities across the GTA.",
-                        ),
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        text = text("pathway", "Choose your path"),
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = Modifier.semantics { heading() },
                     )
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(10.dp),
                     ) {
-                        Button(
-                            onClick = onSearch,
-                            modifier = Modifier
-                                .weight(1f)
-                                .heightIn(min = 52.dp),
-                        ) { Text(text("search", "Search")) }
-                        OutlinedButton(
-                            onClick = onHighSchool,
-                            modifier = Modifier
-                                .weight(1f)
-                                .heightIn(min = 52.dp),
-                        ) { Text(text("highSchool", "High School")) }
+                        HomePathButton(
+                            label = text("volunteerHours", "Volunteer Hours"),
+                            modifier = Modifier.weight(1f),
+                        ) { onQuickAction(HighSchoolFocus.VOLUNTEER) }
+                        HomePathButton(
+                            label = text("categoryCoOpAndSHSM", "Co-op / SHSM"),
+                            modifier = Modifier.weight(1f),
+                        ) { onQuickAction(HighSchoolFocus.COOP) }
+                    }
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(10.dp),
+                    ) {
+                        HomePathButton(
+                            label = text("mentorship", "Mentorship"),
+                            modifier = Modifier.weight(1f),
+                        ) { onQuickAction(HighSchoolFocus.MENTORSHIP) }
+                        HomePathButton(
+                            label = text("feedback", "Feedback"),
+                            modifier = Modifier.weight(1f),
+                            onClick = onFeedback,
+                        )
                     }
                 }
             }
-        }
 
-        item {
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(10.dp),
-            ) {
-                Text(
-                    text = text("pathway", "Choose your path"),
-                    style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier.semantics { heading() },
-                )
-                Row(
+            item {
+                Column(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(10.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
-                    HomePathButton(
-                        label = text("volunteerHours", "Volunteer Hours"),
-                        modifier = Modifier.weight(1f),
-                    ) { onQuickAction(HighSchoolFocus.VOLUNTEER) }
-                    HomePathButton(
-                        label = text("categoryCoOpAndSHSM", "Co-op / SHSM"),
-                        modifier = Modifier.weight(1f),
-                    ) { onQuickAction(HighSchoolFocus.COOP) }
-                }
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(10.dp),
-                ) {
-                    HomePathButton(
-                        label = text("mentorship", "Mentorship"),
-                        modifier = Modifier.weight(1f),
-                    ) { onQuickAction(HighSchoolFocus.MENTORSHIP) }
-                    HomePathButton(
-                        label = text("feedback", "Feedback"),
-                        modifier = Modifier.weight(1f),
-                        onClick = onFeedback,
+                    Text(
+                        text = text("opportunities", "Featured opportunities"),
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = Modifier.semantics { heading() },
+                    )
+                    Text(
+                        text = text(
+                            "sourceDetails",
+                            "A few source-backed programs to get you started.",
+                        ),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
             }
-        }
 
-        item {
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-            ) {
-                Text(
-                    text = text("opportunities", "Featured opportunities"),
-                    style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier.semantics { heading() },
-                )
-                Text(
-                    text = text(
-                        "sourceDetails",
-                        "A few source-backed programs to get you started.",
-                    ),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
-        }
-
-        when {
-            state.isLoading && state.snapshot == null -> item { LoadingPanel(text) }
-            featuredOpportunities.isEmpty() -> item {
-                Text(
-                    text = text(
-                        "noOpportunities",
-                        "Open Opportunities to search all verified listings.",
-                    ),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
-            else -> items(
-                items = featuredOpportunities,
-                key = Opportunity::id,
-            ) { opportunity ->
-                OpportunityCard(
-                    opportunity = opportunity,
-                    isFavorite = opportunity.id in state.favoriteIds,
-                    onDetails = { onSelectOpportunity(opportunity) },
-                    onToggleFavorite = { onToggleFavorite(opportunity.id) },
-                    language = language,
-                    catalog = catalog,
-                    text = text,
-                )
+            when {
+                state.isLoading && state.snapshot == null -> item { LoadingPanel(text) }
+                featuredOpportunities.isEmpty() -> item {
+                    Text(
+                        text = text(
+                            "noOpportunities",
+                            "Open Opportunities to search all verified listings.",
+                        ),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+                else -> items(
+                    items = featuredOpportunities,
+                    key = Opportunity::id,
+                ) { opportunity ->
+                    OpportunityCard(
+                        opportunity = opportunity,
+                        isFavorite = opportunity.id in state.favoriteIds,
+                        onDetails = { onSelectOpportunity(opportunity) },
+                        onToggleFavorite = { onToggleFavorite(opportunity.id) },
+                        language = language,
+                        catalog = catalog,
+                        text = text,
+                    )
+                }
             }
         }
     }
@@ -592,54 +602,60 @@ private fun FilterScreen(
     onFiltersChanged: (OpportunitySearchFilters) -> Unit,
     text: (String, String) -> String,
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(AppScreenPadding),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
+    BoxWithConstraints(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.TopCenter,
     ) {
-        Card(
-            shape = MaterialTheme.shapes.medium,
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surface,
-            ),
-            border = BorderStroke(
-                1.dp,
-                MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.55f),
-            ),
-            elevation = CardDefaults.cardElevation(defaultElevation = AppCardElevation),
+        Column(
+            modifier = Modifier
+                .widthIn(max = AppScreenMaxWidth)
+                .padding(AppScreenPadding)
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            Row(
+            Card(
+                shape = MaterialTheme.shapes.medium,
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surface,
+                ),
+                border = BorderStroke(
+                    1.dp,
+                    MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.55f),
+                ),
+                elevation = CardDefaults.cardElevation(defaultElevation = AppCardElevation),
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp, vertical = 12.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    TextButton(
+                        onClick = onBack,
+                        modifier = Modifier.heightIn(min = 48.dp),
+                    ) {
+                        Text(text("back", "Back"))
+                    }
+                    Text(
+                        text = text("filters", "Filters"),
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = Modifier.semantics { heading() },
+                    )
+                }
+            }
+            OpportunityFilterPanel(
+                filters = state.filters,
+                options = state.filterOptions,
+                onFiltersChange = onFiltersChanged,
+                labels = localizedFilterLabels(text),
+                onReset = { onFiltersChanged(OpportunitySearchFilters()) },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 12.dp, vertical = 12.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-            ) {
-                TextButton(
-                    onClick = onBack,
-                    modifier = Modifier.heightIn(min = 48.dp),
-                ) {
-                    Text(text("back", "Back"))
-                }
-                Text(
-                    text = text("filters", "Filters"),
-                    style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier.semantics { heading() },
-                )
-            }
+                    .weight(1f)
+                    .padding(bottom = 8.dp),
+            )
         }
-        OpportunityFilterPanel(
-            filters = state.filters,
-            options = state.filterOptions,
-            onFiltersChange = onFiltersChanged,
-            labels = localizedFilterLabels(text),
-            onReset = { onFiltersChanged(OpportunitySearchFilters()) },
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f)
-                .padding(bottom = 8.dp),
-        )
     }
 }
 
@@ -699,18 +715,21 @@ private fun BrowseScreen(
         state.filters.hasActiveFilters ||
         (mode == BrowseMode.HIGH_SCHOOL && highSchoolFocus != HighSchoolFocus.ALL)
 
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxHeight()
-            .widthIn(max = AppScreenMaxWidth),
-        contentPadding = PaddingValues(
-            start = AppScreenPadding,
-            top = AppScreenTopPadding,
-            end = AppScreenPadding,
-            bottom = 24.dp,
-        ),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
+    BoxWithConstraints(
+        modifier = Modifier.fillMaxHeight(),
+        contentAlignment = Alignment.TopCenter,
     ) {
+        LazyColumn(
+            modifier = Modifier
+                .widthIn(max = AppScreenMaxWidth)
+                .padding(horizontal = AppScreenPadding)
+                .fillMaxHeight(),
+            contentPadding = PaddingValues(
+                top = AppScreenTopPadding,
+                bottom = 24.dp,
+            ),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
         item {
             BrandHeader(
                 mode = mode,
@@ -750,13 +769,21 @@ private fun BrowseScreen(
                             )
                         },
                         singleLine = true,
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Default.Search,
+                                contentDescription = shellText("searchIcon", "Search"),
+                            )
+                        },
                         trailingIcon = {
                             if (state.query.isNotBlank()) {
-                                TextButton(
+                                IconButton(
                                     onClick = { onQueryChanged("") },
-                                    modifier = Modifier.heightIn(min = 40.dp),
                                 ) {
-                                    Text(shellText("reset", "Clear"))
+                                    Icon(
+                                        imageVector = Icons.Default.Clear,
+                                        contentDescription = shellText("clearSearch", "Clear search"),
+                                    )
                                 }
                             }
                         },
@@ -888,6 +915,7 @@ private fun BrowseScreen(
                     text = shellText,
                 )
             }
+        }
         }
     }
 }
