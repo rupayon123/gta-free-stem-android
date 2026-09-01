@@ -6,7 +6,9 @@ import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,6 +33,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -87,6 +90,13 @@ import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
 import java.util.Locale
+
+private val AppScreenMaxWidth = 840.dp
+private val AppScreenPadding = 16.dp
+private val AppScreenTopPadding = 12.dp
+private val AppScreenSectionSpacing = 14.dp
+private val AppCardRadius = 18.dp
+private val AppCardElevation = 1.5.dp
 
 data class AppPreferenceActions(
     val saveDisplayName: (String) -> DisplayNameSaveResult,
@@ -353,14 +363,24 @@ private fun HomeScreen(
     LazyColumn(
         modifier = Modifier
             .fillMaxHeight()
-            .widthIn(max = 840.dp),
-        contentPadding = PaddingValues(bottom = 24.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+            .widthIn(max = AppScreenMaxWidth),
+        contentPadding = PaddingValues(
+            start = AppScreenPadding,
+            end = AppScreenPadding,
+            top = AppScreenTopPadding,
+            bottom = 24.dp,
+        ),
+        verticalArrangement = Arrangement.spacedBy(AppScreenSectionSpacing),
     ) {
         item {
             Surface(
                 color = MaterialTheme.colorScheme.primaryContainer,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 4.dp),
+                shape = MaterialTheme.shapes.medium,
+                tonalElevation = 2.dp,
+                shadowElevation = 1.dp,
             ) {
                 Column(
                     modifier = Modifier.padding(horizontal = 20.dp, vertical = 22.dp),
@@ -432,7 +452,7 @@ private fun HomeScreen(
 
         item {
             Column(
-                modifier = Modifier.padding(horizontal = 16.dp),
+                modifier = Modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(10.dp),
             ) {
                 Text(
@@ -472,7 +492,7 @@ private fun HomeScreen(
 
         item {
             Column(
-                modifier = Modifier.padding(horizontal = 16.dp),
+                modifier = Modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 Text(
@@ -499,7 +519,6 @@ private fun HomeScreen(
                         "noOpportunities",
                         "Open Opportunities to search all verified listings.",
                     ),
-                    modifier = Modifier.padding(horizontal = 16.dp),
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
@@ -515,7 +534,6 @@ private fun HomeScreen(
                     language = language,
                     catalog = catalog,
                     text = text,
-                    modifier = Modifier.padding(horizontal = 16.dp),
                 )
             }
         }
@@ -530,7 +548,10 @@ private fun HomePathButton(
 ) {
     OutlinedButton(
         onClick = onClick,
-        modifier = modifier.heightIn(min = 52.dp),
+        modifier = modifier
+            .heightIn(min = 52.dp)
+            .padding(top = 2.dp),
+        shape = MaterialTheme.shapes.medium,
     ) {
         Text(label)
     }
@@ -575,7 +596,7 @@ private fun FilterScreen(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 8.dp, vertical = 4.dp),
+                .padding(horizontal = AppScreenPadding, vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
@@ -597,7 +618,9 @@ private fun FilterScreen(
             onFiltersChange = onFiltersChanged,
             labels = localizedFilterLabels(text),
             onReset = { onFiltersChanged(OpportunitySearchFilters()) },
-            modifier = Modifier.weight(1f),
+            modifier = Modifier
+                .weight(1f)
+                .padding(bottom = 8.dp),
         )
     }
 }
@@ -661,8 +684,13 @@ private fun BrowseScreen(
     LazyColumn(
         modifier = Modifier
             .fillMaxHeight()
-            .widthIn(max = 840.dp),
-        contentPadding = PaddingValues(bottom = 24.dp),
+            .widthIn(max = AppScreenMaxWidth),
+        contentPadding = PaddingValues(
+            start = AppScreenPadding,
+            top = AppScreenTopPadding,
+            end = AppScreenPadding,
+            bottom = 24.dp,
+        ),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         item {
@@ -675,13 +703,14 @@ private fun BrowseScreen(
 
         item {
             Column(
-                modifier = Modifier.padding(horizontal = 16.dp),
+                modifier = Modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(10.dp),
             ) {
                 OutlinedTextField(
                     value = state.query,
                     onValueChange = onQueryChanged,
                     modifier = Modifier.fillMaxWidth(),
+                    shape = MaterialTheme.shapes.small,
                     label = { Text(shellText("search", "Search opportunities")) },
                     placeholder = {
                         Text(
@@ -694,7 +723,10 @@ private fun BrowseScreen(
                     singleLine = true,
                     trailingIcon = {
                         if (state.query.isNotBlank()) {
-                            TextButton(onClick = { onQueryChanged("") }) {
+                            TextButton(
+                                onClick = { onQueryChanged("") },
+                                modifier = Modifier.heightIn(min = 40.dp),
+                            ) {
                                 Text(shellText("reset", "Clear"))
                             }
                         }
@@ -706,6 +738,7 @@ private fun BrowseScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .heightIn(min = 52.dp),
+                    shape = MaterialTheme.shapes.medium,
                 ) {
                     Text(
                         text = if (activeFilterCount == 0) {
@@ -727,11 +760,17 @@ private fun BrowseScreen(
                             selected = state.selectedCategory == null,
                             onClick = { onCategoryChanged(null) },
                             label = { Text(shellText("all", "All")) },
+                            shape = MaterialTheme.shapes.small,
+                            colors = browseFilterChipColors(selected = state.selectedCategory == null),
                         )
                         state.categories.forEach { category ->
                             FilterChip(
                                 selected = state.selectedCategory == category,
                                 onClick = { onCategoryChanged(category) },
+                                shape = MaterialTheme.shapes.small,
+                                colors = browseFilterChipColors(
+                                    selected = state.selectedCategory == category,
+                                ),
                                 label = {
                                     Text(
                                         OpportunityLocalization.categoryName(
@@ -760,6 +799,10 @@ private fun BrowseScreen(
                             FilterChip(
                                 selected = highSchoolFocus == focus,
                                 onClick = { onHighSchoolFocusChanged(focus) },
+                                shape = MaterialTheme.shapes.small,
+                                colors = browseFilterChipColors(
+                                    selected = highSchoolFocus == focus,
+                                ),
                                 label = { Text(label) },
                             )
                         }
@@ -811,7 +854,6 @@ private fun BrowseScreen(
                     language = language,
                     catalog = catalog,
                     text = shellText,
-                    modifier = Modifier.padding(horizontal = 16.dp),
                 )
             }
         }
@@ -843,7 +885,10 @@ private fun BrandHeader(
 
     Surface(
         color = MaterialTheme.colorScheme.primaryContainer,
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth(),
+        shape = MaterialTheme.shapes.medium,
+        tonalElevation = 2.dp,
     ) {
         Row(
             modifier = Modifier.padding(horizontal = 18.dp, vertical = 20.dp),
@@ -885,8 +930,15 @@ private fun FeedStatusRow(
     onRefresh: () -> Unit,
     text: (String, String) -> String,
 ) {
+    Surface(
+        color = MaterialTheme.colorScheme.surface,
+        shape = MaterialTheme.shapes.medium,
+        tonalElevation = 1.dp,
+    ) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(10.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(10.dp),
     ) {
@@ -916,6 +968,7 @@ private fun FeedStatusRow(
             onClick = onRefresh,
             enabled = !isRefreshing,
             modifier = Modifier.heightIn(min = 48.dp),
+            shape = MaterialTheme.shapes.small,
         ) {
             if (isRefreshing) {
                 CircularProgressIndicator(
@@ -940,7 +993,17 @@ private fun FeedStatusRow(
             )
         }
     }
+    }
 }
+
+@Composable
+private fun browseFilterChipColors(selected: Boolean) = FilterChipDefaults.filterChipColors(
+    selectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+    selectedLabelColor = MaterialTheme.colorScheme.onPrimaryContainer,
+    containerColor = MaterialTheme.colorScheme.surfaceVariant,
+    labelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+    iconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+)
 
 private fun resultSummary(
     snapshot: OpportunityFeedSnapshot?,
@@ -984,12 +1047,14 @@ private fun OpportunityCard(
     }
     Card(
         modifier = modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(AppCardRadius),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.7f)),
+        elevation = CardDefaults.cardElevation(defaultElevation = AppCardElevation),
     ) {
         Column(
-            modifier = Modifier.padding(18.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp),
+            modifier = Modifier.padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -1033,6 +1098,7 @@ private fun OpportunityCard(
                 OutlinedButton(
                     onClick = onToggleFavorite,
                     modifier = Modifier
+                        .weight(1f)
                         .heightIn(min = 48.dp)
                         .semantics {
                             contentDescription = if (isFavorite) {
@@ -1047,6 +1113,7 @@ private fun OpportunityCard(
                 Button(
                     onClick = onDetails,
                     modifier = Modifier
+                        .weight(1f)
                         .heightIn(min = 48.dp)
                         .semantics {
                             contentDescription = "${text("details", "View details")}: ${localized.title}"
@@ -1063,7 +1130,7 @@ private fun OpportunityCard(
 private fun CategoryPill(text: String) {
     Surface(
         color = MaterialTheme.colorScheme.primaryContainer,
-        shape = CircleShape,
+        shape = MaterialTheme.shapes.small,
     ) {
         Text(
             text = text,
@@ -1082,7 +1149,7 @@ private fun FreePill(label: String) {
     Surface(
         color = MaterialTheme.colorScheme.tertiary,
         contentColor = MaterialTheme.colorScheme.onTertiary,
-        shape = CircleShape,
+        shape = MaterialTheme.shapes.small,
     ) {
         Text(
             text = label,
@@ -1199,9 +1266,14 @@ private fun OpportunityDetailScreen(
     LazyColumn(
         modifier = Modifier
             .fillMaxHeight()
-            .widthIn(max = 840.dp)
+            .widthIn(max = AppScreenMaxWidth)
             .testTag("opportunity-detail"),
-        contentPadding = PaddingValues(horizontal = 18.dp, vertical = 12.dp),
+        contentPadding = PaddingValues(
+            start = AppScreenPadding,
+            top = AppScreenTopPadding,
+            end = AppScreenPadding,
+            bottom = 24.dp,
+        ),
         verticalArrangement = Arrangement.spacedBy(14.dp),
     ) {
         item {
@@ -1216,7 +1288,9 @@ private fun OpportunityDetailScreen(
                 Spacer(Modifier.weight(1f))
                 OutlinedButton(
                     onClick = onToggleFavorite,
+                    shape = MaterialTheme.shapes.small,
                     modifier = Modifier
+                        .widthIn(max = 160.dp)
                         .heightIn(min = 48.dp)
                         .semantics {
                             contentDescription = if (isFavorite) {
@@ -1299,6 +1373,7 @@ private fun OpportunityDetailScreen(
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 val registrationUrl = opportunity.registrationUrl ?: opportunity.sourceUrl
                 Button(
+                    shape = MaterialTheme.shapes.medium,
                     onClick = {
                         if (!openHttps(context, registrationUrl)) {
                             Toast.makeText(
@@ -1331,6 +1406,7 @@ private fun OpportunityDetailScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .heightIn(min = 52.dp),
+                        shape = MaterialTheme.shapes.medium,
                     ) {
                         Text(text("directions", "Get directions"))
                     }
@@ -1375,8 +1451,10 @@ private fun DetailFacts(
 ) {
     Card(
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
+        shape = MaterialTheme.shapes.medium,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)),
     ) {
-        Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+        Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
             DetailFactRow(text("region", "Location"), locationLabel(opportunity, localized))
             HorizontalDivider()
             DetailFactRow(text("ages", "Ages"), ageLabel(opportunity, text))
@@ -1441,7 +1519,12 @@ private fun DetailFactRow(label: String, value: String) {
 
 @Composable
 private fun DetailSection(title: String, body: String) {
-    Card {
+    Card(
+        shape = MaterialTheme.shapes.medium,
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.5.dp),
+    ) {
         Column(
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(6.dp),
@@ -1459,36 +1542,64 @@ private fun DetailSection(title: String, body: String) {
 @Composable
 private fun SupportScreen(text: (String, String) -> String) {
     val context = LocalContext.current
+    val supportActions = listOf(
+        SupportAction(
+            label = text("sendFeedback", "Get help and share feedback"),
+            summary = "Report issues, suggest features, and help us improve reliability and accuracy.",
+            url = stringResource(R.string.support_url),
+        ),
+        SupportAction(
+            label = text("privacyPolicy", "Privacy policy"),
+            summary = "Review how local data and account settings are handled.",
+            url = stringResource(R.string.privacy_policy_url),
+        ),
+        SupportAction(
+            label = text("termsTitle", "Terms of use"),
+            summary = "Understand usage rules and support expectations.",
+            url = stringResource(R.string.terms_url),
+        ),
+    )
+
     LazyColumn(
         modifier = Modifier
             .fillMaxHeight()
-            .widthIn(max = 720.dp)
+            .widthIn(max = 760.dp)
             .testTag("support-screen"),
-        contentPadding = PaddingValues(horizontal = 20.dp, vertical = 24.dp),
+        contentPadding = PaddingValues(
+            start = AppScreenPadding,
+            top = AppScreenTopPadding,
+            end = AppScreenPadding,
+            bottom = 24.dp,
+        ),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+        verticalArrangement = Arrangement.spacedBy(14.dp),
     ) {
         item {
-            Image(
-                painter = painterResource(R.drawable.app_icon),
-                contentDescription = "GTA FREE STEM app icon",
-                modifier = Modifier
-                    .size(112.dp)
-                    .clip(RoundedCornerShape(26.dp)),
-            )
+            SupportHeroCard()
         }
         item {
-            Text(
-                text("support", "Support and feedback"),
-                style = MaterialTheme.typography.headlineSmall,
-                modifier = Modifier.semantics { heading() },
-            )
-        }
-        item {
-            Text(
-                "Need help, found a listing that changed, or have an idea to make GTA FREE STEM better? Reach us through the support page.",
-                style = MaterialTheme.typography.bodyLarge,
-            )
+            Card(
+                shape = MaterialTheme.shapes.medium,
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.45f)),
+                elevation = CardDefaults.cardElevation(defaultElevation = AppCardElevation),
+            ) {
+                Column(
+                    modifier = Modifier.padding(horizontal = 18.dp, vertical = 14.dp),
+                    verticalArrangement = Arrangement.spacedBy(10.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    Text(
+                        text("support", "Support and feedback"),
+                        style = MaterialTheme.typography.headlineSmall,
+                        modifier = Modifier.semantics { heading() },
+                    )
+                    Text(
+                        "Need help, found a listing that changed, or have an idea to make GTA FREE STEM better? Reach us through the support page.",
+                        style = MaterialTheme.typography.bodyLarge,
+                    )
+                }
+            }
         }
         item {
             DetailSection(
@@ -1499,41 +1610,129 @@ private fun SupportScreen(text: (String, String) -> String) {
         item {
             Column(
                 modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp),
             ) {
-                ExternalPolicyButton(
-                    label = text("sendFeedback", "Get help and share feedback"),
-                    url = stringResource(R.string.support_url),
-                    context = context,
-                )
-                ExternalPolicyButton(
-                    label = text("privacyPolicy", "Privacy policy"),
-                    url = stringResource(R.string.privacy_policy_url),
-                    context = context,
-                )
-                ExternalPolicyButton(
-                    label = text("termsTitle", "Terms of use"),
-                    url = stringResource(R.string.terms_url),
-                    context = context,
-                )
+                supportActions.forEach {
+                    SupportActionCard(
+                        label = it.label,
+                        summary = it.summary,
+                        url = it.url,
+                        context = context,
+                    )
+                }
             }
+        }
+        item {
+            Text(
+                "Tip: if something feels off, report it quickly and include your city, device version, and what you were doing.",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(bottom = 4.dp),
+            )
         }
     }
 }
 
 @Composable
-private fun ExternalPolicyButton(label: String, url: String, context: Context) {
-    OutlinedButton(
-        onClick = {
-            if (!openHttps(context, url)) {
-                Toast.makeText(context, "$label is unavailable.", Toast.LENGTH_LONG).show()
+private fun SupportHeroCard() {
+    Card(
+        shape = RoundedCornerShape(AppCardRadius),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.25f)),
+        elevation = CardDefaults.cardElevation(defaultElevation = AppCardElevation),
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+            Surface(
+                modifier = Modifier.size(98.dp),
+                shape = CircleShape,
+                color = MaterialTheme.colorScheme.primaryContainer,
+            ) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Image(
+                        painter = painterResource(R.drawable.app_icon),
+                        contentDescription = "GTA FREE STEM app icon",
+                        modifier = Modifier
+                            .size(66.dp)
+                            .clip(RoundedCornerShape(20.dp)),
+                    )
+                }
             }
-        },
+            Text(
+                "GTA FREE STEM support",
+                style = MaterialTheme.typography.titleLarge,
+                color = MaterialTheme.colorScheme.onSurface,
+            )
+            Text(
+                "Need us? We're here to help fix issues and improve the app together.",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(horizontal = 4.dp),
+            )
+        }
+    }
+}
+
+private data class SupportAction(
+    val label: String,
+    val summary: String,
+    val url: String,
+)
+
+@Composable
+private fun SupportActionCard(
+    label: String,
+    summary: String,
+    url: String,
+    context: Context,
+) {
+    Card(
+        shape = MaterialTheme.shapes.medium,
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.55f)),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.9.dp),
         modifier = Modifier
             .fillMaxWidth()
-            .heightIn(min = 50.dp),
+            .heightIn(min = 72.dp)
+            .clickable {
+                if (!openHttps(context, url)) {
+                    Toast.makeText(context, "$label is unavailable.", Toast.LENGTH_LONG).show()
+                }
+            },
     ) {
-        Text(label)
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 14.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(4.dp),
+                modifier = Modifier.weight(1f),
+            ) {
+                Text(label, style = MaterialTheme.typography.titleSmall)
+                Text(
+                    summary,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+            Text(
+                ">",
+                style = MaterialTheme.typography.titleLarge,
+                color = MaterialTheme.colorScheme.primary,
+            )
+        }
     }
 }
 
