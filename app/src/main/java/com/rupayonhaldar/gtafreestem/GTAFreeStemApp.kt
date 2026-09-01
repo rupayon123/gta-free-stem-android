@@ -550,7 +550,7 @@ private fun HomePathButton(
         onClick = onClick,
         modifier = modifier
             .heightIn(min = 52.dp)
-            .padding(top = 2.dp),
+            .padding(top = 0.dp),
         shape = MaterialTheme.shapes.medium,
     ) {
         Text(label)
@@ -1194,19 +1194,35 @@ private fun FreePill(label: String) {
 
 @Composable
 private fun LoadingPanel(text: (String, String) -> String) {
-    Column(
+    Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 24.dp, vertical = 48.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+            .padding(horizontal = 4.dp),
+        shape = MaterialTheme.shapes.medium,
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant,
+        ),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+        elevation = CardDefaults.cardElevation(defaultElevation = 1.2.dp),
     ) {
-        CircularProgressIndicator(
-            modifier = Modifier.semantics {
-                contentDescription = text("preparingOpportunities", "Loading opportunities")
-            },
-        )
-        Text(text("preparingOpportunities", "Loading verified free opportunities…"))
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp, vertical = 36.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+        ) {
+            CircularProgressIndicator(
+                modifier = Modifier.semantics {
+                    contentDescription = text("preparingOpportunities", "Loading opportunities")
+                },
+            )
+            Text(
+                text("preparingOpportunities", "Loading verified free opportunities…"),
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
     }
 }
 
@@ -1219,9 +1235,12 @@ private fun ErrorBanner(
 ) {
     Card(
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.errorContainer),
+        shape = MaterialTheme.shapes.medium,
+        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.error.copy(alpha = 0.35f)),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp),
+            .padding(horizontal = 4.dp, vertical = 2.dp),
     ) {
         Row(
             modifier = Modifier.padding(16.dp),
@@ -1234,7 +1253,10 @@ private fun ErrorBanner(
                 modifier = Modifier.weight(1f),
             )
             if (showRetry) {
-                TextButton(onClick = onRetry) {
+                TextButton(
+                    onClick = onRetry,
+                    shape = MaterialTheme.shapes.small,
+                ) {
                     Text(text("refreshResearch", "Try again"))
                 }
             }
@@ -1261,7 +1283,7 @@ private fun EmptyPanel(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 28.dp, vertical = 44.dp),
+                .padding(horizontal = 28.dp, vertical = 38.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {

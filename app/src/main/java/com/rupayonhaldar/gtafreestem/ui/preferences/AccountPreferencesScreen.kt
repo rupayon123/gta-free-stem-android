@@ -34,6 +34,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -65,6 +66,10 @@ import com.rupayonhaldar.gtafreestem.data.local.AppThemePreference
 import com.rupayonhaldar.gtafreestem.data.local.DisplayNameSaveResult
 import com.rupayonhaldar.gtafreestem.data.local.LocalAccountDataDeletionResult
 import com.rupayonhaldar.gtafreestem.localization.AppLanguage
+
+private val PreferenceScreenTopPadding = 16.dp
+private val PreferenceCardSpacing = 14.dp
+private val PreferenceCardElevation = 1.5.dp
 
 /**
  * Local profile and app preferences UI. This screen creates no account, network connection,
@@ -128,7 +133,7 @@ fun AccountPreferencesScreen(
                 .windowInsetsPadding(WindowInsets.safeDrawing)
                 .imePadding(),
         ) {
-            val horizontalPadding = if (maxWidth >= 600.dp) 24.dp else 16.dp
+            val horizontalPadding = if (maxWidth >= 600.dp) 24.dp else PreferenceScreenTopPadding
 
             Column(
                 modifier = Modifier
@@ -143,11 +148,11 @@ fun AccountPreferencesScreen(
                         .widthIn(max = 720.dp)
                         .padding(
                             start = horizontalPadding,
-                            top = 24.dp,
+                            top = PreferenceScreenTopPadding,
                             end = horizontalPadding,
                             bottom = 40.dp,
                         ),
-                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(PreferenceCardSpacing),
                 ) {
                     ScreenHeading(labels)
 
@@ -414,6 +419,9 @@ private fun StatusMessage(message: String) {
             .fillMaxWidth()
             .semantics { liveRegion = LiveRegionMode.Polite }
             .testTag(AccountPreferencesTestTags.STATUS),
+        shape = MaterialTheme.shapes.medium,
+        elevation = CardDefaults.cardElevation(defaultElevation = PreferenceCardElevation),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.secondaryContainer,
         ),
@@ -434,6 +442,8 @@ private fun PreferencesCard(
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
+        shape = MaterialTheme.shapes.medium,
+        elevation = CardDefaults.cardElevation(defaultElevation = PreferenceCardElevation),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         border = BorderStroke(1.dp, borderColor),
     ) {
@@ -460,30 +470,42 @@ private fun ThemeChoiceRow(
     selected: Boolean,
     onClick: () -> Unit,
 ) {
+    val container = if (selected) {
+        MaterialTheme.colorScheme.secondaryContainer
+    } else {
+        MaterialTheme.colorScheme.surface
+    }
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .heightIn(min = 52.dp)
+            .heightIn(min = 56.dp)
             .selectable(
                 selected = selected,
                 onClick = onClick,
                 role = Role.RadioButton,
             )
             .semantics(mergeDescendants = true) {}
-            .padding(horizontal = 8.dp, vertical = 8.dp),
+            .padding(horizontal = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        RadioButton(
-            selected = selected,
-            onClick = null,
-            modifier = Modifier.clearAndSetSemantics {},
-        )
-        Text(
-            text = label,
-            style = MaterialTheme.typography.bodyLarge,
+        Surface(
+            color = container,
+            shape = MaterialTheme.shapes.small,
+            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+        ) {
+            RadioButton(
+                selected = selected,
+                onClick = null,
+                modifier = Modifier.clearAndSetSemantics {},
+            )
+        }
+        Column(
             modifier = Modifier.weight(1f),
-        )
+            verticalArrangement = Arrangement.spacedBy(4.dp),
+        ) {
+            Text(text = label, style = MaterialTheme.typography.bodyLarge)
+        }
     }
 }
 
@@ -504,7 +526,8 @@ private fun PreferenceToggleRow(
                 onValueChange = onCheckedChange,
             )
             .semantics(mergeDescendants = true) {}
-            .padding(vertical = 8.dp),
+            .padding(vertical = 8.dp)
+            .padding(horizontal = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp),
     ) {
@@ -533,7 +556,8 @@ private fun LegalAction(label: String, onClick: () -> Unit) {
         onClick = onClick,
         modifier = Modifier
             .fillMaxWidth()
-            .heightIn(min = 52.dp),
+            .heightIn(min = 52.dp)
+            .padding(horizontal = 6.dp),
         contentPadding = PaddingValues(horizontal = 12.dp, vertical = 12.dp),
     ) {
         Text(

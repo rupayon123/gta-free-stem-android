@@ -9,14 +9,17 @@ import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.NavigationRailItem
+import androidx.compose.material3.NavigationRailItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.MaterialTheme
@@ -111,7 +114,11 @@ private fun PrimaryNavigationBar(
     destinationLabel: (PrimaryDestination) -> String,
 ) {
     NavigationBar(
-        modifier = Modifier.testTag("primary-navigation-bar"),
+        modifier = Modifier
+            .testTag("primary-navigation-bar")
+            .fillMaxWidth(),
+        containerColor = MaterialTheme.colorScheme.surface,
+        tonalElevation = 4.dp,
         windowInsets = WindowInsets.safeDrawing.only(
             WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom,
         ),
@@ -134,6 +141,13 @@ private fun PrimaryNavigationBar(
                     )
                 },
                 alwaysShowLabel = true,
+                colors = NavigationBarItemDefaults.colors(
+                    selectedIconColor = MaterialTheme.colorScheme.primary,
+                    selectedTextColor = MaterialTheme.colorScheme.primary,
+                    unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    indicatorColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.5f),
+                ),
             )
         }
     }
@@ -148,7 +162,9 @@ private fun PrimaryNavigationRail(
     NavigationRail(
         modifier = Modifier
             .fillMaxHeight()
+            .padding(horizontal = 8.dp, vertical = 8.dp)
             .testTag("primary-navigation-rail"),
+        containerColor = MaterialTheme.colorScheme.surface,
         windowInsets = WindowInsets(0, 0, 0, 0),
     ) {
         PrimaryDestination.entries.forEach { destination ->
@@ -166,6 +182,13 @@ private fun PrimaryNavigationRail(
                     DestinationLabel(destinationLabel(destination), compact = false)
                 },
                 alwaysShowLabel = true,
+                colors = NavigationRailItemDefaults.colors(
+                    selectedIconColor = MaterialTheme.colorScheme.primary,
+                    selectedTextColor = MaterialTheme.colorScheme.primary,
+                    unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    indicatorColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.5f),
+                ),
             )
         }
     }

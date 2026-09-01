@@ -52,6 +52,12 @@ import com.rupayonhaldar.gtafreestem.domain.model.Opportunity
 import com.rupayonhaldar.gtafreestem.localization.AppLanguage
 import com.rupayonhaldar.gtafreestem.localization.AppStringCatalog
 
+private val SavedLibraryMaxWidth = 840.dp
+private val SavedLibraryPadding = 16.dp
+private val SavedLibraryTopPadding = 12.dp
+private val SavedLibrarySpacing = 14.dp
+private val SavedLibraryElevation = 1.5.dp
+
 /**
  * Displays the exact full opportunity snapshots held by the caller's local saved store.
  * This composable performs no persistence, network request, sign-in, or cloud synchronization.
@@ -79,15 +85,15 @@ fun SavedOpportunityLibraryScreen(
     val layoutDirection = if (language.isRightToLeft) LayoutDirection.Rtl else LayoutDirection.Ltr
 
     CompositionLocalProvider(LocalLayoutDirection provides layoutDirection) {
-        BoxWithConstraints(
-            modifier = modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
-                .windowInsetsPadding(WindowInsets.safeDrawing),
-            contentAlignment = Alignment.TopCenter,
-        ) {
-            val listWidth = maxWidth.coerceAtMost(760.dp)
-            val horizontalPadding = if (maxWidth >= 600.dp) 24.dp else 16.dp
+            BoxWithConstraints(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight()
+                    .windowInsetsPadding(WindowInsets.safeDrawing),
+                contentAlignment = Alignment.TopCenter,
+            ) {
+                val listWidth = maxWidth.coerceAtMost(SavedLibraryMaxWidth)
+                val horizontalPadding = if (maxWidth >= 600.dp) 24.dp else SavedLibraryPadding
 
             LazyColumn(
                 modifier = Modifier
@@ -96,11 +102,11 @@ fun SavedOpportunityLibraryScreen(
                     .testTag(SavedOpportunityLibraryTestTags.SCREEN),
                 contentPadding = PaddingValues(
                     start = horizontalPadding,
-                    top = 12.dp,
+                    top = SavedLibraryTopPadding,
                     end = horizontalPadding,
                     bottom = 40.dp,
                 ),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
+                verticalArrangement = Arrangement.spacedBy(SavedLibrarySpacing),
             ) {
                 item(key = "header", contentType = "header") {
                     LibraryHeader(
@@ -277,42 +283,55 @@ private fun LibraryHeader(
     onBack: () -> Unit,
     onClearAll: () -> Unit,
 ) {
-    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        TextButton(
-            onClick = onBack,
-            modifier = Modifier
-                .heightIn(min = 48.dp)
-                .testTag(SavedOpportunityLibraryTestTags.BACK),
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = MaterialTheme.shapes.medium,
+        elevation = CardDefaults.cardElevation(defaultElevation = SavedLibraryElevation),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+    ) {
+        Column(
+            modifier = Modifier.padding(18.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            Text(labels.back)
-        }
-        Text(
-            text = labels.title,
-            style = MaterialTheme.typography.headlineMedium,
-            modifier = Modifier.semantics { heading() },
-        )
-        Text(
-            text = labels.localOnlyExplanation,
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-        Text(
-            text = labels.itemCount(count),
-            style = MaterialTheme.typography.titleMedium,
-        )
-        if (showClearAll) {
-            OutlinedButton(
-                onClick = onClearAll,
+            TextButton(
+                onClick = onBack,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .heightIn(min = 52.dp)
-                    .testTag(SavedOpportunityLibraryTestTags.CLEAR_ALL),
-                colors = ButtonDefaults.outlinedButtonColors(
-                    contentColor = MaterialTheme.colorScheme.error,
-                ),
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.error),
+                    .heightIn(min = 48.dp)
+                    .testTag(SavedOpportunityLibraryTestTags.BACK),
             ) {
-                Text(labels.clearAll, textAlign = TextAlign.Center)
+                Text(labels.back)
+            }
+            Text(
+                text = labels.title,
+                style = MaterialTheme.typography.headlineMedium,
+                modifier = Modifier.semantics { heading() },
+            )
+            Text(
+                text = labels.localOnlyExplanation,
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            Text(
+                text = labels.itemCount(count),
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.primary,
+            )
+            if (showClearAll) {
+                OutlinedButton(
+                    onClick = onClearAll,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(min = 52.dp)
+                        .testTag(SavedOpportunityLibraryTestTags.CLEAR_ALL),
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        contentColor = MaterialTheme.colorScheme.error,
+                    ),
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.error),
+                    shape = MaterialTheme.shapes.small,
+                ) {
+                    Text(labels.clearAll, textAlign = TextAlign.Center)
+                }
             }
         }
     }
@@ -325,6 +344,9 @@ private fun StatusMessage(message: String) {
             .fillMaxWidth()
             .semantics { liveRegion = LiveRegionMode.Polite }
             .testTag(SavedOpportunityLibraryTestTags.STATUS),
+        shape = MaterialTheme.shapes.small,
+        elevation = CardDefaults.cardElevation(defaultElevation = SavedLibraryElevation),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.secondaryContainer,
         ),
@@ -347,9 +369,12 @@ private fun LegacySavedNotice(
         modifier = Modifier
             .fillMaxWidth()
             .testTag(SavedOpportunityLibraryTestTags.LEGACY_NOTICE),
+        shape = MaterialTheme.shapes.medium,
+        elevation = CardDefaults.cardElevation(defaultElevation = SavedLibraryElevation),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer,
         ),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
     ) {
         Column(
             modifier = Modifier.padding(16.dp),
@@ -375,6 +400,8 @@ private fun EmptySavedLibrary(labels: SavedOpportunityLibraryLabels) {
         modifier = Modifier
             .fillMaxWidth()
             .testTag(SavedOpportunityLibraryTestTags.EMPTY),
+        shape = MaterialTheme.shapes.medium,
+        elevation = CardDefaults.cardElevation(defaultElevation = SavedLibraryElevation),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
     ) {
@@ -449,8 +476,19 @@ private fun SavedOpportunityCard(
         modifier = Modifier
             .fillMaxWidth()
             .testTag(SavedOpportunityLibraryTestTags.card(opportunity.id)),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+        shape = MaterialTheme.shapes.medium,
+        colors = CardDefaults.cardColors(
+            containerColor = if (archived) {
+                MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f)
+            } else {
+                MaterialTheme.colorScheme.surface
+            },
+        ),
+        border = BorderStroke(
+            1.dp,
+            if (archived) MaterialTheme.colorScheme.outline.copy(alpha = 0.75f) else MaterialTheme.colorScheme.outlineVariant,
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = SavedLibraryElevation),
     ) {
         Column(
             modifier = Modifier.padding(18.dp),
@@ -498,33 +536,35 @@ private fun SavedOpportunityCard(
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
-            Button(
-                onClick = onOpenDetail,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .heightIn(min = 52.dp)
-                    .semantics {
-                        contentDescription = labels.openDetailsAccessibility(text.title)
-                    }
-                    .testTag(SavedOpportunityLibraryTestTags.details(opportunity.id)),
-            ) {
-                Text(labels.details, textAlign = TextAlign.Center)
-            }
-            OutlinedButton(
-                onClick = onRemove,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .heightIn(min = 52.dp)
-                    .semantics {
-                        contentDescription = labels.removeAccessibility(text.title)
-                    }
-                    .testTag(SavedOpportunityLibraryTestTags.remove(opportunity.id)),
-                colors = ButtonDefaults.outlinedButtonColors(
-                    contentColor = MaterialTheme.colorScheme.error,
-                ),
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.error),
-            ) {
-                Text(labels.remove, textAlign = TextAlign.Center)
+            Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth()) {
+                Button(
+                    onClick = onOpenDetail,
+                    modifier = Modifier
+                        .weight(1f)
+                        .heightIn(min = 48.dp)
+                        .semantics {
+                            contentDescription = labels.openDetailsAccessibility(text.title)
+                        }
+                        .testTag(SavedOpportunityLibraryTestTags.details(opportunity.id)),
+                ) {
+                    Text(labels.details, textAlign = TextAlign.Center)
+                }
+                OutlinedButton(
+                    onClick = onRemove,
+                    modifier = Modifier
+                        .weight(1f)
+                        .heightIn(min = 48.dp)
+                        .semantics {
+                            contentDescription = labels.removeAccessibility(text.title)
+                        }
+                        .testTag(SavedOpportunityLibraryTestTags.remove(opportunity.id)),
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        contentColor = MaterialTheme.colorScheme.error,
+                    ),
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.error),
+                ) {
+                    Text(labels.remove, textAlign = TextAlign.Center)
+                }
             }
         }
     }
@@ -532,7 +572,7 @@ private fun SavedOpportunityCard(
 
 @Composable
 private fun SavedOpportunityFactRow(fact: SavedOpportunityFact) {
-    Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
         Text(
             text = fact.label,
             style = MaterialTheme.typography.labelMedium,

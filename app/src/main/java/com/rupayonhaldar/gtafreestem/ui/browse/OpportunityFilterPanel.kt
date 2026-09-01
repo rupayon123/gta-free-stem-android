@@ -1,5 +1,6 @@
 package com.rupayonhaldar.gtafreestem.ui.browse
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -17,9 +18,12 @@ import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExposedDropdownMenuAnchorType
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -91,7 +95,7 @@ fun OpportunityFilterPanel(
         Column(
             modifier = Modifier
                 .align(Alignment.TopCenter)
-                .widthIn(max = 720.dp)
+                .widthIn(max = 740.dp)
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = horizontalPadding, vertical = 16.dp),
@@ -104,15 +108,19 @@ fun OpportunityFilterPanel(
                 onReset = onReset,
             )
 
-            Surface(
-                color = MaterialTheme.colorScheme.surfaceVariant,
-                contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            Card(
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                ),
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.45f)),
+                elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
                 shape = MaterialTheme.shapes.medium,
             ) {
                 Text(
                     text = labels.scopeDescription,
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
                     style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
 
@@ -341,6 +349,7 @@ private fun FilterPanelHeader(
             modifier = Modifier
                 .heightIn(min = MinimumTouchTarget)
                 .testTag(OpportunityFilterPanelTestTags.RESET),
+            shape = MaterialTheme.shapes.small,
         ) {
             Text(labels.reset)
         }
@@ -442,6 +451,7 @@ private fun <T> FilterDropdown(
                 .semantics { stateDescription = selectedLabel },
             readOnly = true,
             singleLine = true,
+            shape = MaterialTheme.shapes.small,
             label = { Text(label) },
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
         )
@@ -478,6 +488,14 @@ private fun FilterToggleFlow(
                 selected = toggle.selected,
                 onClick = { toggle.onToggle(!toggle.selected) },
                 label = { Text(toggle.label) },
+                shape = MaterialTheme.shapes.small,
+                colors = FilterChipDefaults.filterChipColors(
+                    selectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                    selectedLabelColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                    containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                    labelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    iconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                ),
                 modifier = Modifier
                     .heightIn(min = MinimumTouchTarget)
                     .testTag(toggle.testTag)
@@ -500,22 +518,40 @@ private fun SortChoice(
     testTag: String,
     onClick: () -> Unit,
 ) {
-    Row(
+    Surface(
+        color = if (selected) {
+            MaterialTheme.colorScheme.secondaryContainer
+        } else {
+            MaterialTheme.colorScheme.surface
+        },
+        shape = MaterialTheme.shapes.small,
+        border = BorderStroke(
+            1.dp,
+            if (selected) {
+                MaterialTheme.colorScheme.primary
+            } else {
+                MaterialTheme.colorScheme.outlineVariant
+            },
+        ),
         modifier = Modifier
             .fillMaxWidth()
-            .heightIn(min = MinimumTouchTarget)
-            .selectable(
-                selected = selected,
-                onClick = onClick,
-                role = Role.RadioButton,
-            )
-            .testTag(testTag)
-            .padding(horizontal = 4.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
+            .heightIn(min = MinimumTouchTarget),
     ) {
-        RadioButton(selected = selected, onClick = null)
-        Text(text = label, style = MaterialTheme.typography.bodyLarge)
+        Row(
+            modifier = Modifier
+                .selectable(
+                    selected = selected,
+                    onClick = onClick,
+                    role = Role.RadioButton,
+                )
+                .padding(horizontal = 12.dp)
+                .testTag(testTag),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            RadioButton(selected = selected, onClick = null)
+            Text(text = label, style = MaterialTheme.typography.bodyLarge)
+        }
     }
 }
 
