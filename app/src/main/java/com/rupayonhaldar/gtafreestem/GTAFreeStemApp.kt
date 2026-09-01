@@ -592,25 +592,42 @@ private fun FilterScreen(
     onFiltersChanged: (OpportunitySearchFilters) -> Unit,
     text: (String, String) -> String,
 ) {
-    Column(modifier = Modifier.fillMaxSize()) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = AppScreenPadding, vertical = 12.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(AppScreenPadding),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
+        Card(
+            shape = MaterialTheme.shapes.medium,
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surface,
+            ),
+            border = BorderStroke(
+                1.dp,
+                MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.55f),
+            ),
+            elevation = CardDefaults.cardElevation(defaultElevation = AppCardElevation),
         ) {
-            TextButton(
-                onClick = onBack,
-                modifier = Modifier.heightIn(min = 48.dp),
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 12.dp, vertical = 12.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                Text(text("back", "Back"))
+                TextButton(
+                    onClick = onBack,
+                    modifier = Modifier.heightIn(min = 48.dp),
+                ) {
+                    Text(text("back", "Back"))
+                }
+                Text(
+                    text = text("filters", "Filters"),
+                    style = MaterialTheme.typography.titleLarge,
+                    modifier = Modifier.semantics { heading() },
+                )
             }
-            Text(
-                text = text("filters", "Filters"),
-                style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier.semantics { heading() },
-            )
         }
         OpportunityFilterPanel(
             filters = state.filters,
@@ -619,6 +636,7 @@ private fun FilterScreen(
             labels = localizedFilterLabels(text),
             onReset = { onFiltersChanged(OpportunitySearchFilters()) },
             modifier = Modifier
+                .fillMaxWidth()
                 .weight(1f)
                 .padding(bottom = 8.dp),
         )
