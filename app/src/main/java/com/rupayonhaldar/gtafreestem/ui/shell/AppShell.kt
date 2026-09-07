@@ -280,8 +280,8 @@ private fun PrimaryNavigationBar(
                     val activeItemCorner by animateDpAsState(
                         targetValue = when {
                             isSelected -> 21.dp
-                            isPressed -> 19.dp
-                            else -> 17.dp
+                            isPressed -> 18.dp
+                            else -> 16.dp
                         },
                         animationSpec = if (isPressed) {
                             navPressDpAnimationSpec
@@ -307,8 +307,8 @@ private fun PrimaryNavigationBar(
                     val activeItemHeight by animateDpAsState(
                         targetValue = when {
                             isSelected -> 59.dp
-                            isPressed -> 56.dp
-                            else -> 55.dp
+                            isPressed -> 55.5.dp
+                            else -> 54.5.dp
                         },
                         animationSpec = if (isPressed) {
                             navPressDpAnimationSpec
