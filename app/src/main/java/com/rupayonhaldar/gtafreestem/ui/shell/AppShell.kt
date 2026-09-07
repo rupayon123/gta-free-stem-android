@@ -695,7 +695,10 @@ private fun DestinationLabel(
         )
     } else {
         MaterialTheme.typography.labelSmall.copy(
-            fontWeight = if (isSelected) FontWeight.Medium else if (isPressed) FontWeight.Normal else FontWeight.Normal,
+            fontSize = 11.5.sp,
+            lineHeight = 13.sp,
+            fontWeight = if (isSelected) FontWeight.Medium else FontWeight.Normal,
+            letterSpacing = 0.02.sp,
         )
     }
     val labelColor by animateColorAsState(
@@ -713,7 +716,7 @@ private fun DestinationLabel(
         label = "destination-label-color",
     )
     val labelAlpha by animateFloatAsState(
-        targetValue = if (isPressed) 0.72f else if (isSelected) 1f else 0.9f,
+        targetValue = if (isPressed && !isSelected) 0.72f else if (isSelected) 1f else 0.88f,
         animationSpec = if (isPressed) {
             navPressFloatAnimationSpec
         } else {
