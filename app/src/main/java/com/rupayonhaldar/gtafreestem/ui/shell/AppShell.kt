@@ -224,7 +224,7 @@ private fun PrimaryNavigationBar(
                     interactionSource = destinationInteractionSource,
                     modifier = Modifier
                         .testTag(destination.testTag)
-                        .padding(top = 2.dp)
+                        .padding(horizontal = 4.dp, top = 2.dp)
                         .sizeIn(minWidth = 56.dp, minHeight = 56.dp),
                     icon = {
                         val iconLift by animateDpAsState(
@@ -479,7 +479,7 @@ private fun PrimaryNavigationRail(
         NavigationRail(
             modifier = Modifier
                 .fillMaxHeight()
-                .padding(top = 8.dp, bottom = 8.dp)
+                .padding(horizontal = 2.dp, top = 8.dp, bottom = 8.dp)
                 .clip(RoundedCornerShape(20.dp)),
             containerColor = railContainer,
             windowInsets = WindowInsets(0, 0, 0, 0),
@@ -510,7 +510,7 @@ private fun PrimaryNavigationRail(
                     interactionSource = destinationInteractionSource,
                     modifier = Modifier
                         .testTag(destination.testTag)
-                        .padding(vertical = 2.dp)
+                        .padding(horizontal = 2.dp, vertical = 2.dp)
                         .sizeIn(minWidth = 72.dp, minHeight = 48.dp),
                     icon = {
                         val iconLift by animateDpAsState(
