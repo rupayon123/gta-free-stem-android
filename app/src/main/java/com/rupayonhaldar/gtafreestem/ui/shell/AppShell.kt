@@ -1096,7 +1096,7 @@ private fun PrimaryNavigationRail(
                             },
                             label = "rail-icon-halo-size-${destination.name}",
                         )
-                    val iconHaloBorderWidth by animateDpAsState(
+                        val iconHaloBorderWidth by animateDpAsState(
                             targetValue = if (isSelected || isPressed) 0.7.dp else 0.dp,
                             animationSpec = if (isPressed) {
                                 navPressDpAnimationSpec
