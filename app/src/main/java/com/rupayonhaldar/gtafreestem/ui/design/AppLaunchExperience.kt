@@ -14,10 +14,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Surface
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -84,38 +87,68 @@ fun AppLaunchExperience(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(18.dp),
         ) {
-            Image(
-                painter = painterResource(R.drawable.app_logo),
-                contentDescription = brandLabel,
-                modifier = Modifier
-                    .size(150.dp)
-                    .clip(RoundedCornerShape(32.dp)),
-            )
+            Surface(
+                color = MaterialTheme.colorScheme.surface.copy(alpha = 0.76f),
+                shape = RoundedCornerShape(28.dp),
+                shadowElevation = 10.dp,
+                tonalElevation = 4.dp,
+            ) {
+                Column(
+                    modifier = Modifier
+                        .padding(vertical = 26.dp, horizontal = 22.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(14.dp),
+                ) {
+                    Image(
+                        painter = painterResource(R.drawable.app_logo),
+                        contentDescription = brandLabel,
+                        modifier = Modifier
+                            .size(140.dp)
+                            .clip(RoundedCornerShape(32.dp)),
+                    )
+                    Text(
+                        text = brandLabel,
+                        style = MaterialTheme.typography.headlineSmall,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        textAlign = TextAlign.Center,
+                    )
+                    Text(
+                        text = status,
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        textAlign = TextAlign.Center,
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(2.dp))
+            Surface(
+                color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                tonalElevation = 0.dp,
+                shape = RoundedCornerShape(999.dp),
+            ) {
+                LinearProgressIndicator(
+                    progress = { animatedProgress },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(9.dp)
+                        .padding(horizontal = 2.dp)
+                        .semantics {
+                            contentDescription = progressLabel
+                            progressBarRangeInfo = ProgressBarRangeInfo(
+                                current = animatedProgress,
+                                range = 0f..1f,
+                            )
+                        },
+                    trackColor = Color.Transparent,
+                    color = MaterialTheme.colorScheme.primary,
+                    strokeCap = StrokeCap.Round,
+                )
+            }
             Text(
-                text = brandLabel,
-                style = MaterialTheme.typography.headlineSmall,
-                color = MaterialTheme.colorScheme.onBackground,
-                textAlign = TextAlign.Center,
-            )
-            Text(
-                text = status,
-                style = MaterialTheme.typography.bodyLarge,
+                text = progressLabel,
+                style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center,
-            )
-            LinearProgressIndicator(
-                progress = { animatedProgress },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .semantics {
-                        contentDescription = progressLabel
-                        progressBarRangeInfo = ProgressBarRangeInfo(
-                            current = animatedProgress,
-                            range = 0f..1f,
-                        )
-                    },
-                trackColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.14f),
-                strokeCap = StrokeCap.Round,
             )
         }
     }
