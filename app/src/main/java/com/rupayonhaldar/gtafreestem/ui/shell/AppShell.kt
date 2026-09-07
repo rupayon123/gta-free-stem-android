@@ -192,6 +192,8 @@ private fun PrimaryNavigationBar(
                 ),
         )
         NavigationBar(
+            modifier = Modifier
+                .padding(horizontal = 2.dp),
             containerColor = barContainer,
             tonalElevation = 0.dp,
             windowInsets = WindowInsets.safeDrawing.only(
@@ -480,7 +482,7 @@ private fun PrimaryNavigationRail(
             modifier = Modifier
                 .fillMaxHeight()
                 .padding(horizontal = 2.dp, top = 8.dp, bottom = 8.dp)
-                .clip(RoundedCornerShape(20.dp)),
+                .clip(railShape),
             containerColor = railContainer,
             windowInsets = WindowInsets(0, 0, 0, 0),
         ) {
