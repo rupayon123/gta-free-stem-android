@@ -193,7 +193,7 @@ private fun PrimaryNavigationBar(
         )
         NavigationBar(
             modifier = Modifier
-                .padding(horizontal = 4.dp)
+                .padding(horizontal = 4.dp, top = 2.dp, bottom = 2.dp)
                 .clip(barShape),
             containerColor = barContainer,
             tonalElevation = 0.dp,
@@ -304,7 +304,7 @@ private fun PrimaryNavigationBar(
                     val activeItemShape = RoundedCornerShape(activeItemCorner)
                     val activeItemOffset by animateDpAsState(
                         targetValue = when {
-                            isSelected -> (-1).dp
+                            isSelected -> (-1.5).dp
                             isPressed -> 1.dp
                             else -> 0.dp
                         },
@@ -367,8 +367,8 @@ private fun PrimaryNavigationBar(
                     icon = {
                         val iconLift by animateDpAsState(
                             targetValue = when {
-                                isPressed -> (-1).dp
-                                isSelected -> (-2).dp
+                                isPressed -> 0.dp
+                                isSelected -> (-2.5).dp
                                 else -> 0.dp
                             },
                             animationSpec = if (isPressed) {
@@ -694,7 +694,7 @@ private fun PrimaryNavigationRail(
         NavigationRail(
             modifier = Modifier
                 .fillMaxHeight()
-                .padding(horizontal = 4.dp, top = 8.dp, bottom = 8.dp)
+                .padding(start = 6.dp, end = 6.dp, top = 10.dp, bottom = 6.dp)
                 .clip(railShape),
             containerColor = railContainer,
             windowInsets = WindowInsets(0, 0, 0, 0),
@@ -802,7 +802,7 @@ private fun PrimaryNavigationRail(
                     val activeItemShape = RoundedCornerShape(activeItemCorner)
                     val activeItemOffset by animateDpAsState(
                         targetValue = when {
-                            isSelected -> (-1).dp
+                            isSelected -> (-2).dp
                             isPressed -> 1.dp
                             else -> 0.dp
                         },
@@ -865,8 +865,8 @@ private fun PrimaryNavigationRail(
                     icon = {
                         val iconLift by animateDpAsState(
                             targetValue = when {
-                                isPressed -> (-1).dp
-                                isSelected -> (-2).dp
+                                isPressed -> 0.dp
+                                isSelected -> (-2.5).dp
                                 else -> 0.dp
                             },
                             animationSpec = if (isPressed) {
