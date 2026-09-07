@@ -693,14 +693,14 @@ private fun PrimaryNavigationRail(
         Color.Black.copy(alpha = 0.08f)
     }
     val railTint = if (isDark) {
-        MaterialTheme.colorScheme.primary.copy(alpha = 0.17f)
+        MaterialTheme.colorScheme.primary.copy(alpha = 0.14f)
     } else {
-        MaterialTheme.colorScheme.primary.copy(alpha = 0.08f)
+        MaterialTheme.colorScheme.primary.copy(alpha = 0.06f)
     }
     val railContainer = if (isDark) {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.70f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.66f)
     } else {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.78f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.74f)
     }
 
     Surface(
@@ -737,7 +737,7 @@ private fun PrimaryNavigationRail(
         NavigationRail(
             modifier = Modifier
                 .fillMaxHeight()
-                .padding(start = 6.dp, end = 6.dp, top = 10.dp, bottom = 6.dp)
+                .padding(start = 5.dp, end = 5.dp, top = 8.dp, bottom = 8.dp)
                 .clip(railShape),
             containerColor = railContainer,
             windowInsets = WindowInsets(0, 0, 0, 0),
@@ -1053,9 +1053,9 @@ private fun PrimaryNavigationRail(
                         )
                         val iconHalo by animateColorAsState(
                             targetValue = if (isSelected) {
-                                MaterialTheme.colorScheme.primary.copy(alpha = 0.10f)
-                            } else if (isPressed) {
                                 MaterialTheme.colorScheme.primary.copy(alpha = 0.08f)
+                            } else if (isPressed) {
+                                MaterialTheme.colorScheme.primary.copy(alpha = 0.06f)
                             } else {
                                 Color.Transparent
                             },
@@ -1068,9 +1068,9 @@ private fun PrimaryNavigationRail(
                         )
                         val iconHaloHighlight by animateColorAsState(
                             targetValue = if (isSelected) {
-                                MaterialTheme.colorScheme.primary.copy(alpha = 0.05f)
-                            } else if (isPressed) {
                                 MaterialTheme.colorScheme.primary.copy(alpha = 0.03f)
+                            } else if (isPressed) {
+                                MaterialTheme.colorScheme.primary.copy(alpha = 0.02f)
                             } else {
                                 Color.Transparent
                             },
@@ -1083,11 +1083,11 @@ private fun PrimaryNavigationRail(
                         )
                         val iconHaloSize by animateDpAsState(
                             targetValue = if (isSelected) {
-                                38.dp
+                                36.dp
                             } else if (isPressed) {
-                                30.dp
+                                28.dp
                             } else {
-                                26.dp
+                                24.dp
                             },
                             animationSpec = if (isPressed) {
                                 navPressDpAnimationSpec
