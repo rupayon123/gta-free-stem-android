@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -28,6 +29,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -171,37 +173,50 @@ private fun PrimaryNavigationRail(
     onDestinationSelected: (PrimaryDestination) -> Unit,
     destinationLabel: (PrimaryDestination) -> String,
 ) {
-    NavigationRail(
+    Surface(
         modifier = Modifier
             .fillMaxHeight()
-            .padding(horizontal = 8.dp, vertical = 8.dp)
+            .widthIn(min = 84.dp)
+            .padding(8.dp)
             .testTag("primary-navigation-rail"),
-        containerColor = MaterialTheme.colorScheme.surface,
-        windowInsets = WindowInsets(0, 0, 0, 0),
+        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.97f),
+        shape = RoundedCornerShape(20.dp),
+        tonalElevation = 6.dp,
+        shadowElevation = 7.dp,
+        border = BorderStroke(0.5.dp, MaterialTheme.colorScheme.surfaceVariant),
     ) {
-        PrimaryDestination.entries.forEach { destination ->
-            NavigationRailItem(
-                selected = selectedDestination == destination,
-                onClick = { onDestinationSelected(destination) },
-                modifier = Modifier.testTag(destination.testTag),
-                icon = {
-                    Icon(
-                        painter = painterResource(destination.iconResource),
-                        contentDescription = null,
-                    )
-                },
-                label = {
-                    DestinationLabel(destinationLabel(destination), compact = false)
-                },
-                alwaysShowLabel = true,
-                colors = NavigationRailItemDefaults.colors(
-                    selectedIconColor = MaterialTheme.colorScheme.primary,
-                    selectedTextColor = MaterialTheme.colorScheme.primary,
-                    unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                    unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                    indicatorColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.5f),
-                ),
-            )
+        NavigationRail(
+            modifier = Modifier
+                .fillMaxHeight()
+                .padding(top = 8.dp, bottom = 8.dp)
+                .clip(RoundedCornerShape(20.dp)),
+            containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.76f),
+            windowInsets = WindowInsets(0, 0, 0, 0),
+        ) {
+            PrimaryDestination.entries.forEach { destination ->
+                NavigationRailItem(
+                    selected = selectedDestination == destination,
+                    onClick = { onDestinationSelected(destination) },
+                    modifier = Modifier.testTag(destination.testTag),
+                    icon = {
+                        Icon(
+                            painter = painterResource(destination.iconResource),
+                            contentDescription = null,
+                        )
+                    },
+                    label = {
+                        DestinationLabel(destinationLabel(destination), compact = false)
+                    },
+                    alwaysShowLabel = true,
+                    colors = NavigationRailItemDefaults.colors(
+                        selectedIconColor = MaterialTheme.colorScheme.primary,
+                        selectedTextColor = MaterialTheme.colorScheme.primary,
+                        unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                        unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                        indicatorColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.5f),
+                    ),
+                )
+            }
         }
     }
 }
