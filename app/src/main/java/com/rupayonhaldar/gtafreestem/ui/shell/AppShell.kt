@@ -33,6 +33,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -151,6 +152,7 @@ private fun PrimaryNavigationBar(
                         DestinationLabel(
                             label = destinationLabel(destination),
                             compact = true,
+                            isSelected = selectedDestination == destination,
                         )
                     },
                     alwaysShowLabel = true,
@@ -204,9 +206,13 @@ private fun PrimaryNavigationRail(
                             contentDescription = null,
                         )
                     },
-                    label = {
-                        DestinationLabel(destinationLabel(destination), compact = false)
-                    },
+                label = {
+                    DestinationLabel(
+                        destinationLabel(destination),
+                        compact = false,
+                        isSelected = selectedDestination == destination,
+                    )
+                },
                     alwaysShowLabel = true,
                     colors = NavigationRailItemDefaults.colors(
                         selectedIconColor = MaterialTheme.colorScheme.primary,
@@ -225,17 +231,22 @@ private fun PrimaryNavigationRail(
 private fun DestinationLabel(
     label: String,
     compact: Boolean,
+    isSelected: Boolean = false,
 ) {
+    val resolvedStyle = if (compact) {
+        MaterialTheme.typography.labelSmall.copy(
+            fontSize = 12.sp,
+            lineHeight = 14.sp,
+            fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
+        )
+    } else {
+        MaterialTheme.typography.labelSmall.copy(
+            fontWeight = if (isSelected) FontWeight.Medium else FontWeight.Normal,
+        )
+    }
     Text(
         text = label,
-        style = if (compact) {
-            MaterialTheme.typography.labelSmall.copy(
-                fontSize = 12.sp,
-                lineHeight = 14.sp,
-            )
-        } else {
-            MaterialTheme.typography.labelSmall
-        },
+        style = resolvedStyle,
         maxLines = if (compact) 2 else 1,
         textAlign = TextAlign.Center,
         overflow = TextOverflow.Ellipsis,
