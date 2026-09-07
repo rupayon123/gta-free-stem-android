@@ -47,10 +47,12 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
+import androidx.compose.ui.text.Shadow
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -1142,9 +1144,9 @@ private fun DestinationLabel(
         )
     } else {
         MaterialTheme.typography.labelSmall.copy(
-            fontSize = 11.5.sp,
-            lineHeight = 13.sp,
-            fontWeight = if (isSelected) FontWeight.Medium else FontWeight.Normal,
+            fontSize = if (isSelected) 11.8.sp else if (isPressed) 11.2.sp else 11.2.sp,
+            lineHeight = if (isPressed) 12.8.sp else 13.sp,
+            fontWeight = if (isSelected) FontWeight.SemiBold else if (isPressed) FontWeight.Medium else FontWeight.Normal,
             letterSpacing = 0.02.sp,
         )
     }
@@ -1225,6 +1227,32 @@ private fun DestinationLabel(
         },
         label = "destination-label-scale",
     )
+    val labelShadowColor by animateColorAsState(
+        targetValue = when {
+            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = if (isPressed) 0.22f else 0.16f)
+            isPressed -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.14f)
+            else -> Color.Transparent
+        },
+        animationSpec = if (isPressed) {
+            navPressColorAnimationSpec
+        } else {
+            navSelectionColorAnimationSpec
+        },
+        label = "destination-label-shadow-color",
+    )
+    val labelShadowRadius by animateFloatAsState(
+        targetValue = when {
+            isSelected -> 2.4f
+            isPressed -> 1.1f
+            else -> 0f
+        },
+        animationSpec = if (isPressed) {
+            navPressFloatAnimationSpec
+        } else {
+            navSelectionFloatAnimationSpec
+        },
+        label = "destination-label-shadow-radius",
+    )
     Text(
         text = label,
         modifier = Modifier
@@ -1239,6 +1267,11 @@ private fun DestinationLabel(
         maxLines = 1,
         textAlign = TextAlign.Center,
         overflow = TextOverflow.Ellipsis,
+        shadow = Shadow(
+            color = labelShadowColor,
+            offset = Offset(0f, 1f),
+            blurRadius = labelShadowRadius,
+        ),
     )
 }
 
