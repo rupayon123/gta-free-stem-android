@@ -235,6 +235,20 @@ private fun PrimaryNavigationBar(
                         },
                         label = "bottom-nav-pill-color-${destination.name}",
                     )
+                    val selectedPillTopColor by animateColorAsState(
+                        targetValue = when {
+                            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.40f)
+                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.28f)
+                            isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.14f)
+                            else -> Color.Transparent
+                        },
+                        animationSpec = if (isPressed) {
+                            navPressColorAnimationSpec
+                        } else {
+                            navSelectionColorAnimationSpec
+                        },
+                        label = "bottom-nav-pill-top-color-${destination.name}",
+                    )
                     val selectedPillBorderColor by animateColorAsState(
                         targetValue = when {
                             isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.36f)
@@ -303,7 +317,12 @@ private fun PrimaryNavigationBar(
                                 spotColor = selectedPillColor,
                             )
                             .background(
-                                color = selectedPillColor,
+                                brush = Brush.verticalGradient(
+                                    colors = listOf(
+                                        selectedPillTopColor,
+                                        selectedPillColor,
+                                    ),
+                                ),
                                 shape = activeItemShape,
                             )
                             .border(
@@ -636,6 +655,20 @@ private fun PrimaryNavigationRail(
                         },
                         label = "rail-pill-color-${destination.name}",
                     )
+                    val selectedPillTopColor by animateColorAsState(
+                        targetValue = when {
+                            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.30f)
+                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.22f)
+                            isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.10f)
+                            else -> Color.Transparent
+                        },
+                        animationSpec = if (isPressed) {
+                            navPressColorAnimationSpec
+                        } else {
+                            navSelectionColorAnimationSpec
+                        },
+                        label = "rail-pill-top-color-${destination.name}",
+                    )
                     val selectedPillBorderColor by animateColorAsState(
                         targetValue = when {
                             isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.26f)
@@ -704,7 +737,12 @@ private fun PrimaryNavigationRail(
                                 spotColor = selectedPillColor,
                             )
                             .background(
-                                color = selectedPillColor,
+                                brush = Brush.verticalGradient(
+                                    colors = listOf(
+                                        selectedPillTopColor,
+                                        selectedPillColor,
+                                    ),
+                                ),
                                 shape = activeItemShape,
                             )
                             .border(
