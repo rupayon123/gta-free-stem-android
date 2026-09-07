@@ -147,7 +147,9 @@ private fun PrimaryNavigationBar(
                 NavigationBarItem(
                     selected = selectedDestination == destination,
                     onClick = { onDestinationSelected(destination) },
-                    modifier = Modifier.testTag(destination.testTag),
+                    modifier = Modifier
+                        .testTag(destination.testTag)
+                        .padding(top = 2.dp),
                     icon = {
                         val isSelected = selectedDestination == destination
                         val iconScale by animateFloatAsState(
@@ -235,7 +237,9 @@ private fun PrimaryNavigationRail(
                 NavigationRailItem(
                     selected = selectedDestination == destination,
                     onClick = { onDestinationSelected(destination) },
-                    modifier = Modifier.testTag(destination.testTag),
+                    modifier = Modifier
+                        .testTag(destination.testTag)
+                        .padding(vertical = 2.dp),
                     icon = {
                         val isSelected = selectedDestination == destination
                         val iconScale by animateFloatAsState(
