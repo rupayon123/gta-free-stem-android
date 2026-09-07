@@ -266,8 +266,8 @@ private fun PrimaryNavigationBar(
                     )
                     val activeNavItemWidth by animateDpAsState(
                         targetValue = when {
-                            isSelected -> 82.dp
-                            isPressed -> 74.dp
+                            isSelected -> 81.dp
+                            isPressed -> 73.dp
                             else -> 70.dp
                         },
                         animationSpec = if (isPressed) {
@@ -804,9 +804,9 @@ private fun PrimaryNavigationRail(
                     )
                     val activeNavItemWidth by animateDpAsState(
                         targetValue = when {
-                            isSelected -> 90.dp
-                            isPressed -> 82.dp
-                            else -> 78.dp
+                            isSelected -> 89.dp
+                            isPressed -> 81.dp
+                            else -> 77.dp
                         },
                         animationSpec = if (isPressed) {
                             navPressDpAnimationSpec
