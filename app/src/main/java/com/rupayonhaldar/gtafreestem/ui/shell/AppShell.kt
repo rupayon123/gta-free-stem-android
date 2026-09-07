@@ -459,6 +459,21 @@ private fun PrimaryNavigationBar(
                             },
                             label = "bottom-nav-icon-halo-${destination.name}",
                         )
+                        val iconHaloHighlight by animateColorAsState(
+                            targetValue = if (isSelected) {
+                                MaterialTheme.colorScheme.primary.copy(alpha = 0.10f)
+                            } else if (isPressed) {
+                                MaterialTheme.colorScheme.primary.copy(alpha = 0.06f)
+                            } else {
+                                Color.Transparent
+                            },
+                            animationSpec = if (isPressed) {
+                                navPressColorAnimationSpec
+                            } else {
+                                navSelectionColorAnimationSpec
+                            },
+                            label = "bottom-nav-icon-halo-highlight-${destination.name}",
+                        )
                         val iconHaloSize by animateDpAsState(
                             targetValue = if (isSelected) {
                                 40.dp
@@ -502,7 +517,14 @@ private fun PrimaryNavigationBar(
                             modifier = Modifier
                                 .size(iconHaloSize)
                                 .clip(RoundedCornerShape(iconHaloSize / 2))
-                                .background(iconHalo)
+                                .background(
+                                    brush = Brush.radialGradient(
+                                        colors = listOf(
+                                            iconHaloHighlight,
+                                            iconHalo,
+                                        ),
+                                    ),
+                                )
                                 .border(
                                     border = BorderStroke(
                                         width = iconHaloBorderWidth,
@@ -907,6 +929,21 @@ private fun PrimaryNavigationRail(
                             },
                             label = "rail-icon-halo-${destination.name}",
                         )
+                        val iconHaloHighlight by animateColorAsState(
+                            targetValue = if (isSelected) {
+                                MaterialTheme.colorScheme.primary.copy(alpha = 0.08f)
+                            } else if (isPressed) {
+                                MaterialTheme.colorScheme.primary.copy(alpha = 0.04f)
+                            } else {
+                                Color.Transparent
+                            },
+                            animationSpec = if (isPressed) {
+                                navPressColorAnimationSpec
+                            } else {
+                                navSelectionColorAnimationSpec
+                            },
+                            label = "rail-icon-halo-highlight-${destination.name}",
+                        )
                         val iconHaloSize by animateDpAsState(
                             targetValue = if (isSelected) {
                                 40.dp
@@ -949,7 +986,14 @@ private fun PrimaryNavigationRail(
                             modifier = Modifier
                                 .size(iconHaloSize)
                                 .clip(RoundedCornerShape(iconHaloSize / 2))
-                                .background(iconHalo)
+                                .background(
+                                    brush = Brush.radialGradient(
+                                        colors = listOf(
+                                            iconHaloHighlight,
+                                            iconHalo,
+                                        ),
+                                    ),
+                                )
                                 .border(
                                     border = BorderStroke(
                                         width = iconHaloBorderWidth,
