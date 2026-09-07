@@ -206,12 +206,20 @@ private fun PrimaryNavigationBar(
                             label = "bottom-nav-icon-lift-${destination.name}",
                         )
                         val iconElevation by animateFloatAsState(
-                            targetValue = if (isSelected) 5f else 0f,
+                            targetValue = when {
+                                isPressed -> 2f
+                                isSelected -> 5f
+                                else -> 0f
+                            },
                             animationSpec = navSelectionFloatAnimationSpec,
                             label = "bottom-nav-icon-elevation-${destination.name}",
                         )
                         val iconContainerScale by animateFloatAsState(
-                            targetValue = if (isSelected) 1.05f else 1f,
+                            targetValue = when {
+                                isPressed -> 1.03f
+                                isSelected -> 1.05f
+                                else -> 1f
+                            },
                             animationSpec = navSelectionFloatAnimationSpec,
                             label = "bottom-nav-icon-container-scale-${destination.name}",
                         )
@@ -418,12 +426,20 @@ private fun PrimaryNavigationRail(
                             label = "rail-icon-lift-${destination.name}",
                         )
                         val iconElevation by animateFloatAsState(
-                            targetValue = if (isSelected) 5f else 0f,
+                            targetValue = when {
+                                isPressed -> 2f
+                                isSelected -> 5f
+                                else -> 0f
+                            },
                             animationSpec = navSelectionFloatAnimationSpec,
                             label = "rail-icon-elevation-${destination.name}",
                         )
                         val iconContainerScale by animateFloatAsState(
-                            targetValue = if (isSelected) 1.05f else 1f,
+                            targetValue = when {
+                                isPressed -> 1.03f
+                                isSelected -> 1.05f
+                                else -> 1f
+                            },
                             animationSpec = navSelectionFloatAnimationSpec,
                             label = "rail-icon-container-scale-${destination.name}",
                         )
