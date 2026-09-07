@@ -248,6 +248,19 @@ private fun PrimaryNavigationBar(
                         },
                         label = "bottom-nav-pill-border-color-${destination.name}",
                     )
+                    val selectedPillElevation by animateDpAsState(
+                        targetValue = when {
+                            isSelected -> 2.6.dp
+                            isPressed -> 1.4.dp
+                            else -> 0.dp
+                        },
+                        animationSpec = if (isPressed) {
+                            navPressDpAnimationSpec
+                        } else {
+                            navSelectionDpAnimationSpec
+                        },
+                        label = "bottom-nav-pill-elevation-${destination.name}",
+                    )
                     NavigationBarItem(
                         selected = isSelected,
                         onClick = { onDestinationSelected(destination) },
@@ -256,6 +269,12 @@ private fun PrimaryNavigationBar(
                             .testTag(destination.testTag)
                             .padding(horizontal = 4.dp, top = 2.dp)
                             .clip(RoundedCornerShape(18.dp))
+                            .shadow(
+                                elevation = selectedPillElevation,
+                                shape = RoundedCornerShape(18.dp),
+                                ambientColor = selectedPillBorderColor.copy(alpha = if (isDark) 0.26f else 0.16f),
+                                spotColor = selectedPillColor,
+                            )
                             .background(
                                 color = selectedPillColor,
                                 shape = RoundedCornerShape(18.dp),
@@ -587,6 +606,19 @@ private fun PrimaryNavigationRail(
                         },
                         label = "rail-pill-border-color-${destination.name}",
                     )
+                    val selectedPillElevation by animateDpAsState(
+                        targetValue = when {
+                            isSelected -> 2.2.dp
+                            isPressed -> 1.2.dp
+                            else -> 0.dp
+                        },
+                        animationSpec = if (isPressed) {
+                            navPressDpAnimationSpec
+                        } else {
+                            navSelectionDpAnimationSpec
+                        },
+                        label = "rail-pill-elevation-${destination.name}",
+                    )
                     NavigationRailItem(
                         selected = isSelected,
                         onClick = { onDestinationSelected(destination) },
@@ -595,6 +627,12 @@ private fun PrimaryNavigationRail(
                             .testTag(destination.testTag)
                             .padding(horizontal = 2.dp, vertical = 2.dp)
                             .clip(RoundedCornerShape(14.dp))
+                            .shadow(
+                                elevation = selectedPillElevation,
+                                shape = RoundedCornerShape(14.dp),
+                                ambientColor = selectedPillBorderColor.copy(alpha = 0.24f),
+                                spotColor = selectedPillColor,
+                            )
                             .background(
                                 color = selectedPillColor,
                                 shape = RoundedCornerShape(14.dp),
