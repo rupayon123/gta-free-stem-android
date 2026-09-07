@@ -635,7 +635,7 @@ private fun PrimaryNavigationBar(
                         selectedTextColor = MaterialTheme.colorScheme.primary,
                         unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.78f),
                         unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.78f),
-                        indicatorColor = selectedIndicatorColor,
+                        indicatorColor = Color.Transparent,
                         disabledIndicatorColor = Color.Transparent,
                     ),
                 )
@@ -1145,7 +1145,7 @@ private fun PrimaryNavigationRail(
                         selectedTextColor = MaterialTheme.colorScheme.primary,
                         unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.78f),
                         unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.78f),
-                        indicatorColor = selectedIndicatorColor,
+                        indicatorColor = Color.Transparent,
                         disabledIndicatorColor = Color.Transparent,
                     ),
                 )
