@@ -646,7 +646,7 @@ private fun PrimaryNavigationBar(
                             isPressed = isPressed,
                         )
                     },
-                    alwaysShowLabel = false,
+                    alwaysShowLabel = true,
                     colors = NavigationBarItemDefaults.colors(
                         selectedIconColor = MaterialTheme.colorScheme.primary,
                         selectedTextColor = MaterialTheme.colorScheme.primary,
