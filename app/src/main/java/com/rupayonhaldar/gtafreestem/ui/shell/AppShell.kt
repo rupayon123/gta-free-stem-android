@@ -829,6 +829,19 @@ private fun PrimaryNavigationRail(
                         },
                         label = "rail-item-offset-${destination.name}",
                     )
+                    val activeItemHeight by animateDpAsState(
+                        targetValue = when {
+                            isSelected -> 52.dp
+                            isPressed -> 50.dp
+                            else -> 48.dp
+                        },
+                        animationSpec = if (isPressed) {
+                            navPressDpAnimationSpec
+                        } else {
+                            navSelectionDpAnimationSpec
+                        },
+                        label = "rail-item-height-${destination.name}",
+                    )
                     val activeItemScale by animateFloatAsState(
                         targetValue = when {
                             isSelected -> 1.012f
@@ -874,7 +887,7 @@ private fun PrimaryNavigationRail(
                             )
                             .sizeIn(
                                 minWidth = activeNavItemWidth,
-                                minHeight = 48.dp,
+                                minHeight = activeItemHeight,
                             ),
                             .offset(y = activeItemOffset)
                             .scale(activeItemScale),
