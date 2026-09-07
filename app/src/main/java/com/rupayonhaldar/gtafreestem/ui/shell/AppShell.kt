@@ -43,6 +43,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.clip
@@ -165,6 +166,18 @@ private fun PrimaryNavigationBar(
         shadowElevation = 8.dp,
         border = BorderStroke(0.5.dp, barBorder),
     ) {
+        Box(
+            modifier = Modifier
+                .matchParentSize()
+                .background(
+                    Brush.verticalGradient(
+                        colors = listOf(
+                            Color.Transparent,
+                            MaterialTheme.colorScheme.onSurface.copy(alpha = if (isDark) 0.08f else 0.04f),
+                        ),
+                    ),
+                ),
+        )
         NavigationBar(
             containerColor = barContainer,
             tonalElevation = 0.dp,
@@ -384,6 +397,18 @@ private fun PrimaryNavigationRail(
         shadowElevation = 7.dp,
         border = BorderStroke(0.5.dp, railBorder),
     ) {
+        Box(
+            modifier = Modifier
+                .matchParentSize()
+                .background(
+                    Brush.horizontalGradient(
+                        colors = listOf(
+                            MaterialTheme.colorScheme.onSurface.copy(alpha = if (isDark) 0.09f else 0.05f),
+                            Color.Transparent,
+                        ),
+                    ),
+                ),
+        )
         NavigationRail(
             modifier = Modifier
                 .fillMaxHeight()
