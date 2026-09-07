@@ -154,9 +154,9 @@ private fun PrimaryNavigationBar(
         Color.Black.copy(alpha = 0.08f)
     }
     val barBottomGlow = if (isDark) {
-        MaterialTheme.colorScheme.primary.copy(alpha = 0.16f)
+        MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
     } else {
-        MaterialTheme.colorScheme.primary.copy(alpha = 0.06f)
+        MaterialTheme.colorScheme.primary.copy(alpha = 0.04f)
     }
     val barContainer = if (isDark) {
         MaterialTheme.colorScheme.surface.copy(alpha = 0.62f)
@@ -189,7 +189,7 @@ private fun PrimaryNavigationBar(
                     Brush.verticalGradient(
                         colors = listOf(
                             Color.Transparent,
-                            MaterialTheme.colorScheme.onSurface.copy(alpha = if (isDark) 0.08f else 0.04f),
+                            MaterialTheme.colorScheme.onSurface.copy(alpha = if (isDark) 0.06f else 0.03f),
                         ),
                     ),
                 ),
@@ -728,7 +728,7 @@ private fun PrimaryNavigationRail(
                 .background(
                     Brush.horizontalGradient(
                         colors = listOf(
-                            MaterialTheme.colorScheme.onSurface.copy(alpha = if (isDark) 0.09f else 0.05f),
+                            MaterialTheme.colorScheme.onSurface.copy(alpha = if (isDark) 0.07f else 0.03f),
                             Color.Transparent,
                         ),
                     ),
