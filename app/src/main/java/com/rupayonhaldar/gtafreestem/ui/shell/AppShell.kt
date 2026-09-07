@@ -1214,8 +1214,8 @@ private fun DestinationLabel(
         )
     } else {
         MaterialTheme.typography.labelSmall.copy(
-            fontSize = if (isSelected) 11.8.sp else if (isPressed) 11.2.sp else 11.2.sp,
-            lineHeight = if (isPressed) 12.8.sp else 13.sp,
+            fontSize = if (isSelected) 11.7.sp else if (isPressed) 11.1.sp else 11.2.sp,
+            lineHeight = if (isPressed) 12.6.sp else 13.sp,
             fontWeight = if (isSelected) FontWeight.SemiBold else if (isPressed) FontWeight.Medium else FontWeight.Normal,
             letterSpacing = 0.02.sp,
         )
@@ -1259,9 +1259,9 @@ private fun DestinationLabel(
     )
     val labelOffset by animateDpAsState(
         targetValue = when {
-            isPressed && !isSelected -> 3.dp
+            isPressed && !isSelected -> 2.6.dp
             isSelected -> 0.dp
-            else -> if (compact) 2.dp else 1.dp
+            else -> if (compact) 1.8.dp else 1.1.dp
         },
         animationSpec = if (isPressed) {
             navPressDpAnimationSpec
@@ -1270,12 +1270,12 @@ private fun DestinationLabel(
         },
         label = "destination-label-offset",
     )
-        val labelLift by animateDpAsState(
+    val labelLift by animateDpAsState(
         targetValue = when {
             isPressed && !isSelected -> 1.5.dp
             isPressed && isSelected -> 0.dp
-            isSelected -> (-0.5).dp
-            else -> if (compact) 2.dp else 1.5.dp
+            isSelected -> (-0.4).dp
+            else -> if (compact) 1.8.dp else 1.1.dp
         },
         animationSpec = if (isPressed) {
             navPressDpAnimationSpec
