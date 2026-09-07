@@ -267,7 +267,7 @@ private fun PrimaryNavigationBar(
                                 )
                                 .shadow(
                                     elevation = iconElevation.dp,
-                                    shape = RoundedCornerShape(17.dp),
+                                    shape = RoundedCornerShape(iconHaloSize / 2),
                                     ambientColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.25f),
                                     spotColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.25f),
                                 )
@@ -457,7 +457,7 @@ private fun PrimaryNavigationRail(
                                 )
                                 .shadow(
                                     elevation = iconElevation.dp,
-                                    shape = RoundedCornerShape(17.dp),
+                                    shape = RoundedCornerShape(iconHaloSize / 2),
                                     ambientColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
                                     spotColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
                                 )
