@@ -220,7 +220,7 @@ private fun PrimaryNavigationBar(
                             isSelected = selectedDestination == destination,
                         )
                     },
-                    alwaysShowLabel = true,
+                    alwaysShowLabel = false,
                     colors = NavigationBarItemDefaults.colors(
                         selectedIconColor = MaterialTheme.colorScheme.primary,
                         selectedTextColor = MaterialTheme.colorScheme.primary,
