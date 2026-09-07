@@ -304,6 +304,19 @@ private fun PrimaryNavigationBar(
                         },
                         label = "bottom-nav-item-offset-${destination.name}",
                     )
+                    val activeItemHeight by animateDpAsState(
+                        targetValue = when {
+                            isSelected -> 62.dp
+                            isPressed -> 58.dp
+                            else -> 56.dp
+                        },
+                        animationSpec = if (isPressed) {
+                            navPressDpAnimationSpec
+                        } else {
+                            navSelectionDpAnimationSpec
+                        },
+                        label = "bottom-nav-item-height-${destination.name}",
+                    )
                     val activeItemScale by animateFloatAsState(
                         targetValue = when {
                             isSelected -> 1.015f
@@ -349,7 +362,7 @@ private fun PrimaryNavigationBar(
                             )
                             .sizeIn(
                                 minWidth = activeNavItemWidth,
-                                minHeight = 60.dp,
+                                minHeight = activeItemHeight,
                             ),
                             .offset(y = activeItemOffset)
                             .scale(activeItemScale),
