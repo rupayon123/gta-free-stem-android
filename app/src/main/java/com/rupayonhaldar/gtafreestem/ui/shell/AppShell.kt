@@ -217,7 +217,11 @@ private fun PrimaryNavigationBar(
                                 isSelected -> (-2).dp
                                 else -> 0.dp
                             },
-                            animationSpec = navSelectionDpAnimationSpec,
+                            animationSpec = if (isPressed) {
+                                navPressDpAnimationSpec
+                            } else {
+                                navSelectionDpAnimationSpec
+                            },
                             label = "bottom-nav-icon-lift-${destination.name}",
                         )
                         val iconElevation by animateFloatAsState(
@@ -226,7 +230,11 @@ private fun PrimaryNavigationBar(
                                 isSelected -> 5f
                                 else -> 0f
                             },
-                            animationSpec = navSelectionFloatAnimationSpec,
+                            animationSpec = if (isPressed) {
+                                navPressFloatAnimationSpec
+                            } else {
+                                navSelectionFloatAnimationSpec
+                            },
                             label = "bottom-nav-icon-elevation-${destination.name}",
                         )
                         val iconContainerScale by animateFloatAsState(
@@ -235,7 +243,11 @@ private fun PrimaryNavigationBar(
                                 isSelected -> 1.05f
                                 else -> 1f
                             },
-                            animationSpec = navSelectionFloatAnimationSpec,
+                            animationSpec = if (isPressed) {
+                                navPressFloatAnimationSpec
+                            } else {
+                                navSelectionFloatAnimationSpec
+                            },
                             label = "bottom-nav-icon-container-scale-${destination.name}",
                         )
                         val iconScale by animateFloatAsState(
@@ -244,7 +256,11 @@ private fun PrimaryNavigationBar(
                                 isSelected -> 1.04f
                                 else -> 1f
                             },
-                            animationSpec = navSelectionFloatAnimationSpec,
+                            animationSpec = if (isPressed) {
+                                navPressFloatAnimationSpec
+                            } else {
+                                navSelectionFloatAnimationSpec
+                            },
                             label = "bottom-nav-icon-scale-${destination.name}",
                         )
                         val iconBackground by animateColorAsState(
@@ -286,12 +302,20 @@ private fun PrimaryNavigationBar(
                             } else {
                                 24.dp
                             },
-                            animationSpec = navSelectionDpAnimationSpec,
+                            animationSpec = if (isPressed) {
+                                navPressDpAnimationSpec
+                            } else {
+                                navSelectionDpAnimationSpec
+                            },
                             label = "bottom-nav-icon-halo-size-${destination.name}",
                         )
                         val iconHaloBorderWidth by animateDpAsState(
                             targetValue = if (isSelected || isPressed) 0.8.dp else 0.dp,
-                            animationSpec = navSelectionDpAnimationSpec,
+                            animationSpec = if (isPressed) {
+                                navPressDpAnimationSpec
+                            } else {
+                                navSelectionDpAnimationSpec
+                            },
                             label = "bottom-nav-icon-halo-border-width-${destination.name}",
                         )
 
@@ -451,7 +475,11 @@ private fun PrimaryNavigationRail(
                                 isSelected -> (-2).dp
                                 else -> 0.dp
                             },
-                            animationSpec = navSelectionDpAnimationSpec,
+                            animationSpec = if (isPressed) {
+                                navPressDpAnimationSpec
+                            } else {
+                                navSelectionDpAnimationSpec
+                            },
                             label = "rail-icon-lift-${destination.name}",
                         )
                         val iconElevation by animateFloatAsState(
@@ -460,7 +488,11 @@ private fun PrimaryNavigationRail(
                                 isSelected -> 5f
                                 else -> 0f
                             },
-                            animationSpec = navSelectionFloatAnimationSpec,
+                            animationSpec = if (isPressed) {
+                                navPressFloatAnimationSpec
+                            } else {
+                                navSelectionFloatAnimationSpec
+                            },
                             label = "rail-icon-elevation-${destination.name}",
                         )
                         val iconContainerScale by animateFloatAsState(
@@ -469,7 +501,11 @@ private fun PrimaryNavigationRail(
                                 isSelected -> 1.05f
                                 else -> 1f
                             },
-                            animationSpec = navSelectionFloatAnimationSpec,
+                            animationSpec = if (isPressed) {
+                                navPressFloatAnimationSpec
+                            } else {
+                                navSelectionFloatAnimationSpec
+                            },
                             label = "rail-icon-container-scale-${destination.name}",
                         )
                         val iconScale by animateFloatAsState(
@@ -478,7 +514,11 @@ private fun PrimaryNavigationRail(
                                 isSelected -> 1.05f
                                 else -> 1f
                             },
-                            animationSpec = navSelectionFloatAnimationSpec,
+                            animationSpec = if (isPressed) {
+                                navPressFloatAnimationSpec
+                            } else {
+                                navSelectionFloatAnimationSpec
+                            },
                             label = "rail-icon-scale-${destination.name}",
                         )
                         val iconBackground by animateColorAsState(
@@ -520,12 +560,20 @@ private fun PrimaryNavigationRail(
                             } else {
                                 26.dp
                             },
-                            animationSpec = navSelectionDpAnimationSpec,
+                            animationSpec = if (isPressed) {
+                                navPressDpAnimationSpec
+                            } else {
+                                navSelectionDpAnimationSpec
+                            },
                             label = "rail-icon-halo-size-${destination.name}",
                         )
                         val iconHaloBorderWidth by animateDpAsState(
                             targetValue = if (isSelected || isPressed) 0.8.dp else 0.dp,
-                            animationSpec = navSelectionDpAnimationSpec,
+                            animationSpec = if (isPressed) {
+                                navPressDpAnimationSpec
+                            } else {
+                                navSelectionDpAnimationSpec
+                            },
                             label = "rail-icon-halo-border-width-${destination.name}",
                         )
                         Box(
@@ -664,6 +712,8 @@ private fun DestinationLabel(
 private val PrimaryDestination.testTag: String
     get() = "primary-navigation-${name.lowercase()}"
 
-private val navSelectionFloatAnimationSpec = tween<Float>(220, easing = FastOutSlowInEasing)
-private val navSelectionDpAnimationSpec = tween<Dp>(220, easing = FastOutSlowInEasing)
+    private val navSelectionFloatAnimationSpec = tween<Float>(220, easing = FastOutSlowInEasing)
+    private val navPressFloatAnimationSpec = tween<Float>(120, easing = FastOutSlowInEasing)
+    private val navSelectionDpAnimationSpec = tween<Dp>(220, easing = FastOutSlowInEasing)
+    private val navPressDpAnimationSpec = tween<Dp>(120, easing = FastOutSlowInEasing)
 private val navSelectionColorAnimationSpec = tween<Color>(220, easing = FastOutSlowInEasing)
