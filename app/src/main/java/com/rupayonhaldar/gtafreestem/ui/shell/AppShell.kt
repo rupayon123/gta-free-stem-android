@@ -323,7 +323,7 @@ private fun PrimaryNavigationBar(
                         interactionSource = destinationInteractionSource,
                         modifier = Modifier
                             .testTag(destination.testTag)
-                            .padding(horizontal = 4.dp, top = 2.dp)
+                            .padding(horizontal = 4.dp, vertical = 2.dp)
                             .clip(activeItemShape)
                             .shadow(
                                 elevation = selectedPillElevation,
@@ -349,7 +349,7 @@ private fun PrimaryNavigationBar(
                             )
                             .sizeIn(
                                 minWidth = activeNavItemWidth,
-                                minHeight = 56.dp,
+                                minHeight = 60.dp,
                             ),
                             .offset(y = activeItemOffset)
                             .scale(activeItemScale),
