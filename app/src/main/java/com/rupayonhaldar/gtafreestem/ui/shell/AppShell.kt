@@ -276,7 +276,11 @@ private fun PrimaryNavigationBar(
                             } else {
                                 Color.Transparent
                             },
-                            animationSpec = navSelectionColorAnimationSpec,
+                            animationSpec = if (isPressed) {
+                                navPressColorAnimationSpec
+                            } else {
+                                navSelectionColorAnimationSpec
+                            },
                             label = "bottom-nav-icon-background-${destination.name}",
                         )
                         val iconTint by animateColorAsState(
@@ -285,7 +289,11 @@ private fun PrimaryNavigationBar(
                             } else {
                                 MaterialTheme.colorScheme.onSurfaceVariant
                             },
-                            animationSpec = navSelectionColorAnimationSpec,
+                            animationSpec = if (isPressed) {
+                                navPressColorAnimationSpec
+                            } else {
+                                navSelectionColorAnimationSpec
+                            },
                             label = "bottom-nav-icon-tint-${destination.name}",
                         )
                         val iconHalo by animateColorAsState(
@@ -296,7 +304,11 @@ private fun PrimaryNavigationBar(
                             } else {
                                 Color.Transparent
                             },
-                            animationSpec = navSelectionColorAnimationSpec,
+                            animationSpec = if (isPressed) {
+                                navPressColorAnimationSpec
+                            } else {
+                                navSelectionColorAnimationSpec
+                            },
                             label = "bottom-nav-icon-halo-${destination.name}",
                         )
                         val iconHaloSize by animateDpAsState(
@@ -539,7 +551,11 @@ private fun PrimaryNavigationRail(
                             } else {
                                 Color.Transparent
                             },
-                            animationSpec = navSelectionColorAnimationSpec,
+                            animationSpec = if (isPressed) {
+                                navPressColorAnimationSpec
+                            } else {
+                                navSelectionColorAnimationSpec
+                            },
                             label = "rail-icon-background-${destination.name}",
                         )
                         val iconTint by animateColorAsState(
@@ -548,7 +564,11 @@ private fun PrimaryNavigationRail(
                             } else {
                                 MaterialTheme.colorScheme.onSurfaceVariant
                             },
-                            animationSpec = navSelectionColorAnimationSpec,
+                            animationSpec = if (isPressed) {
+                                navPressColorAnimationSpec
+                            } else {
+                                navSelectionColorAnimationSpec
+                            },
                             label = "rail-icon-tint-${destination.name}",
                         )
                         val iconHalo by animateColorAsState(
@@ -559,7 +579,11 @@ private fun PrimaryNavigationRail(
                             } else {
                                 Color.Transparent
                             },
-                            animationSpec = navSelectionColorAnimationSpec,
+                            animationSpec = if (isPressed) {
+                                navPressColorAnimationSpec
+                            } else {
+                                navSelectionColorAnimationSpec
+                            },
                             label = "rail-icon-halo-${destination.name}",
                         )
                         val iconHaloSize by animateDpAsState(
