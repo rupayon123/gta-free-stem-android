@@ -508,8 +508,7 @@ private fun PrimaryNavigationRail(
                                     spotColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
                                 )
                                 .offset(y = iconLift)
-                                .scale(iconContainerScale)
-                                .background(iconBackground),
+                                .scale(iconContainerScale),
                             contentAlignment = Alignment.Center,
                         ) {
                             Box(
