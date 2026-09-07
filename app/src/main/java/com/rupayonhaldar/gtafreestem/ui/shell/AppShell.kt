@@ -197,7 +197,11 @@ private fun PrimaryNavigationBar(
                     icon = {
                         val isPressed by destinationInteractionSource.collectIsPressedAsState()
                         val iconLift by animateDpAsState(
-                            targetValue = if (isSelected) (-2).dp else 0.dp,
+                            targetValue = when {
+                                isPressed -> (-1).dp
+                                isSelected -> (-2).dp
+                                else -> 0.dp
+                            },
                             animationSpec = navSelectionDpAnimationSpec,
                             label = "bottom-nav-icon-lift-${destination.name}",
                         )
@@ -405,7 +409,11 @@ private fun PrimaryNavigationRail(
                     icon = {
                         val isPressed by destinationInteractionSource.collectIsPressedAsState()
                         val iconLift by animateDpAsState(
-                            targetValue = if (isSelected) (-2).dp else 0.dp,
+                            targetValue = when {
+                                isPressed -> (-1).dp
+                                isSelected -> (-2).dp
+                                else -> 0.dp
+                            },
                             animationSpec = navSelectionDpAnimationSpec,
                             label = "rail-icon-lift-${destination.name}",
                         )
