@@ -1,7 +1,10 @@
 package com.rupayonhaldar.gtafreestem.ui.shell
 
 import androidx.annotation.DrawableRes
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Row
@@ -14,6 +17,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -29,10 +33,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -143,10 +149,39 @@ private fun PrimaryNavigationBar(
                     onClick = { onDestinationSelected(destination) },
                     modifier = Modifier.testTag(destination.testTag),
                     icon = {
-                        Icon(
-                            painter = painterResource(destination.iconResource),
-                            contentDescription = null,
+                        val isSelected = selectedDestination == destination
+                        val iconScale by animateFloatAsState(
+                            targetValue = if (isSelected) 1.04f else 1f,
+                            animationSpec = tween(durationMillis = 180),
+                            label = "bottom-nav-icon-scale-${destination.name}",
                         )
+                        val iconBackground = if (isSelected) {
+                            MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.35f)
+                        } else {
+                            Color.Transparent
+                        }
+                        val iconTint = if (isSelected) {
+                            MaterialTheme.colorScheme.primary
+                        } else {
+                            MaterialTheme.colorScheme.onSurfaceVariant
+                        }
+
+                        Box(
+                            modifier = Modifier
+                                .size(34.dp)
+                                .clip(RoundedCornerShape(17.dp))
+                                .background(iconBackground),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            Icon(
+                                painter = painterResource(destination.iconResource),
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .size(20.dp)
+                                    .scale(iconScale),
+                                tint = iconTint,
+                            )
+                        }
                     },
                     label = {
                         DestinationLabel(
@@ -162,6 +197,7 @@ private fun PrimaryNavigationBar(
                         unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
                         unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
                         indicatorColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.5f),
+                        disabledIndicatorColor = Color.Transparent,
                     ),
                 )
             }
@@ -201,18 +237,46 @@ private fun PrimaryNavigationRail(
                     onClick = { onDestinationSelected(destination) },
                     modifier = Modifier.testTag(destination.testTag),
                     icon = {
-                        Icon(
-                            painter = painterResource(destination.iconResource),
-                            contentDescription = null,
+                        val isSelected = selectedDestination == destination
+                        val iconScale by animateFloatAsState(
+                            targetValue = if (isSelected) 1.05f else 1f,
+                            animationSpec = tween(durationMillis = 180),
+                            label = "rail-icon-scale-${destination.name}",
+                        )
+                        val iconBackground = if (isSelected) {
+                            MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.28f)
+                        } else {
+                            Color.Transparent
+                        }
+                        val iconTint = if (isSelected) {
+                            MaterialTheme.colorScheme.primary
+                        } else {
+                            MaterialTheme.colorScheme.onSurfaceVariant
+                        }
+                        Box(
+                            modifier = Modifier
+                                .size(34.dp)
+                                .clip(RoundedCornerShape(17.dp))
+                                .background(iconBackground),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            Icon(
+                                painter = painterResource(destination.iconResource),
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .size(20.dp)
+                                    .scale(iconScale),
+                                tint = iconTint,
+                            )
+                        }
+                    },
+                    label = {
+                        DestinationLabel(
+                            destinationLabel(destination),
+                            compact = false,
+                            isSelected = selectedDestination == destination,
                         )
                     },
-                label = {
-                    DestinationLabel(
-                        destinationLabel(destination),
-                        compact = false,
-                        isSelected = selectedDestination == destination,
-                    )
-                },
                     alwaysShowLabel = true,
                     colors = NavigationRailItemDefaults.colors(
                         selectedIconColor = MaterialTheme.colorScheme.primary,
@@ -220,6 +284,7 @@ private fun PrimaryNavigationRail(
                         unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
                         unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
                         indicatorColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.5f),
+                        disabledIndicatorColor = Color.Transparent,
                     ),
                 )
             }
