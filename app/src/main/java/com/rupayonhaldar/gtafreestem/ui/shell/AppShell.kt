@@ -274,6 +274,20 @@ private fun PrimaryNavigationBar(
                         },
                         label = "bottom-nav-item-width-${destination.name}",
                     )
+                    val activeItemCorner by animateDpAsState(
+                        targetValue = when {
+                            isSelected -> 22.dp
+                            isPressed -> 20.dp
+                            else -> 18.dp
+                        },
+                        animationSpec = if (isPressed) {
+                            navPressDpAnimationSpec
+                        } else {
+                            navSelectionDpAnimationSpec
+                        },
+                        label = "bottom-nav-item-corner-${destination.name}",
+                    )
+                    val activeItemShape = RoundedCornerShape(activeItemCorner)
                     NavigationBarItem(
                         selected = isSelected,
                         onClick = { onDestinationSelected(destination) },
@@ -281,23 +295,23 @@ private fun PrimaryNavigationBar(
                         modifier = Modifier
                             .testTag(destination.testTag)
                             .padding(horizontal = 4.dp, top = 2.dp)
-                            .clip(RoundedCornerShape(18.dp))
+                            .clip(activeItemShape)
                             .shadow(
                                 elevation = selectedPillElevation,
-                                shape = RoundedCornerShape(18.dp),
+                                shape = activeItemShape,
                                 ambientColor = selectedPillBorderColor.copy(alpha = if (isDark) 0.26f else 0.16f),
                                 spotColor = selectedPillColor,
                             )
                             .background(
                                 color = selectedPillColor,
-                                shape = RoundedCornerShape(18.dp),
+                                shape = activeItemShape,
                             )
                             .border(
                                 border = BorderStroke(
                                     width = if (isSelected || isPressed) 0.9.dp else 0.dp,
                                     color = selectedPillBorderColor,
                                 ),
-                                shape = RoundedCornerShape(18.dp),
+                                shape = activeItemShape,
                             )
                             .sizeIn(
                                 minWidth = activeNavItemWidth,
@@ -661,6 +675,20 @@ private fun PrimaryNavigationRail(
                         },
                         label = "rail-item-width-${destination.name}",
                     )
+                    val activeItemCorner by animateDpAsState(
+                        targetValue = when {
+                            isSelected -> 18.dp
+                            isPressed -> 16.dp
+                            else -> 14.dp
+                        },
+                        animationSpec = if (isPressed) {
+                            navPressDpAnimationSpec
+                        } else {
+                            navSelectionDpAnimationSpec
+                        },
+                        label = "rail-item-corner-${destination.name}",
+                    )
+                    val activeItemShape = RoundedCornerShape(activeItemCorner)
                     NavigationRailItem(
                         selected = isSelected,
                         onClick = { onDestinationSelected(destination) },
@@ -668,23 +696,23 @@ private fun PrimaryNavigationRail(
                         modifier = Modifier
                             .testTag(destination.testTag)
                             .padding(horizontal = 2.dp, vertical = 2.dp)
-                            .clip(RoundedCornerShape(14.dp))
+                            .clip(activeItemShape)
                             .shadow(
                                 elevation = selectedPillElevation,
-                                shape = RoundedCornerShape(14.dp),
+                                shape = activeItemShape,
                                 ambientColor = selectedPillBorderColor.copy(alpha = 0.24f),
                                 spotColor = selectedPillColor,
                             )
                             .background(
                                 color = selectedPillColor,
-                                shape = RoundedCornerShape(14.dp),
+                                shape = activeItemShape,
                             )
                             .border(
                                 border = BorderStroke(
                                     width = if (isSelected || isPressed) 0.8.dp else 0.dp,
                                     color = selectedPillBorderColor,
                                 ),
-                                shape = RoundedCornerShape(14.dp),
+                                shape = activeItemShape,
                             )
                             .sizeIn(
                                 minWidth = activeNavItemWidth,
