@@ -8,6 +8,8 @@ import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Row
@@ -37,6 +39,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -169,14 +172,19 @@ private fun PrimaryNavigationBar(
             ),
         ) {
             PrimaryDestination.entries.forEach { destination ->
+                    val destinationInteractionSource = remember {
+                        MutableInteractionSource()
+                    }
                     NavigationBarItem(
                     selected = selectedDestination == destination,
                     onClick = { onDestinationSelected(destination) },
+                    interactionSource = destinationInteractionSource,
                     modifier = Modifier
                         .testTag(destination.testTag)
                         .padding(top = 2.dp)
                         .sizeIn(minWidth = 56.dp, minHeight = 56.dp),
                     icon = {
+                        val isPressed by destinationInteractionSource.collectIsPressedAsState()
                         val isSelected = selectedDestination == destination
                         val iconLift by animateDpAsState(
                             targetValue = if (isSelected) (-2).dp else 0.dp,
@@ -194,7 +202,11 @@ private fun PrimaryNavigationBar(
                             label = "bottom-nav-icon-container-scale-${destination.name}",
                         )
                         val iconScale by animateFloatAsState(
-                            targetValue = if (isSelected) 1.04f else 1f,
+                            targetValue = when {
+                                isPressed -> 0.98f
+                                isSelected -> 1.04f
+                                else -> 1f
+                            },
                             animationSpec = navSelectionFloatAnimationSpec,
                             label = "bottom-nav-icon-scale-${destination.name}",
                         )
@@ -334,14 +346,19 @@ private fun PrimaryNavigationRail(
             windowInsets = WindowInsets(0, 0, 0, 0),
         ) {
             PrimaryDestination.entries.forEach { destination ->
+                    val destinationInteractionSource = remember {
+                        MutableInteractionSource()
+                    }
                     NavigationRailItem(
                     selected = selectedDestination == destination,
                     onClick = { onDestinationSelected(destination) },
+                    interactionSource = destinationInteractionSource,
                     modifier = Modifier
                         .testTag(destination.testTag)
                         .padding(vertical = 2.dp)
                         .sizeIn(minWidth = 72.dp, minHeight = 48.dp),
                     icon = {
+                        val isPressed by destinationInteractionSource.collectIsPressedAsState()
                         val isSelected = selectedDestination == destination
                         val iconLift by animateDpAsState(
                             targetValue = if (isSelected) (-2).dp else 0.dp,
@@ -359,7 +376,11 @@ private fun PrimaryNavigationRail(
                             label = "rail-icon-container-scale-${destination.name}",
                         )
                         val iconScale by animateFloatAsState(
-                            targetValue = if (isSelected) 1.05f else 1f,
+                            targetValue = when {
+                                isPressed -> 0.98f
+                                isSelected -> 1.05f
+                                else -> 1f
+                            },
                             animationSpec = navSelectionFloatAnimationSpec,
                             label = "rail-icon-scale-${destination.name}",
                         )
