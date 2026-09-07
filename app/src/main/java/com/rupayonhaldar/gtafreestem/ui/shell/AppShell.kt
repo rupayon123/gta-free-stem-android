@@ -177,6 +177,15 @@ private fun PrimaryNavigationBar(
                         MutableInteractionSource()
                     }
                     val isSelected = selectedDestination == destination
+                    val selectedIndicatorColor by animateColorAsState(
+                        targetValue = if (isSelected) {
+                            MaterialTheme.colorScheme.primary.copy(alpha = 0.14f)
+                        } else {
+                            Color.Transparent
+                        },
+                        animationSpec = navSelectionColorAnimationSpec,
+                        label = "bottom-nav-indicator-color-${destination.name}",
+                    )
                     NavigationBarItem(
                     selected = isSelected,
                     onClick = { onDestinationSelected(destination) },
@@ -307,11 +316,7 @@ private fun PrimaryNavigationBar(
                         selectedTextColor = MaterialTheme.colorScheme.primary,
                         unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
                         unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                        indicatorColor = if (isSelected) {
-                            MaterialTheme.colorScheme.primary.copy(alpha = 0.14f)
-                        } else {
-                            Color.Transparent
-                        },
+                        indicatorColor = selectedIndicatorColor,
                         disabledIndicatorColor = Color.Transparent,
                     ),
                 )
@@ -368,6 +373,15 @@ private fun PrimaryNavigationRail(
                         MutableInteractionSource()
                     }
                     val isSelected = selectedDestination == destination
+                    val selectedIndicatorColor by animateColorAsState(
+                        targetValue = if (isSelected) {
+                            MaterialTheme.colorScheme.primary.copy(alpha = 0.10f)
+                        } else {
+                            Color.Transparent
+                        },
+                        animationSpec = navSelectionColorAnimationSpec,
+                        label = "rail-indicator-color-${destination.name}",
+                    )
                     NavigationRailItem(
                     selected = isSelected,
                     onClick = { onDestinationSelected(destination) },
@@ -498,11 +512,7 @@ private fun PrimaryNavigationRail(
                         selectedTextColor = MaterialTheme.colorScheme.primary,
                         unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
                         unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                        indicatorColor = if (isSelected) {
-                            MaterialTheme.colorScheme.primary.copy(alpha = 0.10f)
-                        } else {
-                            Color.Transparent
-                        },
+                        indicatorColor = selectedIndicatorColor,
                         disabledIndicatorColor = Color.Transparent,
                     ),
                 )
