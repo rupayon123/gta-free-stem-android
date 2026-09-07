@@ -207,20 +207,6 @@ private fun PrimaryNavigationBar(
                     }
                     val isSelected = selectedDestination == destination
                     val isPressed by destinationInteractionSource.collectIsPressedAsState()
-                    val selectedIndicatorColor by animateColorAsState(
-                        targetValue = when {
-                            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.18f)
-                            isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.06f)
-                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.14f)
-                            else -> Color.Transparent
-                        },
-                        animationSpec = if (isPressed) {
-                            navPressColorAnimationSpec
-                        } else {
-                            navSelectionColorAnimationSpec
-                        },
-                        label = "bottom-nav-indicator-color-${destination.name}",
-                    )
                     val selectedPillColor by animateColorAsState(
                         targetValue = when {
                             isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.30f)
@@ -718,20 +704,6 @@ private fun PrimaryNavigationRail(
                     }
                     val isSelected = selectedDestination == destination
                     val isPressed by destinationInteractionSource.collectIsPressedAsState()
-                    val selectedIndicatorColor by animateColorAsState(
-                        targetValue = when {
-                            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.14f)
-                            isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.05f)
-                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.10f)
-                            else -> Color.Transparent
-                        },
-                        animationSpec = if (isPressed) {
-                            navPressColorAnimationSpec
-                        } else {
-                            navSelectionColorAnimationSpec
-                        },
-                        label = "rail-indicator-color-${destination.name}",
-                    )
                     val selectedPillColor by animateColorAsState(
                         targetValue = when {
                             isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.22f)
