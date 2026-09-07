@@ -1050,6 +1050,20 @@ private fun DestinationLabel(
             letterSpacing = 0.02.sp,
         )
     }
+    val labelGlowColor by animateColorAsState(
+        targetValue = when {
+            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.96f)
+            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.90f)
+            isPressed -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.55f)
+            else -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.68f)
+        },
+        animationSpec = if (isPressed) {
+            navPressColorAnimationSpec
+        } else {
+            navSelectionColorAnimationSpec
+        },
+        label = "destination-label-glow-color",
+    )
     val labelColor by animateColorAsState(
         targetValue = when {
             isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.95f)
@@ -1086,6 +1100,20 @@ private fun DestinationLabel(
         },
         label = "destination-label-offset",
     )
+    val labelLift by animateDpAsState(
+        targetValue = when {
+            isPressed && !isSelected -> 1.5.dp
+            isPressed && isSelected -> 0.dp
+            isSelected -> 0.dp
+            else -> if (compact) 2.dp else 1.5.dp
+        },
+        animationSpec = if (isPressed) {
+            navPressDpAnimationSpec
+        } else {
+            navSelectionDpAnimationSpec
+        },
+        label = "destination-label-lift",
+    )
     val labelScale by animateFloatAsState(
         targetValue = when {
             isPressed && !isSelected -> 0.96f
@@ -1102,9 +1130,13 @@ private fun DestinationLabel(
     Text(
         text = label,
         modifier = Modifier
-            .offset(y = labelOffset)
+            .offset(y = labelOffset + labelLift)
             .scale(labelScale),
-        color = labelColor.copy(alpha = labelAlpha),
+        color = if (isSelected) {
+            labelColor.copy(alpha = labelAlpha)
+        } else {
+            labelGlowColor.copy(alpha = labelAlpha)
+        },
         style = resolvedStyle,
         maxLines = 1,
         textAlign = TextAlign.Center,
