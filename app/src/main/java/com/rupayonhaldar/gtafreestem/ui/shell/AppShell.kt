@@ -588,6 +588,7 @@ private fun DestinationLabel(
     }
     val labelColor by animateColorAsState(
         targetValue = when {
+            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.95f)
             isPressed -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.72f)
             isSelected -> MaterialTheme.colorScheme.primary
             else -> MaterialTheme.colorScheme.onSurfaceVariant
@@ -602,7 +603,7 @@ private fun DestinationLabel(
     )
     val labelOffset by animateDpAsState(
         targetValue = when {
-            isPressed -> 3.dp
+            isPressed && !isSelected -> 3.dp
             isSelected -> 0.dp
             else -> if (compact) 2.dp else 1.dp
         },
@@ -611,7 +612,7 @@ private fun DestinationLabel(
     )
     val labelScale by animateFloatAsState(
         targetValue = when {
-            isPressed -> 0.96f
+            isPressed && !isSelected -> 0.96f
             isSelected -> 1f
             else -> 0.97f
         },
