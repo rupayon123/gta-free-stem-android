@@ -39,6 +39,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -125,19 +126,36 @@ private fun PrimaryNavigationBar(
     onDestinationSelected: (PrimaryDestination) -> Unit,
     destinationLabel: (PrimaryDestination) -> String,
 ) {
+    val isDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
+    val barSurface = if (isDark) {
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.96f)
+    } else {
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.98f)
+    }
+    val barBorder = if (isDark) {
+        Color.White.copy(alpha = 0.14f)
+    } else {
+        Color.Black.copy(alpha = 0.08f)
+    }
+    val barContainer = if (isDark) {
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.70f)
+    } else {
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.84f)
+    }
+
     Surface(
         modifier = Modifier
             .testTag("primary-navigation-bar")
             .fillMaxWidth()
             .padding(horizontal = 10.dp, vertical = 6.dp),
         shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
-        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.97f),
+        color = barSurface,
         tonalElevation = 6.dp,
         shadowElevation = 8.dp,
-        border = BorderStroke(0.5.dp, MaterialTheme.colorScheme.surfaceVariant),
+        border = BorderStroke(0.5.dp, barBorder),
     ) {
         NavigationBar(
-            containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.72f),
+            containerColor = barContainer,
             tonalElevation = 0.dp,
             windowInsets = WindowInsets.safeDrawing.only(
                 WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom,
@@ -213,24 +231,41 @@ private fun PrimaryNavigationRail(
     onDestinationSelected: (PrimaryDestination) -> Unit,
     destinationLabel: (PrimaryDestination) -> String,
 ) {
+    val isDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
+    val railSurface = if (isDark) {
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.96f)
+    } else {
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.98f)
+    }
+    val railBorder = if (isDark) {
+        Color.White.copy(alpha = 0.14f)
+    } else {
+        Color.Black.copy(alpha = 0.08f)
+    }
+    val railContainer = if (isDark) {
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.78f)
+    } else {
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.84f)
+    }
+
     Surface(
         modifier = Modifier
             .fillMaxHeight()
             .widthIn(min = 84.dp)
             .padding(8.dp)
             .testTag("primary-navigation-rail"),
-        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.97f),
+        color = railSurface,
         shape = RoundedCornerShape(20.dp),
         tonalElevation = 6.dp,
         shadowElevation = 7.dp,
-        border = BorderStroke(0.5.dp, MaterialTheme.colorScheme.surfaceVariant),
+        border = BorderStroke(0.5.dp, railBorder),
     ) {
         NavigationRail(
             modifier = Modifier
                 .fillMaxHeight()
                 .padding(top = 8.dp, bottom = 8.dp)
                 .clip(RoundedCornerShape(20.dp)),
-            containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.76f),
+            containerColor = railContainer,
             windowInsets = WindowInsets(0, 0, 0, 0),
         ) {
             PrimaryDestination.entries.forEach { destination ->
