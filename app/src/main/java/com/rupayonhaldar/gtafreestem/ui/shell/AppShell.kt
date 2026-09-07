@@ -221,14 +221,53 @@ private fun PrimaryNavigationBar(
                         },
                         label = "bottom-nav-indicator-color-${destination.name}",
                     )
+                    val selectedPillColor by animateColorAsState(
+                        targetValue = when {
+                            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.30f)
+                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.22f)
+                            isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.08f)
+                            else -> Color.Transparent
+                        },
+                        animationSpec = if (isPressed) {
+                            navPressColorAnimationSpec
+                        } else {
+                            navSelectionColorAnimationSpec
+                        },
+                        label = "bottom-nav-pill-color-${destination.name}",
+                    )
+                    val selectedPillBorderColor by animateColorAsState(
+                        targetValue = when {
+                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.36f)
+                            isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.18f)
+                            else -> Color.Transparent
+                        },
+                        animationSpec = if (isPressed) {
+                            navPressColorAnimationSpec
+                        } else {
+                            navSelectionColorAnimationSpec
+                        },
+                        label = "bottom-nav-pill-border-color-${destination.name}",
+                    )
                     NavigationBarItem(
-                    selected = isSelected,
-                    onClick = { onDestinationSelected(destination) },
-                    interactionSource = destinationInteractionSource,
-                    modifier = Modifier
-                        .testTag(destination.testTag)
-                        .padding(horizontal = 4.dp, top = 2.dp)
-                        .sizeIn(minWidth = 56.dp, minHeight = 56.dp),
+                        selected = isSelected,
+                        onClick = { onDestinationSelected(destination) },
+                        interactionSource = destinationInteractionSource,
+                        modifier = Modifier
+                            .testTag(destination.testTag)
+                            .padding(horizontal = 4.dp, top = 2.dp)
+                            .clip(RoundedCornerShape(18.dp))
+                            .background(
+                                color = selectedPillColor,
+                                shape = RoundedCornerShape(18.dp),
+                            )
+                            .border(
+                                border = BorderStroke(
+                                    width = if (isSelected || isPressed) 0.9.dp else 0.dp,
+                                    color = selectedPillBorderColor,
+                                ),
+                                shape = RoundedCornerShape(18.dp),
+                            )
+                            .sizeIn(minWidth = 56.dp, minHeight = 56.dp),
                     icon = {
                         val iconLift by animateDpAsState(
                             targetValue = when {
@@ -521,14 +560,53 @@ private fun PrimaryNavigationRail(
                         },
                         label = "rail-indicator-color-${destination.name}",
                     )
+                    val selectedPillColor by animateColorAsState(
+                        targetValue = when {
+                            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.22f)
+                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.16f)
+                            isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.06f)
+                            else -> Color.Transparent
+                        },
+                        animationSpec = if (isPressed) {
+                            navPressColorAnimationSpec
+                        } else {
+                            navSelectionColorAnimationSpec
+                        },
+                        label = "rail-pill-color-${destination.name}",
+                    )
+                    val selectedPillBorderColor by animateColorAsState(
+                        targetValue = when {
+                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.26f)
+                            isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.14f)
+                            else -> Color.Transparent
+                        },
+                        animationSpec = if (isPressed) {
+                            navPressColorAnimationSpec
+                        } else {
+                            navSelectionColorAnimationSpec
+                        },
+                        label = "rail-pill-border-color-${destination.name}",
+                    )
                     NavigationRailItem(
-                    selected = isSelected,
-                    onClick = { onDestinationSelected(destination) },
-                    interactionSource = destinationInteractionSource,
-                    modifier = Modifier
-                        .testTag(destination.testTag)
-                        .padding(horizontal = 2.dp, vertical = 2.dp)
-                        .sizeIn(minWidth = 72.dp, minHeight = 48.dp),
+                        selected = isSelected,
+                        onClick = { onDestinationSelected(destination) },
+                        interactionSource = destinationInteractionSource,
+                        modifier = Modifier
+                            .testTag(destination.testTag)
+                            .padding(horizontal = 2.dp, vertical = 2.dp)
+                            .clip(RoundedCornerShape(14.dp))
+                            .background(
+                                color = selectedPillColor,
+                                shape = RoundedCornerShape(14.dp),
+                            )
+                            .border(
+                                border = BorderStroke(
+                                    width = if (isSelected || isPressed) 0.8.dp else 0.dp,
+                                    color = selectedPillBorderColor,
+                                ),
+                                shape = RoundedCornerShape(14.dp),
+                            )
+                            .sizeIn(minWidth = 72.dp, minHeight = 48.dp),
                     icon = {
                         val iconLift by animateDpAsState(
                             targetValue = when {
