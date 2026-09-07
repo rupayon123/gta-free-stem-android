@@ -176,8 +176,9 @@ private fun PrimaryNavigationBar(
                     val destinationInteractionSource = remember {
                         MutableInteractionSource()
                     }
+                    val isSelected = selectedDestination == destination
                     NavigationBarItem(
-                    selected = selectedDestination == destination,
+                    selected = isSelected,
                     onClick = { onDestinationSelected(destination) },
                     interactionSource = destinationInteractionSource,
                     modifier = Modifier
@@ -186,7 +187,7 @@ private fun PrimaryNavigationBar(
                         .sizeIn(minWidth = 56.dp, minHeight = 56.dp),
                     icon = {
                         val isPressed by destinationInteractionSource.collectIsPressedAsState()
-                        val isSelected = selectedDestination == destination
+                        // isSelected reused for consistent destination-focused animation state.
                         val iconLift by animateDpAsState(
                             targetValue = if (isSelected) (-2).dp else 0.dp,
                             animationSpec = navSelectionDpAnimationSpec,
@@ -296,7 +297,7 @@ private fun PrimaryNavigationBar(
                         DestinationLabel(
                             label = destinationLabel(destination),
                             compact = true,
-                            isSelected = selectedDestination == destination,
+                            isSelected = isSelected,
                             isPressed = isPressed,
                         )
                     },
@@ -306,7 +307,11 @@ private fun PrimaryNavigationBar(
                         selectedTextColor = MaterialTheme.colorScheme.primary,
                         unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
                         unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                        indicatorColor = Color.Transparent,
+                        indicatorColor = if (isSelected) {
+                            MaterialTheme.colorScheme.primary.copy(alpha = 0.14f)
+                        } else {
+                            Color.Transparent
+                        },
                         disabledIndicatorColor = Color.Transparent,
                     ),
                 )
@@ -362,8 +367,9 @@ private fun PrimaryNavigationRail(
                     val destinationInteractionSource = remember {
                         MutableInteractionSource()
                     }
+                    val isSelected = selectedDestination == destination
                     NavigationRailItem(
-                    selected = selectedDestination == destination,
+                    selected = isSelected,
                     onClick = { onDestinationSelected(destination) },
                     interactionSource = destinationInteractionSource,
                     modifier = Modifier
@@ -372,7 +378,7 @@ private fun PrimaryNavigationRail(
                         .sizeIn(minWidth = 72.dp, minHeight = 48.dp),
                     icon = {
                         val isPressed by destinationInteractionSource.collectIsPressedAsState()
-                        val isSelected = selectedDestination == destination
+                        // isSelected reused for consistent destination-focused animation state.
                         val iconLift by animateDpAsState(
                             targetValue = if (isSelected) (-2).dp else 0.dp,
                             animationSpec = navSelectionDpAnimationSpec,
@@ -482,7 +488,7 @@ private fun PrimaryNavigationRail(
                         DestinationLabel(
                             destinationLabel(destination),
                             compact = false,
-                            isSelected = selectedDestination == destination,
+                            isSelected = isSelected,
                             isPressed = isPressed,
                         )
                     },
@@ -492,7 +498,11 @@ private fun PrimaryNavigationRail(
                         selectedTextColor = MaterialTheme.colorScheme.primary,
                         unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
                         unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                        indicatorColor = Color.Transparent,
+                        indicatorColor = if (isSelected) {
+                            MaterialTheme.colorScheme.primary.copy(alpha = 0.10f)
+                        } else {
+                            Color.Transparent
+                        },
                         disabledIndicatorColor = Color.Transparent,
                     ),
                 )
