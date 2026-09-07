@@ -274,7 +274,6 @@ private fun PrimaryNavigationBar(
                         },
                         label = "bottom-nav-item-width-${destination.name}",
                     )
-                    val iconFaceShape = RoundedCornerShape(17.dp)
                     NavigationBarItem(
                         selected = isSelected,
                         onClick = { onDestinationSelected(destination) },
@@ -483,7 +482,7 @@ private fun PrimaryNavigationBar(
                             Box(
                                 modifier = Modifier
                                     .size(iconFaceSize)
-                                    .clip(iconFaceShape)
+                                    .clip(RoundedCornerShape(iconFaceSize / 2))
                                     .background(iconBackground),
                                 contentAlignment = Alignment.Center,
                             ) {
@@ -869,7 +868,7 @@ private fun PrimaryNavigationRail(
                             Box(
                                 modifier = Modifier
                                     .size(iconFaceSize)
-                                    .clip(RoundedCornerShape(17.dp))
+                                    .clip(RoundedCornerShape(iconFaceSize / 2))
                                     .background(iconBackground),
                                 contentAlignment = Alignment.Center,
                             ) {
