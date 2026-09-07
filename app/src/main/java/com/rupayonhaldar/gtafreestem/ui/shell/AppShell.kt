@@ -417,6 +417,19 @@ private fun PrimaryNavigationBar(
                             },
                             label = "bottom-nav-icon-scale-${destination.name}",
                         )
+                        val iconGlyphSize by animateDpAsState(
+                            targetValue = when {
+                                isPressed -> 19.dp
+                                isSelected -> 20.5.dp
+                                else -> 19.5.dp
+                            },
+                            animationSpec = if (isPressed) {
+                                navPressDpAnimationSpec
+                            } else {
+                                navSelectionDpAnimationSpec
+                            },
+                            label = "bottom-nav-icon-glyph-size-${destination.name}",
+                        )
                         val iconFaceSize by animateDpAsState(
                             targetValue = when {
                                 isPressed -> 33.dp
@@ -601,7 +614,7 @@ private fun PrimaryNavigationBar(
                                     painter = painterResource(destination.iconResource),
                                     contentDescription = null,
                                     modifier = Modifier
-                                        .size(20.dp)
+                                        .size(iconGlyphSize)
                                         .scale(iconScale),
                                     tint = iconTint,
                                 )
@@ -915,6 +928,19 @@ private fun PrimaryNavigationRail(
                             },
                             label = "rail-icon-scale-${destination.name}",
                         )
+                        val iconGlyphSize by animateDpAsState(
+                            targetValue = when {
+                                isPressed -> 19.dp
+                                isSelected -> 20.5.dp
+                                else -> 19.5.dp
+                            },
+                            animationSpec = if (isPressed) {
+                                navPressDpAnimationSpec
+                            } else {
+                                navSelectionDpAnimationSpec
+                            },
+                            label = "rail-icon-glyph-size-${destination.name}",
+                        )
                         val iconFaceSize by animateDpAsState(
                             targetValue = when {
                                 isPressed -> 33.dp
@@ -1098,7 +1124,7 @@ private fun PrimaryNavigationRail(
                                     painter = painterResource(destination.iconResource),
                                     contentDescription = null,
                                     modifier = Modifier
-                                        .size(20.dp)
+                                        .size(iconGlyphSize)
                                         .scale(iconScale),
                                     tint = iconTint,
                                 )
