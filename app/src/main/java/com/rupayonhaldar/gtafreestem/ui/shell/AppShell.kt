@@ -1,6 +1,7 @@
 package com.rupayonhaldar.gtafreestem.ui.shell
 
 import androidx.annotation.DrawableRes
+import androidx.compose.animation.core.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
@@ -175,16 +176,24 @@ private fun PrimaryNavigationBar(
                             animationSpec = tween(durationMillis = 180),
                             label = "bottom-nav-icon-scale-${destination.name}",
                         )
-                        val iconBackground = if (isSelected) {
-                            MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.35f)
-                        } else {
-                            Color.Transparent
-                        }
-                        val iconTint = if (isSelected) {
-                            MaterialTheme.colorScheme.primary
-                        } else {
-                            MaterialTheme.colorScheme.onSurfaceVariant
-                        }
+                        val iconBackground by animateColorAsState(
+                            targetValue = if (isSelected) {
+                                MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.35f)
+                            } else {
+                                Color.Transparent
+                            },
+                            animationSpec = tween(durationMillis = 180),
+                            label = "bottom-nav-icon-background-${destination.name}",
+                        )
+                        val iconTint by animateColorAsState(
+                            targetValue = if (isSelected) {
+                                MaterialTheme.colorScheme.primary
+                            } else {
+                                MaterialTheme.colorScheme.onSurfaceVariant
+                            },
+                            animationSpec = tween(durationMillis = 180),
+                            label = "bottom-nav-icon-tint-${destination.name}",
+                        )
 
                         Box(
                             modifier = Modifier
@@ -282,16 +291,24 @@ private fun PrimaryNavigationRail(
                             animationSpec = tween(durationMillis = 180),
                             label = "rail-icon-scale-${destination.name}",
                         )
-                        val iconBackground = if (isSelected) {
-                            MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.28f)
-                        } else {
-                            Color.Transparent
-                        }
-                        val iconTint = if (isSelected) {
-                            MaterialTheme.colorScheme.primary
-                        } else {
-                            MaterialTheme.colorScheme.onSurfaceVariant
-                        }
+                        val iconBackground by animateColorAsState(
+                            targetValue = if (isSelected) {
+                                MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.28f)
+                            } else {
+                                Color.Transparent
+                            },
+                            animationSpec = tween(durationMillis = 180),
+                            label = "rail-icon-background-${destination.name}",
+                        )
+                        val iconTint by animateColorAsState(
+                            targetValue = if (isSelected) {
+                                MaterialTheme.colorScheme.primary
+                            } else {
+                                MaterialTheme.colorScheme.onSurfaceVariant
+                            },
+                            animationSpec = tween(durationMillis = 180),
+                            label = "rail-icon-tint-${destination.name}",
+                        )
                         Box(
                             modifier = Modifier
                                 .size(34.dp)
