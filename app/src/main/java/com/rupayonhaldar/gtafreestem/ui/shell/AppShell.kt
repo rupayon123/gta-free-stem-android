@@ -370,7 +370,7 @@ private fun PrimaryNavigationBar(
                         val iconLift by animateDpAsState(
                             targetValue = when {
                                 isPressed -> 0.dp
-                                isSelected -> (-2).dp
+                                isSelected -> (-1.5).dp
                                 else -> 0.dp
                             },
                             animationSpec = if (isPressed) {
@@ -383,7 +383,7 @@ private fun PrimaryNavigationBar(
                         val iconElevation by animateFloatAsState(
                             targetValue = when {
                                 isPressed -> 2f
-                                isSelected -> 5f
+                                isSelected -> 4.5f
                                 else -> 0f
                             },
                             animationSpec = if (isPressed) {
@@ -908,7 +908,7 @@ private fun PrimaryNavigationRail(
                         val iconLift by animateDpAsState(
                             targetValue = when {
                                 isPressed -> 0.dp
-                                isSelected -> (-2).dp
+                                isSelected -> (-1.5).dp
                                 else -> 0.dp
                             },
                             animationSpec = if (isPressed) {
@@ -921,7 +921,7 @@ private fun PrimaryNavigationRail(
                         val iconElevation by animateFloatAsState(
                             targetValue = when {
                                 isPressed -> 2f
-                                isSelected -> 5f
+                                isSelected -> 4.5f
                                 else -> 0f
                             },
                             animationSpec = if (isPressed) {
