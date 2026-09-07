@@ -266,8 +266,8 @@ private fun PrimaryNavigationBar(
                     )
                     val activeNavItemWidth by animateDpAsState(
                         targetValue = when {
-                            isSelected -> 79.dp
-                            isPressed -> 73.dp
+                            isSelected -> 78.dp
+                            isPressed -> 72.dp
                             else -> 70.dp
                         },
                         animationSpec = if (isPressed) {
@@ -279,9 +279,9 @@ private fun PrimaryNavigationBar(
                     )
                     val activeItemCorner by animateDpAsState(
                         targetValue = when {
-                            isSelected -> 22.dp
-                            isPressed -> 20.dp
-                            else -> 18.dp
+                            isSelected -> 21.dp
+                            isPressed -> 19.dp
+                            else -> 17.dp
                         },
                         animationSpec = if (isPressed) {
                             navPressDpAnimationSpec
@@ -306,9 +306,9 @@ private fun PrimaryNavigationBar(
                     )
                     val activeItemHeight by animateDpAsState(
                         targetValue = when {
-                            isSelected -> 60.dp
-                            isPressed -> 57.dp
-                            else -> 56.dp
+                            isSelected -> 59.dp
+                            isPressed -> 56.dp
+                            else -> 55.dp
                         },
                         animationSpec = if (isPressed) {
                             navPressDpAnimationSpec
@@ -319,8 +319,8 @@ private fun PrimaryNavigationBar(
                     )
                     val activeItemScale by animateFloatAsState(
                         targetValue = when {
-                            isSelected -> 1.002f
-                            isPressed -> 0.988f
+                            isSelected -> 1.001f
+                            isPressed -> 0.989f
                             else -> 1f
                         },
                         animationSpec = if (isPressed) {
