@@ -49,6 +49,7 @@ import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.rupayonhaldar.gtafreestem.R
@@ -184,7 +185,7 @@ private fun PrimaryNavigationBar(
                         )
                         val iconElevation by animateFloatAsState(
                             targetValue = if (isSelected) 5f else 0f,
-                            animationSpec = navSelectionAnimationSpec,
+                            animationSpec = navSelectionFloatAnimationSpec,
                             label = "bottom-nav-icon-elevation-${destination.name}",
                         )
                         val iconContainerScale by animateFloatAsState(
@@ -215,11 +216,30 @@ private fun PrimaryNavigationBar(
                             animationSpec = navSelectionColorAnimationSpec,
                             label = "bottom-nav-icon-tint-${destination.name}",
                         )
+                        val iconHalo by animateColorAsState(
+                            targetValue = if (isSelected) {
+                                MaterialTheme.colorScheme.primary.copy(alpha = 0.18f)
+                            } else {
+                                Color.Transparent
+                            },
+                            animationSpec = navSelectionColorAnimationSpec,
+                            label = "bottom-nav-icon-halo-${destination.name}",
+                        )
+                        val iconHaloSize by animateDpAsState(
+                            targetValue = if (isSelected) {
+                                40.dp
+                            } else {
+                                24.dp
+                            },
+                            animationSpec = navSelectionDpAnimationSpec,
+                            label = "bottom-nav-icon-halo-size-${destination.name}",
+                        )
 
                         Box(
                             modifier = Modifier
-                                .size(34.dp)
-                                .clip(RoundedCornerShape(17.dp))
+                                .size(iconHaloSize)
+                                .clip(RoundedCornerShape(iconHaloSize / 2))
+                                .background(iconHalo)
                                 .shadow(
                                     elevation = iconElevation.dp,
                                     shape = RoundedCornerShape(17.dp),
@@ -227,18 +247,25 @@ private fun PrimaryNavigationBar(
                                     spotColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.25f),
                                 )
                                 .offset(y = iconLift)
-                                .scale(iconContainerScale)
-                                .background(iconBackground),
+                                .scale(iconContainerScale),
                             contentAlignment = Alignment.Center,
                         ) {
-                            Icon(
-                                painter = painterResource(destination.iconResource),
-                                contentDescription = null,
+                            Box(
                                 modifier = Modifier
-                                    .size(20.dp)
-                                    .scale(iconScale),
-                                tint = iconTint,
-                            )
+                                    .size(34.dp)
+                                    .clip(RoundedCornerShape(17.dp))
+                                    .background(iconBackground),
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                Icon(
+                                    painter = painterResource(destination.iconResource),
+                                    contentDescription = null,
+                                    modifier = Modifier
+                                        .size(20.dp)
+                                        .scale(iconScale),
+                                    tint = iconTint,
+                                )
+                            }
                         }
                     },
                     label = {
@@ -354,10 +381,29 @@ private fun PrimaryNavigationRail(
                             animationSpec = navSelectionColorAnimationSpec,
                             label = "rail-icon-tint-${destination.name}",
                         )
+                        val iconHalo by animateColorAsState(
+                            targetValue = if (isSelected) {
+                                MaterialTheme.colorScheme.primary.copy(alpha = 0.14f)
+                            } else {
+                                Color.Transparent
+                            },
+                            animationSpec = navSelectionColorAnimationSpec,
+                            label = "rail-icon-halo-${destination.name}",
+                        )
+                        val iconHaloSize by animateDpAsState(
+                            targetValue = if (isSelected) {
+                                40.dp
+                            } else {
+                                26.dp
+                            },
+                            animationSpec = navSelectionDpAnimationSpec,
+                            label = "rail-icon-halo-size-${destination.name}",
+                        )
                         Box(
                             modifier = Modifier
-                                .size(34.dp)
-                                .clip(RoundedCornerShape(17.dp))
+                                .size(iconHaloSize)
+                                .clip(RoundedCornerShape(iconHaloSize / 2))
+                                .background(iconHalo)
                                 .shadow(
                                     elevation = iconElevation.dp,
                                     shape = RoundedCornerShape(17.dp),
@@ -369,14 +415,22 @@ private fun PrimaryNavigationRail(
                                 .background(iconBackground),
                             contentAlignment = Alignment.Center,
                         ) {
-                            Icon(
-                                painter = painterResource(destination.iconResource),
-                                contentDescription = null,
+                            Box(
                                 modifier = Modifier
-                                    .size(20.dp)
-                                    .scale(iconScale),
-                                tint = iconTint,
-                            )
+                                    .size(34.dp)
+                                    .clip(RoundedCornerShape(17.dp))
+                                    .background(iconBackground),
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                Icon(
+                                    painter = painterResource(destination.iconResource),
+                                    contentDescription = null,
+                                    modifier = Modifier
+                                        .size(20.dp)
+                                        .scale(iconScale),
+                                    tint = iconTint,
+                                )
+                            }
                         }
                     },
                     label = {
