@@ -150,6 +150,11 @@ private fun PrimaryNavigationBar(
     } else {
         Color.Black.copy(alpha = 0.08f)
     }
+    val barBottomGlow = if (isDark) {
+        MaterialTheme.colorScheme.primary.copy(alpha = 0.22f)
+    } else {
+        MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)
+    }
     val barContainer = if (isDark) {
         MaterialTheme.colorScheme.surface.copy(alpha = 0.70f)
     } else {
@@ -171,6 +176,12 @@ private fun PrimaryNavigationBar(
             modifier = Modifier
                 .matchParentSize()
                 .clip(barShape)
+                .shadow(
+                    elevation = if (isDark) 8.dp else 6.dp,
+                    shape = barShape,
+                    ambientColor = barBottomGlow,
+                    spotColor = barBottomGlow,
+                )
                 .background(
                     Brush.verticalGradient(
                         colors = listOf(
@@ -423,6 +434,11 @@ private fun PrimaryNavigationRail(
     } else {
         Color.Black.copy(alpha = 0.08f)
     }
+    val railTint = if (isDark) {
+        MaterialTheme.colorScheme.primary.copy(alpha = 0.20f)
+    } else {
+        MaterialTheme.colorScheme.primary.copy(alpha = 0.10f)
+    }
     val railContainer = if (isDark) {
         MaterialTheme.colorScheme.surface.copy(alpha = 0.78f)
     } else {
@@ -438,13 +454,19 @@ private fun PrimaryNavigationRail(
         color = railSurface,
         shape = railShape,
         tonalElevation = 6.dp,
-        shadowElevation = 7.dp,
+        shadowElevation = 8.dp,
         border = BorderStroke(0.5.dp, railBorder),
     ) {
         Box(
             modifier = Modifier
                 .matchParentSize()
                 .clip(railShape)
+                .shadow(
+                    elevation = if (isDark) 8.dp else 6.dp,
+                    shape = railShape,
+                    ambientColor = railTint,
+                    spotColor = railTint,
+                )
                 .background(
                     Brush.horizontalGradient(
                         colors = listOf(
