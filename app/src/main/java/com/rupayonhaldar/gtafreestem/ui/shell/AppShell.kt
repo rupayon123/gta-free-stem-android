@@ -261,6 +261,20 @@ private fun PrimaryNavigationBar(
                         },
                         label = "bottom-nav-pill-elevation-${destination.name}",
                     )
+                    val activeNavItemWidth by animateDpAsState(
+                        targetValue = when {
+                            isSelected -> 74.dp
+                            isPressed -> 64.dp
+                            else -> 56.dp
+                        },
+                        animationSpec = if (isPressed) {
+                            navPressDpAnimationSpec
+                        } else {
+                            navSelectionDpAnimationSpec
+                        },
+                        label = "bottom-nav-item-width-${destination.name}",
+                    )
+                    val iconFaceShape = RoundedCornerShape(17.dp)
                     NavigationBarItem(
                         selected = isSelected,
                         onClick = { onDestinationSelected(destination) },
@@ -286,7 +300,10 @@ private fun PrimaryNavigationBar(
                                 ),
                                 shape = RoundedCornerShape(18.dp),
                             )
-                            .sizeIn(minWidth = 56.dp, minHeight = 56.dp),
+                            .sizeIn(
+                                minWidth = activeNavItemWidth,
+                                minHeight = 56.dp,
+                            ),
                     icon = {
                         val iconLift by animateDpAsState(
                             targetValue = when {
@@ -339,6 +356,19 @@ private fun PrimaryNavigationBar(
                                 navSelectionFloatAnimationSpec
                             },
                             label = "bottom-nav-icon-scale-${destination.name}",
+                        )
+                        val iconFaceSize by animateDpAsState(
+                            targetValue = when {
+                                isPressed -> 33.dp
+                                isSelected -> 35.dp
+                                else -> 34.dp
+                            },
+                            animationSpec = if (isPressed) {
+                                navPressDpAnimationSpec
+                            } else {
+                                navSelectionDpAnimationSpec
+                            },
+                            label = "bottom-nav-icon-face-size-${destination.name}",
                         )
                         val iconBackground by animateColorAsState(
                             targetValue = if (isSelected) {
@@ -452,8 +482,8 @@ private fun PrimaryNavigationBar(
                         ) {
                             Box(
                                 modifier = Modifier
-                                    .size(34.dp)
-                                    .clip(RoundedCornerShape(17.dp))
+                                    .size(iconFaceSize)
+                                    .clip(iconFaceShape)
                                     .background(iconBackground),
                                 contentAlignment = Alignment.Center,
                             ) {
@@ -619,6 +649,19 @@ private fun PrimaryNavigationRail(
                         },
                         label = "rail-pill-elevation-${destination.name}",
                     )
+                    val activeNavItemWidth by animateDpAsState(
+                        targetValue = when {
+                            isSelected -> 86.dp
+                            isPressed -> 76.dp
+                            else -> 72.dp
+                        },
+                        animationSpec = if (isPressed) {
+                            navPressDpAnimationSpec
+                        } else {
+                            navSelectionDpAnimationSpec
+                        },
+                        label = "rail-item-width-${destination.name}",
+                    )
                     NavigationRailItem(
                         selected = isSelected,
                         onClick = { onDestinationSelected(destination) },
@@ -644,7 +687,10 @@ private fun PrimaryNavigationRail(
                                 ),
                                 shape = RoundedCornerShape(14.dp),
                             )
-                            .sizeIn(minWidth = 72.dp, minHeight = 48.dp),
+                            .sizeIn(
+                                minWidth = activeNavItemWidth,
+                                minHeight = 48.dp,
+                            ),
                     icon = {
                         val iconLift by animateDpAsState(
                             targetValue = when {
@@ -697,6 +743,19 @@ private fun PrimaryNavigationRail(
                                 navSelectionFloatAnimationSpec
                             },
                             label = "rail-icon-scale-${destination.name}",
+                        )
+                        val iconFaceSize by animateDpAsState(
+                            targetValue = when {
+                                isPressed -> 33.dp
+                                isSelected -> 35.dp
+                                else -> 34.dp
+                            },
+                            animationSpec = if (isPressed) {
+                                navPressDpAnimationSpec
+                            } else {
+                                navSelectionDpAnimationSpec
+                            },
+                            label = "rail-icon-face-size-${destination.name}",
                         )
                         val iconBackground by animateColorAsState(
                             targetValue = if (isSelected) {
@@ -809,7 +868,7 @@ private fun PrimaryNavigationRail(
                         ) {
                             Box(
                                 modifier = Modifier
-                                    .size(34.dp)
+                                    .size(iconFaceSize)
                                     .clip(RoundedCornerShape(17.dp))
                                     .background(iconBackground),
                                 contentAlignment = Alignment.Center,
