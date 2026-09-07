@@ -154,14 +154,14 @@ private fun PrimaryNavigationBar(
         Color.Black.copy(alpha = 0.08f)
     }
     val barBottomGlow = if (isDark) {
-        MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
+        MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)
     } else {
-        MaterialTheme.colorScheme.primary.copy(alpha = 0.04f)
+        MaterialTheme.colorScheme.primary.copy(alpha = 0.03f)
     }
     val barContainer = if (isDark) {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.62f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.60f)
     } else {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.76f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.74f)
     }
 
     Surface(
@@ -189,14 +189,14 @@ private fun PrimaryNavigationBar(
                     Brush.verticalGradient(
                         colors = listOf(
                             Color.Transparent,
-                            MaterialTheme.colorScheme.onSurface.copy(alpha = if (isDark) 0.06f else 0.03f),
+                        MaterialTheme.colorScheme.onSurface.copy(alpha = if (isDark) 0.06f else 0.03f),
                         ),
                     ),
                 ),
         )
         NavigationBar(
             modifier = Modifier
-                .padding(horizontal = 4.dp, top = 2.dp, bottom = 2.dp)
+                .padding(horizontal = 4.dp, top = 1.dp, bottom = 1.dp)
                 .clip(barShape),
             containerColor = barContainer,
             tonalElevation = 0.dp,
