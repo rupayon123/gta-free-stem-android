@@ -47,6 +47,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
@@ -405,6 +406,32 @@ private fun PrimaryNavigationBar(
                             },
                             label = "bottom-nav-icon-scale-${destination.name}",
                         )
+                        val iconGlyphAlpha by animateFloatAsState(
+                            targetValue = when {
+                                isSelected -> 1f
+                                isPressed -> 0.88f
+                                else -> 0.78f
+                            },
+                            animationSpec = if (isPressed) {
+                                navPressFloatAnimationSpec
+                            } else {
+                                navSelectionFloatAnimationSpec
+                            },
+                            label = "bottom-nav-icon-glyph-alpha-${destination.name}",
+                        )
+                        val iconContainerAlpha by animateFloatAsState(
+                            targetValue = when {
+                                isSelected -> 1f
+                                isPressed -> 0.9f
+                                else -> 0.84f
+                            },
+                            animationSpec = if (isPressed) {
+                                navPressFloatAnimationSpec
+                            } else {
+                                navSelectionFloatAnimationSpec
+                            },
+                            label = "bottom-nav-icon-container-alpha-${destination.name}",
+                        )
                         val iconGlyphSize by animateDpAsState(
                             targetValue = when {
                                 isPressed -> 19.dp
@@ -573,6 +600,7 @@ private fun PrimaryNavigationBar(
                                     ambientColor = iconShadowColor,
                                     spotColor = iconShadowColor,
                                 )
+                                .alpha(iconContainerAlpha)
                                 .offset(y = iconLift)
                                 .scale(iconContainerScale),
                             contentAlignment = Alignment.Center,
@@ -603,7 +631,8 @@ private fun PrimaryNavigationBar(
                                     contentDescription = null,
                                     modifier = Modifier
                                         .size(iconGlyphSize)
-                                        .scale(iconScale),
+                                        .scale(iconScale)
+                                        .alpha(iconGlyphAlpha),
                                     tint = iconTint,
                                 )
                             }
@@ -902,6 +931,32 @@ private fun PrimaryNavigationRail(
                             },
                             label = "rail-icon-scale-${destination.name}",
                         )
+                        val iconGlyphAlpha by animateFloatAsState(
+                            targetValue = when {
+                                isSelected -> 1f
+                                isPressed -> 0.88f
+                                else -> 0.78f
+                            },
+                            animationSpec = if (isPressed) {
+                                navPressFloatAnimationSpec
+                            } else {
+                                navSelectionFloatAnimationSpec
+                            },
+                            label = "rail-icon-glyph-alpha-${destination.name}",
+                        )
+                        val iconContainerAlpha by animateFloatAsState(
+                            targetValue = when {
+                                isSelected -> 1f
+                                isPressed -> 0.9f
+                                else -> 0.84f
+                            },
+                            animationSpec = if (isPressed) {
+                                navPressFloatAnimationSpec
+                            } else {
+                                navSelectionFloatAnimationSpec
+                            },
+                            label = "rail-icon-container-alpha-${destination.name}",
+                        )
                         val iconGlyphSize by animateDpAsState(
                             targetValue = when {
                                 isPressed -> 19.dp
@@ -1069,6 +1124,7 @@ private fun PrimaryNavigationRail(
                                     ambientColor = iconShadowColor,
                                     spotColor = iconShadowColor,
                                 )
+                                .alpha(iconContainerAlpha)
                                 .offset(y = iconLift)
                                 .scale(iconContainerScale),
                             contentAlignment = Alignment.Center,
@@ -1099,7 +1155,8 @@ private fun PrimaryNavigationRail(
                                     contentDescription = null,
                                     modifier = Modifier
                                         .size(iconGlyphSize)
-                                        .scale(iconScale),
+                                        .scale(iconScale)
+                                        .alpha(iconGlyphAlpha),
                                     tint = iconTint,
                                 )
                             }
