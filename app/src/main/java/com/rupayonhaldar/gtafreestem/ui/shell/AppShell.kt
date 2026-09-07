@@ -172,6 +172,11 @@ private fun PrimaryNavigationBar(
                         .padding(top = 2.dp),
                     icon = {
                         val isSelected = selectedDestination == destination
+                        val iconContainerScale by animateFloatAsState(
+                            targetValue = if (isSelected) 1.05f else 1f,
+                            animationSpec = navSelectionAnimationSpec,
+                            label = "bottom-nav-icon-container-scale-${destination.name}",
+                        )
                         val iconScale by animateFloatAsState(
                             targetValue = if (isSelected) 1.04f else 1f,
                             animationSpec = navSelectionAnimationSpec,
@@ -200,6 +205,7 @@ private fun PrimaryNavigationBar(
                             modifier = Modifier
                                 .size(34.dp)
                                 .clip(RoundedCornerShape(17.dp))
+                                .scale(iconContainerScale)
                                 .background(iconBackground),
                             contentAlignment = Alignment.Center,
                         ) {
@@ -287,6 +293,11 @@ private fun PrimaryNavigationRail(
                         .padding(vertical = 2.dp),
                     icon = {
                         val isSelected = selectedDestination == destination
+                        val iconContainerScale by animateFloatAsState(
+                            targetValue = if (isSelected) 1.05f else 1f,
+                            animationSpec = navSelectionAnimationSpec,
+                            label = "rail-icon-container-scale-${destination.name}",
+                        )
                         val iconScale by animateFloatAsState(
                             targetValue = if (isSelected) 1.05f else 1f,
                             animationSpec = navSelectionAnimationSpec,
@@ -314,6 +325,7 @@ private fun PrimaryNavigationRail(
                             modifier = Modifier
                                 .size(34.dp)
                                 .clip(RoundedCornerShape(17.dp))
+                                .scale(iconContainerScale)
                                 .background(iconBackground),
                             contentAlignment = Alignment.Center,
                         ) {
