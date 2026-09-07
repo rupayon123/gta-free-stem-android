@@ -192,13 +192,19 @@ private fun PrimaryNavigationBar(
                         MutableInteractionSource()
                     }
                     val isSelected = selectedDestination == destination
+                    val isPressed by destinationInteractionSource.collectIsPressedAsState()
                     val selectedIndicatorColor by animateColorAsState(
-                        targetValue = if (isSelected) {
-                            MaterialTheme.colorScheme.primary.copy(alpha = 0.14f)
-                        } else {
-                            Color.Transparent
+                        targetValue = when {
+                            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.18f)
+                            isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.06f)
+                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.14f)
+                            else -> Color.Transparent
                         },
-                        animationSpec = navSelectionColorAnimationSpec,
+                        animationSpec = if (isPressed) {
+                            navPressColorAnimationSpec
+                        } else {
+                            navSelectionColorAnimationSpec
+                        },
                         label = "bottom-nav-indicator-color-${destination.name}",
                     )
                     NavigationBarItem(
@@ -210,7 +216,6 @@ private fun PrimaryNavigationBar(
                         .padding(top = 2.dp)
                         .sizeIn(minWidth = 56.dp, minHeight = 56.dp),
                     icon = {
-                        val isPressed by destinationInteractionSource.collectIsPressedAsState()
                         val iconLift by animateDpAsState(
                             targetValue = when {
                                 isPressed -> (-1).dp
@@ -450,13 +455,19 @@ private fun PrimaryNavigationRail(
                         MutableInteractionSource()
                     }
                     val isSelected = selectedDestination == destination
+                    val isPressed by destinationInteractionSource.collectIsPressedAsState()
                     val selectedIndicatorColor by animateColorAsState(
-                        targetValue = if (isSelected) {
-                            MaterialTheme.colorScheme.primary.copy(alpha = 0.10f)
-                        } else {
-                            Color.Transparent
+                        targetValue = when {
+                            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.14f)
+                            isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.05f)
+                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.10f)
+                            else -> Color.Transparent
                         },
-                        animationSpec = navSelectionColorAnimationSpec,
+                        animationSpec = if (isPressed) {
+                            navPressColorAnimationSpec
+                        } else {
+                            navSelectionColorAnimationSpec
+                        },
                         label = "rail-indicator-color-${destination.name}",
                     )
                     NavigationRailItem(
@@ -468,7 +479,6 @@ private fun PrimaryNavigationRail(
                         .padding(vertical = 2.dp)
                         .sizeIn(minWidth = 72.dp, minHeight = 48.dp),
                     icon = {
-                        val isPressed by destinationInteractionSource.collectIsPressedAsState()
                         val iconLift by animateDpAsState(
                             targetValue = when {
                                 isPressed -> (-1).dp
