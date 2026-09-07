@@ -302,6 +302,32 @@ private fun PrimaryNavigationBar(
                         label = "bottom-nav-item-corner-${destination.name}",
                     )
                     val activeItemShape = RoundedCornerShape(activeItemCorner)
+                    val activeItemOffset by animateDpAsState(
+                        targetValue = when {
+                            isSelected -> (-1).dp
+                            isPressed -> 1.dp
+                            else -> 0.dp
+                        },
+                        animationSpec = if (isPressed) {
+                            navPressDpAnimationSpec
+                        } else {
+                            navSelectionDpAnimationSpec
+                        },
+                        label = "bottom-nav-item-offset-${destination.name}",
+                    )
+                    val activeItemScale by animateFloatAsState(
+                        targetValue = when {
+                            isSelected -> 1.015f
+                            isPressed -> 0.992f
+                            else -> 1f
+                        },
+                        animationSpec = if (isPressed) {
+                            navPressFloatAnimationSpec
+                        } else {
+                            navSelectionFloatAnimationSpec
+                        },
+                        label = "bottom-nav-item-scale-${destination.name}",
+                    )
                     NavigationBarItem(
                         selected = isSelected,
                         onClick = { onDestinationSelected(destination) },
@@ -336,6 +362,8 @@ private fun PrimaryNavigationBar(
                                 minWidth = activeNavItemWidth,
                                 minHeight = 56.dp,
                             ),
+                            .offset(y = activeItemOffset)
+                            .scale(activeItemScale),
                     icon = {
                         val iconLift by animateDpAsState(
                             targetValue = when {
@@ -772,6 +800,32 @@ private fun PrimaryNavigationRail(
                         label = "rail-item-corner-${destination.name}",
                     )
                     val activeItemShape = RoundedCornerShape(activeItemCorner)
+                    val activeItemOffset by animateDpAsState(
+                        targetValue = when {
+                            isSelected -> (-1).dp
+                            isPressed -> 1.dp
+                            else -> 0.dp
+                        },
+                        animationSpec = if (isPressed) {
+                            navPressDpAnimationSpec
+                        } else {
+                            navSelectionDpAnimationSpec
+                        },
+                        label = "rail-item-offset-${destination.name}",
+                    )
+                    val activeItemScale by animateFloatAsState(
+                        targetValue = when {
+                            isSelected -> 1.012f
+                            isPressed -> 0.992f
+                            else -> 1f
+                        },
+                        animationSpec = if (isPressed) {
+                            navPressFloatAnimationSpec
+                        } else {
+                            navSelectionFloatAnimationSpec
+                        },
+                        label = "rail-item-scale-${destination.name}",
+                    )
                     NavigationRailItem(
                         selected = isSelected,
                         onClick = { onDestinationSelected(destination) },
@@ -806,6 +860,8 @@ private fun PrimaryNavigationRail(
                                 minWidth = activeNavItemWidth,
                                 minHeight = 48.dp,
                             ),
+                            .offset(y = activeItemOffset)
+                            .scale(activeItemScale),
                     icon = {
                         val iconLift by animateDpAsState(
                             targetValue = when {
