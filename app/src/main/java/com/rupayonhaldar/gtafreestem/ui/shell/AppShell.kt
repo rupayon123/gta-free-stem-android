@@ -365,8 +365,23 @@ private fun DestinationLabel(
             fontWeight = if (isSelected) FontWeight.Medium else FontWeight.Normal,
         )
     }
+    val labelColor by animateColorAsState(
+        targetValue = if (isSelected) {
+            MaterialTheme.colorScheme.primary
+        } else {
+            MaterialTheme.colorScheme.onSurfaceVariant
+        },
+        animationSpec = tween(durationMillis = 180),
+        label = "destination-label-color",
+    )
+    val labelAlpha by animateFloatAsState(
+        targetValue = if (isSelected) 1f else 0.9f,
+        animationSpec = tween(durationMillis = 180),
+        label = "destination-label-alpha",
+    )
     Text(
         text = label,
+        color = labelColor.copy(alpha = labelAlpha),
         style = resolvedStyle,
         maxLines = if (compact) 2 else 1,
         textAlign = TextAlign.Center,
