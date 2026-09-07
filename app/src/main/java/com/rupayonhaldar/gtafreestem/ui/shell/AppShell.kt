@@ -423,7 +423,7 @@ private fun PrimaryNavigationBar(
                             targetValue = when {
                                 isSelected -> 1f
                                 isPressed -> 0.88f
-                                else -> 0.78f
+                                else -> 0.76f
                             },
                             animationSpec = if (isPressed) {
                                 navPressFloatAnimationSpec
@@ -436,7 +436,7 @@ private fun PrimaryNavigationBar(
                             targetValue = when {
                                 isSelected -> 1f
                                 isPressed -> 0.9f
-                                else -> 0.84f
+                                else -> 0.82f
                             },
                             animationSpec = if (isPressed) {
                                 navPressFloatAnimationSpec
@@ -488,8 +488,8 @@ private fun PrimaryNavigationBar(
                         )
                         val iconFaceGlow by animateColorAsState(
                             targetValue = when {
-                                isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.20f)
-                                isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.14f)
+                                isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.18f)
+                                isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.13f)
                                 isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.08f)
                                 else -> Color.Transparent
                             },
@@ -545,11 +545,11 @@ private fun PrimaryNavigationBar(
                         )
                         val iconHaloSize by animateDpAsState(
                             targetValue = if (isSelected) {
-                                38.dp
+                                37.dp
                             } else if (isPressed) {
-                                29.dp
+                                28.dp
                             } else {
-                                23.dp
+                                22.dp
                             },
                             animationSpec = if (isPressed) {
                                 navPressDpAnimationSpec
@@ -961,7 +961,7 @@ private fun PrimaryNavigationRail(
                             targetValue = when {
                                 isSelected -> 1f
                                 isPressed -> 0.88f
-                                else -> 0.78f
+                                else -> 0.76f
                             },
                             animationSpec = if (isPressed) {
                                 navPressFloatAnimationSpec
@@ -974,7 +974,7 @@ private fun PrimaryNavigationRail(
                             targetValue = when {
                                 isSelected -> 1f
                                 isPressed -> 0.9f
-                                else -> 0.84f
+                                else -> 0.82f
                             },
                             animationSpec = if (isPressed) {
                                 navPressFloatAnimationSpec
@@ -1096,8 +1096,8 @@ private fun PrimaryNavigationRail(
                             },
                             label = "rail-icon-halo-size-${destination.name}",
                         )
-                        val iconHaloBorderWidth by animateDpAsState(
-                            targetValue = if (isSelected || isPressed) 0.8.dp else 0.dp,
+                    val iconHaloBorderWidth by animateDpAsState(
+                            targetValue = if (isSelected || isPressed) 0.7.dp else 0.dp,
                             animationSpec = if (isPressed) {
                                 navPressDpAnimationSpec
                             } else {
@@ -1107,9 +1107,9 @@ private fun PrimaryNavigationRail(
                         )
                         val iconShadowColor by animateColorAsState(
                             targetValue = when {
-                                isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.14f)
-                                isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.07f)
-                                isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.10f)
+                                isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)
+                                isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.06f)
+                                isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.08f)
                                 else -> Color.Transparent
                             },
                             animationSpec = if (isPressed) {
