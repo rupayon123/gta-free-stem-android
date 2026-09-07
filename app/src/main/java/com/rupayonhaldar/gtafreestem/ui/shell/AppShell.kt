@@ -670,12 +670,20 @@ private fun DestinationLabel(
             isSelected -> MaterialTheme.colorScheme.primary
             else -> MaterialTheme.colorScheme.onSurfaceVariant
         },
-        animationSpec = navSelectionColorAnimationSpec,
+        animationSpec = if (isPressed) {
+            navPressColorAnimationSpec
+        } else {
+            navSelectionColorAnimationSpec
+        },
         label = "destination-label-color",
     )
     val labelAlpha by animateFloatAsState(
         targetValue = if (isPressed) 0.72f else if (isSelected) 1f else 0.9f,
-        animationSpec = navSelectionFloatAnimationSpec,
+        animationSpec = if (isPressed) {
+            navPressFloatAnimationSpec
+        } else {
+            navSelectionFloatAnimationSpec
+        },
         label = "destination-label-alpha",
     )
     val labelOffset by animateDpAsState(
@@ -684,7 +692,11 @@ private fun DestinationLabel(
             isSelected -> 0.dp
             else -> if (compact) 2.dp else 1.dp
         },
-        animationSpec = navSelectionDpAnimationSpec,
+        animationSpec = if (isPressed) {
+            navPressDpAnimationSpec
+        } else {
+            navSelectionDpAnimationSpec
+        },
         label = "destination-label-offset",
     )
     val labelScale by animateFloatAsState(
@@ -693,7 +705,11 @@ private fun DestinationLabel(
             isSelected -> 1f
             else -> 0.97f
         },
-        animationSpec = navSelectionFloatAnimationSpec,
+        animationSpec = if (isPressed) {
+            navPressFloatAnimationSpec
+        } else {
+            navSelectionFloatAnimationSpec
+        },
         label = "destination-label-scale",
     )
     Text(
@@ -712,8 +728,9 @@ private fun DestinationLabel(
 private val PrimaryDestination.testTag: String
     get() = "primary-navigation-${name.lowercase()}"
 
-    private val navSelectionFloatAnimationSpec = tween<Float>(220, easing = FastOutSlowInEasing)
-    private val navPressFloatAnimationSpec = tween<Float>(120, easing = FastOutSlowInEasing)
-    private val navSelectionDpAnimationSpec = tween<Dp>(220, easing = FastOutSlowInEasing)
-    private val navPressDpAnimationSpec = tween<Dp>(120, easing = FastOutSlowInEasing)
+private val navSelectionFloatAnimationSpec = tween<Float>(220, easing = FastOutSlowInEasing)
+private val navPressFloatAnimationSpec = tween<Float>(120, easing = FastOutSlowInEasing)
+private val navSelectionDpAnimationSpec = tween<Dp>(220, easing = FastOutSlowInEasing)
+private val navPressDpAnimationSpec = tween<Dp>(120, easing = FastOutSlowInEasing)
+private val navPressColorAnimationSpec = tween<Color>(120, easing = FastOutSlowInEasing)
 private val navSelectionColorAnimationSpec = tween<Color>(220, easing = FastOutSlowInEasing)
