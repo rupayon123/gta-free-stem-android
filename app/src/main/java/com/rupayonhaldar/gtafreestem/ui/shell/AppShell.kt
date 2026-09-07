@@ -1163,8 +1163,8 @@ private fun DestinationLabel(
 ) {
     val resolvedStyle = if (compact) {
         MaterialTheme.typography.labelSmall.copy(
-            fontSize = if (isPressed) 11.sp else 12.sp,
-            lineHeight = if (isPressed) 13.sp else 14.sp,
+            fontSize = if (isSelected) 12.4.sp else if (isPressed) 11.sp else 12.sp,
+            lineHeight = if (isPressed) 13.sp else 14.5.sp,
             fontWeight = if (isSelected) FontWeight.SemiBold else if (isPressed) FontWeight.Medium else FontWeight.Normal,
             letterSpacing = 0.08.sp,
         )
@@ -1226,11 +1226,11 @@ private fun DestinationLabel(
         },
         label = "destination-label-offset",
     )
-    val labelLift by animateDpAsState(
+        val labelLift by animateDpAsState(
         targetValue = when {
             isPressed && !isSelected -> 1.5.dp
             isPressed && isSelected -> 0.dp
-            isSelected -> 0.dp
+            isSelected -> (-0.5).dp
             else -> if (compact) 2.dp else 1.5.dp
         },
         animationSpec = if (isPressed) {
