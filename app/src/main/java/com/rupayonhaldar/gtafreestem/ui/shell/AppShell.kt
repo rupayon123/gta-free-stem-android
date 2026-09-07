@@ -3,6 +3,7 @@ package com.rupayonhaldar.gtafreestem.ui.shell
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.core.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
@@ -17,11 +18,13 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -36,11 +39,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.text.font.FontWeight
@@ -174,6 +177,16 @@ private fun PrimaryNavigationBar(
                         .sizeIn(minWidth = 56.dp, minHeight = 56.dp),
                     icon = {
                         val isSelected = selectedDestination == destination
+                        val iconLift by animateDpAsState(
+                            targetValue = if (isSelected) (-2).dp else 0.dp,
+                            animationSpec = navSelectionAnimationSpec,
+                            label = "bottom-nav-icon-lift-${destination.name}",
+                        )
+                        val iconElevation by animateFloatAsState(
+                            targetValue = if (isSelected) 5f else 0f,
+                            animationSpec = navSelectionAnimationSpec,
+                            label = "bottom-nav-icon-elevation-${destination.name}",
+                        )
                         val iconContainerScale by animateFloatAsState(
                             targetValue = if (isSelected) 1.05f else 1f,
                             animationSpec = navSelectionAnimationSpec,
@@ -207,6 +220,13 @@ private fun PrimaryNavigationBar(
                             modifier = Modifier
                                 .size(34.dp)
                                 .clip(RoundedCornerShape(17.dp))
+                                .shadow(
+                                    elevation = iconElevation.dp,
+                                    shape = RoundedCornerShape(17.dp),
+                                    ambientColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.25f),
+                                    spotColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.25f),
+                                )
+                                .offset(y = iconLift)
                                 .scale(iconContainerScale)
                                 .background(iconBackground),
                             contentAlignment = Alignment.Center,
@@ -296,6 +316,16 @@ private fun PrimaryNavigationRail(
                         .sizeIn(minWidth = 72.dp, minHeight = 48.dp),
                     icon = {
                         val isSelected = selectedDestination == destination
+                        val iconLift by animateDpAsState(
+                            targetValue = if (isSelected) (-2).dp else 0.dp,
+                            animationSpec = navSelectionAnimationSpec,
+                            label = "rail-icon-lift-${destination.name}",
+                        )
+                        val iconElevation by animateFloatAsState(
+                            targetValue = if (isSelected) 5f else 0f,
+                            animationSpec = navSelectionAnimationSpec,
+                            label = "rail-icon-elevation-${destination.name}",
+                        )
                         val iconContainerScale by animateFloatAsState(
                             targetValue = if (isSelected) 1.05f else 1f,
                             animationSpec = navSelectionAnimationSpec,
@@ -328,6 +358,13 @@ private fun PrimaryNavigationRail(
                             modifier = Modifier
                                 .size(34.dp)
                                 .clip(RoundedCornerShape(17.dp))
+                                .shadow(
+                                    elevation = iconElevation.dp,
+                                    shape = RoundedCornerShape(17.dp),
+                                    ambientColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
+                                    spotColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
+                                )
+                                .offset(y = iconLift)
                                 .scale(iconContainerScale)
                                 .background(iconBackground),
                             contentAlignment = Alignment.Center,
