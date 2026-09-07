@@ -349,6 +349,20 @@ private fun PrimaryNavigationBar(
                             },
                             label = "bottom-nav-icon-halo-border-width-${destination.name}",
                         )
+                        val iconShadowColor by animateColorAsState(
+                            targetValue = when {
+                                isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.28f)
+                                isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.20f)
+                                isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.16f)
+                                else -> Color.Transparent
+                            },
+                            animationSpec = if (isPressed) {
+                                navPressColorAnimationSpec
+                            } else {
+                                navSelectionColorAnimationSpec
+                            },
+                            label = "bottom-nav-icon-shadow-${destination.name}",
+                        )
 
                         Box(
                             modifier = Modifier
@@ -371,8 +385,8 @@ private fun PrimaryNavigationBar(
                                 .shadow(
                                     elevation = iconElevation.dp,
                                     shape = RoundedCornerShape(iconHaloSize / 2),
-                                    ambientColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.25f),
-                                    spotColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.25f),
+                                    ambientColor = iconShadowColor,
+                                    spotColor = iconShadowColor,
                                 )
                                 .offset(y = iconLift)
                                 .scale(iconContainerScale),
@@ -635,6 +649,20 @@ private fun PrimaryNavigationRail(
                             },
                             label = "rail-icon-halo-border-width-${destination.name}",
                         )
+                        val iconShadowColor by animateColorAsState(
+                            targetValue = when {
+                                isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.22f)
+                                isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.16f)
+                                isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)
+                                else -> Color.Transparent
+                            },
+                            animationSpec = if (isPressed) {
+                                navPressColorAnimationSpec
+                            } else {
+                                navSelectionColorAnimationSpec
+                            },
+                            label = "rail-icon-shadow-${destination.name}",
+                        )
                         Box(
                             modifier = Modifier
                                 .size(iconHaloSize)
@@ -656,8 +684,8 @@ private fun PrimaryNavigationRail(
                                 .shadow(
                                     elevation = iconElevation.dp,
                                     shape = RoundedCornerShape(iconHaloSize / 2),
-                                    ambientColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
-                                    spotColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
+                                    ambientColor = iconShadowColor,
+                                    spotColor = iconShadowColor,
                                 )
                                 .offset(y = iconLift)
                                 .scale(iconContainerScale),
