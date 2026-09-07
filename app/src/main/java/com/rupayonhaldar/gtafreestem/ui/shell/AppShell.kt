@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -164,12 +165,13 @@ private fun PrimaryNavigationBar(
             ),
         ) {
             PrimaryDestination.entries.forEach { destination ->
-                NavigationBarItem(
+                    NavigationBarItem(
                     selected = selectedDestination == destination,
                     onClick = { onDestinationSelected(destination) },
                     modifier = Modifier
                         .testTag(destination.testTag)
-                        .padding(top = 2.dp),
+                        .padding(top = 2.dp)
+                        .sizeIn(minWidth = 56.dp, minHeight = 56.dp),
                     icon = {
                         val isSelected = selectedDestination == destination
                         val iconContainerScale by animateFloatAsState(
@@ -285,12 +287,13 @@ private fun PrimaryNavigationRail(
             windowInsets = WindowInsets(0, 0, 0, 0),
         ) {
             PrimaryDestination.entries.forEach { destination ->
-                NavigationRailItem(
+                    NavigationRailItem(
                     selected = selectedDestination == destination,
                     onClick = { onDestinationSelected(destination) },
                     modifier = Modifier
                         .testTag(destination.testTag)
-                        .padding(vertical = 2.dp),
+                        .padding(vertical = 2.dp)
+                        .sizeIn(minWidth = 72.dp, minHeight = 48.dp),
                     icon = {
                         val isSelected = selectedDestination == destination
                         val iconContainerScale by animateFloatAsState(
