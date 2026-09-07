@@ -293,7 +293,7 @@ private fun PrimaryNavigationBar(
                     val activeItemShape = RoundedCornerShape(activeItemCorner)
                     val activeItemOffset by animateDpAsState(
                         targetValue = when {
-                            isSelected -> (-1).dp
+                            isSelected -> (-0.8).dp
                             isPressed -> 0.7.dp
                             else -> 0.dp
                         },
@@ -319,7 +319,7 @@ private fun PrimaryNavigationBar(
                     )
                     val activeItemScale by animateFloatAsState(
                         targetValue = when {
-                            isSelected -> 1.004f
+                            isSelected -> 1.002f
                             isPressed -> 0.988f
                             else -> 1f
                         },
@@ -791,7 +791,7 @@ private fun PrimaryNavigationRail(
                     )
                     val selectedPillElevation by animateDpAsState(
                         targetValue = when {
-                            isSelected -> 2.0.dp
+                            isSelected -> 1.9.dp
                             isPressed -> 1.2.dp
                             else -> 0.dp
                         },
@@ -804,7 +804,7 @@ private fun PrimaryNavigationRail(
                     )
                     val activeNavItemWidth by animateDpAsState(
                         targetValue = when {
-                            isSelected -> 88.dp
+                            isSelected -> 87.dp
                             isPressed -> 79.dp
                             else -> 76.dp
                         },
@@ -831,7 +831,7 @@ private fun PrimaryNavigationRail(
                     val activeItemShape = RoundedCornerShape(activeItemCorner)
                     val activeItemOffset by animateDpAsState(
                         targetValue = when {
-                                isSelected -> (-1.5).dp
+                                isSelected -> (-1.1).dp
                                 isPressed -> 0.7.dp
                                 else -> 0.dp
                         },
@@ -857,7 +857,7 @@ private fun PrimaryNavigationRail(
                     )
                     val activeItemScale by animateFloatAsState(
                         targetValue = when {
-                            isSelected -> 1.008f
+                            isSelected -> 1.004f
                             isPressed -> 0.988f
                             else -> 1f
                         },
