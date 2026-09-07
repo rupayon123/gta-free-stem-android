@@ -559,7 +559,7 @@ private fun PrimaryNavigationBar(
                             label = "bottom-nav-icon-halo-size-${destination.name}",
                         )
                         val iconHaloBorderWidth by animateDpAsState(
-                            targetValue = if (isSelected || isPressed) 0.8.dp else 0.dp,
+                            targetValue = if (isSelected || isPressed) 0.65.dp else 0.dp,
                             animationSpec = if (isPressed) {
                                 navPressDpAnimationSpec
                             } else {
@@ -1135,9 +1135,9 @@ private fun PrimaryNavigationRail(
                                     border = BorderStroke(
                                         width = iconHaloBorderWidth,
                                         color = if (isSelected) {
-                                            MaterialTheme.colorScheme.primary.copy(alpha = 0.24f)
+                                            MaterialTheme.colorScheme.primary.copy(alpha = 0.18f)
                                         } else if (isPressed) {
-                                            MaterialTheme.colorScheme.primary.copy(alpha = 0.08f)
+                                            MaterialTheme.colorScheme.primary.copy(alpha = 0.06f)
                                         } else {
                                             Color.Transparent
                                         },
