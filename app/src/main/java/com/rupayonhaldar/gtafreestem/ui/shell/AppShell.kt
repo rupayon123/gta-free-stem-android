@@ -657,6 +657,7 @@ private fun DestinationLabel(
             fontSize = if (isPressed) 11.sp else 12.sp,
             lineHeight = if (isPressed) 13.sp else 14.sp,
             fontWeight = if (isSelected) FontWeight.SemiBold else if (isPressed) FontWeight.Medium else FontWeight.Normal,
+            letterSpacing = 0.08.sp,
         )
     } else {
         MaterialTheme.typography.labelSmall.copy(
@@ -719,7 +720,7 @@ private fun DestinationLabel(
             .scale(labelScale),
         color = labelColor.copy(alpha = labelAlpha),
         style = resolvedStyle,
-        maxLines = if (compact) 2 else 1,
+        maxLines = 1,
         textAlign = TextAlign.Center,
         overflow = TextOverflow.Ellipsis,
     )
