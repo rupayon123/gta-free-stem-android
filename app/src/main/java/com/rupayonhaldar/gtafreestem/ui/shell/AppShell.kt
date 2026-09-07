@@ -294,7 +294,7 @@ private fun PrimaryNavigationBar(
                     val activeItemOffset by animateDpAsState(
                         targetValue = when {
                             isSelected -> (-0.8).dp
-                            isPressed -> 0.7.dp
+                            isPressed -> 0.5.dp
                             else -> 0.dp
                         },
                         animationSpec = if (isPressed) {
@@ -832,7 +832,7 @@ private fun PrimaryNavigationRail(
                     val activeItemOffset by animateDpAsState(
                         targetValue = when {
                                 isSelected -> (-1.1).dp
-                                isPressed -> 0.7.dp
+                                isPressed -> 0.5.dp
                                 else -> 0.dp
                         },
                         animationSpec = if (isPressed) {
@@ -1325,8 +1325,8 @@ private fun DestinationLabel(
     )
     val labelShadowRadius by animateFloatAsState(
         targetValue = when {
-            isSelected -> 1.2f
-            isPressed -> 0.3f
+            isSelected -> 1f
+            isPressed -> 0.2f
             else -> 0f
         },
         animationSpec = if (isPressed) {
