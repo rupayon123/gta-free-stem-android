@@ -196,7 +196,6 @@ private fun PrimaryNavigationBar(
                         .sizeIn(minWidth = 56.dp, minHeight = 56.dp),
                     icon = {
                         val isPressed by destinationInteractionSource.collectIsPressedAsState()
-                        // isSelected reused for consistent destination-focused animation state.
                         val iconLift by animateDpAsState(
                             targetValue = if (isSelected) (-2).dp else 0.dp,
                             animationSpec = navSelectionDpAnimationSpec,
@@ -392,7 +391,6 @@ private fun PrimaryNavigationRail(
                         .sizeIn(minWidth = 72.dp, minHeight = 48.dp),
                     icon = {
                         val isPressed by destinationInteractionSource.collectIsPressedAsState()
-                        // isSelected reused for consistent destination-focused animation state.
                         val iconLift by animateDpAsState(
                             targetValue = if (isSelected) (-2).dp else 0.dp,
                             animationSpec = navSelectionDpAnimationSpec,
