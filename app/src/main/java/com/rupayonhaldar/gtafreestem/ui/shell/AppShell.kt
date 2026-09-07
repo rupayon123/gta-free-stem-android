@@ -179,7 +179,7 @@ private fun PrimaryNavigationBar(
                         val isSelected = selectedDestination == destination
                         val iconLift by animateDpAsState(
                             targetValue = if (isSelected) (-2).dp else 0.dp,
-                            animationSpec = navSelectionAnimationSpec,
+                            animationSpec = navSelectionDpAnimationSpec,
                             label = "bottom-nav-icon-lift-${destination.name}",
                         )
                         val iconElevation by animateFloatAsState(
@@ -189,12 +189,12 @@ private fun PrimaryNavigationBar(
                         )
                         val iconContainerScale by animateFloatAsState(
                             targetValue = if (isSelected) 1.05f else 1f,
-                            animationSpec = navSelectionAnimationSpec,
+                            animationSpec = navSelectionFloatAnimationSpec,
                             label = "bottom-nav-icon-container-scale-${destination.name}",
                         )
                         val iconScale by animateFloatAsState(
                             targetValue = if (isSelected) 1.04f else 1f,
-                            animationSpec = navSelectionAnimationSpec,
+                            animationSpec = navSelectionFloatAnimationSpec,
                             label = "bottom-nav-icon-scale-${destination.name}",
                         )
                         val iconBackground by animateColorAsState(
@@ -203,7 +203,7 @@ private fun PrimaryNavigationBar(
                             } else {
                                 Color.Transparent
                             },
-                            animationSpec = navSelectionAnimationSpec,
+                            animationSpec = navSelectionColorAnimationSpec,
                             label = "bottom-nav-icon-background-${destination.name}",
                         )
                         val iconTint by animateColorAsState(
@@ -212,7 +212,7 @@ private fun PrimaryNavigationBar(
                             } else {
                                 MaterialTheme.colorScheme.onSurfaceVariant
                             },
-                            animationSpec = navSelectionAnimationSpec,
+                            animationSpec = navSelectionColorAnimationSpec,
                             label = "bottom-nav-icon-tint-${destination.name}",
                         )
 
@@ -318,22 +318,22 @@ private fun PrimaryNavigationRail(
                         val isSelected = selectedDestination == destination
                         val iconLift by animateDpAsState(
                             targetValue = if (isSelected) (-2).dp else 0.dp,
-                            animationSpec = navSelectionAnimationSpec,
+                            animationSpec = navSelectionDpAnimationSpec,
                             label = "rail-icon-lift-${destination.name}",
                         )
                         val iconElevation by animateFloatAsState(
                             targetValue = if (isSelected) 5f else 0f,
-                            animationSpec = navSelectionAnimationSpec,
+                            animationSpec = navSelectionFloatAnimationSpec,
                             label = "rail-icon-elevation-${destination.name}",
                         )
                         val iconContainerScale by animateFloatAsState(
                             targetValue = if (isSelected) 1.05f else 1f,
-                            animationSpec = navSelectionAnimationSpec,
+                            animationSpec = navSelectionFloatAnimationSpec,
                             label = "rail-icon-container-scale-${destination.name}",
                         )
                         val iconScale by animateFloatAsState(
                             targetValue = if (isSelected) 1.05f else 1f,
-                            animationSpec = navSelectionAnimationSpec,
+                            animationSpec = navSelectionFloatAnimationSpec,
                             label = "rail-icon-scale-${destination.name}",
                         )
                         val iconBackground by animateColorAsState(
@@ -342,7 +342,7 @@ private fun PrimaryNavigationRail(
                             } else {
                                 Color.Transparent
                             },
-                            animationSpec = navSelectionAnimationSpec,
+                            animationSpec = navSelectionColorAnimationSpec,
                             label = "rail-icon-background-${destination.name}",
                         )
                         val iconTint by animateColorAsState(
@@ -351,7 +351,7 @@ private fun PrimaryNavigationRail(
                             } else {
                                 MaterialTheme.colorScheme.onSurfaceVariant
                             },
-                            animationSpec = navSelectionAnimationSpec,
+                            animationSpec = navSelectionColorAnimationSpec,
                             label = "rail-icon-tint-${destination.name}",
                         )
                         Box(
@@ -424,16 +424,33 @@ private fun DestinationLabel(
         } else {
             MaterialTheme.colorScheme.onSurfaceVariant
         },
-        animationSpec = navSelectionAnimationSpec,
+        animationSpec = navSelectionColorAnimationSpec,
         label = "destination-label-color",
     )
     val labelAlpha by animateFloatAsState(
         targetValue = if (isSelected) 1f else 0.9f,
-        animationSpec = navSelectionAnimationSpec,
+        animationSpec = navSelectionFloatAnimationSpec,
         label = "destination-label-alpha",
+    )
+    val labelOffset by animateDpAsState(
+        targetValue = if (isSelected) {
+            0.dp
+        } else {
+            if (compact) 2.dp else 1.dp
+        },
+        animationSpec = navSelectionDpAnimationSpec,
+        label = "destination-label-offset",
+    )
+    val labelScale by animateFloatAsState(
+        targetValue = if (isSelected) 1f else 0.97f,
+        animationSpec = navSelectionFloatAnimationSpec,
+        label = "destination-label-scale",
     )
     Text(
         text = label,
+        modifier = Modifier
+            .offset(y = labelOffset)
+            .scale(labelScale),
         color = labelColor.copy(alpha = labelAlpha),
         style = resolvedStyle,
         maxLines = if (compact) 2 else 1,
@@ -445,4 +462,6 @@ private fun DestinationLabel(
 private val PrimaryDestination.testTag: String
     get() = "primary-navigation-${name.lowercase()}"
 
-private val navSelectionAnimationSpec = tween<Float>(220, easing = FastOutSlowInEasing)
+private val navSelectionFloatAnimationSpec = tween<Float>(220, easing = FastOutSlowInEasing)
+private val navSelectionDpAnimationSpec = tween<Dp>(220, easing = FastOutSlowInEasing)
+private val navSelectionColorAnimationSpec = tween<Color>(220, easing = FastOutSlowInEasing)
