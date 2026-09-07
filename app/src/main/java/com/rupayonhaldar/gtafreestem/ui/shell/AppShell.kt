@@ -8,6 +8,7 @@ import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Box
@@ -252,6 +253,17 @@ private fun PrimaryNavigationBar(
                                 .size(iconHaloSize)
                                 .clip(RoundedCornerShape(iconHaloSize / 2))
                                 .background(iconHalo)
+                                .border(
+                                    border = BorderStroke(
+                                        0.6.dp,
+                                        if (isSelected) {
+                                            MaterialTheme.colorScheme.primary.copy(alpha = 0.45f)
+                                        } else {
+                                            Color.Transparent
+                                        },
+                                    ),
+                                    shape = RoundedCornerShape(iconHaloSize / 2),
+                                )
                                 .shadow(
                                     elevation = iconElevation.dp,
                                     shape = RoundedCornerShape(17.dp),
@@ -426,6 +438,17 @@ private fun PrimaryNavigationRail(
                                 .size(iconHaloSize)
                                 .clip(RoundedCornerShape(iconHaloSize / 2))
                                 .background(iconHalo)
+                                .border(
+                                    border = BorderStroke(
+                                        0.6.dp,
+                                        if (isSelected) {
+                                            MaterialTheme.colorScheme.primary.copy(alpha = 0.32f)
+                                        } else {
+                                            Color.Transparent
+                                        },
+                                    ),
+                                    shape = RoundedCornerShape(iconHaloSize / 2),
+                                )
                                 .shadow(
                                     elevation = iconElevation.dp,
                                     shape = RoundedCornerShape(17.dp),
