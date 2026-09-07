@@ -3,6 +3,7 @@ package com.rupayonhaldar.gtafreestem.ui.shell
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.core.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -173,7 +174,7 @@ private fun PrimaryNavigationBar(
                         val isSelected = selectedDestination == destination
                         val iconScale by animateFloatAsState(
                             targetValue = if (isSelected) 1.04f else 1f,
-                            animationSpec = tween(durationMillis = 180),
+                            animationSpec = navSelectionAnimationSpec,
                             label = "bottom-nav-icon-scale-${destination.name}",
                         )
                         val iconBackground by animateColorAsState(
@@ -182,7 +183,7 @@ private fun PrimaryNavigationBar(
                             } else {
                                 Color.Transparent
                             },
-                            animationSpec = tween(durationMillis = 180),
+                            animationSpec = navSelectionAnimationSpec,
                             label = "bottom-nav-icon-background-${destination.name}",
                         )
                         val iconTint by animateColorAsState(
@@ -191,7 +192,7 @@ private fun PrimaryNavigationBar(
                             } else {
                                 MaterialTheme.colorScheme.onSurfaceVariant
                             },
-                            animationSpec = tween(durationMillis = 180),
+                            animationSpec = navSelectionAnimationSpec,
                             label = "bottom-nav-icon-tint-${destination.name}",
                         )
 
@@ -288,7 +289,7 @@ private fun PrimaryNavigationRail(
                         val isSelected = selectedDestination == destination
                         val iconScale by animateFloatAsState(
                             targetValue = if (isSelected) 1.05f else 1f,
-                            animationSpec = tween(durationMillis = 180),
+                            animationSpec = navSelectionAnimationSpec,
                             label = "rail-icon-scale-${destination.name}",
                         )
                         val iconBackground by animateColorAsState(
@@ -297,7 +298,7 @@ private fun PrimaryNavigationRail(
                             } else {
                                 Color.Transparent
                             },
-                            animationSpec = tween(durationMillis = 180),
+                            animationSpec = navSelectionAnimationSpec,
                             label = "rail-icon-background-${destination.name}",
                         )
                         val iconTint by animateColorAsState(
@@ -306,7 +307,7 @@ private fun PrimaryNavigationRail(
                             } else {
                                 MaterialTheme.colorScheme.onSurfaceVariant
                             },
-                            animationSpec = tween(durationMillis = 180),
+                            animationSpec = navSelectionAnimationSpec,
                             label = "rail-icon-tint-${destination.name}",
                         )
                         Box(
@@ -371,12 +372,12 @@ private fun DestinationLabel(
         } else {
             MaterialTheme.colorScheme.onSurfaceVariant
         },
-        animationSpec = tween(durationMillis = 180),
+        animationSpec = navSelectionAnimationSpec,
         label = "destination-label-color",
     )
     val labelAlpha by animateFloatAsState(
         targetValue = if (isSelected) 1f else 0.9f,
-        animationSpec = tween(durationMillis = 180),
+        animationSpec = navSelectionAnimationSpec,
         label = "destination-label-alpha",
     )
     Text(
@@ -391,3 +392,5 @@ private fun DestinationLabel(
 
 private val PrimaryDestination.testTag: String
     get() = "primary-navigation-${name.lowercase()}"
+
+private val navSelectionAnimationSpec = tween<Float>(220, easing = FastOutSlowInEasing)
