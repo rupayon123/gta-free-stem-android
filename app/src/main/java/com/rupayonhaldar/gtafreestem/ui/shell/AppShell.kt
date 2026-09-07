@@ -262,6 +262,11 @@ private fun PrimaryNavigationBar(
                             animationSpec = navSelectionDpAnimationSpec,
                             label = "bottom-nav-icon-halo-size-${destination.name}",
                         )
+                        val iconHaloBorderWidth by animateDpAsState(
+                            targetValue = if (isSelected || isPressed) 0.8.dp else 0.dp,
+                            animationSpec = navSelectionDpAnimationSpec,
+                            label = "bottom-nav-icon-halo-border-width-${destination.name}",
+                        )
 
                         Box(
                             modifier = Modifier
@@ -270,9 +275,11 @@ private fun PrimaryNavigationBar(
                                 .background(iconHalo)
                                 .border(
                                     border = BorderStroke(
-                                        0.6.dp,
-                                        if (isSelected) {
+                                        width = iconHaloBorderWidth,
+                                        color = if (isSelected) {
                                             MaterialTheme.colorScheme.primary.copy(alpha = 0.45f)
+                                        } else if (isPressed) {
+                                            MaterialTheme.colorScheme.primary.copy(alpha = 0.28f)
                                         } else {
                                             Color.Transparent
                                         },
@@ -463,6 +470,11 @@ private fun PrimaryNavigationRail(
                             animationSpec = navSelectionDpAnimationSpec,
                             label = "rail-icon-halo-size-${destination.name}",
                         )
+                        val iconHaloBorderWidth by animateDpAsState(
+                            targetValue = if (isSelected || isPressed) 0.8.dp else 0.dp,
+                            animationSpec = navSelectionDpAnimationSpec,
+                            label = "rail-icon-halo-border-width-${destination.name}",
+                        )
                         Box(
                             modifier = Modifier
                                 .size(iconHaloSize)
@@ -470,9 +482,11 @@ private fun PrimaryNavigationRail(
                                 .background(iconHalo)
                                 .border(
                                     border = BorderStroke(
-                                        0.6.dp,
-                                        if (isSelected) {
+                                        width = iconHaloBorderWidth,
+                                        color = if (isSelected) {
                                             MaterialTheme.colorScheme.primary.copy(alpha = 0.32f)
+                                        } else if (isPressed) {
+                                            MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)
                                         } else {
                                             Color.Transparent
                                         },
