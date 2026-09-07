@@ -554,13 +554,13 @@ private fun DestinationLabel(
 ) {
     val resolvedStyle = if (compact) {
         MaterialTheme.typography.labelSmall.copy(
-            fontSize = 12.sp,
-            lineHeight = 14.sp,
-            fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
+            fontSize = if (isPressed) 11.sp else 12.sp,
+            lineHeight = if (isPressed) 13.sp else 14.sp,
+            fontWeight = if (isSelected) FontWeight.SemiBold else if (isPressed) FontWeight.Medium else FontWeight.Normal,
         )
     } else {
         MaterialTheme.typography.labelSmall.copy(
-            fontWeight = if (isSelected) FontWeight.Medium else FontWeight.Normal,
+            fontWeight = if (isSelected) FontWeight.Medium else if (isPressed) FontWeight.Normal else FontWeight.Normal,
         )
     }
     val labelColor by animateColorAsState(
