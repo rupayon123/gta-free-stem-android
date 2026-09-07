@@ -417,6 +417,20 @@ private fun PrimaryNavigationBar(
                             },
                             label = "bottom-nav-icon-background-${destination.name}",
                         )
+                        val iconFaceGlow by animateColorAsState(
+                            targetValue = when {
+                                isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.36f)
+                                isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.26f)
+                                isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.16f)
+                                else -> Color.Transparent
+                            },
+                            animationSpec = if (isPressed) {
+                                navPressColorAnimationSpec
+                            } else {
+                                navSelectionColorAnimationSpec
+                            },
+                            label = "bottom-nav-icon-face-glow-${destination.name}",
+                        )
                         val iconTint by animateColorAsState(
                             targetValue = if (isSelected) {
                                 MaterialTheme.colorScheme.primary
@@ -516,7 +530,21 @@ private fun PrimaryNavigationBar(
                                 modifier = Modifier
                                     .size(iconFaceSize)
                                     .clip(RoundedCornerShape(iconFaceSize / 2))
-                                    .background(iconBackground),
+                                    .background(
+                                        brush = Brush.radialGradient(
+                                            colors = listOf(
+                                                iconFaceGlow,
+                                                iconBackground,
+                                            ),
+                                        ),
+                                    ),
+                                    .border(
+                                        border = BorderStroke(
+                                            width = 0.5.dp,
+                                            color = iconFaceGlow,
+                                        ),
+                                        shape = RoundedCornerShape(iconFaceSize / 2),
+                                    ),
                                 contentAlignment = Alignment.Center,
                             ) {
                                 Icon(
@@ -837,6 +865,20 @@ private fun PrimaryNavigationRail(
                             },
                             label = "rail-icon-background-${destination.name}",
                         )
+                        val iconFaceGlow by animateColorAsState(
+                            targetValue = when {
+                                isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.28f)
+                                isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.20f)
+                                isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)
+                                else -> Color.Transparent
+                            },
+                            animationSpec = if (isPressed) {
+                                navPressColorAnimationSpec
+                            } else {
+                                navSelectionColorAnimationSpec
+                            },
+                            label = "rail-icon-face-glow-${destination.name}",
+                        )
                         val iconTint by animateColorAsState(
                             targetValue = if (isSelected) {
                                 MaterialTheme.colorScheme.primary
@@ -935,7 +977,21 @@ private fun PrimaryNavigationRail(
                                 modifier = Modifier
                                     .size(iconFaceSize)
                                     .clip(RoundedCornerShape(iconFaceSize / 2))
-                                    .background(iconBackground),
+                                    .background(
+                                        brush = Brush.radialGradient(
+                                            colors = listOf(
+                                                iconFaceGlow,
+                                                iconBackground,
+                                            ),
+                                        ),
+                                    )
+                                    .border(
+                                        border = BorderStroke(
+                                            width = 0.45.dp,
+                                            color = iconFaceGlow,
+                                        ),
+                                        shape = RoundedCornerShape(iconFaceSize / 2),
+                                    ),
                                 contentAlignment = Alignment.Center,
                             ) {
                                 Icon(
