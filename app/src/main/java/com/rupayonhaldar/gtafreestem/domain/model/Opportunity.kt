@@ -40,6 +40,9 @@ data class Opportunity(
     val volunteerHoursEligible: Boolean = false,
     val coopEligible: Boolean = false,
     val tags: List<String> = emptyList(),
+    val distanceKm: Double? = null,
+    val isNewFind: Boolean? = null,
+    val sourceConfidence: String? = null,
     val sources: List<OpportunitySourceEvidence> = emptyList(),
     val translations: Map<String, OpportunityTranslation> = emptyMap(),
 )

@@ -45,7 +45,7 @@ interface LocalAccountPreferencesStore {
 
     fun setTheme(theme: AppThemePreference): Boolean
 
-    /** Records intent only. Notification permission and scheduling belong to a later UI flow. */
+    /** Persists the Activity-coordinated local alert preference. */
     fun setOpportunityAlertsPreferred(preferred: Boolean): Boolean
 
     /** Removes only the optional display name; device-level settings remain unchanged. */

@@ -9,8 +9,12 @@ import com.rupayonhaldar.gtafreestem.localization.AppStringCatalog
 import com.rupayonhaldar.gtafreestem.localization.LanguagePreferenceStore
 import com.rupayonhaldar.gtafreestem.localization.TextDirection
 import java.io.File
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.withTimeoutOrNull
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
@@ -132,6 +136,25 @@ class AppPreferencesViewModelTest {
         assertEquals(AppThemePreference.SYSTEM, state.theme)
         assertFalse(state.opportunityAlertsPreferred)
     }
+
+    @Test
+    fun `alert feedback queued before collection is delivered once without stale replay`() =
+        runTest {
+            val viewModel = viewModel()
+
+            viewModel.reportOpportunityAlertFeedback(
+                OpportunityAlertFeedback.PERMISSION_DENIED,
+            )
+
+            assertEquals(
+                OpportunityAlertFeedback.PERMISSION_DENIED,
+                viewModel.opportunityAlertFeedback.first(),
+            )
+            assertNull(
+                "A consumed one-shot message must not replay to a recreated collector",
+                withTimeoutOrNull(1) { viewModel.opportunityAlertFeedback.first() },
+            )
+        }
 
     private fun viewModel(
         languageStore: FakeLanguageStore = FakeLanguageStore(),

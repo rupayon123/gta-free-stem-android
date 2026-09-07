@@ -43,14 +43,17 @@ class OpportunityFilterPanelContractTest {
     }
 
     @Test
-    fun `deferred and enforcement fields are not presented as visible filters`() {
+    fun `nearby and new-find discovery fields are counted when rendered`() {
         val filters = OpportunitySearchFilters(
             activeOnly = false,
+            latitude = 43.65,
+            longitude = -79.38,
             distanceKm = 25,
             includeNewFinds = false,
+            sort = OpportunitySearchSort.NEAREST,
         )
 
-        assertEquals(0, opportunityFilterPanelActiveCount(filters))
+        assertEquals(4, opportunityFilterPanelActiveCount(filters))
         assertTrue(filters.hasActiveFilters)
     }
 
@@ -93,6 +96,6 @@ class OpportunityFilterPanelContractTest {
         assertEquals("No filters active", labels.activeFilterCount(0))
         assertEquals("1 filter active", labels.activeFilterCount(1))
         assertEquals("3 filters active", labels.activeFilterCount(3))
-        assertTrue(labels.scopeDescription.contains("Distance and New Finds"))
+        assertTrue(labels.scopeDescription.contains("Nearby"))
     }
 }

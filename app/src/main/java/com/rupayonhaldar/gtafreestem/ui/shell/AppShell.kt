@@ -1,6 +1,7 @@
 package com.rupayonhaldar.gtafreestem.ui.shell
 
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Row
@@ -20,6 +21,7 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.NavigationRailItemDefaults
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.MaterialTheme
@@ -28,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -113,42 +116,51 @@ private fun PrimaryNavigationBar(
     onDestinationSelected: (PrimaryDestination) -> Unit,
     destinationLabel: (PrimaryDestination) -> String,
 ) {
-    NavigationBar(
+    Surface(
         modifier = Modifier
             .testTag("primary-navigation-bar")
-            .fillMaxWidth(),
-        containerColor = MaterialTheme.colorScheme.surface,
-        tonalElevation = 4.dp,
-        windowInsets = WindowInsets.safeDrawing.only(
-            WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom,
-        ),
+            .fillMaxWidth()
+            .padding(horizontal = 10.dp, vertical = 6.dp),
+        shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
+        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.97f),
+        tonalElevation = 6.dp,
+        shadowElevation = 8.dp,
+        border = BorderStroke(0.5.dp, MaterialTheme.colorScheme.surfaceVariant),
     ) {
-        PrimaryDestination.entries.forEach { destination ->
-            NavigationBarItem(
-                selected = selectedDestination == destination,
-                onClick = { onDestinationSelected(destination) },
-                modifier = Modifier.testTag(destination.testTag),
-                icon = {
-                    Icon(
-                        painter = painterResource(destination.iconResource),
-                        contentDescription = null,
-                    )
-                },
-                label = {
-                    DestinationLabel(
-                        label = destinationLabel(destination),
-                        compact = true,
-                    )
-                },
-                alwaysShowLabel = true,
-                colors = NavigationBarItemDefaults.colors(
-                    selectedIconColor = MaterialTheme.colorScheme.primary,
-                    selectedTextColor = MaterialTheme.colorScheme.primary,
-                    unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                    unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                    indicatorColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.5f),
-                ),
-            )
+        NavigationBar(
+            containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.72f),
+            tonalElevation = 0.dp,
+            windowInsets = WindowInsets.safeDrawing.only(
+                WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom,
+            ),
+        ) {
+            PrimaryDestination.entries.forEach { destination ->
+                NavigationBarItem(
+                    selected = selectedDestination == destination,
+                    onClick = { onDestinationSelected(destination) },
+                    modifier = Modifier.testTag(destination.testTag),
+                    icon = {
+                        Icon(
+                            painter = painterResource(destination.iconResource),
+                            contentDescription = null,
+                        )
+                    },
+                    label = {
+                        DestinationLabel(
+                            label = destinationLabel(destination),
+                            compact = true,
+                        )
+                    },
+                    alwaysShowLabel = true,
+                    colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = MaterialTheme.colorScheme.primary,
+                        selectedTextColor = MaterialTheme.colorScheme.primary,
+                        unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                        unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                        indicatorColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.5f),
+                    ),
+                )
+            }
         }
     }
 }

@@ -13,14 +13,14 @@ import org.junit.Test
 
 class SavedOpportunityLibraryLabelsTest {
     @Test
-    fun `existing labels localize while saved-specific copy falls back to English`() {
+    fun `saved library copy localizes completely`() {
         val labels = SavedOpportunityLibraryLabels(AppLanguage.SPANISH, bundledCatalog())
 
         assertEquals("Guardado", labels.title)
         assertEquals("Archivo", labels.archive)
         assertEquals("Detalles", labels.details)
-        assertEquals("Current", labels.current)
-        assertTrue(labels.localOnlyExplanation.contains("Nothing here is synced"))
+        assertEquals("Actuales", labels.current)
+        assertTrue(labels.localOnlyExplanation.contains("Nada se sincroniza"))
     }
 
     @Test
@@ -70,9 +70,9 @@ class SavedOpportunityLibraryLabelsTest {
             archiveStatusExplanation(opportunity(status = "inactive"), labels)
                 .contains("deadline or end date passed"),
         )
-        assertTrue(labels.unresolvedExplanation(1).startsWith("1 item"))
-        assertTrue(labels.unresolvedExplanation(3).startsWith("3 items"))
-        assertEquals("0 saved opportunities", labels.itemCount(-5))
+        assertTrue(labels.unresolvedExplanation(1).contains("1"))
+        assertTrue(labels.unresolvedExplanation(3).contains("3"))
+        assertEquals("Saved opportunities: 0", labels.itemCount(-5))
     }
 
     private fun opportunity(status: String = "active") = Opportunity(

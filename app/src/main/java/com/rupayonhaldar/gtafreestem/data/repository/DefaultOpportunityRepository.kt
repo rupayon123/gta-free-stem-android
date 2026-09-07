@@ -16,6 +16,9 @@ import com.rupayonhaldar.gtafreestem.domain.repository.OpportunityRepository
 import com.rupayonhaldar.gtafreestem.domain.repository.OpportunityRepositoryException
 import com.rupayonhaldar.gtafreestem.domain.search.OpportunitySearch
 import com.rupayonhaldar.gtafreestem.domain.search.OpportunitySearchFilters
+import com.rupayonhaldar.gtafreestem.localization.AndroidAppStringCatalogLoader
+import com.rupayonhaldar.gtafreestem.localization.AppLanguage
+import com.rupayonhaldar.gtafreestem.localization.AppStringCatalog
 import java.time.Instant
 import java.util.concurrent.atomic.AtomicReference
 import kotlinx.coroutines.CancellationException
@@ -40,6 +43,7 @@ object OpportunityRepositories {
             network = HttpsOpportunityFeedNetwork(),
             cache = AndroidOpportunityFeedCache(appContext),
             bundled = AndroidBundledOpportunityFeedSource(appContext, bundledRawResourceId),
+            catalog = AndroidAppStringCatalogLoader.load(appContext),
         )
     }
 }
@@ -49,6 +53,7 @@ internal class DefaultOpportunityRepository(
     private val network: OpportunityFeedNetwork,
     private val cache: OpportunityFeedCache,
     private val bundled: BundledOpportunityFeedSource,
+    private val catalog: AppStringCatalog? = null,
     private val now: () -> Instant = Instant::now,
 ) : OpportunityRepository {
     private val retained = AtomicReference<OpportunityFeedSnapshot?>(null)
@@ -123,8 +128,17 @@ internal class DefaultOpportunityRepository(
 
     override fun current(): OpportunityFeedSnapshot? = retained.get()
 
-    override fun search(query: String, filters: OpportunitySearchFilters): List<Opportunity> =
-        OpportunitySearch.search(retained.get()?.opportunities.orEmpty(), query, filters)
+    override fun search(
+        query: String,
+        filters: OpportunitySearchFilters,
+        language: AppLanguage,
+    ): List<Opportunity> = OpportunitySearch.search(
+        opportunities = retained.get()?.opportunities.orEmpty(),
+        query = query,
+        filters = filters,
+        language = language,
+        catalog = catalog,
+    )
 
     override fun findById(id: String): Opportunity? {
         val normalized = id.trim()

@@ -16,8 +16,8 @@ EXPECTED_APPLICATION_ID=${EXPECTED_APPLICATION_ID:-com.rupayonhaldar.gtafreestem
 EXPECTED_COMPILE_SDK=${EXPECTED_COMPILE_SDK:-36}
 EXPECTED_TARGET_SDK=${EXPECTED_TARGET_SDK:-36}
 EXPECTED_MIN_SDK=${EXPECTED_MIN_SDK:-26}
-EXPECTED_VERSION_CODE=${EXPECTED_VERSION_CODE:-2}
-EXPECTED_VERSION_NAME=${EXPECTED_VERSION_NAME:-1.0.1}
+EXPECTED_VERSION_CODE=${EXPECTED_VERSION_CODE:-3}
+EXPECTED_VERSION_NAME=${EXPECTED_VERSION_NAME:-1.1.0}
 REQUIRE_SIGNING=${REQUIRE_SIGNING:-0}
 
 failures=0
@@ -215,18 +215,44 @@ else
   fail "source manifest and extraction rules must exclude local-only app data from backup and transfer"
 fi
 
-if grep -Eq '<uses-permission[[:space:]][^>]*android:name="android\.permission\.INTERNET"' "$MANIFEST_FILE"; then
-  pass "source manifest declares the INTERNET permission required for the HTTPS feed"
-else
-  fail "source manifest is missing android.permission.INTERNET"
-fi
+for expected_permission in \
+  android.permission.INTERNET \
+  android.permission.ACCESS_COARSE_LOCATION \
+  android.permission.POST_NOTIFICATIONS
+do
+  if grep -Eq "<uses-permission[[:space:]][^>]*android:name=\"${expected_permission//./\\.}\"" "$MANIFEST_FILE"; then
+    pass "source manifest declares $expected_permission"
+  else
+    fail "source manifest is missing $expected_permission"
+  fi
+done
 
 unexpected_permissions=$(sed -nE 's/.*<uses-permission[^>]*android:name="([^"]+)".*/\1/p' "$MANIFEST_FILE" | \
-  grep -Fvx 'android.permission.INTERNET' || true)
+  grep -Fvx 'android.permission.INTERNET' | \
+  grep -Fvx 'android.permission.ACCESS_COARSE_LOCATION' | \
+  grep -Fvx 'android.permission.POST_NOTIFICATIONS' || true)
 if [ -n "$unexpected_permissions" ]; then
-  fail "source manifest declares a permission beyond the expected INTERNET permission"
+  fail "source manifest declares a permission beyond the expected Internet, coarse-location, and notification permissions"
 else
   pass "source manifest declares no unexpected permissions"
+fi
+
+manifest_flat=$(tr '\n' ' ' < "$MANIFEST_FILE")
+optional_location_features_ok=1
+for expected_feature in \
+  android.hardware.location \
+  android.hardware.location.network
+do
+  if ! printf '%s\n' "$manifest_flat" | grep -Eq \
+    "<uses-feature[[:space:]][^>]*android:name=\"${expected_feature//./\\.}\"[^>]*android:required=\"false\"" \
+    ; then
+    optional_location_features_ok=0
+  fi
+done
+if [ "$optional_location_features_ok" -eq 1 ]; then
+  pass "source manifest declares location hardware as optional"
+else
+  fail "source manifest must declare location and network-location features with android:required=false"
 fi
 
 if find "$PROJECT_ROOT/app/src/main" -type f -name '*.kt' -exec grep -Il 'http://' {} + 2>/dev/null | grep -q .; then

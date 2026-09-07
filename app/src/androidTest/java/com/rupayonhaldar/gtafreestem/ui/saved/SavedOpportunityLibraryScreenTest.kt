@@ -58,7 +58,9 @@ class SavedOpportunityLibraryScreenTest {
 
         composeRule.onNodeWithTag(SavedOpportunityLibraryTestTags.SCREEN)
             .performScrollToKey("legacy")
-        composeRule.onNodeWithText("2 items", substring = true).assertIsDisplayed()
+        composeRule.onNodeWithTag(SavedOpportunityLibraryTestTags.LEGACY_NOTICE)
+            .performScrollTo()
+            .assertIsDisplayed()
         composeRule.onNodeWithTag(SavedOpportunityLibraryTestTags.SCREEN)
             .performScrollToKey("current-header")
         composeRule.onNodeWithText("Current (1)").assertIsDisplayed()
@@ -80,9 +82,11 @@ class SavedOpportunityLibraryScreenTest {
         val saved = entry(opportunity("saved"))
         var clearCalled = false
         var removed: Opportunity? = null
+        var opened: Opportunity? = null
 
         setScreen(
             sections = SavedOpportunitySections(current = listOf(saved), archive = emptyList()),
+            onOpenDetail = { opened = it },
             onRemoveSaved = {
                 removed = it
                 true
@@ -107,6 +111,7 @@ class SavedOpportunityLibraryScreenTest {
             .performScrollTo()
             .performClick()
         composeRule.runOnIdle { assertEquals(saved.opportunity, removed) }
+        composeRule.runOnIdle { assertEquals(null, opened) }
     }
 
     @Test

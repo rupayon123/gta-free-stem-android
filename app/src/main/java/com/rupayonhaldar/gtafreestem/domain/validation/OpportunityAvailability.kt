@@ -56,26 +56,49 @@ object OpportunityAvailability {
 
     private fun activeArchiveBoundary(opportunity: Opportunity, localZone: ZoneId): Instant? {
         val deadline = registrationDeadline(opportunity, localZone)
-        val end = expiryInstant(opportunity.endDate, localZone)
+        val end = parseScheduleExpiryInstant(opportunity.endDate, localZone)
         return listOfNotNull(deadline, end).minOrNull()
-            ?: expiryInstant(opportunity.startDate, localZone)
+            // Here start is the archive boundary for a one-day listing, not its opening instant.
+            ?: parseScheduleExpiryInstant(opportunity.startDate, localZone)
     }
 
     private fun registrationDeadline(opportunity: Opportunity, localZone: ZoneId): Instant? {
-        val deadline = expiryInstant(opportunity.deadline, localZone) ?: return null
-        val start = expiryInstant(opportunity.startDate, localZone) ?: return deadline
-        return deadline.takeUnless { it == start }
+        val deadline = parseScheduleExpiryInstant(opportunity.deadline, localZone) ?: return null
+        // Compare like-for-like archive boundaries so identical date-only start/deadline values
+        // remain recognized as publisher mirrors rather than distinct deadlines.
+        val startAsBoundary = parseScheduleExpiryInstant(opportunity.startDate, localZone)
+            ?: return deadline
+        return deadline.takeUnless { it == startAsBoundary }
     }
 
-    private fun expiryInstant(raw: String?, localZone: ZoneId): Instant? {
+    /** Strict parser for an opening instant; a date-only start opens at local midnight. */
+    internal fun parseScheduleStartInstant(
+        raw: String?,
+        localZone: ZoneId = gtaTimeZone,
+    ): Instant? = parseScheduleInstant(raw, localZone, dateOnlyIsExpiry = false)
+
+    /** Strict parser for a closing instant; a date-only end/deadline lasts through the local day. */
+    internal fun parseScheduleExpiryInstant(
+        raw: String?,
+        localZone: ZoneId = gtaTimeZone,
+    ): Instant? = parseScheduleInstant(raw, localZone, dateOnlyIsExpiry = true)
+
+    private fun parseScheduleInstant(
+        raw: String?,
+        localZone: ZoneId,
+        dateOnlyIsExpiry: Boolean,
+    ): Instant? {
         val value = raw?.trim()?.takeIf(String::isNotEmpty) ?: return null
         runCatching { Instant.parse(value) }.getOrNull()?.let { return it }
         runCatching { OffsetDateTime.parse(value).toInstant() }.getOrNull()?.let { return it }
 
         val date = runCatching { LocalDate.parse(value) }.getOrNull() ?: return null
-        // Date-only values describe a GTA calendar day and expire at the next local midnight.
         return runCatching {
-            date.plusDays(1).atStartOfDay(localZone).toInstant().minusNanos(1)
+            if (dateOnlyIsExpiry) {
+                date.plusDays(1).atStartOfDay(localZone).toInstant().minusNanos(1)
+            } else {
+                date.atStartOfDay(localZone).toInstant()
+            }
         }.getOrNull()
     }
 }

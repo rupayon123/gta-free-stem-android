@@ -13,6 +13,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performScrollToNode
+import androidx.compose.ui.test.performTextReplacement
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.rupayonhaldar.gtafreestem.data.local.AppThemePreference
@@ -31,7 +32,7 @@ class AccountPreferencesScreenTest {
     val composeRule = createComposeRule()
 
     @Test
-    fun localOnlyActionsAndAlertLimitAreVisibleAndCallable() {
+    fun localOnlyActionsAndWorkingAlertPreferenceAreVisibleAndCallable() {
         var savedLibraryOpened = false
         val state = state(
             displayName = "Ada",
@@ -59,14 +60,50 @@ class AccountPreferencesScreenTest {
         composeRule.onNodeWithText("Personalize this device without signing in.")
             .assertIsDisplayed()
         composeRule.onNodeWithText(
-            "Notifications are not active yet. This only remembers your preference on this device.",
+            "Checks periodically for new matching opportunities and alerts you on this device.",
         ).performScrollTo().assertIsDisplayed()
-        composeRule.onNodeWithText("Remember that I want opportunity alerts")
+        composeRule.onNodeWithText("New-match alerts")
             .assertIsOn()
         composeRule.onNodeWithTag(AccountPreferencesTestTags.SAVED_LIBRARY)
             .performScrollTo()
             .performClick()
         composeRule.runOnIdle { assertEquals(true, savedLibraryOpened) }
+    }
+
+    @Test
+    fun displayNameEditorIsModalAndSavesThroughExistingCallback() {
+        var savedName: String? = null
+        composeRule.setContent {
+            MaterialTheme {
+                AccountPreferencesScreen(
+                    state = state(displayName = "Ada"),
+                    onSaveDisplayName = { candidate ->
+                        savedName = candidate
+                        DisplayNameSaveResult.SAVED
+                    },
+                    onClearProfile = { true },
+                    onLanguageSelected = { true },
+                    onThemeSelected = { true },
+                    onOpportunityAlertsPreferredChanged = { true },
+                    onOpenSavedLibrary = {},
+                    onDeleteAllLocalData = ::successfulDeletion,
+                    onOpenSupport = {},
+                    onOpenPrivacyPolicy = {},
+                    onOpenTerms = {},
+                )
+            }
+        }
+
+        composeRule.onNodeWithTag(AccountPreferencesTestTags.EDIT_PROFILE)
+            .performClick()
+        composeRule.onNodeWithTag(AccountPreferencesTestTags.PROFILE_DIALOG)
+            .assertIsDisplayed()
+        composeRule.onNodeWithTag(AccountPreferencesTestTags.DISPLAY_NAME)
+            .performTextReplacement("Grace Hopper")
+        composeRule.onNodeWithTag(AccountPreferencesTestTags.SAVE_PROFILE)
+            .performClick()
+
+        composeRule.runOnIdle { assertEquals("Grace Hopper", savedName) }
     }
 
     @Test
@@ -105,6 +142,36 @@ class AccountPreferencesScreenTest {
         composeRule.onNodeWithTag(AccountPreferencesTestTags.LANGUAGE_LIST)
             .performScrollToNode(hasText("Magyar · Hungarian"))
         composeRule.onNodeWithText("Magyar · Hungarian").assertIsDisplayed()
+    }
+
+    @Test
+    fun alertPreferenceToggleDelegatesToTheSharedPreferenceAction() {
+        var requestedPreference: Boolean? = null
+        composeRule.setContent {
+            MaterialTheme {
+                AccountPreferencesScreen(
+                    state = state(opportunityAlertsPreferred = false),
+                    onSaveDisplayName = { DisplayNameSaveResult.SAVED },
+                    onClearProfile = { true },
+                    onLanguageSelected = { true },
+                    onThemeSelected = { true },
+                    onOpportunityAlertsPreferredChanged = { preferred ->
+                        requestedPreference = preferred
+                    },
+                    onOpenSavedLibrary = {},
+                    onDeleteAllLocalData = ::successfulDeletion,
+                    onOpenSupport = {},
+                    onOpenPrivacyPolicy = {},
+                    onOpenTerms = {},
+                )
+            }
+        }
+
+        composeRule.onNodeWithText("New-match alerts")
+            .performScrollTo()
+            .performClick()
+
+        composeRule.runOnIdle { assertEquals(true, requestedPreference) }
     }
 
     private fun state(

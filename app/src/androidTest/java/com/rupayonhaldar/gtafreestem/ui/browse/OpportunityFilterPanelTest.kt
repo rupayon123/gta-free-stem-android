@@ -5,6 +5,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.test.SemanticsMatcher
+import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertHeightIsAtLeast
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
@@ -85,10 +88,41 @@ class OpportunityFilterPanelTest {
         }
     }
 
+    @Test
+    fun selectedAndNotSelectedStatesUseSuppliedLocalizedSemantics() {
+        val frenchLabels = OpportunityFilterPanelLabels.English.copy(
+            selectedState = "Sélectionné",
+            notSelectedState = "Non sélectionné",
+        )
+        setPanelContent(
+            filters = OpportunitySearchFilters(leadershipOnly = true),
+            onFiltersChange = {},
+            labels = frenchLabels,
+        )
+
+        composeRule.onNodeWithTag(OpportunityFilterPanelTestTags.LEADERSHIP)
+            .performScrollTo()
+            .assert(
+                SemanticsMatcher.expectValue(
+                    SemanticsProperties.StateDescription,
+                    "Sélectionné",
+                ),
+            )
+        composeRule.onNodeWithTag(OpportunityFilterPanelTestTags.INDIGENOUS_FOCUSED)
+            .performScrollTo()
+            .assert(
+                SemanticsMatcher.expectValue(
+                    SemanticsProperties.StateDescription,
+                    "Non sélectionné",
+                ),
+            )
+    }
+
     private fun setPanelContent(
         filters: OpportunitySearchFilters,
         onFiltersChange: (OpportunitySearchFilters) -> Unit,
         onReset: () -> Unit = {},
+        labels: OpportunityFilterPanelLabels = OpportunityFilterPanelLabels.English,
     ) {
         composeRule.setContent {
             GTAFreeStemTheme {
@@ -97,6 +131,7 @@ class OpportunityFilterPanelTest {
                         filters = filters,
                         options = Options,
                         onFiltersChange = onFiltersChange,
+                        labels = labels,
                         onReset = onReset,
                         modifier = Modifier.fillMaxSize(),
                     )

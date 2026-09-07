@@ -6,7 +6,7 @@ language for students, families, educators, and community organizations.
 ## How localization works
 
 The Android app loads its shared interface catalog from
-`app/src/main/res/raw/app_strings.json`. The catalog currently contains 184 keys
+`app/src/main/res/raw/app_strings.json`. The catalog currently contains 249 keys
 for each of 18 languages. The app supports an explicit language choice or the
 device language, uses English as a safe fallback, and mirrors Arabic, Farsi, and
 Urdu right-to-left.

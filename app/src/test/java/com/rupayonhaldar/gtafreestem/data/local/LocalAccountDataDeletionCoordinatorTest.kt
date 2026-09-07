@@ -22,16 +22,20 @@ class LocalAccountDataDeletionCoordinatorTest {
                 calls += "saves"
                 true
             },
+            deleteLocalAlerts = {
+                calls += "alerts"
+                true
+            },
         )
 
         val result = coordinator.deleteAllLocalAccountData()
 
         assertTrue(result.allLocalAccountDataDeleted)
         assertEquals(
-            LocalAccountDataDeletionResult(true, true, true),
+            LocalAccountDataDeletionResult(true, true, true, true),
             result,
         )
-        assertEquals(listOf("profile", "history", "saves"), calls)
+        assertEquals(listOf("alerts", "profile", "history", "saves"), calls)
     }
 
     @Test
@@ -50,15 +54,19 @@ class LocalAccountDataDeletionCoordinatorTest {
                 calls += "saves"
                 error("save deletion failed")
             },
+            deleteLocalAlerts = {
+                calls += "alerts"
+                false
+            },
         )
 
         val result = coordinator.deleteAllLocalAccountData()
 
         assertFalse(result.allLocalAccountDataDeleted)
         assertEquals(
-            LocalAccountDataDeletionResult(false, false, false),
+            LocalAccountDataDeletionResult(false, false, false, false),
             result,
         )
-        assertEquals(listOf("profile", "history", "saves"), calls)
+        assertEquals(listOf("alerts", "profile", "history", "saves"), calls)
     }
 }

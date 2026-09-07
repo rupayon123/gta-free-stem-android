@@ -1,10 +1,12 @@
 package com.rupayonhaldar.gtafreestem
 
+import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.getUnclippedBoundsInRoot
 import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
+import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
@@ -37,6 +39,13 @@ class MainActivityTest {
             composeRule.activity.preferencesViewModel.setLanguage(AppLanguage.ENGLISH)
             composeRule.activity.preferencesViewModel.setTheme(AppThemePreference.SYSTEM)
         }
+        // First-install ART verification on the release API 36 AVD can outlive a short UI wait.
+        // This guard waits only for the real navigation contract used by every test below.
+        composeRule.waitUntil(timeoutMillis = 60_000) {
+            composeRule.onAllNodesWithTag("primary-navigation-home")
+                .fetchSemanticsNodes()
+                .isNotEmpty()
+        }
     }
 
     @After
@@ -54,7 +63,7 @@ class MainActivityTest {
             "opportunities" to "Opportunities",
             "high_school" to "High School",
             "support" to "Support",
-            "account" to "Account",
+            "account" to "Profile",
         )
 
         destinations.forEach { (tag, label) ->
@@ -72,23 +81,25 @@ class MainActivityTest {
             .assertIsDisplayed()
         composeRule.onNodeWithText("Filters").performClick()
         composeRule.onNodeWithTag("opportunity-filter-panel").assertIsDisplayed()
-        composeRule.onNodeWithText("Back").performClick()
+        composeRule.onNodeWithText("Done").performClick()
         composeRule.onNodeWithTag("browse-screen-title")
             .assertTextContains("Opportunities")
             .assertIsDisplayed()
 
         composeRule.onNodeWithTag("primary-navigation-high_school").performClick()
-        composeRule.onNodeWithText("Programs for teens", substring = true).assertIsDisplayed()
+        composeRule.onNodeWithText("High school hunt engine").assertIsDisplayed()
 
         composeRule.onNodeWithTag("primary-navigation-support").performClick()
-        composeRule.onNodeWithText("Community-built").assertIsDisplayed()
-        composeRule.onNodeWithTag("support-screen").performScrollToIndex(4)
+        composeRule.onNodeWithText(
+            "Built to be easier for students, parents, educators, and community groups.",
+        ).assertIsDisplayed()
+        composeRule.onNodeWithTag("support-screen").performScrollToIndex(2)
         composeRule.onNodeWithText("Send feedback").assertIsDisplayed()
         composeRule.onNodeWithText("Privacy policy").assertIsDisplayed()
         composeRule.onNodeWithText("Terms of Service and Privacy Notice").assertIsDisplayed()
 
         composeRule.onNodeWithTag("primary-navigation-account").performClick()
-        composeRule.onNodeWithText("Profile").assertIsDisplayed()
+        composeRule.onNodeWithTag("account-preferences-screen").assertIsDisplayed()
         composeRule.onNodeWithText(
             "This profile and its saved opportunities stay on this device.",
         ).assertIsDisplayed()
@@ -99,7 +110,7 @@ class MainActivityTest {
         composeRule.runOnIdle {
             composeRule.activity.onBackPressedDispatcher.onBackPressed()
         }
-        composeRule.onNodeWithText("Profile").assertIsDisplayed()
+        composeRule.onNodeWithTag("account-preferences-screen").assertIsDisplayed()
     }
 
     @Test
@@ -158,7 +169,12 @@ class MainActivityTest {
                 homeBounds.left > accountBounds.left,
             )
         } else {
-            val railBounds = composeRule.onNodeWithTag("primary-navigation-rail")
+            val navigationTag = if (rootBounds.right - rootBounds.left >= 840.dp) {
+                "primary-navigation-drawer"
+            } else {
+                "primary-navigation-rail"
+            }
+            val railBounds = composeRule.onNodeWithTag(navigationTag)
                 .getUnclippedBoundsInRoot()
             assertTrue(
                 "RTL should place the navigation rail on the logical start (right) edge",
@@ -220,11 +236,22 @@ class MainActivityTest {
             accountBounds.right <= safeRight && accountBounds.bottom <= safeBottom,
         )
 
-        val expectedContainer = if (rootBounds.right - rootBounds.left >= 600.dp) {
-            "primary-navigation-rail"
-        } else {
-            "primary-navigation-bar"
+        when {
+            rootBounds.right - rootBounds.left >= 840.dp -> {
+                composeRule.onNodeWithTag("primary-navigation-drawer").assertIsDisplayed()
+                composeRule.onAllNodesWithTag("primary-navigation-rail").assertCountEquals(0)
+                composeRule.onAllNodesWithTag("primary-navigation-bar").assertCountEquals(0)
+            }
+            rootBounds.right - rootBounds.left >= 600.dp -> {
+                composeRule.onNodeWithTag("primary-navigation-rail").assertIsDisplayed()
+                composeRule.onAllNodesWithTag("primary-navigation-drawer").assertCountEquals(0)
+                composeRule.onAllNodesWithTag("primary-navigation-bar").assertCountEquals(0)
+            }
+            else -> {
+                composeRule.onNodeWithTag("primary-navigation-bar").assertIsDisplayed()
+                composeRule.onAllNodesWithTag("primary-navigation-rail").assertCountEquals(0)
+                composeRule.onAllNodesWithTag("primary-navigation-drawer").assertCountEquals(0)
+            }
         }
-        composeRule.onNodeWithTag(expectedContainer).assertIsDisplayed()
     }
 }

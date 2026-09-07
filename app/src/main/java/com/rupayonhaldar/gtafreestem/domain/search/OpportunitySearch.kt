@@ -1,27 +1,31 @@
 package com.rupayonhaldar.gtafreestem.domain.search
 
 import com.rupayonhaldar.gtafreestem.domain.model.Opportunity
-import com.rupayonhaldar.gtafreestem.domain.model.OpportunityTranslation
 import com.rupayonhaldar.gtafreestem.domain.validation.OpportunityAvailability
 import com.rupayonhaldar.gtafreestem.domain.validation.OpportunityCostEligibility
+import com.rupayonhaldar.gtafreestem.localization.AppLanguage
+import com.rupayonhaldar.gtafreestem.localization.AppStringCatalog
+import com.rupayonhaldar.gtafreestem.localization.LocalizedOpportunitySearchIndex
+import com.rupayonhaldar.gtafreestem.localization.OpportunityLocalization
 import java.text.Normalizer
 import java.time.Instant
 import java.time.LocalDate
 import java.time.OffsetDateTime
 import java.time.ZoneId
 import java.util.Locale
+import kotlin.math.atan2
+import kotlin.math.cos
+import kotlin.math.sin
+import kotlin.math.sqrt
 import kotlinx.serialization.Serializable
 
 @Serializable
 enum class OpportunitySearchSort {
     SOONEST,
+    NEAREST,
     RELEVANCE,
 }
 
-/**
- * Distance and new-find selections are retained for forward-compatible persisted state. They are
- * intentionally not applied until Android has a user-selected location and seen-history source.
- */
 @Serializable
 data class OpportunitySearchFilters(
     val region: String? = null,
@@ -40,25 +44,35 @@ data class OpportunitySearchFilters(
     val leadershipOnly: Boolean = false,
     val activeOnly: Boolean = true,
     val sort: OpportunitySearchSort = OpportunitySearchSort.SOONEST,
+    val latitude: Double? = null,
+    val longitude: Double? = null,
     val distanceKm: Int? = null,
     val includeNewFinds: Boolean = true,
 ) {
+    val hasValidLocation: Boolean
+        get() = validCoordinate(latitude, longitude) != null
+
     val hasActiveFilters: Boolean
         get() = normalized() != OpportunitySearchFilters()
 
-    fun normalized(): OpportunitySearchFilters = copy(
-        region = region.normalizedSelection(),
-        city = city.normalizedSelection(),
-        category = category.normalizedSelection(),
-        age = age?.takeIf {
-            it in 0..OpportunitySearchLimits.MAXIMUM_AGE && !adultsOnly
-        },
-        language = language.normalizedSelection(),
-        distanceKm = distanceKm?.takeIf {
-            it in OpportunitySearchLimits.MINIMUM_DISTANCE_KM..
-                OpportunitySearchLimits.MAXIMUM_DISTANCE_KM
-        },
-    )
+    fun normalized(): OpportunitySearchFilters {
+        val coordinate = validCoordinate(latitude, longitude)
+        return copy(
+            region = region.normalizedSelection(),
+            city = city.normalizedSelection(),
+            category = category.normalizedSelection(),
+            age = age?.takeIf {
+                it in 0..OpportunitySearchLimits.MAXIMUM_AGE && !adultsOnly
+            },
+            language = language.normalizedSelection(),
+            latitude = coordinate?.latitude,
+            longitude = coordinate?.longitude,
+            distanceKm = distanceKm?.takeIf {
+                it in OpportunitySearchLimits.MINIMUM_DISTANCE_KM..
+                    OpportunitySearchLimits.MAXIMUM_DISTANCE_KM
+            },
+        )
+    }
 }
 
 data class OpportunityAgeOption(
@@ -100,20 +114,33 @@ object OpportunitySearch {
         query: String = "",
         filters: OpportunitySearchFilters = OpportunitySearchFilters(),
         now: Instant = Instant.now(),
+        language: AppLanguage = AppLanguage.ENGLISH,
+        catalog: AppStringCatalog? = null,
     ): List<Opportunity> {
         val normalizedFilters = filters.normalized()
+        val origin = validCoordinate(
+            normalizedFilters.latitude,
+            normalizedFilters.longitude,
+        )
         val terms = normalize(query.take(OpportunitySearchLimits.MAXIMUM_QUERY_LENGTH))
             .split(' ')
             .filter(String::isNotBlank)
             .distinct()
         val candidates = opportunities.mapIndexed { index, opportunity ->
-            IndexedOpportunity(opportunity = opportunity, originalIndex = index)
+            IndexedOpportunity(
+                opportunity = opportunity,
+                originalIndex = index,
+                language = language,
+                catalog = catalog,
+                origin = origin,
+            )
         }
         val filtered = candidates.filter { candidate ->
             val opportunity = candidate.opportunity
             OpportunityCostEligibility.isExplicitlyFree(opportunity.cost) &&
                 (!normalizedFilters.activeOnly ||
                     OpportunityAvailability.isCurrentlyAvailable(opportunity, now)) &&
+                (normalizedFilters.includeNewFinds || opportunity.isNewFind != true) &&
                 matches(normalizedFilters.region, opportunity.region) &&
                 matches(normalizedFilters.city, opportunity.city) &&
                 matchesCategory(normalizedFilters.category, opportunity) &&
@@ -130,10 +157,19 @@ object OpportunitySearch {
                 (!normalizedFilters.indigenousFocusedOnly ||
                     candidate.matchesAny(INDIGENOUS_FOCUSED_TERMS)) &&
                 (!normalizedFilters.leadershipOnly || candidate.matchesAny(LEADERSHIP_TERMS)) &&
+                (origin == null || normalizedFilters.distanceKm == null ||
+                    candidate.distanceKm?.let { distance ->
+                        distance <= normalizedFilters.distanceKm.toDouble()
+                    } == true) &&
                 terms.all(candidate.searchableText::contains)
         }
 
         val comparator = when {
+            normalizedFilters.sort == OpportunitySearchSort.NEAREST && origin != null ->
+                compareBy<IndexedOpportunity> { candidate ->
+                    candidate.distanceKm ?: Double.POSITIVE_INFINITY
+                }.thenBy { candidate -> candidate.dateValue(now) }
+                    .then(STABLE_TIE_ORDER)
             normalizedFilters.sort == OpportunitySearchSort.RELEVANCE && terms.isNotEmpty() ->
                 compareByDescending<IndexedOpportunity> { candidate -> candidate.relevance(terms) }
                     .thenBy { candidate -> candidate.dateValue(now) }
@@ -141,7 +177,7 @@ object OpportunitySearch {
             else -> compareBy<IndexedOpportunity> { candidate -> candidate.dateValue(now) }
                 .then(STABLE_TIE_ORDER)
         }
-        return filtered.sortedWith(comparator).map(IndexedOpportunity::opportunity)
+        return filtered.sortedWith(comparator).map(IndexedOpportunity::result)
     }
 
     fun options(opportunities: List<Opportunity>): OpportunitySearchOptions =
@@ -202,14 +238,27 @@ object OpportunitySearch {
     private class IndexedOpportunity(
         val opportunity: Opportunity,
         val originalIndex: Int,
+        val language: AppLanguage,
+        val catalog: AppStringCatalog?,
+        val origin: SearchCoordinate?,
     ) {
         val searchableText: String by lazy(LazyThreadSafetyMode.NONE) {
-            normalize(searchableFields(opportunity).joinToString(" "))
+            LocalizedOpportunitySearchIndex.normalizedText(opportunity, language, catalog)
         }
 
         private val weightedFields: List<Pair<String, Int>> by lazy(LazyThreadSafetyMode.NONE) {
-            weightedFields(opportunity)
+            weightedFields(opportunity, language, catalog)
         }
+
+        val distanceKm: Double? by lazy(LazyThreadSafetyMode.NONE) {
+            val from = origin ?: return@lazy null
+            val to = validCoordinate(opportunity.latitude, opportunity.longitude)
+                ?: return@lazy null
+            haversineDistanceKm(from, to)
+        }
+
+        val result: Opportunity
+            get() = if (origin != null) opportunity.copy(distanceKm = distanceKm) else opportunity
 
         fun matchesAny(terms: List<String>): Boolean = terms.any(searchableText::contains)
 
@@ -284,76 +333,30 @@ object OpportunitySearch {
         return runCatching { date.atStartOfDay(GTA_TIME_ZONE).toInstant() }.getOrNull()
     }
 
-    private fun searchableFields(opportunity: Opportunity): List<String> = buildList {
-        add(opportunity.title)
-        add(opportunity.organization)
-        add(opportunity.description)
-        opportunity.summary?.let(::add)
-        add(opportunity.category)
-        addAll(opportunity.categories)
-        add(opportunity.city)
-        add(opportunity.region)
-        opportunity.address?.let(::add)
-        addAll(opportunity.communityFocus)
-        addAll(opportunity.accessibility)
-        opportunity.equipment?.let(::add)
-        opportunity.food?.let(::add)
-        opportunity.capacity?.let(::add)
-        opportunity.commitment?.let(::add)
-        opportunity.providerContact?.let(::add)
-        addAll(opportunity.tags)
-        addAll(opportunity.languages)
-        opportunity.translations.entries
-            .sortedBy { (language, _) -> normalize(language) }
-            .forEach { (_, translation) -> addTranslation(translation) }
-    }.uniqueNormalizedValues()
-
-    private fun MutableList<String>.addTranslation(translation: OpportunityTranslation) {
-        translation.title?.let(::add)
-        translation.organization?.let(::add)
-        translation.description?.let(::add)
-        translation.summary?.let(::add)
-        translation.category?.let(::add)
-        translation.city?.let(::add)
-        translation.region?.let(::add)
-        translation.address?.let(::add)
-        translation.cost?.let(::add)
-        translation.tags?.let(::addAll)
-    }
-
-    private fun weightedFields(opportunity: Opportunity): List<Pair<String, Int>> {
-        val translations = opportunity.translations.sortedValues()
+    private fun weightedFields(
+        opportunity: Opportunity,
+        language: AppLanguage,
+        catalog: AppStringCatalog?,
+    ): List<Pair<String, Int>> {
+        val localized = OpportunityLocalization.resolve(opportunity, language, catalog)
         return buildList {
+            add(localized.title to 8)
             add(opportunity.title to 8)
-            translations.mapNotNullTo(this) { it.title?.let { value -> value to 8 } }
+            add(localized.organization to 5)
             add(opportunity.organization to 5)
-            translations.mapNotNullTo(this) { it.organization?.let { value -> value to 5 } }
+            add(localized.category to 4)
             add(opportunity.category to 4)
-            translations.mapNotNullTo(this) { it.category?.let { value -> value to 4 } }
+            add(localized.city to 3)
             add(opportunity.city to 3)
-            translations.mapNotNullTo(this) { it.city?.let { value -> value to 3 } }
+            add(localized.summary to 3)
             opportunity.summary?.let { add(it to 3) }
-            translations.mapNotNullTo(this) { it.summary?.let { value -> value to 3 } }
+            add(localized.description to 2)
             add(opportunity.description to 2)
-            translations.mapNotNullTo(this) { it.description?.let { value -> value to 2 } }
+            add(localized.region to 1)
             add(opportunity.region to 1)
-            translations.mapNotNullTo(this) { it.region?.let { value -> value to 1 } }
+            localized.tags.forEach { add(it to 3) }
             opportunity.tags.forEach { add(it to 3) }
-            translations.forEach { translation ->
-                translation.tags.orEmpty().forEach { add(it to 3) }
-            }
         }.uniqueWeightedValues()
-    }
-
-    private fun Map<String, OpportunityTranslation>.sortedValues(): List<OpportunityTranslation> =
-        entries.sortedBy { (language, _) -> normalize(language) }.map { it.value }
-
-    private fun List<String>.uniqueNormalizedValues(): List<String> {
-        val seen = mutableSetOf<String>()
-        return mapNotNull { value ->
-            val normalized = normalize(value)
-            value.trim().takeIf { normalized.isNotEmpty() && seen.add(normalized) }
-        }
     }
 
     private fun List<Pair<String, Int>>.uniqueWeightedValues(): List<Pair<String, Int>> {
@@ -363,6 +366,32 @@ object OpportunitySearch {
             field.takeIf { normalized.isNotEmpty() && seen.add(normalized) }
         }
     }
+}
+
+private data class SearchCoordinate(
+    val latitude: Double,
+    val longitude: Double,
+)
+
+private fun validCoordinate(latitude: Double?, longitude: Double?): SearchCoordinate? {
+    if (latitude == null || longitude == null) return null
+    if (!latitude.isFinite() || !longitude.isFinite()) return null
+    if (latitude !in -90.0..90.0 || longitude !in -180.0..180.0) return null
+    return SearchCoordinate(latitude = latitude, longitude = longitude)
+}
+
+private fun haversineDistanceKm(from: SearchCoordinate, to: SearchCoordinate): Double {
+    val fromLatitude = Math.toRadians(from.latitude)
+    val toLatitude = Math.toRadians(to.latitude)
+    val latitudeDelta = Math.toRadians(to.latitude - from.latitude)
+    val longitudeDelta = Math.toRadians(to.longitude - from.longitude)
+    val latitudeComponent = sin(latitudeDelta / 2.0)
+    val longitudeComponent = sin(longitudeDelta / 2.0)
+    val haversine = (
+        latitudeComponent * latitudeComponent +
+            longitudeComponent * longitudeComponent * cos(fromLatitude) * cos(toLatitude)
+        ).coerceIn(0.0, 1.0)
+    return EARTH_RADIUS_KM * 2.0 * atan2(sqrt(haversine), sqrt(1.0 - haversine))
 }
 
 private fun String?.normalizedSelection(): String? = this
@@ -382,3 +411,4 @@ private fun normalize(value: String): String = Normalizer
 
 private val COMBINING_MARKS = Regex("\\p{M}+")
 private val WHITESPACE = Regex("\\s+")
+private const val EARTH_RADIUS_KM = 6_371.0

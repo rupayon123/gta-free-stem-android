@@ -4,6 +4,8 @@ import com.rupayonhaldar.gtafreestem.domain.model.Opportunity
 import com.rupayonhaldar.gtafreestem.domain.model.OpportunityFeedSnapshot
 import com.rupayonhaldar.gtafreestem.domain.model.OpportunityFeedSource
 import java.time.Instant
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -146,6 +148,49 @@ class FavoriteOpportunityStoreTest {
         assertEquals(savedAt, restored.savedAt)
         assertEquals(setOf("round-trip"), restoredStore.ids())
         assertTrue(restoredStore.unresolvedIds().isEmpty())
+    }
+
+    @Test
+    fun `nearby distance is never persisted with a saved opportunity`() {
+        val persistence = InMemoryPersistence(snapshotJson = validEmptyEnvelope())
+        val nearbyResult = opportunity("nearby").copy(distanceKm = 3.25)
+
+        val firstStore = PersistentFavoriteOpportunityStore(persistence)
+        assertTrue(firstStore.setFavorite(nearbyResult, favorite = true, savedAt = savedAt))
+
+        assertEquals(null, firstStore.entries().single().opportunity.distanceKm)
+        assertFalse(persistence.snapshotJson.orEmpty().contains("distanceKm"))
+        assertEquals(
+            null,
+            PersistentFavoriteOpportunityStore(persistence)
+                .entries()
+                .single()
+                .opportunity
+                .distanceKm,
+        )
+    }
+
+    @Test
+    fun `legacy saved distance is scrubbed and rewritten during load`() {
+        val encodedOpportunity = Json { explicitNulls = false }
+            .encodeToString(opportunity("legacy-nearby").copy(distanceKm = 8.5))
+        val persistence = InMemoryPersistence(
+            snapshotJson = """
+                {
+                  "schemaVersion": 1,
+                  "records": [{
+                    "opportunity": $encodedOpportunity,
+                    "savedAt": "$savedAt"
+                  }],
+                  "unresolvedIds": []
+                }
+            """.trimIndent(),
+        )
+
+        val store = PersistentFavoriteOpportunityStore(persistence)
+
+        assertEquals(null, store.entries().single().opportunity.distanceKm)
+        assertFalse(persistence.snapshotJson.orEmpty().contains("distanceKm"))
     }
 
     @Test

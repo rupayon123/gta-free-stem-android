@@ -1,6 +1,7 @@
 package com.rupayonhaldar.gtafreestem.data.feed
 
 import java.io.File
+import java.security.MessageDigest
 import java.time.Instant
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertThrows
@@ -31,6 +32,9 @@ class OpportunityFeedCodecTest {
                 "cost": "Free to join",
                 "registrationUrl": "https://example.org/register",
                 "status": "active",
+                "distanceKm": 3.25,
+                "isNewFind": true,
+                "sourceConfidence": "high",
                 "unknownListingField": 42
               }]
             }
@@ -47,6 +51,9 @@ class OpportunityFeedCodecTest {
         assertEquals(14, opportunity.ageMax)
         assertEquals(listOf("en", "fr"), opportunity.languages)
         assertEquals("https://example.org/register", opportunity.sourceUrl)
+        assertEquals(3.25, opportunity.distanceKm ?: error("missing distance"), 0.0)
+        assertEquals(true, opportunity.isNewFind)
+        assertEquals("high", opportunity.sourceConfidence)
     }
 
     @Test
@@ -67,6 +74,60 @@ class OpportunityFeedCodecTest {
     }
 
     @Test
+    fun `rss excerpts capped by the publisher end cleanly without changing other copy`() {
+        val cutMidWord = "A".repeat(248) + " fraud detec"
+        val completedSentence = "B".repeat(259) + "."
+        val quotedCompletedSentence = "D".repeat(258) + ".”"
+        val noWordBoundary = "E".repeat(260)
+        val outerWhitespace = " " + "F".repeat(258) + " "
+        val trailingWordBoundary = "I".repeat(250) + " complete "
+        val punctuationOnlyPrefix = "- " + "G".repeat(258)
+        val astralFinalCodePoint = "H".repeat(258) + "😀"
+        val nonRssCopy = "C".repeat(248) + " fraud detec"
+        assertEquals(260, cutMidWord.length)
+        assertEquals(260, completedSentence.length)
+        assertEquals(260, quotedCompletedSentence.length)
+        assertEquals(260, noWordBoundary.length)
+        assertEquals(260, outerWhitespace.length)
+        assertEquals(260, trailingWordBoundary.length)
+        assertEquals(260, punctuationOnlyPrefix.length)
+        assertEquals(260, astralFinalCodePoint.length)
+        assertEquals(260, nonRssCopy.length)
+
+        val feed = codec.decodeAndValidate(
+            """
+            {
+              "count": 9,
+              "lastDataChange": "2026-08-15",
+              "opportunities": [
+                ${opportunityJson("tpl-rss-cut", "Free").replace("Description", cutMidWord)},
+                ${opportunityJson("tpl-rss-complete", "Free").replace("Description", completedSentence)},
+                ${opportunityJson("tpl-rss-quoted", "Free").replace("Description", quotedCompletedSentence)},
+                ${opportunityJson("tpl-rss-token", "Free").replace("Description", noWordBoundary)},
+                ${opportunityJson("tpl-rss-whitespace", "Free").replace("Description", outerWhitespace)},
+                ${opportunityJson("tpl-rss-boundary", "Free").replace("Description", trailingWordBoundary)},
+                ${opportunityJson("tpl-rss-punctuation", "Free").replace("Description", punctuationOnlyPrefix)},
+                ${opportunityJson("tpl-rss-astral", "Free").replace("Description", astralFinalCodePoint)},
+                ${opportunityJson("curated-copy", "Free").replace("Description", nonRssCopy)}
+              ]
+            }
+            """.trimIndent(),
+            now,
+            requireFreshness = true,
+        )
+
+        assertEquals("A".repeat(248) + " fraud…", feed.opportunities[0].description)
+        assertEquals(completedSentence, feed.opportunities[1].description)
+        assertEquals(quotedCompletedSentence, feed.opportunities[2].description)
+        assertEquals("E".repeat(259) + "…", feed.opportunities[3].description)
+        assertEquals("F".repeat(258), feed.opportunities[4].description)
+        assertEquals("I".repeat(250) + " complete…", feed.opportunities[5].description)
+        assertEquals("- " + "G".repeat(257) + "…", feed.opportunities[6].description)
+        assertEquals("H".repeat(258) + "…", feed.opportunities[7].description)
+        assertEquals(nonRssCopy, feed.opportunities[8].description)
+    }
+
+    @Test
     fun `bundled production feed satisfies the strict boundary`() {
         val bundledFeed = sequenceOf(
             File("app/src/main/res/raw/opportunities.json"),
@@ -76,13 +137,43 @@ class OpportunityFeedCodecTest {
 
         val feed = codec.decodeAndValidate(
             requireNotNull(bundledFeed).readText(),
-            now,
-            requireFreshness = false,
+            Instant.parse("2026-08-18T14:36:00Z"),
+            requireFreshness = true,
             requireSourceHealth = true,
         )
 
-        assertEquals(125, feed.declaredRecordCount)
-        assertEquals(125, feed.opportunities.size)
+        assertEquals(104, feed.declaredRecordCount)
+        assertEquals(104, feed.opportunities.size)
+        assertEquals(Instant.parse("2026-08-17T00:00:00Z"), feed.lastUpdated)
+        assertEquals(
+            setOf(
+                "discovered-tpl-events-volunteer-summer-camp-for-newcomer-youth-42d7f394f001",
+                "discovered-aurora-library-stem-steam-workshop-53c30bcddb04",
+            ),
+            feed.opportunities.filter { it.isNewFind == true }.map { it.id }.toSet(),
+        )
+        assertTrue(
+            feed.opportunities
+                .first { it.id == "tpl-rss-6a56abf2cca66c2f00a371a9" }
+                .description
+                .endsWith("self-driving cars, fraud…"),
+        )
+        assertTrue(
+            feed.opportunities
+                .first { it.id == "tpl-rss-6a590ec871ef13620052687d" }
+                .description
+                .endsWith("personal device and any…"),
+        )
+        assertTrue(
+            feed.opportunities
+                .first { it.id == "tpl-rss-6a39a3fb2ea730c17ab8c183" }
+                .description
+                .endsWith("Participants need…"),
+        )
+        assertEquals(
+            "2da9c4dadbce14feb16b3306d366b48ef0535febd0d9cfee314266d3e3fd211f",
+            requireNotNull(bundledFeed).sha256(),
+        )
     }
 
     @Test
@@ -205,6 +296,152 @@ class OpportunityFeedCodecTest {
         )
 
         assertEquals(listOf("safe"), feed.opportunities.map { it.id })
+    }
+
+    @Test
+    fun `drops malformed schedule fields and end dates before their starts`() {
+        val malformedSchedules = listOf(
+            opportunityJson("bad-start", "Free").replace(
+                ",\"status\":\"active\"",
+                ",\"startDate\":\"not-a-date\",\"status\":\"active\"",
+            ),
+            opportunityJson("bad-end", "Free").replace(
+                ",\"status\":\"active\"",
+                ",\"endDate\":\"2026-02-30\",\"status\":\"active\"",
+            ),
+            opportunityJson("bad-deadline", "Free").replace(
+                ",\"status\":\"active\"",
+                ",\"deadline\":\"tomorrow\",\"status\":\"active\"",
+            ),
+            opportunityJson("backwards", "Free").replace(
+                ",\"status\":\"active\"",
+                ",\"startDate\":\"2026-10-01\",\"endDate\":\"2026-09-30\",\"status\":\"active\"",
+            ),
+        )
+        val validSchedule = opportunityJson("valid-schedule", "Free").replace(
+            ",\"status\":\"active\"",
+            ",\"startDate\":\"2026-09-01\",\"endDate\":\"2026-10-01T20:00:00Z\",\"deadline\":\"2026-08-31T23:59:00-04:00\",\"status\":\"active\"",
+        )
+
+        val feed = codec.decodeAndValidate(
+            """
+            {
+              "count": ${malformedSchedules.size + 1},
+              "lastDataChange": "2026-08-15",
+              "opportunities": [
+                $validSchedule,
+                ${malformedSchedules.joinToString(",")}
+              ]
+            }
+            """.trimIndent(),
+            now,
+            requireFreshness = true,
+        )
+
+        assertEquals(listOf("valid-schedule"), feed.opportunities.map { it.id })
+    }
+
+    @Test
+    fun `accepts an end timestamp later on a date-only start day`() {
+        val dateOnlyStartWithSameDayEnd = opportunityJson("same-day-schedule", "Free").replace(
+            ",\"status\":\"active\"",
+            ",\"startDate\":\"2026-09-01\",\"endDate\":\"2026-09-01T20:00:00Z\",\"status\":\"active\"",
+        )
+
+        val feed = codec.decodeAndValidate(
+            """
+            {
+              "count": 2,
+              "lastDataChange": "2026-08-15",
+              "opportunities": [
+                ${opportunityJson("control", "Free")},
+                $dateOnlyStartWithSameDayEnd
+              ]
+            }
+            """.trimIndent(),
+            now,
+            requireFreshness = true,
+        )
+
+        assertEquals(
+            listOf("control", "same-day-schedule"),
+            feed.opportunities.map { it.id },
+        )
+    }
+
+    @Test
+    fun `drops oversized translation list and text fields before domain mapping`() {
+        val excessiveTags = List(101) { index -> "\"tag-$index\"" }.joinToString(",")
+        val excessiveTranslations = (0..32).joinToString(",") { index ->
+            "\"x$index\":{\"title\":\"Translation $index\"}"
+        }
+        val oversizedTranslationTitle = "t".repeat(301)
+        val oversizedCity = "c".repeat(301)
+        val oversizedConfidence = "c".repeat(101)
+        val unsafe = listOf(
+            opportunityJson("too-many-tags", "Free").replace(
+                ",\"status\":\"active\"",
+                ",\"tags\":[$excessiveTags],\"status\":\"active\"",
+            ),
+            opportunityJson("too-many-translations", "Free").replace(
+                ",\"status\":\"active\"",
+                ",\"translations\":{$excessiveTranslations},\"status\":\"active\"",
+            ),
+            opportunityJson("long-translation", "Free").replace(
+                ",\"status\":\"active\"",
+                ",\"translations\":{\"es\":{\"title\":\"$oversizedTranslationTitle\"}},\"status\":\"active\"",
+            ),
+            opportunityJson("long-city", "Free").replace(
+                "\"city\":\"Toronto\"",
+                "\"city\":\"$oversizedCity\"",
+            ),
+            opportunityJson("long-confidence", "Free").replace(
+                ",\"status\":\"active\"",
+                ",\"sourceConfidence\":\"$oversizedConfidence\",\"status\":\"active\"",
+            ),
+            opportunityJson("negative-distance", "Free").replace(
+                ",\"status\":\"active\"",
+                ",\"distanceKm\":-1,\"status\":\"active\"",
+            ),
+        )
+
+        val feed = codec.decodeAndValidate(
+            """
+            {
+              "count": ${unsafe.size + 1},
+              "lastDataChange": "2026-08-15",
+              "opportunities": [
+                ${opportunityJson("safe-bounds", "Free")},
+                ${unsafe.joinToString(",")}
+              ]
+            }
+            """.trimIndent(),
+            now,
+            requireFreshness = true,
+        )
+
+        assertEquals(listOf("safe-bounds"), feed.opportunities.map { it.id })
+    }
+
+    @Test
+    fun `rejects malformed translation and list JSON types`() {
+        val translationArray = opportunityJson("bad-translation", "Free").replace(
+            ",\"status\":\"active\"",
+            ",\"translations\":[],\"status\":\"active\"",
+        )
+        assertReason(
+            InvalidOpportunityFeedReason.MALFORMED_JSON,
+            """{"count":1,"lastDataChange":"2026-08-15","opportunities":[$translationArray]}""",
+        )
+
+        val stringTags = opportunityJson("bad-tags", "Free").replace(
+            ",\"status\":\"active\"",
+            ",\"tags\":\"robotics\",\"status\":\"active\"",
+        )
+        assertReason(
+            InvalidOpportunityFeedReason.MALFORMED_JSON,
+            """{"count":1,"lastDataChange":"2026-08-15","opportunities":[$stringTags]}""",
+        )
     }
 
     @Test
@@ -341,4 +578,8 @@ class OpportunityFeedCodecTest {
           "minimumAcceptedListings": 1
         }
     """.trimIndent()
+
+    private fun File.sha256(): String = MessageDigest.getInstance("SHA-256")
+        .digest(readBytes())
+        .joinToString("") { byte -> "%02x".format(byte) }
 }

@@ -15,6 +15,7 @@ import com.rupayonhaldar.gtafreestem.domain.model.Opportunity
 import com.rupayonhaldar.gtafreestem.domain.model.OpportunityFeedSnapshot
 import com.rupayonhaldar.gtafreestem.domain.repository.OpportunityRepository
 import com.rupayonhaldar.gtafreestem.domain.search.OpportunitySearch
+import com.rupayonhaldar.gtafreestem.localization.AppLanguage
 import com.rupayonhaldar.gtafreestem.domain.search.OpportunitySearchFilters
 import com.rupayonhaldar.gtafreestem.domain.search.OpportunitySearchLimits
 import com.rupayonhaldar.gtafreestem.domain.search.OpportunitySearchOptions
@@ -42,6 +43,7 @@ data class BrowseUiState(
     val categories: List<String> = emptyList(),
     val query: String = "",
     val filters: OpportunitySearchFilters = OpportunitySearchFilters(),
+    val searchLanguage: AppLanguage = AppLanguage.ENGLISH,
     val filterOptions: OpportunitySearchOptions = OpportunitySearchOptions(),
     val favoriteIds: Set<String> = emptySet(),
     val savedSections: SavedOpportunitySections = SavedOpportunitySections(
@@ -61,6 +63,7 @@ class BrowseViewModel(
     private val repository: OpportunityRepository,
     private val favorites: FavoriteOpportunityStore,
     private val browseStateStore: BrowseSearchStateStore = BrowseSearchStateStore.NONE,
+    private val initialSearchLanguage: AppLanguage = AppLanguage.ENGLISH,
 ) : ViewModel() {
     private val restoredBrowseState = runCatching(browseStateStore::read)
         .getOrDefault(BrowseSearchState())
@@ -68,7 +71,8 @@ class BrowseViewModel(
     private val _uiState = MutableStateFlow(
         BrowseUiState(
             query = restoredBrowseState.query.take(OpportunitySearchLimits.MAXIMUM_QUERY_LENGTH),
-            filters = restoredBrowseState.filters.normalized(),
+            filters = restoredBrowseState.filters.withoutTransientLocation().normalized(),
+            searchLanguage = initialSearchLanguage,
             favoriteIds = restoredSavedLibraryState.ids,
             savedSections = restoredSavedLibraryState.sections,
             unresolvedSavedCount = restoredSavedLibraryState.unresolvedCount,
@@ -144,6 +148,16 @@ class BrowseViewModel(
         recomputeResults()
     }
 
+    fun setSearchLanguage(language: AppLanguage) {
+        _uiState.update { state ->
+            val normalizedLanguage = language
+            if (state.searchLanguage == normalizedLanguage) state else {
+                state.copy(searchLanguage = normalizedLanguage)
+            }
+        }
+        recomputeResults()
+    }
+
     fun setQuery(query: String) {
         _uiState.update {
             it.copy(query = query.take(OpportunitySearchLimits.MAXIMUM_QUERY_LENGTH))
@@ -194,6 +208,33 @@ class BrowseViewModel(
         _uiState.update { it.copy(filters = filters.normalized()) }
         persistBrowseState()
         recomputeResults()
+    }
+
+    /** Applies an in-memory coarse fix; coordinates are deliberately excluded from persistence. */
+    fun setNearbyLocation(
+        latitude: Double,
+        longitude: Double,
+        radiusKm: Int = 25,
+    ) = updateFilters { current ->
+        current.copy(
+            latitude = latitude,
+            longitude = longitude,
+            distanceKm = radiusKm,
+            sort = OpportunitySearchSort.NEAREST,
+        )
+    }
+
+    fun clearNearbyLocation() = updateFilters { current ->
+        current.copy(
+            latitude = null,
+            longitude = null,
+            distanceKm = null,
+            sort = if (current.sort == OpportunitySearchSort.NEAREST) {
+                OpportunitySearchSort.SOONEST
+            } else {
+                current.sort
+            },
+        )
     }
 
     fun setRegion(region: String?) = updateFilters { it.copy(region = region) }
@@ -301,6 +342,7 @@ class BrowseViewModel(
         val searched = repository.search(
             query = state.query,
             filters = state.filters,
+            language = state.searchLanguage,
         )
         val visible = if (state.destination == AppDestination.SAVED) {
             searched.filter { it.id in state.favoriteIds }
@@ -325,7 +367,7 @@ class BrowseViewModel(
         browseStateStore.write(
             BrowseSearchState(
                 query = state.query,
-                filters = state.filters,
+                filters = state.filters.withoutTransientLocation(),
             ),
         )
     }
@@ -375,3 +417,14 @@ class BrowseViewModel(
         }
     }
 }
+
+private fun OpportunitySearchFilters.withoutTransientLocation(): OpportunitySearchFilters = copy(
+    latitude = null,
+    longitude = null,
+    distanceKm = null,
+    sort = if (sort == OpportunitySearchSort.NEAREST) {
+        OpportunitySearchSort.SOONEST
+    } else {
+        sort
+    },
+)

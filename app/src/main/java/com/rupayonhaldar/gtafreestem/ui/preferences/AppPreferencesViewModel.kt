@@ -15,9 +15,12 @@ import com.rupayonhaldar.gtafreestem.localization.AppStringCatalog
 import com.rupayonhaldar.gtafreestem.localization.LanguagePreferenceStore
 import com.rupayonhaldar.gtafreestem.localization.SharedPreferencesLanguagePreferenceStore
 import com.rupayonhaldar.gtafreestem.localization.TextDirection
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 
 data class AppLanguageOption(
     val language: AppLanguage,
@@ -25,6 +28,27 @@ data class AppLanguageOption(
     val nativeName: String,
     val direction: TextDirection,
 )
+
+/** Failure feedback emitted after a user explicitly tries to enable local opportunity alerts. */
+enum class OpportunityAlertFeedback(
+    val catalogKey: String,
+    val englishFallback: String,
+) {
+    PERMISSION_DENIED(
+        catalogKey = "alertsPermissionDenied",
+        englishFallback =
+            "Alerts stay off because notification permission wasn't allowed. You can try again anytime.",
+    ),
+    UNAVAILABLE(
+        catalogKey = "alertsUnavailable",
+        englishFallback =
+            "Alerts couldn't be turned on. Check notification settings and try again.",
+    ),
+    SAVE_FAILED(
+        catalogKey = "localSaveFailed",
+        englishFallback = "That change could not be saved on this device. Try again.",
+    ),
+}
 
 /** Immutable preferences state for a later lifecycle-aware Compose collector. */
 data class AppPreferencesUiState(
@@ -51,7 +75,8 @@ data class AppPreferencesUiState(
 
 /**
  * Owns local language, profile, and appearance state across configuration changes.
- * It performs no sign-in, network, location, notification-permission, or scheduling work.
+ * It performs no sign-in, network, location, notification-permission, or scheduling work; the
+ * Activity coordinates Android permission and WorkManager around this observable preference.
  */
 class AppPreferencesViewModel internal constructor(
     private val catalog: AppStringCatalog,
@@ -71,6 +96,14 @@ class AppPreferencesViewModel internal constructor(
     }
     private val _uiState = MutableStateFlow(readState())
     val uiState: StateFlow<AppPreferencesUiState> = _uiState.asStateFlow()
+    private val alertFeedbackChannel = Channel<OpportunityAlertFeedback>(Channel.BUFFERED)
+
+    /**
+     * A buffered, single-consumption stream. A permission callback can enqueue feedback while an
+     * Activity is recreating, but a message that the UI already consumed is never replayed.
+     */
+    val opportunityAlertFeedback: Flow<OpportunityAlertFeedback> =
+        alertFeedbackChannel.receiveAsFlow()
 
     /** Reloads local preferences and re-resolves a system-selected language. */
     fun reload() {
@@ -104,11 +137,15 @@ class AppPreferencesViewModel internal constructor(
     fun setTheme(theme: AppThemePreference): Boolean =
         updateAccountPreference { accountPreferences.setTheme(theme) }
 
-    /** Stores alert intent only; it does not request permission or schedule notifications. */
+    /** Persists the state after the Activity has applied permission and scheduling policy. */
     fun setOpportunityAlertsPreferred(preferred: Boolean): Boolean =
         updateAccountPreference {
             accountPreferences.setOpportunityAlertsPreferred(preferred)
         }
+
+    internal fun reportOpportunityAlertFeedback(feedback: OpportunityAlertFeedback) {
+        alertFeedbackChannel.trySend(feedback)
+    }
 
     private fun updateAccountPreference(update: () -> Boolean): Boolean = synchronized(updateLock) {
         val saved = runCatching(update).getOrDefault(false)

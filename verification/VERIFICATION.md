@@ -1,5 +1,11 @@
 # Android v1.0.1 verification
 
+> **Historical version record:** This file documents only the August 16, 2026
+> v1.0.1 source and its prior internal-test event. It is not evidence for the
+> current v1.1.0 working tree and does not authorize artifact reuse or another
+> upload. References to source behavior below are scoped to that recorded
+> v1.0.1 snapshot.
+
 Evidence recorded August 16, 2026 with Java 17, Android SDK/Build Tools 36, and
 an API 36 Play Store emulator. The source identifies itself as:
 
@@ -30,8 +36,8 @@ permission: android.permission.INTERNET
   [`31981089197`](https://github.com/rupayon123/gta-free-stem-android/actions/runs/31981089197)
   also completed successfully using the current pinned action releases.
 
-These are the recorded results for the current v1.0.1 source. They were not
-rerun merely to rewrite this document.
+These are the recorded results for the recorded v1.0.1 source snapshot. They
+were not rerun merely to rewrite this document.
 
 ## Signed candidate identity
 
@@ -66,7 +72,7 @@ from an AndroidX dependency without a native debug-symbol archive. No matching
 symbol archive was generated locally. This warning remains recorded for later
 crash-symbolication review; it did not block internal-test publication.
 
-## Behavior covered by the current source
+## Behavior covered by the recorded v1.0.1 source
 
 - A five-destination adaptive shell provides Home, Opportunities, High School,
   Support, and Account on compact screens, with an adaptive rail on wider screens.

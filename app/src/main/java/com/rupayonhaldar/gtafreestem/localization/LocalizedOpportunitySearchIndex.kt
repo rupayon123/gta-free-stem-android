@@ -23,18 +23,18 @@ object LocalizedOpportunitySearchIndex {
             localized.address?.let(::add)
             addAll(localized.tags)
 
-            if (language != AppLanguage.ENGLISH) {
-                add(opportunity.title)
-                add(opportunity.organization)
-                add(opportunity.description)
-                opportunity.summary?.let(::add)
-                add(opportunity.category)
-                addAll(opportunity.categories)
-                add(opportunity.city)
-                add(opportunity.region)
-                opportunity.address?.let(::add)
-                addAll(opportunity.tags)
-            }
+            // Search the selected translation and the canonical publisher text, matching iOS.
+            // This deliberately does not expose translations for other, unselected languages.
+            add(opportunity.title)
+            add(opportunity.organization)
+            add(opportunity.description)
+            opportunity.summary?.let(::add)
+            add(opportunity.category)
+            addAll(opportunity.categories)
+            add(opportunity.city)
+            add(opportunity.region)
+            opportunity.address?.let(::add)
+            addAll(opportunity.tags)
 
             addAll(opportunity.communityFocus)
             addAll(opportunity.accessibility)

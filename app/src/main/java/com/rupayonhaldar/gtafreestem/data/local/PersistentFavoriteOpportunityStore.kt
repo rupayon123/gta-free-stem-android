@@ -246,13 +246,19 @@ internal class PersistentFavoriteOpportunityStore(
         val decoded = rawSnapshot?.let(::decodeEnvelope)
         val decodedState = decoded?.toState() ?: SavedState()
         val missingLegacyIds = legacyIds - decodedState.ids()
+        val containedTransientDistance = decoded?.records.orEmpty().any { record ->
+            record.opportunity.distanceKm != null
+        }
         return LoadedState(
             state = decodedState.copy(
                 unresolvedIds = (decodedState.unresolvedIds + missingLegacyIds)
                     .take(MAXIMUM_SAVED_ITEMS - decodedState.entriesById.size)
                     .toSet(),
             ),
-            shouldRewrite = rawSnapshot == null || decoded == null || missingLegacyIds.isNotEmpty(),
+            shouldRewrite = rawSnapshot == null ||
+                decoded == null ||
+                missingLegacyIds.isNotEmpty() ||
+                containedTransientDistance,
         )
     }
 
@@ -319,7 +325,9 @@ internal class PersistentFavoriteOpportunityStore(
 
     private fun normalizedOpportunity(opportunity: Opportunity): Opportunity? {
         val id = normalizeId(opportunity.id) ?: return null
-        return if (id == opportunity.id) opportunity else opportunity.copy(id = id)
+        // distanceKm is derived from the user's one-shot coarse location. It is display-only and
+        // must never enter the saved snapshot or survive a legacy snapshot migration.
+        return opportunity.copy(id = id, distanceKm = null)
     }
 
     private fun OpportunityFeedSnapshot.permitsDestructiveSavedReconciliation(): Boolean {

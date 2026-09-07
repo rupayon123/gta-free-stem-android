@@ -18,6 +18,7 @@ data class OpportunityFilterPanelLabels(
     val pathwaysSection: String,
     val communityFocusSection: String,
     val sortSection: String,
+    val discoverySection: String,
     val region: String,
     val city: String,
     val category: String,
@@ -33,7 +34,10 @@ data class OpportunityFilterPanelLabels(
     val indigenousFocused: String,
     val leadership: String,
     val soonest: String,
+    val nearest: String,
     val relevance: String,
+    val includeNewFinds: String,
+    val distanceRadius: (Int) -> String,
     val selectedState: String,
     val notSelectedState: String,
 ) {
@@ -51,12 +55,13 @@ data class OpportunityFilterPanelLabels(
             oneActiveFilter = "1 filter active",
             multipleActiveFiltersTemplate = "{count} filters active",
             scopeDescription =
-                "These filters cover current free programs, pathways, and community focus. " +
-                    "Distance and New Finds filters are not available in this Android version yet.",
+                "These filters cover current free programs, pathways, community focus, and " +
+                    "New Finds. Nearby distance choices appear after you enable Nearby in Browse.",
             programDetailsSection = "Program details",
             pathwaysSection = "Pathways",
             communityFocusSection = "Community focus",
             sortSection = "Sort results",
+            discoverySection = "Discovery",
             region = "Region",
             city = "City",
             category = "Category",
@@ -72,7 +77,10 @@ data class OpportunityFilterPanelLabels(
             indigenousFocused = "Indigenous-focused",
             leadership = "Leadership",
             soonest = "Soonest",
+            nearest = "Nearest",
             relevance = "Best match",
+            includeNewFinds = "Include new finds",
+            distanceRadius = { distance -> "$distance km radius" },
             selectedState = "Selected",
             notSelectedState = "Not selected",
         )

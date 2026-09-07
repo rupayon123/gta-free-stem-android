@@ -12,17 +12,17 @@ import org.junit.Test
 
 class AccountPreferencesLabelsTest {
     @Test
-    fun `catalog labels localize and new copy safely falls back to English`() {
+    fun `catalog labels localize profile and alert copy`() {
         val labels = AccountPreferencesLabels(state(AppLanguage.SPANISH))
 
-        assertEquals("Ajustes", labels.screenTitle)
+        assertEquals("Perfil", labels.screenTitle)
         assertEquals("Perfil", labels.profileTitle)
         assertEquals("Tema", labels.themeTitle)
         assertEquals("Oscuro", labels.darkTheme)
         assertEquals("Soporte", labels.support)
         assertEquals(
-            "Notifications are not active yet. This only remembers your preference on this device.",
-            labels.alertsNotActive,
+            "Busca periódicamente nuevas oportunidades coincidentes y te avisa en este dispositivo.",
+            labels.alertsExplanation,
         )
     }
 

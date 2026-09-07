@@ -6,6 +6,8 @@ import com.rupayonhaldar.gtafreestem.data.local.OpportunityFeedCache
 import com.rupayonhaldar.gtafreestem.data.network.OpportunityFeedNetwork
 import com.rupayonhaldar.gtafreestem.data.network.RemoteFeedEndpoint
 import com.rupayonhaldar.gtafreestem.domain.model.OpportunityFeedSource
+import com.rupayonhaldar.gtafreestem.localization.AppLanguage
+import com.rupayonhaldar.gtafreestem.localization.AppStringCatalog
 import java.net.URL
 import java.time.Instant
 import kotlinx.coroutines.runBlocking
@@ -95,10 +97,52 @@ class DefaultOpportunityRepositoryTest {
         assertEquals(newerCache, cache.value)
     }
 
+    @Test
+    fun `repository search switches selected translation and uses its injected catalog`() = runBlocking {
+        val catalog = AppStringCatalog.decode(
+            """
+            {
+              "en": {"categoryCodingAndRobotics": "Coding and robotics"},
+              "es": {"categoryCodingAndRobotics": "Programación y robótica"}
+            }
+            """.trimIndent(),
+        )
+        val repository = repository(
+            network = FakeNetwork(emptyList(), emptyMap()),
+            cache = FakeCache(null),
+            bundledJson = translatedFeed(),
+            catalog = catalog,
+        )
+        repository.bootstrap()
+
+        assertEquals(
+            listOf("translated"),
+            repository.search(
+                query = "robotica programacion",
+                language = AppLanguage.SPANISH,
+            ).map { it.id },
+        )
+        assertEquals(
+            emptyList<String>(),
+            repository.search(
+                query = "robotica programacion",
+                language = AppLanguage.ENGLISH,
+            ).map { it.id },
+        )
+        assertEquals(
+            emptyList<String>(),
+            repository.search(
+                query = "robotica programacion",
+                language = AppLanguage.FRENCH,
+            ).map { it.id },
+        )
+    }
+
     private fun repository(
         network: OpportunityFeedNetwork,
         cache: OpportunityFeedCache,
         bundledJson: String,
+        catalog: AppStringCatalog? = null,
     ) = DefaultOpportunityRepository(
         codec = OpportunityFeedCodec(),
         network = network,
@@ -106,8 +150,32 @@ class DefaultOpportunityRepositoryTest {
         bundled = object : BundledOpportunityFeedSource {
             override fun read() = bundledJson
         },
+        catalog = catalog,
         now = { now },
     )
+
+    private fun translatedFeed(): String = """
+        {
+          "count": 1,
+          "lastDataChange": "2026-08-15",
+          "opportunities": [{
+            "id": "translated",
+            "title": "Robotics Club",
+            "organization": "Provider",
+            "description": "Build robots.",
+            "category": "Coding & Robotics",
+            "city": "Toronto",
+            "region": "Toronto",
+            "ageMin": 10,
+            "cost": "Free to join",
+            "status": "active",
+            "sourceUrl": "https://example.org/translated",
+            "translations": {
+              "es": {"title": "Club de robótica"}
+            }
+          }]
+        }
+    """.trimIndent()
 
     private fun feed(id: String, date: String): String = """
         {

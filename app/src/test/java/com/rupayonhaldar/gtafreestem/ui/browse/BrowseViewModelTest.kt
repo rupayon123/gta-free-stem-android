@@ -14,6 +14,7 @@ import com.rupayonhaldar.gtafreestem.domain.search.OpportunitySearch
 import com.rupayonhaldar.gtafreestem.domain.search.OpportunitySearchFilters
 import com.rupayonhaldar.gtafreestem.domain.search.OpportunitySearchLimits
 import com.rupayonhaldar.gtafreestem.domain.search.OpportunitySearchSort
+import com.rupayonhaldar.gtafreestem.localization.AppLanguage
 import java.time.Instant
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -113,12 +114,67 @@ class BrowseViewModelTest {
                 viewModel.uiState.value.query.length,
             )
 
-            viewModel.clearSearchAndFilters()
-            val cleared = viewModel.uiState.value
-            assertEquals("", cleared.query)
+        viewModel.clearSearchAndFilters()
+        val cleared = viewModel.uiState.value
+        assertEquals("", cleared.query)
             assertEquals(OpportunitySearchFilters(), cleared.filters)
             assertEquals(BrowseSearchState(), stateStore.writes.last())
             assertFalse(cleared.filters.hasActiveFilters)
+            assertEquals(AppLanguage.ENGLISH, repository.searches.last().third)
+
+            repository.searches.clear()
+            viewModel.setSearchLanguage(AppLanguage.SPANISH)
+            assertEquals(AppLanguage.SPANISH, repository.searches.last().third)
+        } finally {
+            Dispatchers.resetMain()
+        }
+    }
+
+    @Test
+    fun `nearby coordinates stay in memory and are stripped from restored and persisted state`() = runTest {
+        Dispatchers.setMain(StandardTestDispatcher(testScheduler))
+        try {
+            val stateStore = RecordingBrowseSearchStateStore(
+                restored = BrowseSearchState(
+                    query = "science",
+                    filters = OpportunitySearchFilters(
+                        latitude = 43.6532,
+                        longitude = -79.3832,
+                        distanceKm = 50,
+                        sort = OpportunitySearchSort.NEAREST,
+                    ),
+                ),
+            )
+            val viewModel = BrowseViewModel(
+                repository = RecordingRepository(snapshot(emptyList())),
+                favorites = EmptyFavorites(),
+                browseStateStore = stateStore,
+            )
+
+            advanceUntilIdle()
+
+            assertEquals(null, viewModel.uiState.value.filters.latitude)
+            assertEquals(null, viewModel.uiState.value.filters.longitude)
+            assertEquals(null, viewModel.uiState.value.filters.distanceKm)
+            assertEquals(OpportunitySearchSort.SOONEST, viewModel.uiState.value.filters.sort)
+
+            viewModel.setNearbyLocation(
+                latitude = 43.7001,
+                longitude = -79.4163,
+                radiusKm = 25,
+            )
+
+            val liveFilters = viewModel.uiState.value.filters
+            assertEquals(43.7001, liveFilters.latitude)
+            assertEquals(-79.4163, liveFilters.longitude)
+            assertEquals(25, liveFilters.distanceKm)
+            assertEquals(OpportunitySearchSort.NEAREST, liveFilters.sort)
+
+            val persistedFilters = stateStore.writes.last().filters
+            assertEquals(null, persistedFilters.latitude)
+            assertEquals(null, persistedFilters.longitude)
+            assertEquals(null, persistedFilters.distanceKm)
+            assertEquals(OpportunitySearchSort.SOONEST, persistedFilters.sort)
         } finally {
             Dispatchers.resetMain()
         }
@@ -278,7 +334,7 @@ class BrowseViewModelTest {
     private class RecordingRepository(
         private val snapshot: OpportunityFeedSnapshot,
     ) : OpportunityRepository {
-        val searches = mutableListOf<Pair<String, OpportunitySearchFilters>>()
+        val searches = mutableListOf<Triple<String, OpportunitySearchFilters, AppLanguage>>()
 
         override suspend fun bootstrap(): OpportunityFeedSnapshot = snapshot
 
@@ -286,8 +342,12 @@ class BrowseViewModelTest {
 
         override fun current(): OpportunityFeedSnapshot = snapshot
 
-        override fun search(query: String, filters: OpportunitySearchFilters): List<Opportunity> {
-            searches += query to filters
+        override fun search(
+            query: String,
+            filters: OpportunitySearchFilters,
+            language: AppLanguage,
+        ): List<Opportunity> {
+            searches += Triple(query, filters, language)
             return OpportunitySearch.search(
                 opportunities = snapshot.opportunities,
                 query = query,

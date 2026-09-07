@@ -9,6 +9,18 @@ import org.junit.Test
 
 class OpportunityAvailabilityTest {
     @Test
+    fun `date-only schedule starts and expiries use opposite GTA day boundaries`() {
+        assertEquals(
+            Instant.parse("2026-09-01T04:00:00Z"),
+            OpportunityAvailability.parseScheduleStartInstant("2026-09-01"),
+        )
+        assertEquals(
+            Instant.parse("2026-09-02T03:59:59.999999999Z"),
+            OpportunityAvailability.parseScheduleExpiryInstant("2026-09-01"),
+        )
+    }
+
+    @Test
     fun `distinct registration deadline archives before a later end date`() {
         val opportunity = opportunity(
             startDate = "2026-07-06T08:00:00-04:00",

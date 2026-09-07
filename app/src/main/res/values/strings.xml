@@ -2,6 +2,17 @@
     <string name="app_name">GTA FREE STEM</string>
     <string name="browse_title">Free STEM opportunities</string>
     <string name="browse_subtitle">Source-backed programs across the Greater Toronto Area.</string>
+    <string name="opportunity_alerts_channel_name">Opportunity alerts</string>
+    <string name="opportunity_alerts_channel_description">New free STEM opportunities matching your saved hunt.</string>
+    <string name="new_opportunities_notification_title">GTA FREE STEM found new opportunities</string>
+    <plurals name="new_opportunities_notification_body">
+        <item quantity="one">%1$d new matching free opportunity is ready to check.</item>
+        <item quantity="other">%1$d new matching free opportunities are ready to check.</item>
+    </plurals>
+    <string name="shortcut_opportunities_short_label">Opportunities</string>
+    <string name="shortcut_opportunities_long_label">Find free STEM opportunities</string>
+    <string name="shortcut_high_school_short_label">High school</string>
+    <string name="shortcut_high_school_long_label">High school pathways</string>
     <string name="privacy_policy_url" translatable="false">https://gta-free-stem.vercel.app/privacy/</string>
     <string name="support_url" translatable="false">https://gta-free-stem.vercel.app/support/</string>
     <string name="terms_url" translatable="false">https://gta-free-stem.vercel.app/terms/</string>

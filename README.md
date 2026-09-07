@@ -2,25 +2,75 @@
 
 GTA FREE STEM is a native Android app for browsing free STEM opportunities. This project uses Kotlin, Jetpack Compose, the Gradle wrapper, and Java 17.
 
-> Release status: version 1.0.1 is available only to configured Google Play
-> internal testers. This is not a production release or public-availability
-> claim. Complete every remaining gate in the release runbook before a broader
-> rollout.
+> Release status: version 1.1.0 (`versionCode` 3) is the current local parity
+> candidate. It has not been uploaded to Google Play, installed from a
+> Play-generated artifact, approved for production, or shown to be publicly
+> available. Version 1.0.1 remains available only to configured internal
+> testers. Complete every remaining gate in the release runbook before a
+> broader rollout.
 
-## Current verified baseline
+## Candidate scope
 
-As of August 16, 2026, version `1.0.1` (`versionCode` 2) has been exercised
-locally with Java 17, Android SDK 36, and an API 36 Play Store emulator. The
-current recorded baseline includes:
+As of August 18, 2026, the version 1.1.0 source brings the Android experience
+up to the current iOS product scope while using Android-native interaction and
+accessibility patterns. It includes:
+
+- the storybook-inspired visual system, branded launch sequence, adaptive Home
+  composition, compact opportunity cards, and responsive phone/tablet shell
+- list and zero-cost offline schematic-map browsing, opportunity map previews,
+  New Finds, distance sorting, and an explicit Nearby action that requests one
+  foreground approximate-location fix and keeps that fix only in memory
+- opt-in, on-device new-match alerts backed by WorkManager; the app asks for
+  notification permission when required, checks the public feed approximately
+  every three hours when connected, compares matches locally, and uses no push
+  notification service
+- app-owned deep links and dynamic Opportunities/High School shortcuts
+- local Current/Archive saves, full opportunity details and external actions,
+  a local Profile, theme choices, and a shared 18-language catalog with RTL
+  support
+- strict validation of the current 104-record feed, clean word-boundary handling
+  for provider excerpts, and bounded bundled/cache fallback when a healthy
+  network snapshot is unavailable
+
+The app deliberately has no online account or sign-in flow, paid map provider,
+ads, analytics, attribution, or push service.
+
+## Current release-evidence status
+
+> **The August 19 v1.1.0 evidence is a superseded historical snapshot.** The
+> app source has materially changed since that snapshot, so its signed
+> artifacts, test/lint results, runtime checks, and screenshots do not verify
+> the current working tree and must not be uploaded or presented as current
+> release evidence.
+
+For history, that earlier modified working-tree snapshot recorded 151 passing
+JVM tests, zero-error debug and release lint, 19 of 19 API 36
+gesture-navigation instrumentation tests, adaptive/RTL tablet checks, a
+three-button inset check, and signed-release cold/warm deep-link smoke tests.
+Its signed AAB/APK, upload certificate, R8 mapping, merged manifest, and 16 KB
+native alignment were also inspected. The historical hashes and limitations
+are preserved in
+[`verification/V1.1.0-LOCAL-VERIFICATION.md`](verification/V1.1.0-LOCAL-VERIFICATION.md).
+
+A current candidate requires a reviewed source freeze, clean rebuild, fresh
+full test/lint and device verification, newly signed artifacts, screenshot
+recapture, and regenerated provenance. No current upload artifact of record or
+upload/publication authorization exists.
+
+## Historical verified baseline
+
+The following evidence belongs specifically to version `1.0.1` (`versionCode`
+2) on August 16, 2026. It is preserved for release history and must not be
+treated as final evidence for the version 1.1.0 candidate:
 
 - 105 JVM tests passing
 - the full 11-test instrumentation suite passing in three-button system-navigation mode
 - a focused system-navigation/inset regression test passing in gesture mode
 - debug and release lint completing with zero issues
-- strict validation of the 125-record feed and a bounded bundled/cache fallback
-  when a healthy network snapshot is unavailable
+- strict validation of the feed snapshot used by that historical candidate and
+  a bounded bundled/cache fallback
 
-The exact public source root was also built as a signed 5.2 MiB AAB. Its JAR
+That exact public source root was also built as a signed 5.2 MiB AAB. Its JAR
 signature verified, and its public signing-certificate SHA-256 matched the
 locally protected upload key; the public-safe checksum is recorded in
 [`verification/VERIFICATION.md`](verification/VERIFICATION.md). This does not
@@ -30,20 +80,10 @@ internal testing and reports it available to internal testers; that is not
 production or public availability. An independent encrypted backup of the
 upload key also remains required. Tester invitations, numeric Play identifiers,
 account-contact details, identity evidence, and private signing material are
-intentionally not stored here.
-
-The current app uses a five-destination adaptive shell: Home, Opportunities,
-High School, Support, and Account. It includes system-bar-safe insets for gesture
-and three-button navigation, expanded keyword/pathway/equity filters, local
-full-record saves with Current and Archive sections, opportunity details and
-external actions, strict live/offline feed handling, an optional on-device
-display name, local language/theme/alert-intent preferences, and a shared
-18-language catalog with RTL support. It deliberately has no online account or
-sign-in flow.
-
-This is not full iOS feature parity. Map/nearby browsing, local match
-notifications, deep links, and localization of remaining older
-browse/detail/accessibility copy are still outstanding.
+intentionally not stored here. Current v1.1.0 evidence remains pending under
+the release-evidence requirements above; physical-device,
+Play-generated-install, live policy, and store-review evidence is still
+required.
 
 ## Android baseline
 
@@ -53,7 +93,7 @@ browse/detail/accessibility copy are still outstanding.
 | Compile SDK | 36 |
 | Target SDK | 36 |
 | Minimum SDK | 26 |
-| Current version | `1.0.1` (`versionCode` 2) |
+| Current candidate | `1.1.0` (`versionCode` 3) |
 | Java toolchain | 17 |
 | Play artifact | Signed Android App Bundle (`.aab`) |
 
@@ -107,12 +147,14 @@ The check does not prove runtime quality, policy compliance, signing identity, P
 
 ## Data and cost posture
 
-The app has no online user accounts, ads, analytics, or active push/local
-notifications. The optional display name, searches, filters, saved details,
-language/theme settings, and inactive alerts preference remain on the device.
-The opportunities feed is retrieved over HTTPS from GitHub/jsDelivr, and
-external opportunity links may open in the user's browser. Recheck the final
-release artifact and dependencies before submitting the Data safety form.
+The app has no online user accounts, ads, analytics, attribution, or push
+notification service. The optional display name, searches, filters, saved
+details, language/theme settings, alert state/history, and approximate Nearby
+fix remain on the device; the Nearby fix is in-memory only. When the user opts
+in, Android WorkManager can refresh the public feed over HTTPS and post local
+new-match notifications. Opportunity and source links may open in the user's
+browser. Recheck the final release artifact, merged manifest, dependencies, and
+runtime traffic before submitting the Data safety form.
 
 Google's current registration cost for full distribution is a one-time USD $25 fee, with no annual Play Console fee. Hosting and third-party services can change their terms independently, so review their current limits before each release.
 

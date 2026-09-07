@@ -13,19 +13,21 @@ import com.rupayonhaldar.gtafreestem.localization.AppLanguage
 internal class AccountPreferencesLabels(
     private val state: AppPreferencesUiState,
 ) {
-    val screenTitle = text("settings", "Settings")
+    val screenTitle = text("account", "Profile")
     val screenSummary = text(
         "preferencesLocalSummary",
         "Personalize this device without signing in.",
     )
 
     val profileTitle = text("account", "Profile")
+    val onDeviceBadge = text("onDeviceBadge", "On this device")
     val profileOnDevice = text(
         "profileOnDevice",
         "This profile and its saved opportunities stay on this device.",
     )
     val guest = text("guest", "Guest")
     val displayName = text("name", "Name")
+    val editDisplayName = text("editDisplayName", "Edit display name")
     val displayNameHelp = text(
         "displayNameHelp",
         "Optional. Saved only on this device; no sign-in or cloud account.",
@@ -61,18 +63,19 @@ internal class AccountPreferencesLabels(
     val done = text("done", "Done")
 
     val themeTitle = text("theme", "Theme")
+    val preferencesTitle = text("settings", "Settings")
     val systemTheme = text("system", "System")
     val lightTheme = text("light", "Light")
     val darkTheme = text("dark", "Dark")
 
     val alertsTitle = text("alerts", "Alerts")
     val alertsPreference = text(
-        "alertsPreference",
-        "Remember that I want opportunity alerts",
+        "alertsPreferenceActive",
+        "New-match alerts",
     )
-    val alertsNotActive = text(
-        "alertsNotActive",
-        "Notifications are not active yet. This only remembers your preference on this device.",
+    val alertsExplanation = text(
+        "alertsOnDeviceExplanation",
+        "Checks periodically for new matching opportunities and alerts you on this device.",
     )
 
     val helpAndLegalTitle = text("helpAndLegal", "Help and legal")
@@ -87,7 +90,7 @@ internal class AccountPreferencesLabels(
     val localDataTitle = text("localDataTitle", "Local data")
     val localDataExplanation = text(
         "localDataExplanation",
-        "Your profile, search history, saved opportunities, language, theme, and alerts preference stay on this device. This action removes the profile, search history, and saved opportunities; app preferences remain.",
+        "Your profile, search history, saved opportunities, and alert history stay on this device. This action removes them and turns alerts off; language and theme stay.",
     )
     val deleteAllLocalData = text("deleteLocalData", "Delete all local data")
     val deleteProfileAndLocalData = text(
@@ -100,7 +103,7 @@ internal class AccountPreferencesLabels(
     )
     val deleteConfirmationExplanation = text(
         "deleteConfirmationExplanation",
-        "This permanently removes the optional profile, search history, and saved opportunities from this device. This cannot be undone.",
+        "This permanently removes the optional profile, search history, saved opportunities, and alert history from this device, and turns alerts off. This cannot be undone.",
     )
 
     val saveFailed = text(
@@ -122,25 +125,29 @@ internal class AccountPreferencesLabels(
 
     fun deletionSuccess(hadProfile: Boolean): String = if (hadProfile) {
         text(
-            "accountDeleted",
-            "Profile, saved opportunities, and search history deleted.",
+            "localDataDeletionSuccessWithProfile",
+            "Profile, saved opportunities, search history, and alert history deleted. Alerts are off.",
         )
     } else {
         text(
-            "localDataDeleted",
-            "Saved opportunities and search history deleted.",
+            "localDataDeletionSuccess",
+            "Saved opportunities, search history, and alert history deleted. Alerts are off.",
         )
     }
 
     fun deletionFailure(result: LocalAccountDataDeletionResult): String {
         val remaining = buildList {
-            if (!result.profileDeleted) add("profile")
-            if (!result.searchHistoryDeleted) add("search history")
-            if (!result.savedOpportunitiesDeleted) add("saved opportunities")
+            if (!result.profileDeleted) add(text("profileData", "profile"))
+            if (!result.searchHistoryDeleted) add(text("searchHistory", "search history"))
+            if (!result.savedOpportunitiesDeleted) {
+                add(text("savedOpportunitiesData", "saved opportunities"))
+            }
+            if (!result.localAlertsDeleted) add(text("alertsData", "alerts"))
         }
         return text(
             "localDeleteIncomplete",
-            "Some local data could not be deleted (${remaining.joinToString()}). Try again.",
+            "Some local data could not be deleted ({items}). Try again.",
+            placeholders = mapOf("items" to remaining.joinToString()),
         )
     }
 

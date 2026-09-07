@@ -63,8 +63,8 @@ import java.util.Locale
  * Complete local browse-filter surface. Give [modifier] a finite height when the panel should own
  * scrolling, such as `Modifier.fillMaxSize()` in a screen or bounded sheet.
  *
- * Distance and New Finds are intentionally omitted until Android has location and seen-history
- * sources. The default scope copy discloses that limitation to users.
+ * Nearby distance choices appear only after the user explicitly enables a local foreground
+ * location from Browse. No location is requested or transmitted by this panel.
  */
 @Composable
 fun OpportunityFilterPanel(
@@ -74,6 +74,7 @@ fun OpportunityFilterPanel(
     modifier: Modifier = Modifier,
     labels: OpportunityFilterPanelLabels = OpportunityFilterPanelLabels.English,
     onReset: () -> Unit = { onFiltersChange(OpportunitySearchFilters()) },
+    showHeader: Boolean = true,
 ) {
     val normalizedFilters = filters.normalized()
     val activeFilterCount = opportunityFilterPanelActiveCount(normalizedFilters)
@@ -101,12 +102,14 @@ fun OpportunityFilterPanel(
                 .padding(horizontal = horizontalPadding, vertical = 16.dp),
             verticalArrangement = Arrangement.spacedBy(20.dp),
         ) {
-            FilterPanelHeader(
-                activeFilterCount = activeFilterCount,
-                canReset = normalizedFilters != OpportunitySearchFilters(),
-                labels = labels,
-                onReset = onReset,
-            )
+            if (showHeader) {
+                FilterPanelHeader(
+                    activeFilterCount = activeFilterCount,
+                    canReset = normalizedFilters != OpportunitySearchFilters(),
+                    labels = labels,
+                    onReset = onReset,
+                )
+            }
 
             Card(
                 colors = CardDefaults.cardColors(
@@ -171,6 +174,33 @@ fun OpportunityFilterPanel(
                     testTag = OpportunityFilterPanelTestTags.LANGUAGE,
                     onSelection = { updateFilters(normalizedFilters.copy(language = it)) },
                 )
+            }
+
+            HorizontalDivider()
+
+            FilterSection(title = labels.discoverySection) {
+                FilterToggleFlow(
+                    toggles = listOf(
+                        PanelToggle(
+                            label = labels.includeNewFinds,
+                            selected = normalizedFilters.includeNewFinds,
+                            testTag = OpportunityFilterPanelTestTags.NEW_FINDS,
+                            onToggle = {
+                                updateFilters(normalizedFilters.copy(includeNewFinds = it))
+                            },
+                        ),
+                    ),
+                    labels = labels,
+                )
+                if (normalizedFilters.hasValidLocation) {
+                    DistanceRadiusChoices(
+                        selectedDistance = normalizedFilters.distanceKm,
+                        labels = labels,
+                        onDistanceSelected = { distance ->
+                            updateFilters(normalizedFilters.copy(distanceKm = distance))
+                        },
+                    )
+                }
             }
 
             HorizontalDivider()
@@ -274,6 +304,18 @@ fun OpportunityFilterPanel(
                             updateFilters(normalizedFilters.copy(sort = OpportunitySearchSort.SOONEST))
                         },
                     )
+                    if (normalizedFilters.hasValidLocation) {
+                        SortChoice(
+                            label = labels.nearest,
+                            selected = normalizedFilters.sort == OpportunitySearchSort.NEAREST,
+                            testTag = OpportunityFilterPanelTestTags.SORT_NEAREST,
+                            onClick = {
+                                updateFilters(
+                                    normalizedFilters.copy(sort = OpportunitySearchSort.NEAREST),
+                                )
+                            },
+                        )
+                    }
                     SortChoice(
                         label = labels.relevance,
                         selected = normalizedFilters.sort == OpportunitySearchSort.RELEVANCE,
@@ -309,6 +351,9 @@ fun opportunityFilterPanelActiveCount(filters: OpportunitySearchFilters): Int {
         normalized.girlsFocusedOnly,
         normalized.indigenousFocusedOnly,
         normalized.leadershipOnly,
+        !normalized.includeNewFinds,
+        normalized.hasValidLocation,
+        normalized.distanceKm != null,
         normalized.sort != OpportunitySearchSort.SOONEST,
     ).count { it }
 }
@@ -352,6 +397,36 @@ private fun FilterPanelHeader(
             shape = MaterialTheme.shapes.small,
         ) {
             Text(labels.reset)
+        }
+    }
+}
+
+@Composable
+private fun DistanceRadiusChoices(
+    selectedDistance: Int?,
+    labels: OpportunityFilterPanelLabels,
+    onDistanceSelected: (Int?) -> Unit,
+) {
+    FlowRow(
+        modifier = Modifier
+            .fillMaxWidth()
+            .testTag(OpportunityFilterPanelTestTags.DISTANCE),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp),
+    ) {
+        FilterChip(
+            selected = selectedDistance == null,
+            onClick = { onDistanceSelected(null) },
+            label = { Text(labels.any) },
+            modifier = Modifier.heightIn(min = MinimumTouchTarget),
+        )
+        listOf(5, 10, 25, 50, 100).forEach { distance ->
+            FilterChip(
+                selected = selectedDistance == distance,
+                onClick = { onDistanceSelected(distance) },
+                label = { Text(labels.distanceRadius(distance)) },
+                modifier = Modifier.heightIn(min = MinimumTouchTarget),
+            )
         }
     }
 }
@@ -654,7 +729,10 @@ internal object OpportunityFilterPanelTestTags {
     const val GIRLS_FOCUSED = "opportunity-filter-girls-focused"
     const val INDIGENOUS_FOCUSED = "opportunity-filter-indigenous-focused"
     const val LEADERSHIP = "opportunity-filter-leadership"
+    const val NEW_FINDS = "opportunity-filter-new-finds"
+    const val DISTANCE = "opportunity-filter-distance"
     const val SORT_SOONEST = "opportunity-filter-sort-soonest"
+    const val SORT_NEAREST = "opportunity-filter-sort-nearest"
     const val SORT_RELEVANCE = "opportunity-filter-sort-relevance"
 }
 

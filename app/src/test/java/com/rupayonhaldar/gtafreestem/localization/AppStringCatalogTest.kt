@@ -14,7 +14,7 @@ class AppStringCatalogTest {
         assertEquals(18, AppLanguage.entries.size)
         assertEquals(AppLanguage.entries.toSet(), catalog.availableLanguages)
         assertEquals(AppLanguage.entries.toSet(), catalog.metadataLanguages)
-        assertEquals(184, catalog.sourceKeys.size)
+        assertEquals(249, catalog.sourceKeys.size)
 
         AppLanguage.entries.forEach { language ->
             val metadata = catalog.metadata(language)
@@ -23,6 +23,110 @@ class AppStringCatalogTest {
             assertEquals(language.direction, metadata.direction)
             assertEquals(catalog.sourceKeys, catalog.keys(language))
             assertTrue("${language.catalogCode} is incomplete", catalog.isComplete(language))
+        }
+    }
+
+    @Test
+    fun `release copy has placeholder parity in every language`() {
+        val catalog = bundledCatalog()
+        val placeholderRegex = Regex("\\{([^{}]+)}")
+        val keysWithPlaceholders = setOf(
+            "externalLinkUnavailable",
+            "localDeleteIncomplete",
+            "mapMarkerPosition",
+            "openSavedDetailsAccessibility",
+            "removeSavedAccessibility",
+            "removedSavedMessage",
+            "savedCount",
+            "savedLegacyPending",
+        )
+
+        keysWithPlaceholders.forEach { key ->
+            val expected = placeholderRegex.findAll(catalog.text(key, AppLanguage.ENGLISH))
+                .map { match -> match.groupValues[1] }
+                .toSet()
+            AppLanguage.entries.forEach { language ->
+                val actual = placeholderRegex.findAll(catalog.text(key, language))
+                    .map { match -> match.groupValues[1] }
+                    .toSet()
+                assertEquals("${language.catalogCode} placeholder mismatch for $key", expected, actual)
+            }
+        }
+    }
+
+    @Test
+    fun `accessibility states and external action failures are translated in every language`() {
+        val catalog = bundledCatalog()
+        val requiredKeys = setOf(
+            "selectedState",
+            "notSelectedState",
+            "mapMarkerPosition",
+            "mapMarkerActionLabel",
+            "registrationLinkUnavailable",
+            "directionsUnavailable",
+            "externalLinkUnavailable",
+            "sourceLinkUnavailable",
+        )
+
+        AppLanguage.entries.forEach { language ->
+            requiredKeys.forEach { key ->
+                assertTrue(
+                    "${language.catalogCode} is missing a direct translation for $key",
+                    !catalog.rawText(key, language).isNullOrBlank(),
+                )
+            }
+        }
+    }
+
+    @Test
+    fun `launch experience has dedicated copy in every language`() {
+        val catalog = bundledCatalog()
+        val requiredKeys = setOf(
+            "launchPreparingOpportunityHunt",
+            "launchOpeningLocalLibrary",
+            "launchCheckingOpportunityDetails",
+            "launchLoadingOpportunities",
+        )
+
+        AppLanguage.entries.forEach { language ->
+            requiredKeys.forEach { key ->
+                assertTrue(
+                    "${language.catalogCode} is missing direct launch copy for $key",
+                    !catalog.rawText(key, language).isNullOrBlank(),
+                )
+            }
+        }
+    }
+
+    @Test
+    fun `alert permission and setup failures have direct copy in every language`() {
+        val catalog = bundledCatalog()
+        val requiredKeys = setOf("alertsPermissionDenied", "alertsUnavailable")
+
+        AppLanguage.entries.forEach { language ->
+            requiredKeys.forEach { key ->
+                assertTrue(
+                    "${language.catalogCode} is missing a direct translation for $key",
+                    !catalog.rawText(key, language).isNullOrBlank(),
+                )
+            }
+        }
+    }
+
+    @Test
+    fun `recent approximate location disclosure is direct and distinct in every language`() {
+        val catalog = bundledCatalog()
+
+        AppLanguage.entries.forEach { language ->
+            val disclosure = catalog.rawText("nearbyRecentApproximateLocation", language)
+            assertTrue(
+                "${language.catalogCode} is missing a direct recent-location disclosure",
+                !disclosure.isNullOrBlank(),
+            )
+            assertTrue(
+                "${language.catalogCode} does not distinguish current and recent location copy",
+                disclosure != catalog.rawText("nearbyHuntingOn", language),
+            )
         }
     }
 

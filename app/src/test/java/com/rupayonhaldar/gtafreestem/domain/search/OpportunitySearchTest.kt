@@ -2,6 +2,8 @@ package com.rupayonhaldar.gtafreestem.domain.search
 
 import com.rupayonhaldar.gtafreestem.domain.model.Opportunity
 import com.rupayonhaldar.gtafreestem.domain.model.OpportunityTranslation
+import com.rupayonhaldar.gtafreestem.localization.AppLanguage
+import com.rupayonhaldar.gtafreestem.localization.AppStringCatalog
 import java.time.Instant
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -12,7 +14,7 @@ class OpportunitySearchTest {
     private val now = Instant.parse("2026-08-16T16:00:00Z")
 
     @Test
-    fun `query is case and diacritic insensitive and indexes every translation`() {
+    fun `query follows selected translation plus English source when language switches`() {
         val translated = opportunity(
             id = "robotics",
             title = "Robotics Café",
@@ -20,6 +22,10 @@ class OpportunitySearchTest {
                 "es" to OpportunityTranslation(
                     title = "Club de Robótica",
                     tags = listOf("programación"),
+                ),
+                "fr" to OpportunityTranslation(
+                    title = "Club de robotique",
+                    tags = listOf("codage"),
                 ),
             ),
         )
@@ -30,10 +36,71 @@ class OpportunitySearchTest {
                 listOf(translated, opportunity("science")),
                 query = "ROBOTICA programacion",
                 now = now,
+                language = AppLanguage.SPANISH,
             ).map(Opportunity::id),
         )
-        assertTrue(OpportunitySearch.search(listOf(translated), query = "cafe", now = now).isNotEmpty())
+        assertTrue(
+            OpportunitySearch.search(
+                listOf(translated),
+                query = "cafe",
+                now = now,
+                language = AppLanguage.SPANISH,
+            ).isNotEmpty(),
+        )
+        assertTrue(
+            OpportunitySearch.search(
+                listOf(translated),
+                query = "programacion",
+                now = now,
+                language = AppLanguage.FRENCH,
+            ).isEmpty(),
+        )
+        assertEquals(
+            listOf("robotics"),
+            OpportunitySearch.search(
+                listOf(translated),
+                query = "codage",
+                now = now,
+                language = AppLanguage.FRENCH,
+            ).map(Opportunity::id),
+        )
         assertTrue(OpportunitySearch.search(listOf(translated), query = "missing", now = now).isEmpty())
+    }
+
+    @Test
+    fun `localized catalog category is searchable when feed translation is missing`() {
+        val catalog = AppStringCatalog.decode(
+            """
+            {
+              "en": {"categoryCodingAndRobotics": "Coding and robotics"},
+              "es": {"categoryCodingAndRobotics": "Programación y robótica"}
+            }
+            """.trimIndent(),
+        )
+        val opportunity = opportunity(
+            id = "catalog-category",
+            category = "Coding & Robotics",
+        )
+
+        assertEquals(
+            listOf("catalog-category"),
+            OpportunitySearch.search(
+                opportunities = listOf(opportunity),
+                query = "programacion",
+                now = now,
+                language = AppLanguage.SPANISH,
+                catalog = catalog,
+            ).map(Opportunity::id),
+        )
+        assertTrue(
+            OpportunitySearch.search(
+                opportunities = listOf(opportunity),
+                query = "programacion",
+                now = now,
+                language = AppLanguage.ENGLISH,
+                catalog = catalog,
+            ).isEmpty(),
+        )
     }
 
     @Test
@@ -180,7 +247,12 @@ class OpportunitySearchTest {
         )
         assertEquals(
             listOf("indigenous"),
-            ids(all, OpportunitySearchFilters(indigenousFocusedOnly = true)),
+            OpportunitySearch.search(
+                opportunities = all,
+                filters = OpportunitySearchFilters(indigenousFocusedOnly = true),
+                now = now,
+                language = AppLanguage.FRENCH,
+            ).map(Opportunity::id),
         )
         assertEquals(
             listOf("leadership"),
@@ -234,6 +306,116 @@ class OpportunitySearchTest {
             ids(all, OpportunitySearchFilters(activeOnly = false)).toSet(),
         )
         assertFalse(ids(all, OpportunitySearchFilters(activeOnly = false)).contains("paid"))
+    }
+
+    @Test
+    fun `nearby filtering validates coordinates applies radius and returns Haversine distance`() {
+        val originLatitude = 43.6532
+        val originLongitude = -79.3832
+        val atOrigin = opportunity("at-origin").copy(
+            latitude = originLatitude,
+            longitude = originLongitude,
+        )
+        val nearby = opportunity("nearby").copy(
+            latitude = originLatitude + 0.02,
+            longitude = originLongitude,
+        )
+        val outsideRadius = opportunity("outside").copy(
+            latitude = originLatitude + 0.10,
+            longitude = originLongitude,
+        )
+        val missingCoordinates = opportunity("missing")
+
+        val results = OpportunitySearch.search(
+            opportunities = listOf(outsideRadius, missingCoordinates, nearby, atOrigin),
+            filters = OpportunitySearchFilters(
+                latitude = originLatitude,
+                longitude = originLongitude,
+                distanceKm = 5,
+                sort = OpportunitySearchSort.NEAREST,
+            ),
+            now = now,
+        )
+
+        assertEquals(listOf("at-origin", "nearby"), results.map(Opportunity::id))
+        assertEquals(0.0, results.first().distanceKm ?: error("missing distance"), 0.0001)
+        assertEquals(2.22, results.last().distanceKm ?: error("missing distance"), 0.05)
+
+        val fiftyFiveKmNorth = opportunity("north").copy(
+            latitude = originLatitude + 0.5,
+            longitude = originLongitude,
+        )
+        val distance = OpportunitySearch.search(
+            opportunities = listOf(fiftyFiveKmNorth),
+            filters = OpportunitySearchFilters(
+                latitude = originLatitude,
+                longitude = originLongitude,
+                sort = OpportunitySearchSort.NEAREST,
+            ),
+            now = now,
+        ).single().distanceKm
+        assertEquals(55.6, distance ?: error("missing distance"), 0.2)
+    }
+
+    @Test
+    fun `nearest sort uses stable soonest fallback without a valid origin`() {
+        val later = opportunity("later", startDate = "2026-10-01T12:00:00Z")
+        val sooner = opportunity("sooner", startDate = "2026-09-01T12:00:00Z")
+
+        assertEquals(
+            listOf("sooner", "later"),
+            OpportunitySearch.search(
+                opportunities = listOf(later, sooner),
+                filters = OpportunitySearchFilters(
+                    latitude = 91.0,
+                    longitude = -79.0,
+                    distanceKm = 25,
+                    sort = OpportunitySearchSort.NEAREST,
+                ),
+                now = now,
+            ).map(Opportunity::id),
+        )
+    }
+
+    @Test
+    fun `coordinate and radius normalization rejects partial nonfinite and out of range values`() {
+        listOf(
+            OpportunitySearchFilters(latitude = 43.0, longitude = null, distanceKm = 25),
+            OpportunitySearchFilters(latitude = Double.NaN, longitude = -79.0, distanceKm = 25),
+            OpportunitySearchFilters(latitude = 43.0, longitude = -181.0, distanceKm = 25),
+        ).forEach { invalid ->
+            val normalized = invalid.normalized()
+            assertEquals(null, normalized.latitude)
+            assertEquals(null, normalized.longitude)
+            assertEquals(25, normalized.distanceKm)
+            assertFalse(normalized.hasValidLocation)
+        }
+
+        val validLocation = OpportunitySearchFilters(
+            latitude = 43.0,
+            longitude = -79.0,
+            distanceKm = 4,
+        ).normalized()
+        assertEquals(43.0, validLocation.latitude ?: error("missing latitude"), 0.0)
+        assertEquals(-79.0, validLocation.longitude ?: error("missing longitude"), 0.0)
+        assertEquals(null, validLocation.distanceKm)
+        assertTrue(validLocation.hasValidLocation)
+    }
+
+    @Test
+    fun `new find filter excludes only explicitly new records`() {
+        val newFind = opportunity("new").copy(isNewFind = true)
+        val known = opportunity("known").copy(isNewFind = false)
+        val unspecified = opportunity("unspecified")
+
+        assertEquals(
+            setOf("known", "unspecified"),
+            OpportunitySearch.search(
+                opportunities = listOf(newFind, known, unspecified),
+                filters = OpportunitySearchFilters(includeNewFinds = false),
+                now = now,
+            ).map(Opportunity::id).toSet(),
+        )
     }
 
     @Test

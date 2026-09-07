@@ -7,3 +7,5 @@
 -keepclassmembers class ** {
     *** Companion;
 }
+# WorkManager persists this worker's class name and creates it reflectively.
+-keep class com.rupayonhaldar.gtafreestem.platform.alerts.OpportunityAlertWorker { <init>(...); }

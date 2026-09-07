@@ -3,6 +3,7 @@ package com.rupayonhaldar.gtafreestem.domain.repository
 import com.rupayonhaldar.gtafreestem.domain.model.Opportunity
 import com.rupayonhaldar.gtafreestem.domain.model.OpportunityFeedSnapshot
 import com.rupayonhaldar.gtafreestem.domain.search.OpportunitySearchFilters
+import com.rupayonhaldar.gtafreestem.localization.AppLanguage
 
 interface OpportunityRepository {
     /** Loads the best validated last-good or bundled snapshot without waiting for the network. */
@@ -16,6 +17,7 @@ interface OpportunityRepository {
     fun search(
         query: String = "",
         filters: OpportunitySearchFilters = OpportunitySearchFilters(),
+        language: AppLanguage = AppLanguage.ENGLISH,
     ): List<Opportunity>
 
     fun findById(id: String): Opportunity?

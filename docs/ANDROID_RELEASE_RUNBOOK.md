@@ -2,17 +2,21 @@
 
 This runbook prepares a GTA FREE STEM Android release candidate. It does not authorize an upload, staged rollout, production rollout, or publication.
 
-Policy notes were reviewed on August 16, 2026. Google Play requirements can change; confirm the live Play Console tasks and linked Google documentation before acting.
+Policy notes were reviewed on August 18, 2026. Google Play requirements can change; confirm the live Play Console tasks and linked Google documentation before acting.
 
 ## Release invariants
 
 - Intended application ID: `com.rupayonhaldar.gtafreestem`
 - Initial release: `versionName` `1.0`, `versionCode` 1
-- Current internal-test update: `versionName` `1.0.1`, `versionCode` 2
+- Historical internal-test update: `versionName` `1.0.1`, `versionCode` 2
+- Current local parity candidate: `versionName` `1.1.0`, `versionCode` 3
 - SDK baseline: compile/target 36, minimum 26
 - Distribution artifact: Android App Bundle (`.aab`)
 - Signing: a private upload key held by the developer, plus mandatory Play App Signing for a new Play app
-- Data posture: local app data; no accounts, ads, analytics, or push notifications; public feed fetched over HTTPS from GitHub/jsDelivr
+- Data posture: local app data; no accounts, ads, analytics, attribution, or push
+  service; one-shot foreground approximate location for opt-in Nearby; opt-in
+  local notifications scheduled by WorkManager; public feed fetched over HTTPS
+  from GitHub/jsDelivr
 - Public pages:
   - Privacy: <https://gta-free-stem.vercel.app/privacy>
   - Support: <https://gta-free-stem.vercel.app/support>
@@ -42,7 +46,7 @@ Official references:
 From the project root, run:
 
 ```bash
-EXPECTED_VERSION_CODE=2 EXPECTED_VERSION_NAME=1.0.1 \
+EXPECTED_VERSION_CODE=3 EXPECTED_VERSION_NAME=1.1.0 \
   ./scripts/verify-release-config.sh
 ```
 
@@ -62,12 +66,14 @@ Record the source commit identifier in the release notes once this project is in
 ## Gate 3: Review privacy and network behavior
 
 1. Review `docs/PRIVACY_AND_DATA_SAFETY_DRAFT.md` against the exact release source and merged manifest.
-2. Inventory every dependency and permission; do not infer Data safety answers only from the visible UI.
-3. Confirm there are no account, ad, analytics, crash-reporting, attribution, or push SDKs.
-4. Confirm every app-managed endpoint uses HTTPS and that the production feed has an offline/error state.
-5. Confirm the merged release manifest still disables Android backup and that the backup/data-extraction rules exclude app data. If a future release enables backup, update the public privacy wording and Data safety analysis before shipping.
-6. Open the privacy, support, and terms URLs from a logged-out browser and confirm they are public, current, mobile-readable, and use a monitored support contact.
-7. Decide the target audience truthfully and complete any Families-policy review required for users under the applicable age of a child.
+2. Inventory every dependency and permission; do not infer Data safety answers only from the visible UI. For this candidate, reconcile the source declarations for `INTERNET`, `ACCESS_COARSE_LOCATION`, and `POST_NOTIFICATIONS` and the normal permissions/components merged by WorkManager, including `ACCESS_NETWORK_STATE`, `WAKE_LOCK`, `RECEIVE_BOOT_COMPLETED`, and `FOREGROUND_SERVICE`.
+3. Confirm there are no account, ad, analytics, crash-reporting, attribution, paid-map, or push SDKs.
+4. Confirm Nearby is started only by an explicit user action, requests approximate rather than precise/background location, uses a single foreground fix, keeps it only in memory, and does not transmit it.
+5. Confirm alerts are opt-in, request notification permission only when needed, schedule unique network-constrained periodic work, compare the downloaded feed with saved filters locally, throttle notifications, and cancel work when disabled. WorkManager timing is inexact; do not promise an exact delivery time.
+6. Confirm every app-managed endpoint uses HTTPS and that foreground and background feed refreshes have bounded failure behavior.
+7. Confirm the merged release manifest still disables Android backup and that the backup/data-extraction rules exclude app data. If a future release enables backup, update the public privacy wording and Data safety analysis before shipping.
+8. Open the privacy, support, and terms URLs from a logged-out browser and confirm they are public, current, mobile-readable, and use a monitored support contact.
+9. Decide the target audience truthfully and complete any Families-policy review required for users under the applicable age of a child.
 
 ## Gate 4: Verify the debug-quality baseline
 
@@ -81,9 +87,13 @@ On representative API 26 and API 36 devices or emulators, manually verify:
 
 - cold launch and relaunch
 - opportunity loading, cached/bundled fallback, retry, empty, and offline states
-- search, filters, saved state, and navigation
+- search, filters, New Finds, list/map switching, saved state, and navigation
+- an explicit Nearby flow for granted, denied, disabled, timeout, clear, and relaunch states; confirm no location persists after process death
+- alert opt-in/opt-out, Android 13+ notification-permission denial, first baseline, new-match notification, throttle, reboot/reschedule, and notification deep link
+- cold- and warm-start deep links plus Opportunities/High School app shortcuts
 - external links and back navigation
-- light/dark themes, font scaling, screen reader labels, focus order, and touch targets
+- branded launch motion and reduced/disabled-animation behavior
+- light/dark themes, all 18 languages including RTL, font scaling, screen reader labels, focus order, and touch targets
 - rotation, narrow phone layouts, tablets, and process restoration
 - uninstall/reinstall and the documented data-deletion/backup behavior
 
@@ -235,16 +245,19 @@ Then:
    shasum -a 256 app/build/outputs/bundle/release/app-release.aab
    ```
 
-3. Inspect the bundle with Android Studio's APK Analyzer or `bundletool` from an official source.
-4. Use Play Console's internal test track and generated APK inspection/pre-launch report before any broader test.
-5. Install a Play-generated build on at least one supported physical device; a locally installed debug APK is not equivalent.
-6. Repeat the critical behavior, accessibility, offline, upgrade, and data-persistence tests against the release build.
+3. Inspect the bundle with Android Studio's APK Analyzer or `bundletool` from an official source. Record the merged permissions and components, bundled native libraries, supported devices/ABIs, and size.
+4. Verify 16 KB page-size compatibility for every packaged native library; do not infer compatibility from `targetSdk` alone.
+5. Use Play Console's internal test track and generated APK inspection/pre-launch report before any broader test.
+6. Install a Play-generated build on at least one supported physical device; a locally installed debug APK is not equivalent.
+7. Repeat the critical behavior, accessibility, offline, location, notification, deep-link, upgrade, and data-persistence tests against the release build.
 
 An AAB's existence or signature does not mean Google accepted it or that it is safe to publish.
 
 ## Gate 8: Play Console handoff
 
-Complete `docs/PLAY_CONSOLE_CHECKLIST.md`. Enroll the new app in Play App Signing, upload only to the intended test track, and preserve:
+Complete `docs/PLAY_CONSOLE_CHECKLIST.md`. Confirm the existing Play App Signing
+enrollment and upload only to the explicitly authorized test track, then
+preserve:
 
 - source commit identifier
 - version name/code and application ID
