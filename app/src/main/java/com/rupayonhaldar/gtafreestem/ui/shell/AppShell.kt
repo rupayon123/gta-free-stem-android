@@ -580,7 +580,7 @@ private fun PrimaryNavigationBar(
                         )
                         val iconHaloSize by animateDpAsState(
                             targetValue = if (isSelected) {
-                                38.dp
+                                38.4.dp
                             } else if (isPressed) {
                                 27.dp
                             } else {
@@ -596,7 +596,7 @@ private fun PrimaryNavigationBar(
                             label = "bottom-nav-icon-halo-size-${destination.name}",
                         )
                         val iconHaloBorderWidth by animateDpAsState(
-                            targetValue = if (isSelected || isPressed) 0.7.dp else 0.dp,
+                            targetValue = if (isSelected || isPressed) 0.74.dp else 0.dp,
                             animationSpec = if (isPressed) {
                                 navPressDpAnimationSpec
                                 } else if (isSelected) {
@@ -1155,7 +1155,7 @@ private fun PrimaryNavigationRail(
                         )
                         val iconHaloSize by animateDpAsState(
                             targetValue = if (isSelected) {
-                                36.dp
+                                36.4.dp
                             } else if (isPressed) {
                                 27.dp
                             } else {
@@ -1171,7 +1171,7 @@ private fun PrimaryNavigationRail(
                             label = "rail-icon-halo-size-${destination.name}",
                         )
                         val iconHaloBorderWidth by animateDpAsState(
-                            targetValue = if (isSelected || isPressed) 0.74.dp else 0.dp,
+                            targetValue = if (isSelected || isPressed) 0.78.dp else 0.dp,
                             animationSpec = if (isPressed) {
                                 navPressDpAnimationSpec
                                 } else if (isSelected) {
