@@ -1329,10 +1329,10 @@ private fun DestinationLabel(
     )
     val labelColor by animateColorAsState(
         targetValue = when {
-            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.86f)
-            isPressed -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.565f)
+            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.84f)
+            isPressed -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.53f)
             isSelected -> MaterialTheme.colorScheme.primary
-            else -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.595f)
+            else -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.56f)
         },
         animationSpec = if (isPressed) {
             navPressColorAnimationSpec
@@ -1344,7 +1344,7 @@ private fun DestinationLabel(
         label = "destination-label-color",
     )
     val labelAlpha by animateFloatAsState(
-        targetValue = if (isPressed && !isSelected) 0.97f else if (isSelected) 1f else 0.98f,
+        targetValue = if (isPressed && !isSelected) 0.985f else if (isSelected) 1f else 0.975f,
         animationSpec = if (isPressed) {
             navPressFloatAnimationSpec
         } else if (isSelected) {
@@ -1356,9 +1356,9 @@ private fun DestinationLabel(
     )
     val labelOffset by animateDpAsState(
         targetValue = when {
-            isPressed && !isSelected -> 0.27.dp
+            isPressed && !isSelected -> 0.2.dp
             isSelected -> 0.dp
-            else -> if (compact) 0.52.dp else 0.42.dp
+            else -> if (compact) 0.48.dp else 0.36.dp
         },
         animationSpec = if (isPressed) {
             navPressDpAnimationSpec
@@ -1371,10 +1371,10 @@ private fun DestinationLabel(
     )
     val labelLift by animateDpAsState(
         targetValue = when {
-            isPressed && !isSelected -> 0.08.dp
+            isPressed && !isSelected -> 0.05.dp
             isPressed && isSelected -> 0.dp
-            isSelected -> (-0.14).dp
-            else -> if (compact) 0.54.dp else 0.38.dp
+            isSelected -> (-0.1).dp
+            else -> if (compact) 0.5.dp else 0.34.dp
         },
         animationSpec = if (isPressed) {
             navPressDpAnimationSpec
@@ -1387,9 +1387,9 @@ private fun DestinationLabel(
     )
     val labelScale by animateFloatAsState(
         targetValue = when {
-            isPressed && !isSelected -> 0.988f
-            isSelected -> 1.002f
-            else -> 0.998f
+            isPressed && !isSelected -> 0.992f
+            isSelected -> 1.001f
+            else -> 0.999f
         },
         animationSpec = if (isPressed) {
             navPressFloatAnimationSpec
@@ -1402,9 +1402,9 @@ private fun DestinationLabel(
     )
     val labelShadowColor by animateColorAsState(
         targetValue = when {
-            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = if (isPressed) 0.06f else 0.07f)
-            isPressed -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.03f)
-            else -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.01f)
+            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = if (isPressed) 0.05f else 0.06f)
+            isPressed -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.025f)
+            else -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.008f)
         },
         animationSpec = if (isPressed) {
             navPressColorAnimationSpec
@@ -1417,7 +1417,7 @@ private fun DestinationLabel(
     )
     val labelShadowRadius by animateFloatAsState(
         targetValue = when {
-            isSelected -> 1.0f
+            isSelected -> 0.95f
             isPressed -> 0.1f
             else -> 0.02f
         },
