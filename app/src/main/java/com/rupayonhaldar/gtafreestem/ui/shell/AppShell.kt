@@ -232,7 +232,7 @@ private fun PrimaryNavigationBar(
                     val selectedPillTopColor by animateColorAsState(
                         targetValue = when {
                             isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.24f)
-                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
+                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.17f)
                             isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.07f)
                             else -> Color.Transparent
                         },
@@ -245,7 +245,7 @@ private fun PrimaryNavigationBar(
                     )
                     val selectedPillBorderColor by animateColorAsState(
                         targetValue = when {
-                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.20f)
+                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.22f)
                             isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)
                             else -> Color.Transparent
                         },
@@ -811,7 +811,7 @@ private fun PrimaryNavigationRail(
                     val selectedPillTopColor by animateColorAsState(
                         targetValue = when {
                             isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.22f)
-                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.18f)
+                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.20f)
                             isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.07f)
                             else -> Color.Transparent
                         },
@@ -824,7 +824,7 @@ private fun PrimaryNavigationRail(
                     )
                     val selectedPillBorderColor by animateColorAsState(
                         targetValue = when {
-                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.19f)
+                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.21f)
                             isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.11f)
                             else -> Color.Transparent
                         },
