@@ -265,7 +265,7 @@ private fun PrimaryNavigationBar(
                     val selectedPillElevation by animateDpAsState(
                         targetValue = when {
                             isPressed && isSelected -> NAV_BOTTOM_NAV_ITEM_PRESSED_SELECTED_ELEVATION.dp
-                            isSelected -> 0.55.dp
+                            isSelected -> NAV_BOTTOM_NAV_ITEM_SELECTED_ELEVATION.dp
                             isPressed -> 0.dp
                             else -> 0.dp
                         },
@@ -323,9 +323,9 @@ private fun PrimaryNavigationBar(
                     val activeItemHeight by animateDpAsState(
                         targetValue = when {
                             isPressed && isSelected -> NAV_BOTTOM_NAV_ITEM_PRESSED_SELECTED_HEIGHT.dp
-                            isSelected -> 58.5.dp
-                            isPressed -> 55.5.dp
-                            else -> 55.5.dp
+                            isSelected -> NAV_BOTTOM_NAV_ITEM_SELECTED_HEIGHT.dp
+                            isPressed -> NAV_BOTTOM_NAV_ITEM_UNSELECTED_HEIGHT.dp
+                            else -> NAV_BOTTOM_NAV_ITEM_UNSELECTED_HEIGHT.dp
                         },
                         animationSpec = if (isPressed) {
                             navPressDpAnimationSpec
@@ -340,7 +340,7 @@ private fun PrimaryNavigationBar(
                         targetValue = when {
                             isPressed && isSelected -> NAV_BOTTOM_NAV_ITEM_SELECTED_PRESS_SCALE
                             isSelected -> NAV_BOTTOM_NAV_ITEM_SELECTED_SCALE
-                            isPressed -> 0.998f
+                            isPressed -> NAV_NAV_ITEM_PRESSED_SCALE
                             else -> 1f
                         },
                         animationSpec = if (isPressed) {
@@ -411,7 +411,7 @@ private fun PrimaryNavigationBar(
                         val iconElevation by animateFloatAsState(
                         targetValue = when {
                             isPressed && isSelected -> NAV_ICON_SELECTED_PRESSED_ELEVATION
-                            isPressed -> 0.8f
+                            isPressed -> NAV_ICON_ELEVATION_PRESSED
                             isSelected -> NAV_ICON_SELECTED_ELEVATION
                             else -> 0f
                         },
@@ -443,7 +443,7 @@ private fun PrimaryNavigationBar(
                     val iconScale by animateFloatAsState(
                         targetValue = when {
                             isSelected && isPressed -> NAV_ICON_SCALE_SELECTED_PRESS_SCALE
-                            isPressed -> 0.999f
+                            isPressed -> NAV_ICON_SCALE_PRESSED
                             isSelected -> NAV_ICON_SCALE_SELECTED
                             else -> 1f
                         },
@@ -875,7 +875,7 @@ private fun PrimaryNavigationRail(
                     val selectedPillElevation by animateDpAsState(
                         targetValue = when {
                             isPressed && isSelected -> NAV_RAIL_ITEM_PRESSED_SELECTED_ELEVATION.dp
-                            isSelected -> 0.55.dp
+                            isSelected -> NAV_RAIL_ITEM_SELECTED_ELEVATION.dp
                             isPressed -> 0.dp
                             else -> 0.dp
                         },
@@ -931,9 +931,9 @@ private fun PrimaryNavigationRail(
                     val activeItemHeight by animateDpAsState(
                         targetValue = when {
                             isPressed && isSelected -> NAV_RAIL_ITEM_PRESSED_SELECTED_HEIGHT.dp
-                            isSelected -> 50.2.dp
-                            isPressed -> 47.8.dp
-                            else -> 47.8.dp
+                            isSelected -> NAV_RAIL_ITEM_SELECTED_HEIGHT.dp
+                            isPressed -> NAV_RAIL_ITEM_UNSELECTED_HEIGHT.dp
+                            else -> NAV_RAIL_ITEM_UNSELECTED_HEIGHT.dp
                         },
                         animationSpec = if (isPressed) {
                             navPressDpAnimationSpec
@@ -946,7 +946,7 @@ private fun PrimaryNavigationRail(
                         targetValue = when {
                             isPressed && isSelected -> NAV_RAIL_ITEM_SELECTED_PRESS_SCALE
                             isSelected -> NAV_RAIL_ITEM_SELECTED_SCALE
-                            isPressed -> 0.998f
+                            isPressed -> NAV_NAV_ITEM_PRESSED_SCALE
                             else -> 1f
                         },
                         animationSpec = if (isPressed) {
@@ -1017,7 +1017,7 @@ private fun PrimaryNavigationRail(
                         val iconElevation by animateFloatAsState(
                         targetValue = when {
                             isPressed && isSelected -> NAV_ICON_SELECTED_PRESSED_ELEVATION
-                            isPressed -> 0.8f
+                            isPressed -> NAV_ICON_ELEVATION_PRESSED
                             isSelected -> NAV_ICON_SELECTED_ELEVATION
                             else -> 0f
                         },
@@ -1049,7 +1049,7 @@ private fun PrimaryNavigationRail(
                         val iconScale by animateFloatAsState(
                             targetValue = when {
                                 isSelected && isPressed -> NAV_ICON_SCALE_SELECTED_PRESS_SCALE
-                                isPressed -> 0.999f
+                                isPressed -> NAV_ICON_SCALE_PRESSED
                                 isSelected -> NAV_ICON_SCALE_SELECTED
                                 else -> 1f
                             },
@@ -1496,18 +1496,25 @@ private const val NAV_BOTTOM_NAV_ITEM_SELECTED_OFFSET_PRESSED_DP = -0.34f
 private const val NAV_RAIL_ITEM_SELECTED_OFFSET_PRESSED_DP = -0.34f
 private const val NAV_BOTTOM_NAV_ITEM_SELECTED_OFFSET_DP = -0.30f
 private const val NAV_RAIL_ITEM_SELECTED_OFFSET_DP = -0.31f
+private const val NAV_BOTTOM_NAV_ITEM_SELECTED_ELEVATION = 0.54f
+private const val NAV_RAIL_ITEM_SELECTED_ELEVATION = 0.54f
 private const val NAV_BOTTOM_NAV_ITEM_PRESSED_SELECTED_ELEVATION = 0.38f
 private const val NAV_BOTTOM_NAV_ITEM_PRESSED_SELECTED_HEIGHT = 57.8f
+private const val NAV_BOTTOM_NAV_ITEM_SELECTED_HEIGHT = 58.5f
+private const val NAV_BOTTOM_NAV_ITEM_UNSELECTED_HEIGHT = 55.5f
 private const val NAV_BOTTOM_NAV_ITEM_SELECTED_SCALE = 1.0019f
 private const val NAV_BOTTOM_NAV_ITEM_SELECTED_CORNER = 19.7f
 private const val NAV_BOTTOM_NAV_ITEM_PRESSED_SELECTED_CORNER = 17.3f
 private const val NAV_BOTTOM_NAV_ITEM_SELECTED_PRESS_SCALE = 0.9992f
 private const val NAV_RAIL_ITEM_PRESSED_SELECTED_ELEVATION = 0.32f
 private const val NAV_RAIL_ITEM_PRESSED_SELECTED_HEIGHT = 49.9f
+private const val NAV_RAIL_ITEM_SELECTED_HEIGHT = 50.2f
+private const val NAV_RAIL_ITEM_UNSELECTED_HEIGHT = 47.8f
 private const val NAV_RAIL_ITEM_SELECTED_SCALE = 1.0013f
 private const val NAV_RAIL_ITEM_SELECTED_CORNER = 18.2f
 private const val NAV_RAIL_ITEM_PRESSED_SELECTED_CORNER = 17.6f
 private const val NAV_RAIL_ITEM_SELECTED_PRESS_SCALE = 0.9992f
+private const val NAV_NAV_ITEM_PRESSED_SCALE = 0.9978f
 private const val NAV_ICON_LIFT_SELECTED_DP = -0.12f
 private const val NAV_ICON_LIFT_PRESSED_DP = -0.24f
 private const val NAV_ICON_LIFT_SELECTED_PRESSED_DP = -0.18f
@@ -1519,6 +1526,8 @@ private const val NAV_ICON_CONTAINER_PRESSED_SELECTED_ALPHA = 0.985f
 private const val NAV_ICON_CONTAINER_PRESSED_ALPHA = 0.99f
 private const val NAV_ICON_SELECTED_PRESSED_ELEVATION = 1.6f
 private const val NAV_ICON_SELECTED_ELEVATION = 1.85f
+private const val NAV_ICON_ELEVATION_PRESSED = 0.8f
+private const val NAV_ICON_SCALE_PRESSED = 0.999f
 private const val NAV_ICON_TINT_SELECTED_PRESSED_ALPHA = 0.95f
 private const val NAV_ICON_CONTAINER_SELECTED_PRESS_SCALE = 0.9994f
 private const val NAV_ICON_CONTAINER_SELECTED_SCALE = 1.0012f
