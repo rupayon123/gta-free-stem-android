@@ -580,11 +580,11 @@ private fun PrimaryNavigationBar(
                         )
                         val iconHaloSize by animateDpAsState(
                             targetValue = if (isSelected) {
-                                37.4.dp
+                                37.6.dp
                             } else if (isPressed) {
-                                26.4.dp
+                                26.1.dp
                             } else {
-                                21.8.dp
+                                21.6.dp
                             },
                             animationSpec = if (isPressed) {
                                 navPressDpAnimationSpec
@@ -1155,11 +1155,11 @@ private fun PrimaryNavigationRail(
                         )
                         val iconHaloSize by animateDpAsState(
                             targetValue = if (isSelected) {
-                                35.6.dp
+                                35.8.dp
                             } else if (isPressed) {
-                                26.2.dp
+                                26.0.dp
                             } else {
-                                22.4.dp
+                                22.2.dp
                             },
                             animationSpec = if (isPressed) {
                                 navPressDpAnimationSpec
