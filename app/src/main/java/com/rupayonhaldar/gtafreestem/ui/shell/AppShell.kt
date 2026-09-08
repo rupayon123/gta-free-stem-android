@@ -142,7 +142,7 @@ private fun PrimaryNavigationBar(
     destinationLabel: (PrimaryDestination) -> String,
 ) {
     val isDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
-    val barShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
+    val barShape = RoundedCornerShape(topStart = 26.dp, topEnd = 26.dp)
     val barSurface = if (isDark) {
         MaterialTheme.colorScheme.surface.copy(alpha = 0.82f)
     } else {
@@ -201,7 +201,7 @@ private fun PrimaryNavigationBar(
             )
         NavigationBar(
             modifier = Modifier
-                .padding(horizontal = 6.dp, top = 0.dp, bottom = 0.dp)
+                .padding(horizontal = 7.dp, top = 0.dp, bottom = 0.dp)
                 .clip(barShape),
             containerColor = barContainer,
             tonalElevation = 0.dp,
@@ -722,7 +722,7 @@ private fun PrimaryNavigationRail(
     destinationLabel: (PrimaryDestination) -> String,
 ) {
     val isDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
-    val railShape = RoundedCornerShape(24.dp)
+    val railShape = RoundedCornerShape(26.dp)
     val railSurface = if (isDark) {
         MaterialTheme.colorScheme.surface.copy(alpha = 0.82f)
     } else {
