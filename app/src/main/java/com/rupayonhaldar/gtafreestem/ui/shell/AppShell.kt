@@ -393,8 +393,8 @@ private fun PrimaryNavigationBar(
                         )
                         val iconElevation by animateFloatAsState(
                         targetValue = when {
-                            isPressed -> 1.6f
-                            isSelected -> 2.65f
+                            isPressed -> 1.5f
+                            isSelected -> 2.52f
                             else -> 0f
                         },
                             animationSpec = if (isPressed) {
@@ -408,8 +408,8 @@ private fun PrimaryNavigationBar(
                         )
                         val iconContainerScale by animateFloatAsState(
                             targetValue = when {
-                                isPressed -> 1.01f
-                                isSelected -> 1.008f
+                                isPressed -> 1.006f
+                                isSelected -> 1.004f
                                 else -> 1f
                             },
                             animationSpec = if (isPressed) {
@@ -423,8 +423,8 @@ private fun PrimaryNavigationBar(
                         )
                         val iconScale by animateFloatAsState(
                         targetValue = when {
-                            isPressed -> 0.995f
-                            isSelected -> 1.003f
+                            isPressed -> 0.997f
+                            isSelected -> 1.002f
                             else -> 1f
                         },
                             animationSpec = if (isPressed) {
@@ -439,7 +439,7 @@ private fun PrimaryNavigationBar(
                         val iconGlyphAlpha by animateFloatAsState(
                             targetValue = when {
                             isSelected -> 1f
-                            isPressed -> 0.875f
+                            isPressed -> 0.885f
                             else -> 0.7f
                             },
                             animationSpec = if (isPressed) {
@@ -454,7 +454,7 @@ private fun PrimaryNavigationBar(
                         val iconContainerAlpha by animateFloatAsState(
                             targetValue = when {
                             isSelected -> 1f
-                            isPressed -> 0.89f
+                            isPressed -> 0.9f
                             else -> 0.71f
                             },
                             animationSpec = if (isPressed) {
@@ -498,7 +498,7 @@ private fun PrimaryNavigationBar(
                         )
                         val iconBackground by animateColorAsState(
                             targetValue = if (isSelected) {
-                                MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.28f)
+                                MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.27f)
                             } else if (isPressed) {
                                 MaterialTheme.colorScheme.primary.copy(alpha = 0.10f)
                             } else {
@@ -968,8 +968,8 @@ private fun PrimaryNavigationRail(
                         )
                         val iconElevation by animateFloatAsState(
                         targetValue = when {
-                            isPressed -> 1.72f
-                            isSelected -> 2.85f
+                            isPressed -> 1.6f
+                            isSelected -> 2.72f
                             else -> 0f
                         },
                             animationSpec = if (isPressed) {
@@ -983,8 +983,8 @@ private fun PrimaryNavigationRail(
                         )
                         val iconContainerScale by animateFloatAsState(
                             targetValue = when {
-                                isPressed -> 1.01f
-                                isSelected -> 1.008f
+                                isPressed -> 1.006f
+                                isSelected -> 1.004f
                                 else -> 1f
                             },
                             animationSpec = if (isPressed) {
@@ -998,8 +998,8 @@ private fun PrimaryNavigationRail(
                         )
                         val iconScale by animateFloatAsState(
                         targetValue = when {
-                            isPressed -> 0.997f
-                            isSelected -> 1.003f
+                            isPressed -> 0.998f
+                            isSelected -> 1.002f
                             else -> 1f
                         },
                             animationSpec = if (isPressed) {
@@ -1014,7 +1014,7 @@ private fun PrimaryNavigationRail(
                         val iconGlyphAlpha by animateFloatAsState(
                             targetValue = when {
                                 isSelected -> 1f
-                                isPressed -> 0.875f
+                                isPressed -> 0.885f
                                 else -> 0.7f
                             },
                             animationSpec = if (isPressed) {
@@ -1029,7 +1029,7 @@ private fun PrimaryNavigationRail(
                         val iconContainerAlpha by animateFloatAsState(
                             targetValue = when {
                                 isSelected -> 1f
-                                isPressed -> 0.89f
+                                isPressed -> 0.9f
                                 else -> 0.71f
                             },
                             animationSpec = if (isPressed) {
@@ -1073,7 +1073,7 @@ private fun PrimaryNavigationRail(
                         )
                         val iconBackground by animateColorAsState(
                             targetValue = if (isSelected) {
-                                MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.28f)
+                                MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.27f)
                             } else if (isPressed) {
                                 MaterialTheme.colorScheme.primary.copy(alpha = 0.10f)
                             } else {
