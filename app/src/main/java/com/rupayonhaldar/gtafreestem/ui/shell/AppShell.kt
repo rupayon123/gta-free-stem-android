@@ -1313,10 +1313,10 @@ private fun DestinationLabel(
     }
     val labelGlowColor by animateColorAsState(
         targetValue = when {
-            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.78f)
-            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.73f)
-            isPressed -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.52f)
-            else -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.56f)
+            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.77f)
+            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.72f)
+            isPressed -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.50f)
+            else -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.55f)
         },
         animationSpec = if (isPressed) {
             navPressColorAnimationSpec
