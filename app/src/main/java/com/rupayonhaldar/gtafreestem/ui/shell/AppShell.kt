@@ -296,6 +296,7 @@ private fun PrimaryNavigationBar(
                     val activeItemShape = RoundedCornerShape(activeItemCorner)
                     val activeItemOffset by animateDpAsState(
                         targetValue = when {
+                            isPressed && !isSelected -> NAV_BOTTOM_NAV_ITEM_OFFSET_PRESSED_DP.dp
                             isSelected -> (-0.30).dp
                             else -> 0.dp
                         },
@@ -876,6 +877,7 @@ private fun PrimaryNavigationRail(
                     val activeItemShape = RoundedCornerShape(activeItemCorner)
                     val activeItemOffset by animateDpAsState(
                         targetValue = when {
+                                isPressed && !isSelected -> NAV_RAIL_ITEM_OFFSET_PRESSED_DP.dp
                                 isSelected -> (-0.32).dp
                                 else -> 0.dp
                         },
@@ -1403,6 +1405,8 @@ private const val NAV_LABEL_PRESS_ALPHA = 0.99f
 private const val NAV_LABEL_PRESSED_ALPHA = 0.82f
 private const val NAV_LABEL_SELECTED_PRESS_ALPHA = 0.98f
 private const val NAV_LABEL_OFFSET_SELECTED_DP = -0.12f
+private const val NAV_BOTTOM_NAV_ITEM_OFFSET_PRESSED_DP = -0.16f
+private const val NAV_RAIL_ITEM_OFFSET_PRESSED_DP = -0.14f
 private const val NAV_ICON_LIFT_SELECTED_DP = -0.12f
 private const val NAV_ICON_LIFT_PRESSED_DP = -0.26f
 private const val NAV_ICON_GLYPH_SELECTED_ALPHA = 1f
