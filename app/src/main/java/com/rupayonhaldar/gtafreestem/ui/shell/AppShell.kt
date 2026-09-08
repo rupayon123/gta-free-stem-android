@@ -205,7 +205,7 @@ private fun PrimaryNavigationBar(
                 .clip(barShape),
             containerColor = barContainer,
             tonalElevation = 0.dp,
-            windowInsets = WindowInsets.safeDrawing.only(
+            windowInsets = WindowInsets.navigationBars.only(
                 WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom,
             ),
         ) {
