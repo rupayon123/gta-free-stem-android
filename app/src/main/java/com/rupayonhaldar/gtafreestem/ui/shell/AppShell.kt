@@ -491,9 +491,9 @@ private fun PrimaryNavigationBar(
                         val iconGlyphSize by animateDpAsState(
                             targetValue = when {
                             isSelected && isPressed -> NAV_ICON_GLYPH_SELECTED_PRESSED_SIZE.dp
-                            isPressed -> 19.3.dp
-                            isSelected -> 20.2.dp
-                            else -> 19.3.dp
+                            isPressed -> NAV_ICON_GLYPH_PRESSED_SIZE.dp
+                            isSelected -> NAV_ICON_GLYPH_SELECTED_SIZE.dp
+                            else -> NAV_ICON_GLYPH_UNSELECTED_SIZE.dp
                             },
                             animationSpec = if (isPressed) {
                                 navPressDpAnimationSpec
@@ -507,9 +507,9 @@ private fun PrimaryNavigationBar(
                         val iconFaceSize by animateDpAsState(
                             targetValue = when {
                             isSelected && isPressed -> NAV_ICON_FACE_SELECTED_PRESSED_SIZE.dp
-                            isPressed -> 33.2.dp
-                            isSelected -> 34.8.dp
-                            else -> 33.8.dp
+                            isPressed -> NAV_ICON_FACE_PRESSED_SIZE.dp
+                            isSelected -> NAV_ICON_FACE_SELECTED_SIZE.dp
+                            else -> NAV_ICON_FACE_UNSELECTED_SIZE.dp
                             },
                             animationSpec = if (isPressed) {
                                 navPressDpAnimationSpec
@@ -1097,9 +1097,9 @@ private fun PrimaryNavigationRail(
                         val iconGlyphSize by animateDpAsState(
                         targetValue = when {
                             isSelected && isPressed -> NAV_ICON_GLYPH_SELECTED_PRESSED_SIZE.dp
-                            isPressed -> 19.3.dp
-                            isSelected -> 20.2.dp
-                            else -> 19.3.dp
+                            isPressed -> NAV_ICON_GLYPH_PRESSED_SIZE.dp
+                            isSelected -> NAV_ICON_GLYPH_SELECTED_SIZE.dp
+                            else -> NAV_ICON_GLYPH_UNSELECTED_SIZE.dp
                             },
                             animationSpec = if (isPressed) {
                                 navPressDpAnimationSpec
@@ -1113,9 +1113,9 @@ private fun PrimaryNavigationRail(
                         val iconFaceSize by animateDpAsState(
                         targetValue = when {
                             isSelected && isPressed -> NAV_ICON_FACE_SELECTED_PRESSED_SIZE.dp
-                            isPressed -> 33.2.dp
-                            isSelected -> 34.8.dp
-                            else -> 33.8.dp
+                            isPressed -> NAV_ICON_FACE_PRESSED_SIZE.dp
+                            isSelected -> NAV_ICON_FACE_SELECTED_SIZE.dp
+                            else -> NAV_ICON_FACE_UNSELECTED_SIZE.dp
                             },
                             animationSpec = if (isPressed) {
                                 navPressDpAnimationSpec
@@ -1543,7 +1543,13 @@ private const val NAV_ICON_CONTAINER_SELECTED_SCALE = 1.0012f
 private const val NAV_ICON_SCALE_SELECTED_PRESS_SCALE = 0.9994f
 private const val NAV_ICON_SCALE_SELECTED = 1.0018f
 private const val NAV_ICON_GLYPH_SELECTED_PRESSED_SIZE = 20.0f
+private const val NAV_ICON_GLYPH_SELECTED_SIZE = 20.2f
+private const val NAV_ICON_GLYPH_PRESSED_SIZE = 19.3f
+private const val NAV_ICON_GLYPH_UNSELECTED_SIZE = 19.3f
 private const val NAV_ICON_FACE_SELECTED_PRESSED_SIZE = 34.4f
+private const val NAV_ICON_FACE_PRESSED_SIZE = 33.2f
+private const val NAV_ICON_FACE_SELECTED_SIZE = 34.8f
+private const val NAV_ICON_FACE_UNSELECTED_SIZE = 33.8f
 private const val NAV_ICON_CONTAINER_UNSELECTED_ALPHA = 0.86f
 private const val NAV_ICON_TINT_PRESSED_ALPHA = 0.9f
 private const val NAV_ICON_GLYPH_SELECTED_PRESSED_ALPHA = 0.985f
