@@ -515,9 +515,9 @@ private fun PrimaryNavigationBar(
                         )
                         val iconFaceGlow by animateColorAsState(
                             targetValue = when {
-                                isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.16f)
-                                isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.14f)
-                                isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.09f)
+                                isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
+                                isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.13f)
+                                isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.08f)
                                 else -> Color.Transparent
                             },
                             animationSpec = if (isPressed) {
@@ -1090,9 +1090,9 @@ private fun PrimaryNavigationRail(
                         )
                         val iconFaceGlow by animateColorAsState(
                             targetValue = when {
-                                isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.16f)
-                                isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
-                                isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.09f)
+                                isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
+                                isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.14f)
+                                isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.08f)
                                 else -> Color.Transparent
                             },
                             animationSpec = if (isPressed) {
