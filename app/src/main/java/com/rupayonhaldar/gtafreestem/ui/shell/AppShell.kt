@@ -245,8 +245,8 @@ private fun PrimaryNavigationBar(
                     )
                     val selectedPillBorderColor by animateColorAsState(
                         targetValue = when {
-                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.090f)
-                            isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.064f)
+                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.102f)
+                            isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.072f)
                             else -> Color.Transparent
                         },
                         animationSpec = if (isPressed) {
@@ -824,8 +824,8 @@ private fun PrimaryNavigationRail(
                     )
                     val selectedPillBorderColor by animateColorAsState(
                         targetValue = when {
-                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.090f)
-                            isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.064f)
+                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.102f)
+                            isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.072f)
                             else -> Color.Transparent
                         },
                         animationSpec = if (isPressed) {
@@ -1356,7 +1356,7 @@ private fun DestinationLabel(
     )
     val labelOffset by animateDpAsState(
         targetValue = when {
-            isPressed && !isSelected -> 0.14.dp
+            isPressed && !isSelected -> 0.13.dp
             isSelected -> (-0.03).dp
             else -> if (compact) 0.18.dp else 0.14.dp
         },
@@ -1371,7 +1371,7 @@ private fun DestinationLabel(
     )
     val labelLift by animateDpAsState(
         targetValue = when {
-            isPressed && !isSelected -> 0.03.dp
+            isPressed && !isSelected -> 0.02.dp
             isPressed && isSelected -> 0.dp
             isSelected -> (-0.13).dp
             else -> if (compact) 0.18.dp else 0.14.dp
@@ -1387,7 +1387,7 @@ private fun DestinationLabel(
     )
     val labelScale by animateFloatAsState(
         targetValue = when {
-            isPressed && !isSelected -> 0.9961f
+            isPressed && !isSelected -> 0.9962f
             isSelected -> 1.0004f
             else -> 0.9994f
         },
@@ -1434,7 +1434,7 @@ private fun DestinationLabel(
         text = label,
         modifier = Modifier
             .offset(y = labelOffset + labelLift)
-            .scale(labelScale),
+                    .scale(labelScale),
         color = if (isSelected) {
             labelColor.copy(alpha = labelAlpha)
         } else {
