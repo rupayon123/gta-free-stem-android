@@ -1307,7 +1307,7 @@ private fun DestinationLabel(
         MaterialTheme.typography.labelSmall.copy(
             fontSize = if (isSelected) 12.2.sp else if (isPressed) 11.88.sp else 11.62.sp,
             lineHeight = if (isPressed) 12.68.sp else 12.74.sp,
-            fontWeight = if (isSelected) FontWeight.Medium else if (isPressed) FontWeight.Medium else FontWeight.Normal,
+            fontWeight = if (isSelected) FontWeight.SemiBold else if (isPressed) FontWeight.Medium else FontWeight.Normal,
             letterSpacing = 0.00.sp,
         )
     }
