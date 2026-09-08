@@ -636,12 +636,12 @@ private fun PrimaryNavigationBar(
                                     ),
                                 )
                                 .border(
-                                    border = BorderStroke(
-                                        width = iconHaloBorderWidth,
-                                    color = if (isSelected) {
-                                            MaterialTheme.colorScheme.primary.copy(alpha = 0.17f)
+                                border = BorderStroke(
+                                    width = iconHaloBorderWidth,
+                                color = if (isSelected) {
+                                            MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)
                                         } else if (isPressed) {
-                                            MaterialTheme.colorScheme.primary.copy(alpha = 0.05f)
+                                            MaterialTheme.colorScheme.primary.copy(alpha = 0.04f)
                                         } else {
                                             Color.Transparent
                                         },
@@ -673,7 +673,7 @@ private fun PrimaryNavigationBar(
                                     ),
                                     .border(
                                         border = BorderStroke(
-                                            width = 0.5.dp,
+                                            width = 0.38.dp,
                                             color = iconFaceGlow,
                                         ),
                                         shape = RoundedCornerShape(iconFaceSize / 2),
@@ -1210,12 +1210,12 @@ private fun PrimaryNavigationRail(
                                     ),
                                 )
                                 .border(
-                                    border = BorderStroke(
-                                        width = iconHaloBorderWidth,
-                                    color = if (isSelected) {
-                                            MaterialTheme.colorScheme.primary.copy(alpha = 0.145f)
+                                border = BorderStroke(
+                                    width = iconHaloBorderWidth,
+                                color = if (isSelected) {
+                                            MaterialTheme.colorScheme.primary.copy(alpha = 0.11f)
                                         } else if (isPressed) {
-                                            MaterialTheme.colorScheme.primary.copy(alpha = 0.04f)
+                                            MaterialTheme.colorScheme.primary.copy(alpha = 0.03f)
                                         } else {
                                             Color.Transparent
                                         },
@@ -1247,7 +1247,7 @@ private fun PrimaryNavigationRail(
                                     )
                                     .border(
                                         border = BorderStroke(
-                                            width = 0.45.dp,
+                                            width = 0.35.dp,
                                             color = iconFaceGlow,
                                         ),
                                         shape = RoundedCornerShape(iconFaceSize / 2),
