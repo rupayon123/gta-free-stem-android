@@ -144,9 +144,9 @@ private fun PrimaryNavigationBar(
     val isDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
     val barShape = RoundedCornerShape(topStart = 26.dp, topEnd = 26.dp)
     val barSurface = if (isDark) {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.82f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.84f)
     } else {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.90f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.92f)
     }
     val barBorder = if (isDark) {
         Color.White.copy(alpha = 0.10f)
@@ -159,9 +159,9 @@ private fun PrimaryNavigationBar(
         MaterialTheme.colorScheme.primary.copy(alpha = 0.030f)
     }
     val barContainer = if (isDark) {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.58f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.62f)
     } else {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.72f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.76f)
     }
 
     Surface(
@@ -724,9 +724,9 @@ private fun PrimaryNavigationRail(
     val isDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
     val railShape = RoundedCornerShape(26.dp)
     val railSurface = if (isDark) {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.82f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.84f)
     } else {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.90f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.92f)
     }
     val railBorder = if (isDark) {
         Color.White.copy(alpha = 0.10f)
@@ -739,9 +739,9 @@ private fun PrimaryNavigationRail(
         MaterialTheme.colorScheme.primary.copy(alpha = 0.030f)
     }
     val railContainer = if (isDark) {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.60f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.63f)
     } else {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.72f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.75f)
     }
 
     Surface(
