@@ -1330,7 +1330,12 @@ private fun DestinationLabel(
         label = "destination-label-color",
     )
     val labelAlpha by animateFloatAsState(
-        targetValue = if (isPressed && !isSelected) NAV_LABEL_PRESS_ALPHA else if (isSelected) 1f else NAV_LABEL_UNSELECTED_VISIBILITY_ALPHA,
+        targetValue = when {
+            isPressed && isSelected -> NAV_LABEL_SELECTED_PRESS_ALPHA_VISIBILITY
+            isPressed && !isSelected -> NAV_LABEL_PRESS_ALPHA
+            isSelected -> 1f
+            else -> NAV_LABEL_UNSELECTED_VISIBILITY_ALPHA
+        },
         animationSpec = if (isPressed) {
             navPressFloatAnimationSpec
         } else if (isSelected) {
@@ -1342,6 +1347,7 @@ private fun DestinationLabel(
     )
     val labelOffset by animateDpAsState(
         targetValue = when {
+            isSelected && isPressed -> NAV_LABEL_OFFSET_SELECTED_PRESSED_DP.dp
             isSelected -> NAV_LABEL_OFFSET_SELECTED_DP.dp
             isPressed -> 0.dp
             else -> 0.dp
@@ -1357,6 +1363,7 @@ private fun DestinationLabel(
     )
     val labelScale by animateFloatAsState(
         targetValue = when {
+            isPressed && isSelected -> NAV_LABEL_SELECTED_PRESS_SCALE
             isPressed && !isSelected -> NAV_LABEL_PRESS_SCALE
             isSelected -> NAV_LABEL_SELECTED_SCALE
             else -> 1f
@@ -1404,7 +1411,10 @@ private const val NAV_LABEL_PRESS_SCALE = 0.9975f
 private const val NAV_LABEL_PRESS_ALPHA = 0.99f
 private const val NAV_LABEL_PRESSED_ALPHA = 0.82f
 private const val NAV_LABEL_SELECTED_PRESS_ALPHA = 0.98f
+private const val NAV_LABEL_SELECTED_PRESS_ALPHA_VISIBILITY = 0.985f
 private const val NAV_LABEL_OFFSET_SELECTED_DP = -0.12f
+private const val NAV_LABEL_OFFSET_SELECTED_PRESSED_DP = -0.10f
+private const val NAV_LABEL_SELECTED_PRESS_SCALE = 1.0065f
 private const val NAV_BOTTOM_NAV_ITEM_OFFSET_PRESSED_DP = -0.16f
 private const val NAV_RAIL_ITEM_OFFSET_PRESSED_DP = -0.14f
 private const val NAV_ICON_LIFT_SELECTED_DP = -0.12f
