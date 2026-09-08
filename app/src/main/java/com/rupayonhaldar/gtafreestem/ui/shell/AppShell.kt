@@ -627,7 +627,7 @@ private fun PrimaryNavigationBar(
                             label = "bottom-nav-icon-halo-size-${destination.name}",
                         )
                         val iconHaloBorderWidth by animateDpAsState(
-                            targetValue = if (isSelected) NAV_NAV_ITEM_ACTIVE_BORDER.dp else if (isPressed) NAV_ICON_HALO_BORDER_PRESSED.dp else 0.dp,
+                            targetValue = if (isSelected) NAV_ICON_HALO_BORDER_SELECTED.dp else if (isPressed) NAV_ICON_HALO_BORDER_PRESSED.dp else NAV_ICON_HALO_BORDER_UNSELECTED.dp,
                             animationSpec = if (isPressed) {
                                 navPressDpAnimationSpec
                                 } else if (isSelected) {
@@ -1233,7 +1233,7 @@ private fun PrimaryNavigationRail(
                             label = "rail-icon-halo-size-${destination.name}",
                         )
                         val iconHaloBorderWidth by animateDpAsState(
-                            targetValue = if (isSelected) NAV_NAV_ITEM_ACTIVE_BORDER.dp else if (isPressed) NAV_ICON_HALO_BORDER_PRESSED.dp else 0.dp,
+                            targetValue = if (isSelected) NAV_ICON_HALO_BORDER_SELECTED.dp else if (isPressed) NAV_ICON_HALO_BORDER_PRESSED.dp else NAV_ICON_HALO_BORDER_UNSELECTED.dp,
                             animationSpec = if (isPressed) {
                                 navPressDpAnimationSpec
                                 } else if (isSelected) {
@@ -1566,6 +1566,9 @@ private const val NAV_ICON_HALO_HIGHLIGHT_SELECTED_ALPHA = 0.024f
 private const val NAV_ICON_HALO_HIGHLIGHT_PRESSED_ONLY_ALPHA = 0.01f
 private const val NAV_ICON_HALO_BORDER_SELECTED_ALPHA = 0.06f
 private const val NAV_ICON_HALO_BORDER_PRESSED_ALPHA = 0.028f
+private const val NAV_ICON_HALO_BORDER_SELECTED = 0.42f
+private const val NAV_ICON_HALO_BORDER_PRESSED = 0.16f
+private const val NAV_ICON_HALO_BORDER_UNSELECTED = 0f
 private const val NAV_ICON_SHADOW_SELECTED_PRESSED_ALPHA = 0.024f
 private const val NAV_ICON_SHADOW_SELECTED_ALPHA = 0.028f
 private const val NAV_ICON_BACKGROUND_SELECTED_ALPHA = 0.20f
@@ -1581,7 +1584,6 @@ private const val NAV_ICON_FACE_BORDER = 0.35f
 private const val NAV_NAV_ITEM_PRESSED_ALPHA = 0.02f
 private const val NAV_ICON_HALO_HIGHLIGHT_PRESSED_ALPHA = 0.018f
 private const val NAV_NAV_ITEM_ICON_SHADOW_PRESSED_ALPHA = 0.018f
-private const val NAV_ICON_HALO_BORDER_PRESSED = 0.16f
 private const val NAV_ICON_HALO_SIZE_UNSELECTED = 21.8f
 private const val NAV_ICON_HALO_SIZE_PRESSED = 30f
 private const val NAV_ICON_HALO_SIZE_SELECTED = 35f
