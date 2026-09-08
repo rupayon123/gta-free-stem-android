@@ -1391,9 +1391,9 @@ private fun DestinationLabel(
     )
     val labelScale by animateFloatAsState(
         targetValue = when {
-            isPressed && !isSelected -> 0.9966f
-            isSelected -> 1.0010f
-            else -> 0.9992f
+            isPressed && !isSelected -> 0.9968f
+            isSelected -> 1.0012f
+            else -> 0.9991f
         },
         animationSpec = if (isPressed) {
             navPressFloatAnimationSpec
