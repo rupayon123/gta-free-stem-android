@@ -222,8 +222,8 @@ private fun PrimaryNavigationBar(
                     val isPressed by destinationInteractionSource.collectIsPressedAsState()
                     val selectedPillColor by animateColorAsState(
                         targetValue = when {
-                            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.11f)
-                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.085f)
+                            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PILL_SELECTED_PRESSED_ALPHA)
+                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PILL_SELECTED_ALPHA)
                             isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PRESSED_ALPHA)
                             else -> Color.Transparent
                         },
@@ -236,8 +236,8 @@ private fun PrimaryNavigationBar(
                     )
                     val selectedPillTopColor by animateColorAsState(
                         targetValue = when {
-                            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.09f)
-                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.072f)
+                            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PILL_TOP_SELECTED_PRESSED_ALPHA)
+                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PILL_TOP_SELECTED_ALPHA)
                             isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PRESSED_ALPHA)
                             else -> Color.Transparent
                         },
@@ -250,9 +250,9 @@ private fun PrimaryNavigationBar(
                     )
                     val selectedPillBorderColor by animateColorAsState(
                         targetValue = when {
-                            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.065f)
-                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.08f)
-                            isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.03f)
+                            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PILL_BORDER_SELECTED_PRESSED_ALPHA)
+                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PILL_BORDER_SELECTED_ALPHA)
+                            isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PILL_BORDER_PRESSED_ALPHA)
                             else -> Color.Transparent
                         },
                         animationSpec = if (isPressed) {
@@ -832,8 +832,8 @@ private fun PrimaryNavigationRail(
                     val isPressed by destinationInteractionSource.collectIsPressedAsState()
                     val selectedPillColor by animateColorAsState(
                         targetValue = when {
-                            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.11f)
-                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.085f)
+                            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PILL_SELECTED_PRESSED_ALPHA)
+                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PILL_SELECTED_ALPHA)
                             isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PRESSED_ALPHA)
                             else -> Color.Transparent
                         },
@@ -846,8 +846,8 @@ private fun PrimaryNavigationRail(
                     )
                     val selectedPillTopColor by animateColorAsState(
                         targetValue = when {
-                            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.09f)
-                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.072f)
+                            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PILL_TOP_SELECTED_PRESSED_ALPHA)
+                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PILL_TOP_SELECTED_ALPHA)
                             isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PRESSED_ALPHA)
                             else -> Color.Transparent
                         },
@@ -860,9 +860,9 @@ private fun PrimaryNavigationRail(
                     )
                     val selectedPillBorderColor by animateColorAsState(
                         targetValue = when {
-                            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.065f)
-                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.08f)
-                            isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.03f)
+                            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PILL_BORDER_SELECTED_PRESSED_ALPHA)
+                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PILL_BORDER_SELECTED_ALPHA)
+                            isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PILL_BORDER_PRESSED_ALPHA)
                             else -> Color.Transparent
                         },
                         animationSpec = if (isPressed) {
@@ -1550,6 +1550,13 @@ private const val NAV_ICON_GLYPH_SELECTED_PRESSED_ALPHA = 0.985f
 private const val NAV_NAV_ITEM_ACTIVE_BORDER = 0.42f
 private const val NAV_NAV_ITEM_ACTIVE_SHADOW_DARK_ALPHA = 0.18f
 private const val NAV_NAV_ITEM_ACTIVE_SHADOW_LIGHT_ALPHA = 0.10f
+private const val NAV_NAV_ITEM_PILL_SELECTED_PRESSED_ALPHA = 0.105f
+private const val NAV_NAV_ITEM_PILL_SELECTED_ALPHA = 0.082f
+private const val NAV_NAV_ITEM_PILL_TOP_SELECTED_PRESSED_ALPHA = 0.088f
+private const val NAV_NAV_ITEM_PILL_TOP_SELECTED_ALPHA = 0.071f
+private const val NAV_NAV_ITEM_PILL_BORDER_SELECTED_PRESSED_ALPHA = 0.064f
+private const val NAV_NAV_ITEM_PILL_BORDER_SELECTED_ALPHA = 0.078f
+private const val NAV_NAV_ITEM_PILL_BORDER_PRESSED_ALPHA = 0.028f
 private const val NAV_ICON_FACE_BORDER = 0.35f
 private const val NAV_NAV_ITEM_PRESSED_ALPHA = 0.02f
 private const val NAV_ICON_HALO_HIGHLIGHT_PRESSED_ALPHA = 0.018f
