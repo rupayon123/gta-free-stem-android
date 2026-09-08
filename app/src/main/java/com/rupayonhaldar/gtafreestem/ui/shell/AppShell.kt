@@ -215,7 +215,7 @@ private fun PrimaryNavigationBar(
                     val isPressed by destinationInteractionSource.collectIsPressedAsState()
                     val selectedPillColor by animateColorAsState(
                         targetValue = when {
-                            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.13f)
+                            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.11f)
                             isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.085f)
                             isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.018f)
                             else -> Color.Transparent
@@ -229,7 +229,7 @@ private fun PrimaryNavigationBar(
                     )
                     val selectedPillTopColor by animateColorAsState(
                         targetValue = when {
-                            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.10f)
+                            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.09f)
                             isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.072f)
                             isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.018f)
                             else -> Color.Transparent
@@ -243,6 +243,7 @@ private fun PrimaryNavigationBar(
                     )
                     val selectedPillBorderColor by animateColorAsState(
                         targetValue = when {
+                            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.065f)
                             isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.08f)
                             isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.03f)
                             else -> Color.Transparent
@@ -517,7 +518,7 @@ private fun PrimaryNavigationBar(
                         )
                         val iconFaceGlow by animateColorAsState(
                             targetValue = when {
-                                isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.06f)
+                                isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.05f)
                                 isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.05f)
                                 isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.02f)
                                 else -> Color.Transparent
@@ -549,7 +550,9 @@ private fun PrimaryNavigationBar(
                             label = "bottom-nav-icon-tint-${destination.name}",
                         )
                         val iconHalo by animateColorAsState(
-                            targetValue = if (isSelected) {
+                            targetValue = if (isSelected && isPressed) {
+                                MaterialTheme.colorScheme.primary.copy(alpha = 0.032f)
+                            } else if (isSelected) {
                                 MaterialTheme.colorScheme.primary.copy(alpha = 0.045f)
                             } else if (isPressed) {
                                 MaterialTheme.colorScheme.primary.copy(alpha = 0.012f)
@@ -566,7 +569,9 @@ private fun PrimaryNavigationBar(
                             label = "bottom-nav-icon-halo-${destination.name}",
                         )
                         val iconHaloHighlight by animateColorAsState(
-                            targetValue = if (isSelected) {
+                            targetValue = if (isSelected && isPressed) {
+                                MaterialTheme.colorScheme.primary.copy(alpha = 0.018f)
+                            } else if (isSelected) {
                                 MaterialTheme.colorScheme.primary.copy(alpha = 0.024f)
                             } else if (isPressed) {
                                 MaterialTheme.colorScheme.primary.copy(alpha = 0.010f)
@@ -800,7 +805,7 @@ private fun PrimaryNavigationRail(
                     val isPressed by destinationInteractionSource.collectIsPressedAsState()
                     val selectedPillColor by animateColorAsState(
                         targetValue = when {
-                            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)
+                            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.11f)
                             isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.085f)
                             isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.018f)
                             else -> Color.Transparent
@@ -814,7 +819,7 @@ private fun PrimaryNavigationRail(
                     )
                     val selectedPillTopColor by animateColorAsState(
                         targetValue = when {
-                            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.10f)
+                            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.09f)
                             isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.072f)
                             isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.018f)
                             else -> Color.Transparent
@@ -828,6 +833,7 @@ private fun PrimaryNavigationRail(
                     )
                     val selectedPillBorderColor by animateColorAsState(
                         targetValue = when {
+                            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.065f)
                             isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.08f)
                             isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.03f)
                             else -> Color.Transparent
@@ -1098,7 +1104,7 @@ private fun PrimaryNavigationRail(
                         )
                         val iconFaceGlow by animateColorAsState(
                             targetValue = when {
-                                isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.06f)
+                                isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.05f)
                                 isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.05f)
                                 isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.02f)
                                 else -> Color.Transparent
@@ -1130,7 +1136,9 @@ private fun PrimaryNavigationRail(
                             label = "rail-icon-tint-${destination.name}",
                         )
                         val iconHalo by animateColorAsState(
-                            targetValue = if (isSelected) {
+                            targetValue = if (isSelected && isPressed) {
+                                MaterialTheme.colorScheme.primary.copy(alpha = 0.032f)
+                            } else if (isSelected) {
                                 MaterialTheme.colorScheme.primary.copy(alpha = 0.045f)
                             } else if (isPressed) {
                                 MaterialTheme.colorScheme.primary.copy(alpha = 0.012f)
@@ -1147,7 +1155,9 @@ private fun PrimaryNavigationRail(
                             label = "rail-icon-halo-${destination.name}",
                         )
                         val iconHaloHighlight by animateColorAsState(
-                            targetValue = if (isSelected) {
+                            targetValue = if (isSelected && isPressed) {
+                                MaterialTheme.colorScheme.primary.copy(alpha = 0.018f)
+                            } else if (isSelected) {
                                 MaterialTheme.colorScheme.primary.copy(alpha = 0.024f)
                             } else if (isPressed) {
                                 MaterialTheme.colorScheme.primary.copy(alpha = 0.010f)
