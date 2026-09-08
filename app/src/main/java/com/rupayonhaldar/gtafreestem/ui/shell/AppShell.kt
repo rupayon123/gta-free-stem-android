@@ -1460,7 +1460,7 @@ private fun DestinationLabel(
             isPressed && isSelected -> NAV_LABEL_SELECTED_PRESS_SCALE
             isPressed && !isSelected -> NAV_LABEL_PRESS_SCALE
             isSelected -> NAV_LABEL_SELECTED_SCALE
-            else -> 1f
+            else -> NAV_LABEL_UNSELECTED_SCALE
         },
         animationSpec = if (isPressed) {
             navPressFloatAnimationSpec
@@ -1500,6 +1500,7 @@ private val navSelectedSettleDpAnimationSpec = tween<Dp>(220, easing = FastOutSl
 private const val NAV_UNSELECTED_LABEL_ALPHA = 0.68f
 private const val NAV_LABEL_UNSELECTED_ALPHA = 0.84f
 private const val NAV_LABEL_UNSELECTED_VISIBILITY_ALPHA = 0.985f
+private const val NAV_LABEL_UNSELECTED_SCALE = 1f
 private const val NAV_LABEL_SELECTED_SCALE = 1.005f
 private const val NAV_LABEL_PRESS_SCALE = 0.9992f
 private const val NAV_LABEL_COMPACT_FONT_SELECTED = 12.15f
@@ -1511,7 +1512,7 @@ private const val NAV_LABEL_RAIL_FONT_UNSELECTED = 11.7f
 private const val NAV_LABEL_RAIL_LINE_HEIGHT_SELECTED = 13.6f
 private const val NAV_LABEL_RAIL_LINE_HEIGHT_UNSELECTED = 12.9f
 private const val NAV_LABEL_LETTER_SPACING = 0.01f
-private const val NAV_LABEL_PRESS_ALPHA = 0.99f
+private const val NAV_LABEL_PRESS_ALPHA = 0.96f
 private const val NAV_LABEL_PRESSED_ALPHA = 0.88f
 private const val NAV_LABEL_SELECTED_PRESS_ALPHA = 0.995f
 private const val NAV_LABEL_SELECTED_PRESS_ALPHA_VISIBILITY = 0.992f
