@@ -1299,14 +1299,14 @@ private fun DestinationLabel(
     val resolvedStyle = if (compact) {
         MaterialTheme.typography.labelSmall.copy(
             fontSize = if (isSelected) 12.50.sp else if (isPressed) 12.04.sp else 12.02.sp,
-            lineHeight = if (isPressed) 13.30.sp else if (isSelected) 13.72.sp else 13.64.sp,
+            lineHeight = if (isPressed) 13.26.sp else if (isSelected) 13.72.sp else 13.64.sp,
             fontWeight = if (isSelected) FontWeight.SemiBold else if (isPressed) FontWeight.Medium else FontWeight.Normal,
             letterSpacing = 0.00.sp,
         )
     } else {
         MaterialTheme.typography.labelSmall.copy(
             fontSize = if (isSelected) 12.33.sp else if (isPressed) 11.98.sp else 11.66.sp,
-            lineHeight = if (isPressed) 12.76.sp else if (isSelected) 12.90.sp else 12.80.sp,
+            lineHeight = if (isPressed) 12.73.sp else if (isSelected) 12.90.sp else 12.80.sp,
             fontWeight = if (isSelected) FontWeight.SemiBold else if (isPressed) FontWeight.Medium else FontWeight.Normal,
             letterSpacing = 0.00.sp,
         )
@@ -1344,7 +1344,7 @@ private fun DestinationLabel(
         label = "destination-label-color",
     )
     val labelAlpha by animateFloatAsState(
-        targetValue = if (isPressed && !isSelected) 0.985f else if (isSelected) 1f else 0.966f,
+        targetValue = if (isPressed && !isSelected) 0.987f else if (isSelected) 1f else 0.968f,
         animationSpec = if (isPressed) {
             navPressFloatAnimationSpec
         } else if (isSelected) {
@@ -1417,8 +1417,8 @@ private fun DestinationLabel(
     )
     val labelShadowRadius by animateFloatAsState(
         targetValue = when {
-            isSelected -> 0.28f
-            isPressed -> 0.04f
+            isSelected -> 0.27f
+            isPressed -> 0.042f
             else -> 0.01f
         },
         animationSpec = if (isPressed) {
