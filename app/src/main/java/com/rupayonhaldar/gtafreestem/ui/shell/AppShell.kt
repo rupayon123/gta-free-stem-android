@@ -271,9 +271,9 @@ private fun PrimaryNavigationBar(
                     )
                     val activeNavItemWidth by animateDpAsState(
                         targetValue = when {
-                            isSelected -> 78.2.dp
-                            isPressed -> 71.8.dp
-                            else -> 69.4.dp
+                            isSelected -> 79.6.dp
+                            isPressed -> 72.6.dp
+                            else -> 70.2.dp
                         },
                         animationSpec = if (isPressed) {
                             navPressDpAnimationSpec
@@ -313,9 +313,9 @@ private fun PrimaryNavigationBar(
                     )
                     val activeItemHeight by animateDpAsState(
                         targetValue = when {
-                            isSelected -> 57.6.dp
-                            isPressed -> 54.6.dp
-                            else -> 53.9.dp
+                            isSelected -> 58.2.dp
+                            isPressed -> 54.8.dp
+                            else -> 54.0.dp
                         },
                         animationSpec = if (isPressed) {
                             navPressDpAnimationSpec
@@ -850,9 +850,9 @@ private fun PrimaryNavigationRail(
                     )
                     val activeNavItemWidth by animateDpAsState(
                         targetValue = when {
-                            isSelected -> 86.6.dp
+                            isSelected -> 87.8.dp
                             isPressed -> 77.8.dp
-                            else -> 75.2.dp
+                            else -> 76.0.dp
                         },
                         animationSpec = if (isPressed) {
                             navPressDpAnimationSpec
@@ -890,9 +890,9 @@ private fun PrimaryNavigationRail(
                     )
                     val activeItemHeight by animateDpAsState(
                         targetValue = when {
-                            isSelected -> 49.8.dp
-                            isPressed -> 47.9.dp
-                            else -> 47.8.dp
+                            isSelected -> 50.2.dp
+                            isPressed -> 48.2.dp
+                            else -> 48.0.dp
                         },
                         animationSpec = if (isPressed) {
                             navPressDpAnimationSpec
