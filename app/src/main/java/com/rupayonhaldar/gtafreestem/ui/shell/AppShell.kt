@@ -1275,6 +1275,8 @@ private fun DestinationLabel(
         targetValue = if (isPressed && !isSelected) 0.97f else if (isSelected) 1f else 0.98f,
         animationSpec = if (isPressed) {
             navPressFloatAnimationSpec
+        } else if (isSelected) {
+            navSelectedSettleFloatAnimationSpec
         } else {
             navSelectionFloatAnimationSpec
         },
@@ -1288,6 +1290,8 @@ private fun DestinationLabel(
         },
         animationSpec = if (isPressed) {
             navPressDpAnimationSpec
+        } else if (isSelected) {
+            navSelectedSettleDpAnimationSpec
         } else {
             navSelectionDpAnimationSpec
         },
@@ -1302,6 +1306,8 @@ private fun DestinationLabel(
         },
         animationSpec = if (isPressed) {
             navPressDpAnimationSpec
+        } else if (isSelected) {
+            navSelectedSettleDpAnimationSpec
         } else {
             navSelectionDpAnimationSpec
         },
@@ -1315,6 +1321,8 @@ private fun DestinationLabel(
         },
         animationSpec = if (isPressed) {
             navPressFloatAnimationSpec
+        } else if (isSelected) {
+            navSelectedSettleFloatAnimationSpec
         } else {
             navSelectionFloatAnimationSpec
         },
@@ -1341,6 +1349,8 @@ private fun DestinationLabel(
         },
         animationSpec = if (isPressed) {
             navPressFloatAnimationSpec
+        } else if (isSelected) {
+            navSelectedSettleFloatAnimationSpec
         } else {
             navSelectionFloatAnimationSpec
         },
