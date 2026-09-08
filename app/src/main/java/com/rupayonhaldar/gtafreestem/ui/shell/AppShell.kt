@@ -350,7 +350,7 @@ private fun PrimaryNavigationBar(
                             .shadow(
                                 elevation = selectedPillElevation,
                                 shape = activeItemShape,
-                                ambientColor = selectedPillBorderColor.copy(alpha = if (isDark) 0.24f else 0.14f),
+                                ambientColor = selectedPillBorderColor.copy(alpha = if (isDark) 0.23f else 0.13f),
                                 spotColor = selectedPillColor,
                             )
                             .background(
@@ -925,7 +925,7 @@ private fun PrimaryNavigationRail(
                             .shadow(
                                 elevation = selectedPillElevation,
                                 shape = activeItemShape,
-                                ambientColor = selectedPillBorderColor.copy(alpha = 0.22f),
+                                ambientColor = selectedPillBorderColor.copy(alpha = 0.21f),
                                 spotColor = selectedPillColor,
                             )
                             .background(
@@ -1402,7 +1402,7 @@ private fun DestinationLabel(
     )
     val labelShadowColor by animateColorAsState(
         targetValue = when {
-            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = if (isPressed) 0.07f else 0.08f)
+            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = if (isPressed) 0.06f else 0.07f)
             isPressed -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.03f)
             else -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.01f)
         },
