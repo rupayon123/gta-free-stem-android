@@ -190,11 +190,11 @@ private fun PrimaryNavigationBar(
                         colors = listOf(
                             Color.Transparent,
                             if (isDark) {
-                                Color.White.copy(alpha = 0.026f)
+                                Color.White.copy(alpha = 0.02f)
                             } else {
-                                Color.Black.copy(alpha = 0.012f)
+                                Color.Black.copy(alpha = 0.01f)
                             },
-                            MaterialTheme.colorScheme.onSurface.copy(alpha = if (isDark) 0.048f else 0.03f),
+                            MaterialTheme.colorScheme.onSurface.copy(alpha = if (isDark) 0.042f else 0.026f),
                         ),
                     ),
                 ),
@@ -770,11 +770,11 @@ private fun PrimaryNavigationRail(
                     Brush.horizontalGradient(
                         colors = listOf(
                             if (isDark) {
-                                Color.White.copy(alpha = 0.024f)
+                                Color.White.copy(alpha = 0.019f)
                             } else {
-                                Color.Black.copy(alpha = 0.012f)
+                                Color.Black.copy(alpha = 0.01f)
                             },
-                            MaterialTheme.colorScheme.onSurface.copy(alpha = if (isDark) 0.048f else 0.03f),
+                            MaterialTheme.colorScheme.onSurface.copy(alpha = if (isDark) 0.042f else 0.026f),
                             Color.Transparent,
                         ),
                     ),
