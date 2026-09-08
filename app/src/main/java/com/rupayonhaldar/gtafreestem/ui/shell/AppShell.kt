@@ -169,19 +169,19 @@ private fun PrimaryNavigationBar(
             .padding(horizontal = 12.dp, vertical = 5.6.dp),
         shape = barShape,
         color = barSurface,
-        tonalElevation = 4.88.dp,
-        shadowElevation = 6.4.dp,
+        tonalElevation = NAV_SHELL_BAR_TONAL_ELEVATION.dp,
+        shadowElevation = NAV_SHELL_BAR_SHADOW_ELEVATION.dp,
         border = BorderStroke(0.25.dp, barBorder),
     ) {
         Box(
             modifier = Modifier
                 .matchParentSize()
                 .clip(barShape)
-                .shadow(
-                    elevation = if (isDark) 6.5.dp else 5.2.dp,
-                    shape = barShape,
-                    ambientColor = barBottomGlow,
-                    spotColor = barBottomGlow,
+        .shadow(
+            elevation = if (isDark) NAV_SHELL_BAR_SHADOW_SURFACE_DARK.dp else NAV_SHELL_BAR_SHADOW_SURFACE_LIGHT.dp,
+            shape = barShape,
+            ambientColor = barBottomGlow,
+            spotColor = barBottomGlow,
                 )
                 .background(
                     Brush.verticalGradient(
@@ -773,16 +773,16 @@ private fun PrimaryNavigationRail(
             .testTag("primary-navigation-rail"),
         color = railSurface,
         shape = railShape,
-        tonalElevation = 4.68.dp,
-        shadowElevation = 6.3.dp,
+        tonalElevation = NAV_SHELL_RAIL_TONAL_ELEVATION.dp,
+        shadowElevation = NAV_SHELL_RAIL_SHADOW_ELEVATION.dp,
         border = BorderStroke(0.25.dp, railBorder),
     ) {
         Box(
             modifier = Modifier
                 .matchParentSize()
                 .clip(railShape)
-                .shadow(
-                    elevation = if (isDark) 6.35.dp else 5.0.dp,
+        .shadow(
+                    elevation = if (isDark) NAV_SHELL_RAIL_SHADOW_SURFACE_DARK.dp else NAV_SHELL_RAIL_SHADOW_SURFACE_LIGHT.dp,
                     shape = railShape,
                     ambientColor = railBottomGlow,
                     spotColor = railBottomGlow,
@@ -1510,6 +1510,14 @@ private const val NAV_ICON_HALO_SIZE_SELECTED = 35f
 private const val NAV_ICON_HALO_SIZE_SELECTED_PRESSED = 33.9f
 private const val NAV_SHELL_SURFACE_DARK_ALPHA = 0.89f
 private const val NAV_SHELL_SURFACE_LIGHT_ALPHA = 0.935f
+private const val NAV_SHELL_BAR_TONAL_ELEVATION = 4.88f
+private const val NAV_SHELL_BAR_SHADOW_ELEVATION = 6.4f
+private const val NAV_SHELL_BAR_SHADOW_SURFACE_DARK = 6.5f
+private const val NAV_SHELL_BAR_SHADOW_SURFACE_LIGHT = 5.2f
+private const val NAV_SHELL_RAIL_TONAL_ELEVATION = 4.68f
+private const val NAV_SHELL_RAIL_SHADOW_ELEVATION = 6.3f
+private const val NAV_SHELL_RAIL_SHADOW_SURFACE_DARK = 6.35f
+private const val NAV_SHELL_RAIL_SHADOW_SURFACE_LIGHT = 5.0f
 private const val NAV_SHELL_BORDER_DARK_ALPHA = 0.102f
 private const val NAV_SHELL_BORDER_LIGHT_ALPHA = 0.056f
 private const val NAV_SHELL_GLOW_DARK_ALPHA = 0.054f
