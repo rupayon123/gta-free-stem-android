@@ -1252,6 +1252,8 @@ private fun DestinationLabel(
         },
         animationSpec = if (isPressed) {
             navPressColorAnimationSpec
+        } else if (isSelected) {
+            navSelectedSettleColorAnimationSpec
         } else {
             navSelectionColorAnimationSpec
         },
@@ -1266,6 +1268,8 @@ private fun DestinationLabel(
         },
         animationSpec = if (isPressed) {
             navPressColorAnimationSpec
+        } else if (isSelected) {
+            navSelectedSettleColorAnimationSpec
         } else {
             navSelectionColorAnimationSpec
         },
@@ -1336,6 +1340,8 @@ private fun DestinationLabel(
         },
         animationSpec = if (isPressed) {
             navPressColorAnimationSpec
+        } else if (isSelected) {
+            navSelectedSettleColorAnimationSpec
         } else {
             navSelectionColorAnimationSpec
         },
@@ -1387,5 +1393,6 @@ private val navSelectionDpAnimationSpec = tween<Dp>(240, easing = FastOutSlowInE
 private val navPressDpAnimationSpec = tween<Dp>(145, easing = FastOutSlowInEasing)
 private val navPressColorAnimationSpec = tween<Color>(145, easing = FastOutSlowInEasing)
 private val navSelectionColorAnimationSpec = tween<Color>(240, easing = FastOutSlowInEasing)
+private val navSelectedSettleColorAnimationSpec = tween<Color>(290, easing = FastOutSlowInEasing)
 private val navSelectedSettleFloatAnimationSpec = tween<Float>(290, easing = FastOutSlowInEasing)
 private val navSelectedSettleDpAnimationSpec = tween<Dp>(290, easing = FastOutSlowInEasing)
