@@ -345,7 +345,7 @@ private fun PrimaryNavigationBar(
                         interactionSource = destinationInteractionSource,
                         modifier = Modifier
                             .testTag(destination.testTag)
-                            .padding(horizontal = 4.dp, vertical = 2.dp)
+                            .padding(horizontal = 4.8.dp, vertical = 2.4.dp)
                             .clip(activeItemShape)
                             .shadow(
                                 elevation = selectedPillElevation,
@@ -920,7 +920,7 @@ private fun PrimaryNavigationRail(
                         interactionSource = destinationInteractionSource,
                         modifier = Modifier
                             .testTag(destination.testTag)
-                            .padding(horizontal = 2.dp, vertical = 2.dp)
+                            .padding(horizontal = 2.4.dp, vertical = 2.6.dp)
                             .clip(activeItemShape)
                             .shadow(
                                 elevation = selectedPillElevation,
