@@ -245,8 +245,8 @@ private fun PrimaryNavigationBar(
                     )
                     val selectedPillBorderColor by animateColorAsState(
                         targetValue = when {
-                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
-                            isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.085f)
+                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.14f)
+                            isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.08f)
                             else -> Color.Transparent
                         },
                         animationSpec = if (isPressed) {
@@ -516,8 +516,8 @@ private fun PrimaryNavigationBar(
                         val iconFaceGlow by animateColorAsState(
                             targetValue = when {
                                 isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
-                                isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.11f)
-                                isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.07f)
+                                isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.10f)
+                                isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.06f)
                                 else -> Color.Transparent
                             },
                             animationSpec = if (isPressed) {
@@ -609,8 +609,8 @@ private fun PrimaryNavigationBar(
                         val iconShadowColor by animateColorAsState(
                             targetValue = when {
                                 isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.085f)
-                                isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.038f)
-                                isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.064f)
+                                isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.035f)
+                                isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.058f)
                                 else -> Color.Transparent
                             },
                             animationSpec = if (isPressed) {
@@ -824,8 +824,8 @@ private fun PrimaryNavigationRail(
                     )
                     val selectedPillBorderColor by animateColorAsState(
                         targetValue = when {
-                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
-                            isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.085f)
+                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.14f)
+                            isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.08f)
                             else -> Color.Transparent
                         },
                         animationSpec = if (isPressed) {
@@ -1092,7 +1092,7 @@ private fun PrimaryNavigationRail(
                             targetValue = when {
                                 isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
                                 isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.13f)
-                                isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.07f)
+                                isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.06f)
                                 else -> Color.Transparent
                             },
                             animationSpec = if (isPressed) {
@@ -1184,8 +1184,8 @@ private fun PrimaryNavigationRail(
                         val iconShadowColor by animateColorAsState(
                             targetValue = when {
                                 isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.07f)
-                                isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.038f)
-                                isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.062f)
+                                isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.035f)
+                                isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.056f)
                                 else -> Color.Transparent
                             },
                             animationSpec = if (isPressed) {
@@ -1313,10 +1313,10 @@ private fun DestinationLabel(
     }
     val labelGlowColor by animateColorAsState(
         targetValue = when {
-            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.665f)
-            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.645f)
-            isPressed -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.33f)
-            else -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.34f)
+            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.635f)
+            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.615f)
+            isPressed -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.32f)
+            else -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.32f)
         },
         animationSpec = if (isPressed) {
             navPressColorAnimationSpec
