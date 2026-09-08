@@ -168,7 +168,7 @@ private fun PrimaryNavigationBar(
         modifier = Modifier
             .testTag("primary-navigation-bar")
             .fillMaxWidth()
-            .padding(horizontal = 10.dp, vertical = 6.dp),
+            .padding(horizontal = 12.dp, vertical = 6.dp),
         shape = barShape,
         color = barSurface,
         tonalElevation = 7.dp,
@@ -201,7 +201,7 @@ private fun PrimaryNavigationBar(
             )
         NavigationBar(
             modifier = Modifier
-                .padding(horizontal = 4.dp, top = 1.dp, bottom = 1.dp)
+                .padding(horizontal = 5.dp, top = 0.dp, bottom = 0.dp)
                 .clip(barShape),
             containerColor = barContainer,
             tonalElevation = 0.dp,
@@ -711,7 +711,7 @@ private fun PrimaryNavigationRail(
     Surface(
         modifier = Modifier
             .fillMaxHeight()
-            .widthIn(min = 84.dp)
+            .widthIn(min = 86.dp)
             .padding(8.dp)
             .testTag("primary-navigation-rail"),
         color = railSurface,
@@ -747,7 +747,7 @@ private fun PrimaryNavigationRail(
         NavigationRail(
             modifier = Modifier
                 .fillMaxHeight()
-                .padding(start = 5.dp, end = 5.dp, top = 8.dp, bottom = 8.dp)
+                .padding(start = 6.dp, end = 6.dp, top = 9.dp, bottom = 9.dp)
                 .clip(railShape),
             containerColor = railContainer,
             windowInsets = WindowInsets(0, 0, 0, 0),
