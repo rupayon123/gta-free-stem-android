@@ -402,7 +402,7 @@ private fun PrimaryNavigationBar(
                         targetValue = when {
                             isPressed && isSelected -> NAV_ICON_SELECTED_PRESSED_ELEVATION
                             isPressed -> 0.8f
-                            isSelected -> 2.0f
+                            isSelected -> NAV_ICON_SELECTED_ELEVATION
                             else -> 0f
                         },
                             animationSpec = if (isPressed) {
@@ -1000,7 +1000,7 @@ private fun PrimaryNavigationRail(
                         targetValue = when {
                             isPressed && isSelected -> NAV_ICON_SELECTED_PRESSED_ELEVATION
                             isPressed -> 0.8f
-                            isSelected -> 2.0f
+                            isSelected -> NAV_ICON_SELECTED_ELEVATION
                             else -> 0f
                         },
                             animationSpec = if (isPressed) {
@@ -1485,6 +1485,7 @@ private const val NAV_ICON_CONTAINER_SELECTED_ALPHA = 1f
 private const val NAV_ICON_CONTAINER_PRESSED_SELECTED_ALPHA = 0.985f
 private const val NAV_ICON_CONTAINER_PRESSED_ALPHA = 0.99f
 private const val NAV_ICON_SELECTED_PRESSED_ELEVATION = 1.6f
+private const val NAV_ICON_SELECTED_ELEVATION = 1.85f
 private const val NAV_ICON_TINT_SELECTED_PRESSED_ALPHA = 0.95f
 private const val NAV_ICON_CONTAINER_SELECTED_PRESS_SCALE = 0.9994f
 private const val NAV_ICON_CONTAINER_SELECTED_SCALE = 1.0012f
