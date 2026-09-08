@@ -298,8 +298,8 @@ private fun PrimaryNavigationBar(
                     val activeItemShape = RoundedCornerShape(activeItemCorner)
                     val activeItemOffset by animateDpAsState(
                         targetValue = when {
-                            isSelected -> (-0.7).dp
-                            isPressed -> 0.5.dp
+                            isSelected -> (-0.65).dp
+                            isPressed -> 0.46.dp
                             else -> 0.dp
                         },
                         animationSpec = if (isPressed) {
@@ -877,8 +877,8 @@ private fun PrimaryNavigationRail(
                     val activeItemShape = RoundedCornerShape(activeItemCorner)
                     val activeItemOffset by animateDpAsState(
                         targetValue = when {
-                                isSelected -> (-0.98).dp
-                                isPressed -> 0.35.dp
+                                isSelected -> (-0.93).dp
+                                isPressed -> 0.31.dp
                                 else -> 0.dp
                         },
                         animationSpec = if (isPressed) {
