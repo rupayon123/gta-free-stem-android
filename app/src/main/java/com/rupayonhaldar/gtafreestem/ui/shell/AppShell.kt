@@ -441,6 +441,7 @@ private fun PrimaryNavigationBar(
                         )
                         val iconGlyphAlpha by animateFloatAsState(
                             targetValue = when {
+                            isSelected && isPressed -> 0.985f
                             isSelected -> NAV_ICON_GLYPH_SELECTED_ALPHA
                             isPressed -> NAV_ICON_GLYPH_PRESSED_ALPHA
                             else -> NAV_ICON_GLYPH_UNSELECTED_ALPHA
@@ -456,6 +457,7 @@ private fun PrimaryNavigationBar(
                         )
                         val iconContainerAlpha by animateFloatAsState(
                             targetValue = when {
+                            isSelected && isPressed -> NAV_ICON_CONTAINER_PRESSED_SELECTED_ALPHA
                             isSelected -> NAV_ICON_CONTAINER_SELECTED_ALPHA
                             isPressed -> NAV_ICON_CONTAINER_PRESSED_ALPHA
                             else -> NAV_ICON_CONTAINER_UNSELECTED_ALPHA
@@ -1027,6 +1029,7 @@ private fun PrimaryNavigationRail(
                         )
                         val iconGlyphAlpha by animateFloatAsState(
                             targetValue = when {
+                                isSelected && isPressed -> 0.985f
                                 isSelected -> NAV_ICON_GLYPH_SELECTED_ALPHA
                             isPressed -> NAV_ICON_GLYPH_PRESSED_ALPHA
                             else -> NAV_ICON_GLYPH_UNSELECTED_ALPHA
@@ -1042,6 +1045,7 @@ private fun PrimaryNavigationRail(
                         )
                         val iconContainerAlpha by animateFloatAsState(
                             targetValue = when {
+                                isSelected && isPressed -> NAV_ICON_CONTAINER_PRESSED_SELECTED_ALPHA
                                 isSelected -> NAV_ICON_CONTAINER_SELECTED_ALPHA
                             isPressed -> NAV_ICON_CONTAINER_PRESSED_ALPHA
                             else -> NAV_ICON_CONTAINER_UNSELECTED_ALPHA
@@ -1447,6 +1451,7 @@ private const val NAV_ICON_GLYPH_SELECTED_ALPHA = 1f
 private const val NAV_ICON_GLYPH_PRESSED_ALPHA = 0.94f
 private const val NAV_ICON_GLYPH_UNSELECTED_ALPHA = 0.86f
 private const val NAV_ICON_CONTAINER_SELECTED_ALPHA = 1f
+private const val NAV_ICON_CONTAINER_PRESSED_SELECTED_ALPHA = 0.985f
 private const val NAV_ICON_CONTAINER_PRESSED_ALPHA = 0.99f
 private const val NAV_ICON_CONTAINER_UNSELECTED_ALPHA = 0.86f
 private const val NAV_ICON_TINT_PRESSED_ALPHA = 0.9f
