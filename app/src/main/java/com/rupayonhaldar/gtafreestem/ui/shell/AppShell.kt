@@ -159,7 +159,7 @@ private fun PrimaryNavigationBar(
         MaterialTheme.colorScheme.primary.copy(alpha = 0.030f)
     }
     val barContainer = if (isDark) {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.66f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.68f)
     } else {
         MaterialTheme.colorScheme.surface.copy(alpha = 0.80f)
     }
@@ -704,8 +704,8 @@ private fun PrimaryNavigationBar(
                     colors = NavigationBarItemDefaults.colors(
                         selectedIconColor = MaterialTheme.colorScheme.primary,
                         selectedTextColor = MaterialTheme.colorScheme.primary,
-                        unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.70f),
-                        unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.70f),
+                        unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.72f),
+                        unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.72f),
                         indicatorColor = Color.Transparent,
                         disabledIndicatorColor = Color.Transparent,
                     ),
@@ -739,7 +739,7 @@ private fun PrimaryNavigationRail(
         MaterialTheme.colorScheme.primary.copy(alpha = 0.030f)
     }
     val railContainer = if (isDark) {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.67f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.69f)
     } else {
         MaterialTheme.colorScheme.surface.copy(alpha = 0.80f)
     }
@@ -1278,8 +1278,8 @@ private fun PrimaryNavigationRail(
                 colors = NavigationRailItemDefaults.colors(
                     selectedIconColor = MaterialTheme.colorScheme.primary,
                     selectedTextColor = MaterialTheme.colorScheme.primary,
-                    unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.70f),
-                    unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.70f),
+                    unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.72f),
+                    unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.72f),
                     indicatorColor = Color.Transparent,
                     disabledIndicatorColor = Color.Transparent,
                 ),
@@ -1316,7 +1316,7 @@ private fun DestinationLabel(
             isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)
             isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.46f)
             isPressed -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.40f)
-            else -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.48f)
+            else -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.50f)
         },
         animationSpec = if (isPressed) {
             navPressColorAnimationSpec
@@ -1330,9 +1330,9 @@ private fun DestinationLabel(
     val labelColor by animateColorAsState(
         targetValue = when {
             isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.64f)
-            isPressed -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.60f)
+            isPressed -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.62f)
             isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.94f)
-            else -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.68f)
+            else -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.70f)
         },
         animationSpec = if (isPressed) {
             navPressColorAnimationSpec
