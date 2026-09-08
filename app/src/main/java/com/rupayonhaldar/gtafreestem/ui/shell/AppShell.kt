@@ -469,8 +469,8 @@ private fun PrimaryNavigationBar(
                         val iconGlyphSize by animateDpAsState(
                             targetValue = when {
                             isPressed -> 19.dp
-                            isSelected -> 20.7.dp
-                            else -> 19.6.dp
+                            isSelected -> 20.4.dp
+                            else -> 19.5.dp
                             },
                             animationSpec = if (isPressed) {
                                 navPressDpAnimationSpec
@@ -484,8 +484,8 @@ private fun PrimaryNavigationBar(
                         val iconFaceSize by animateDpAsState(
                             targetValue = when {
                             isPressed -> 33.dp
-                            isSelected -> 35.6.dp
-                            else -> 34.1.dp
+                            isSelected -> 35.3.dp
+                            else -> 34.0.dp
                             },
                             animationSpec = if (isPressed) {
                                 navPressDpAnimationSpec
@@ -1044,8 +1044,8 @@ private fun PrimaryNavigationRail(
                         val iconGlyphSize by animateDpAsState(
                         targetValue = when {
                             isPressed -> 19.dp
-                            isSelected -> 20.7.dp
-                            else -> 19.6.dp
+                            isSelected -> 20.4.dp
+                            else -> 19.5.dp
                             },
                             animationSpec = if (isPressed) {
                                 navPressDpAnimationSpec
@@ -1059,8 +1059,8 @@ private fun PrimaryNavigationRail(
                         val iconFaceSize by animateDpAsState(
                         targetValue = when {
                             isPressed -> 33.dp
-                            isSelected -> 35.6.dp
-                            else -> 34.1.dp
+                            isSelected -> 35.3.dp
+                            else -> 34.0.dp
                             },
                             animationSpec = if (isPressed) {
                                 navPressDpAnimationSpec
