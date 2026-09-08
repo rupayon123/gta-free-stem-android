@@ -217,9 +217,9 @@ private fun PrimaryNavigationBar(
                     val isPressed by destinationInteractionSource.collectIsPressedAsState()
                     val selectedPillColor by animateColorAsState(
                         targetValue = when {
-                            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.22f)
-                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.16f)
-                            isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.055f)
+                            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)
+                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
+                            isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.048f)
                             else -> Color.Transparent
                         },
                         animationSpec = if (isPressed) {
@@ -231,9 +231,9 @@ private fun PrimaryNavigationBar(
                     )
                     val selectedPillTopColor by animateColorAsState(
                         targetValue = when {
-                            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.21f)
-                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.17f)
-                            isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.065f)
+                            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.19f)
+                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.16f)
+                            isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.058f)
                             else -> Color.Transparent
                         },
                         animationSpec = if (isPressed) {
@@ -245,8 +245,8 @@ private fun PrimaryNavigationBar(
                     )
                     val selectedPillBorderColor by animateColorAsState(
                         targetValue = when {
-                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.18f)
-                            isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.10f)
+                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.16f)
+                            isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.09f)
                             else -> Color.Transparent
                         },
                         animationSpec = if (isPressed) {
@@ -258,8 +258,8 @@ private fun PrimaryNavigationBar(
                     )
                     val selectedPillElevation by animateDpAsState(
                         targetValue = when {
-                            isSelected -> 1.70.dp
-                            isPressed -> 0.95.dp
+                            isSelected -> 1.55.dp
+                            isPressed -> 0.9.dp
                             else -> 0.dp
                         },
                         animationSpec = if (isPressed) {
@@ -271,9 +271,9 @@ private fun PrimaryNavigationBar(
                     )
                     val activeNavItemWidth by animateDpAsState(
                         targetValue = when {
-                            isSelected -> 80.dp
-                            isPressed -> 73.dp
-                            else -> 70.dp
+                            isSelected -> 79.6.dp
+                            isPressed -> 72.8.dp
+                            else -> 69.8.dp
                         },
                         animationSpec = if (isPressed) {
                             navPressDpAnimationSpec
@@ -284,9 +284,9 @@ private fun PrimaryNavigationBar(
                     )
                     val activeItemCorner by animateDpAsState(
                         targetValue = when {
-                            isSelected -> 21.5.dp
-                            isPressed -> 18.5.dp
-                            else -> 16.dp
+                            isSelected -> 21.dp
+                            isPressed -> 18.1.dp
+                            else -> 15.5.dp
                         },
                         animationSpec = if (isPressed) {
                             navPressDpAnimationSpec
@@ -313,9 +313,9 @@ private fun PrimaryNavigationBar(
                     )
                     val activeItemHeight by animateDpAsState(
                         targetValue = when {
-                            isSelected -> 59.4.dp
-                            isPressed -> 55.2.dp
-                            else -> 54.4.dp
+                            isSelected -> 58.8.dp
+                            isPressed -> 54.8.dp
+                            else -> 53.9.dp
                         },
                         animationSpec = if (isPressed) {
                             navPressDpAnimationSpec
@@ -796,9 +796,9 @@ private fun PrimaryNavigationRail(
                     val isPressed by destinationInteractionSource.collectIsPressedAsState()
                     val selectedPillColor by animateColorAsState(
                         targetValue = when {
-                            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.17f)
-                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
-                            isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.055f)
+                            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.16f)
+                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.145f)
+                            isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.048f)
                             else -> Color.Transparent
                         },
                         animationSpec = if (isPressed) {
@@ -810,9 +810,9 @@ private fun PrimaryNavigationRail(
                     )
                     val selectedPillTopColor by animateColorAsState(
                         targetValue = when {
-                            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.19f)
-                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.17f)
-                            isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.07f)
+                            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.18f)
+                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.16f)
+                            isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.058f)
                             else -> Color.Transparent
                         },
                         animationSpec = if (isPressed) {
@@ -824,8 +824,8 @@ private fun PrimaryNavigationRail(
                     )
                     val selectedPillBorderColor by animateColorAsState(
                         targetValue = when {
-                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.19f)
-                            isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.10f)
+                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.16f)
+                            isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.09f)
                             else -> Color.Transparent
                         },
                         animationSpec = if (isPressed) {
@@ -837,8 +837,8 @@ private fun PrimaryNavigationRail(
                     )
                     val selectedPillElevation by animateDpAsState(
                         targetValue = when {
-                            isSelected -> 1.50.dp
-                            isPressed -> 0.85.dp
+                            isSelected -> 1.4.dp
+                            isPressed -> 0.76.dp
                             else -> 0.dp
                         },
                         animationSpec = if (isPressed) {
@@ -850,9 +850,9 @@ private fun PrimaryNavigationRail(
                     )
                     val activeNavItemWidth by animateDpAsState(
                         targetValue = when {
-                            isSelected -> 88.dp
-                            isPressed -> 79.dp
-                            else -> 76.dp
+                            isSelected -> 87.4.dp
+                            isPressed -> 78.5.dp
+                            else -> 75.5.dp
                         },
                         animationSpec = if (isPressed) {
                             navPressDpAnimationSpec
@@ -863,9 +863,9 @@ private fun PrimaryNavigationRail(
                     )
                     val activeItemCorner by animateDpAsState(
                         targetValue = when {
-                            isSelected -> 19.dp
-                            isPressed -> 16.5.dp
-                            else -> 14.dp
+                            isSelected -> 18.6.dp
+                            isPressed -> 16.1.dp
+                            else -> 13.6.dp
                         },
                         animationSpec = if (isPressed) {
                             navPressDpAnimationSpec
@@ -890,9 +890,9 @@ private fun PrimaryNavigationRail(
                     )
                     val activeItemHeight by animateDpAsState(
                         targetValue = when {
-                            isSelected -> 50.7.dp
-                            isPressed -> 48.8.dp
-                            else -> 48.2.dp
+                            isSelected -> 50.2.dp
+                            isPressed -> 48.3.dp
+                            else -> 47.8.dp
                         },
                         animationSpec = if (isPressed) {
                             navPressDpAnimationSpec
@@ -903,7 +903,7 @@ private fun PrimaryNavigationRail(
                     )
                     val activeItemScale by animateFloatAsState(
                         targetValue = when {
-                            isSelected -> 1.004f
+                            isSelected -> 1.003f
                             isPressed -> 0.992f
                             else -> 1f
                         },
