@@ -1357,7 +1357,7 @@ private fun DestinationLabel(
     val labelOffset by animateDpAsState(
         targetValue = when {
             isPressed && !isSelected -> 0.14.dp
-            isSelected -> (-0.01).dp
+            isSelected -> (-0.02).dp
             else -> if (compact) 0.18.dp else 0.14.dp
         },
         animationSpec = if (isPressed) {
@@ -1373,7 +1373,7 @@ private fun DestinationLabel(
         targetValue = when {
             isPressed && !isSelected -> 0.03.dp
             isPressed && isSelected -> 0.dp
-            isSelected -> (-0.10).dp
+            isSelected -> (-0.12).dp
             else -> if (compact) 0.18.dp else 0.14.dp
         },
         animationSpec = if (isPressed) {
