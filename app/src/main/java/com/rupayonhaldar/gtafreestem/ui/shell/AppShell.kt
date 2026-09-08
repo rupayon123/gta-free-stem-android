@@ -440,7 +440,7 @@ private fun PrimaryNavigationBar(
                             targetValue = when {
                             isSelected -> 1f
                             isPressed -> 0.88f
-                            else -> 0.75f
+                            else -> 0.74f
                             },
                             animationSpec = if (isPressed) {
                                 navPressFloatAnimationSpec
@@ -452,10 +452,10 @@ private fun PrimaryNavigationBar(
                             label = "bottom-nav-icon-glyph-alpha-${destination.name}",
                         )
                         val iconContainerAlpha by animateFloatAsState(
-                            targetValue = when {
+                        targetValue = when {
                             isSelected -> 1f
                             isPressed -> 0.9f
-                            else -> 0.78f
+                            else -> 0.77f
                             },
                             animationSpec = if (isPressed) {
                                 navPressFloatAnimationSpec
@@ -1015,7 +1015,7 @@ private fun PrimaryNavigationRail(
                             targetValue = when {
                             isSelected -> 1f
                             isPressed -> 0.88f
-                            else -> 0.75f
+                            else -> 0.74f
                             },
                             animationSpec = if (isPressed) {
                                 navPressFloatAnimationSpec
@@ -1027,10 +1027,10 @@ private fun PrimaryNavigationRail(
                             label = "rail-icon-glyph-alpha-${destination.name}",
                         )
                         val iconContainerAlpha by animateFloatAsState(
-                            targetValue = when {
+                        targetValue = when {
                             isSelected -> 1f
                             isPressed -> 0.9f
-                            else -> 0.78f
+                            else -> 0.77f
                             },
                             animationSpec = if (isPressed) {
                                 navPressFloatAnimationSpec
