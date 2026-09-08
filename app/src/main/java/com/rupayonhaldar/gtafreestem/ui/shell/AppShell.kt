@@ -171,9 +171,9 @@ private fun PrimaryNavigationBar(
             .padding(horizontal = 12.dp, vertical = 6.dp),
         shape = barShape,
         color = barSurface,
-        tonalElevation = 4.2.dp,
-        shadowElevation = 5.8.dp,
-        border = BorderStroke(0.30.dp, barBorder),
+        tonalElevation = 4.0.dp,
+        shadowElevation = 5.4.dp,
+        border = BorderStroke(0.25.dp, barBorder),
     ) {
         Box(
             modifier = Modifier
@@ -201,7 +201,7 @@ private fun PrimaryNavigationBar(
             )
         NavigationBar(
             modifier = Modifier
-                .padding(horizontal = 5.dp, top = 0.dp, bottom = 0.dp)
+                .padding(horizontal = 6.dp, top = 0.dp, bottom = 0.dp)
                 .clip(barShape),
             containerColor = barContainer,
             tonalElevation = 0.dp,
@@ -258,8 +258,8 @@ private fun PrimaryNavigationBar(
                     )
                     val selectedPillElevation by animateDpAsState(
                         targetValue = when {
-                            isSelected -> 1.15.dp
-                            isPressed -> 0.9.dp
+                            isSelected -> 1.05.dp
+                            isPressed -> 0.84.dp
                             else -> 0.dp
                         },
                         animationSpec = if (isPressed) {
@@ -271,9 +271,9 @@ private fun PrimaryNavigationBar(
                     )
                     val activeNavItemWidth by animateDpAsState(
                         targetValue = when {
-                            isSelected -> 78.9.dp
-                            isPressed -> 72.2.dp
-                            else -> 69.8.dp
+                            isSelected -> 78.2.dp
+                            isPressed -> 71.8.dp
+                            else -> 69.4.dp
                         },
                         animationSpec = if (isPressed) {
                             navPressDpAnimationSpec
@@ -752,9 +752,9 @@ private fun PrimaryNavigationRail(
             .testTag("primary-navigation-rail"),
         color = railSurface,
         shape = railShape,
-        tonalElevation = 4.2.dp,
-        shadowElevation = 5.8.dp,
-        border = BorderStroke(0.30.dp, railBorder),
+        tonalElevation = 4.0.dp,
+        shadowElevation = 5.4.dp,
+        border = BorderStroke(0.25.dp, railBorder),
     ) {
         Box(
             modifier = Modifier
@@ -837,8 +837,8 @@ private fun PrimaryNavigationRail(
                     )
                     val selectedPillElevation by animateDpAsState(
                         targetValue = when {
-                            isSelected -> 1.1.dp
-                            isPressed -> 0.76.dp
+                            isSelected -> 1.0.dp
+                            isPressed -> 0.72.dp
                             else -> 0.dp
                         },
                         animationSpec = if (isPressed) {
@@ -850,9 +850,9 @@ private fun PrimaryNavigationRail(
                     )
                     val activeNavItemWidth by animateDpAsState(
                         targetValue = when {
-                            isSelected -> 87.0.dp
-                            isPressed -> 78.2.dp
-                            else -> 75.5.dp
+                            isSelected -> 86.6.dp
+                            isPressed -> 77.8.dp
+                            else -> 75.2.dp
                         },
                         animationSpec = if (isPressed) {
                             navPressDpAnimationSpec
