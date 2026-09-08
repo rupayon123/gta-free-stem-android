@@ -408,8 +408,8 @@ private fun PrimaryNavigationBar(
                         )
                     val iconContainerScale by animateFloatAsState(
                         targetValue = when {
-                            isPressed -> 1.015f
-                            isSelected -> 1.013f
+                            isPressed -> 1.012f
+                            isSelected -> 1.011f
                             else -> 1f
                         },
                             animationSpec = if (isPressed) {
@@ -423,8 +423,8 @@ private fun PrimaryNavigationBar(
                         )
                         val iconScale by animateFloatAsState(
                         targetValue = when {
-                            isPressed -> 0.99f
-                            isSelected -> 1.018f
+                            isPressed -> 0.992f
+                            isSelected -> 1.016f
                             else -> 1f
                         },
                             animationSpec = if (isPressed) {
@@ -983,8 +983,8 @@ private fun PrimaryNavigationRail(
                         )
                     val iconContainerScale by animateFloatAsState(
                         targetValue = when {
-                            isPressed -> 1.015f
-                            isSelected -> 1.013f
+                            isPressed -> 1.012f
+                            isSelected -> 1.011f
                             else -> 1f
                         },
                             animationSpec = if (isPressed) {
@@ -998,8 +998,8 @@ private fun PrimaryNavigationRail(
                         )
                         val iconScale by animateFloatAsState(
                         targetValue = when {
-                            isPressed -> 0.994f
-                            isSelected -> 1.018f
+                            isPressed -> 0.995f
+                            isSelected -> 1.016f
                             else -> 1f
                         },
                             animationSpec = if (isPressed) {
@@ -1387,8 +1387,8 @@ private fun DestinationLabel(
     )
     val labelScale by animateFloatAsState(
         targetValue = when {
-            isPressed && !isSelected -> 0.99f
-            isSelected -> 1.004f
+            isPressed && !isSelected -> 0.989f
+            isSelected -> 1.003f
             else -> 0.998f
         },
         animationSpec = if (isPressed) {
