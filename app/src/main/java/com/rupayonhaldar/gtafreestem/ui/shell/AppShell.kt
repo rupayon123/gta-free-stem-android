@@ -1306,7 +1306,7 @@ private fun DestinationLabel(
     } else {
         MaterialTheme.typography.labelSmall.copy(
             fontSize = if (isSelected) 12.33.sp else if (isPressed) 12.00.sp else 11.66.sp,
-            lineHeight = if (isPressed) 12.70.sp else 12.80.sp,
+            lineHeight = if (isPressed) 12.70.sp else if (isSelected) 12.90.sp else 12.80.sp,
             fontWeight = if (isSelected) FontWeight.SemiBold else if (isPressed) FontWeight.Medium else FontWeight.Normal,
             letterSpacing = 0.00.sp,
         )
@@ -1314,7 +1314,7 @@ private fun DestinationLabel(
     val labelGlowColor by animateColorAsState(
         targetValue = when {
             isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)
-            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.46f)
+            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.50f)
             isPressed -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.40f)
             else -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.50f)
         },
@@ -1331,7 +1331,7 @@ private fun DestinationLabel(
         targetValue = when {
             isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.64f)
             isPressed -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.62f)
-            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.94f)
+            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.96f)
             else -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.70f)
         },
         animationSpec = if (isPressed) {
