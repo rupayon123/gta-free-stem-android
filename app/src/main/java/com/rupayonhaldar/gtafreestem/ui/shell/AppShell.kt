@@ -1360,17 +1360,17 @@ private fun DestinationLabel(
 ) {
     val resolvedStyle = if (compact) {
         MaterialTheme.typography.labelSmall.copy(
-            fontSize = if (isSelected) 12.25.sp else 11.8.sp,
-            lineHeight = if (isSelected) 14.25.sp else 13.5.sp,
+            fontSize = if (isSelected) NAV_LABEL_COMPACT_FONT_SELECTED.sp else NAV_LABEL_COMPACT_FONT_UNSELECTED.sp,
+            lineHeight = if (isSelected) NAV_LABEL_COMPACT_LINE_HEIGHT_SELECTED.sp else NAV_LABEL_COMPACT_LINE_HEIGHT_UNSELECTED.sp,
             fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
-            letterSpacing = 0.01.sp,
+            letterSpacing = NAV_LABEL_LETTER_SPACING.sp,
         )
     } else {
             MaterialTheme.typography.labelSmall.copy(
-            fontSize = if (isSelected) 12.4.sp else 11.75.sp,
-            lineHeight = if (isSelected) 13.7.sp else 13.0.sp,
+            fontSize = if (isSelected) NAV_LABEL_RAIL_FONT_SELECTED.sp else NAV_LABEL_RAIL_FONT_UNSELECTED.sp,
+            lineHeight = if (isSelected) NAV_LABEL_RAIL_LINE_HEIGHT_SELECTED.sp else NAV_LABEL_RAIL_LINE_HEIGHT_UNSELECTED.sp,
             fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
-            letterSpacing = 0.01.sp,
+            letterSpacing = NAV_LABEL_LETTER_SPACING.sp,
         )
     }
     val labelColor by animateColorAsState(
@@ -1468,6 +1468,15 @@ private const val NAV_LABEL_UNSELECTED_ALPHA = 0.84f
 private const val NAV_LABEL_UNSELECTED_VISIBILITY_ALPHA = 0.985f
 private const val NAV_LABEL_SELECTED_SCALE = 1.005f
 private const val NAV_LABEL_PRESS_SCALE = 0.9992f
+private const val NAV_LABEL_COMPACT_FONT_SELECTED = 12.15f
+private const val NAV_LABEL_COMPACT_FONT_UNSELECTED = 11.75f
+private const val NAV_LABEL_COMPACT_LINE_HEIGHT_SELECTED = 14.1f
+private const val NAV_LABEL_COMPACT_LINE_HEIGHT_UNSELECTED = 13.4f
+private const val NAV_LABEL_RAIL_FONT_SELECTED = 12.3f
+private const val NAV_LABEL_RAIL_FONT_UNSELECTED = 11.7f
+private const val NAV_LABEL_RAIL_LINE_HEIGHT_SELECTED = 13.6f
+private const val NAV_LABEL_RAIL_LINE_HEIGHT_UNSELECTED = 12.9f
+private const val NAV_LABEL_LETTER_SPACING = 0.01f
 private const val NAV_LABEL_PRESS_ALPHA = 0.99f
 private const val NAV_LABEL_PRESSED_ALPHA = 0.88f
 private const val NAV_LABEL_SELECTED_PRESS_ALPHA = 0.995f
