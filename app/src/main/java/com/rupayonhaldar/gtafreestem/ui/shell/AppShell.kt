@@ -217,9 +217,9 @@ private fun PrimaryNavigationBar(
                     val isPressed by destinationInteractionSource.collectIsPressedAsState()
                     val selectedPillColor by animateColorAsState(
                         targetValue = when {
-                            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.146f)
-                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.104f)
-                            isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.038f)
+                            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.150f)
+                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.108f)
+                            isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.039f)
                             else -> Color.Transparent
                         },
                         animationSpec = if (isPressed) {
@@ -796,9 +796,9 @@ private fun PrimaryNavigationRail(
                     val isPressed by destinationInteractionSource.collectIsPressedAsState()
                     val selectedPillColor by animateColorAsState(
                         targetValue = when {
-                            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.124f)
-                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.104f)
-                            isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.038f)
+                            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.128f)
+                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.108f)
+                            isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.039f)
                             else -> Color.Transparent
                         },
                         animationSpec = if (isPressed) {
