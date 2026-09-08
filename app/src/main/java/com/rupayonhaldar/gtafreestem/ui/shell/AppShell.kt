@@ -350,7 +350,7 @@ private fun PrimaryNavigationBar(
                             .shadow(
                                 elevation = selectedPillElevation,
                                 shape = activeItemShape,
-                                ambientColor = selectedPillBorderColor.copy(alpha = if (isDark) 0.22f else 0.12f),
+                                ambientColor = selectedPillBorderColor.copy(alpha = if (isDark) 0.20f else 0.11f),
                                 spotColor = selectedPillColor,
                             )
                             .background(
@@ -704,8 +704,8 @@ private fun PrimaryNavigationBar(
                     colors = NavigationBarItemDefaults.colors(
                         selectedIconColor = MaterialTheme.colorScheme.primary,
                         selectedTextColor = MaterialTheme.colorScheme.primary,
-                        unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.58f),
-                        unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.58f),
+                        unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.54f),
+                        unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.54f),
                         indicatorColor = Color.Transparent,
                         disabledIndicatorColor = Color.Transparent,
                     ),
@@ -925,7 +925,7 @@ private fun PrimaryNavigationRail(
                             .shadow(
                                 elevation = selectedPillElevation,
                                 shape = activeItemShape,
-                                ambientColor = selectedPillBorderColor.copy(alpha = 0.20f),
+                                ambientColor = selectedPillBorderColor.copy(alpha = 0.18f),
                                 spotColor = selectedPillColor,
                             )
                             .background(
@@ -1278,8 +1278,8 @@ private fun PrimaryNavigationRail(
                 colors = NavigationRailItemDefaults.colors(
                     selectedIconColor = MaterialTheme.colorScheme.primary,
                     selectedTextColor = MaterialTheme.colorScheme.primary,
-                    unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.58f),
-                    unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.58f),
+                    unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.54f),
+                    unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.54f),
                     indicatorColor = Color.Transparent,
                     disabledIndicatorColor = Color.Transparent,
                 ),
