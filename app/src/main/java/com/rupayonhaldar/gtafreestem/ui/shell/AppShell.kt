@@ -149,14 +149,14 @@ private fun PrimaryNavigationBar(
         MaterialTheme.colorScheme.surface.copy(alpha = 0.86f)
     }
     val barBorder = if (isDark) {
-        Color.White.copy(alpha = 0.06f)
+        Color.White.copy(alpha = 0.08f)
     } else {
-        Color.Black.copy(alpha = 0.032f)
+        Color.Black.copy(alpha = 0.045f)
     }
     val barBottomGlow = if (isDark) {
-        MaterialTheme.colorScheme.primary.copy(alpha = 0.05f)
+        MaterialTheme.colorScheme.primary.copy(alpha = 0.048f)
     } else {
-        MaterialTheme.colorScheme.primary.copy(alpha = 0.02f)
+        MaterialTheme.colorScheme.primary.copy(alpha = 0.022f)
     }
     val barContainer = if (isDark) {
         MaterialTheme.colorScheme.surface.copy(alpha = 0.50f)
@@ -171,8 +171,8 @@ private fun PrimaryNavigationBar(
             .padding(horizontal = 12.dp, vertical = 6.dp),
         shape = barShape,
         color = barSurface,
-        tonalElevation = 4.8.dp,
-        shadowElevation = 6.4.dp,
+        tonalElevation = 4.2.dp,
+        shadowElevation = 5.8.dp,
         border = BorderStroke(0.30.dp, barBorder),
     ) {
         Box(
@@ -729,14 +729,14 @@ private fun PrimaryNavigationRail(
         MaterialTheme.colorScheme.surface.copy(alpha = 0.86f)
     }
     val railBorder = if (isDark) {
-        Color.White.copy(alpha = 0.06f)
+        Color.White.copy(alpha = 0.08f)
     } else {
-        Color.Black.copy(alpha = 0.032f)
+        Color.Black.copy(alpha = 0.045f)
     }
     val railBottomGlow = if (isDark) {
-        MaterialTheme.colorScheme.primary.copy(alpha = 0.05f)
+        MaterialTheme.colorScheme.primary.copy(alpha = 0.048f)
     } else {
-        MaterialTheme.colorScheme.primary.copy(alpha = 0.02f)
+        MaterialTheme.colorScheme.primary.copy(alpha = 0.022f)
     }
     val railContainer = if (isDark) {
         MaterialTheme.colorScheme.surface.copy(alpha = 0.54f)
@@ -752,8 +752,8 @@ private fun PrimaryNavigationRail(
             .testTag("primary-navigation-rail"),
         color = railSurface,
         shape = railShape,
-        tonalElevation = 4.8.dp,
-        shadowElevation = 6.4.dp,
+        tonalElevation = 4.2.dp,
+        shadowElevation = 5.8.dp,
         border = BorderStroke(0.30.dp, railBorder),
     ) {
         Box(
@@ -1358,7 +1358,7 @@ private fun DestinationLabel(
         targetValue = when {
             isPressed && !isSelected -> 0.17.dp
             isSelected -> 0.dp
-            else -> if (compact) 0.34.dp else 0.28.dp
+            else -> if (compact) 0.30.dp else 0.24.dp
         },
         animationSpec = if (isPressed) {
             navPressDpAnimationSpec
@@ -1374,7 +1374,7 @@ private fun DestinationLabel(
             isPressed && !isSelected -> 0.04.dp
             isPressed && isSelected -> 0.dp
             isSelected -> (-0.08).dp
-            else -> if (compact) 0.34.dp else 0.28.dp
+            else -> if (compact) 0.30.dp else 0.24.dp
         },
         animationSpec = if (isPressed) {
             navPressDpAnimationSpec
