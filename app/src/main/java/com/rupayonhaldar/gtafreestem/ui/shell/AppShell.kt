@@ -174,7 +174,7 @@ private fun PrimaryNavigationBar(
         color = barSurface,
         tonalElevation = NAV_SHELL_BAR_TONAL_ELEVATION.dp,
         shadowElevation = NAV_SHELL_BAR_SHADOW_ELEVATION.dp,
-        border = BorderStroke(0.25.dp, barBorder),
+        border = BorderStroke(NAV_SHELL_BAR_OUTER_BORDER_WIDTH.dp, barBorder),
     ) {
         Box(
             modifier = Modifier
@@ -293,8 +293,8 @@ private fun PrimaryNavigationBar(
                         targetValue = when {
                             isPressed && isSelected -> NAV_BOTTOM_NAV_ITEM_PRESSED_SELECTED_CORNER.dp
                             isSelected -> NAV_BOTTOM_NAV_ITEM_SELECTED_CORNER.dp
-                            isPressed -> 18.dp
-                            else -> 16.dp
+                            isPressed -> NAV_BOTTOM_NAV_ITEM_PRESSED_CORNER.dp
+                            else -> NAV_BOTTOM_NAV_ITEM_UNPRESSED_CORNER.dp
                         },
                         animationSpec = if (isPressed) {
                             navPressDpAnimationSpec
@@ -792,7 +792,7 @@ private fun PrimaryNavigationRail(
         MaterialTheme.colorScheme.surface.copy(alpha = NAV_SHELL_CONTAINER_LIGHT_ALPHA)
     }
 
-    Surface(
+        Surface(
         modifier = Modifier
         .fillMaxHeight()
             .widthIn(min = NAV_RAIL_WIDTH.dp)
@@ -802,7 +802,7 @@ private fun PrimaryNavigationRail(
         shape = railShape,
         tonalElevation = NAV_SHELL_RAIL_TONAL_ELEVATION.dp,
         shadowElevation = NAV_SHELL_RAIL_SHADOW_ELEVATION.dp,
-        border = BorderStroke(0.25.dp, railBorder),
+        border = BorderStroke(NAV_SHELL_RAIL_OUTER_BORDER_WIDTH.dp, railBorder),
     ) {
         Box(
             modifier = Modifier
@@ -920,8 +920,8 @@ private fun PrimaryNavigationRail(
                         targetValue = when {
                             isPressed && isSelected -> NAV_RAIL_ITEM_PRESSED_SELECTED_CORNER.dp
                             isSelected -> NAV_RAIL_ITEM_SELECTED_CORNER.dp
-                            isPressed -> 16.5.dp
-                            else -> 14.5.dp
+                            isPressed -> NAV_RAIL_ITEM_PRESSED_CORNER.dp
+                            else -> NAV_RAIL_ITEM_UNPRESSED_CORNER.dp
                         },
                         animationSpec = if (isPressed) {
                             navPressDpAnimationSpec
@@ -1548,6 +1548,8 @@ private const val NAV_BOTTOM_NAV_ITEM_UNSELECTED_HEIGHT = 55.5f
 private const val NAV_BOTTOM_NAV_ITEM_SELECTED_SCALE = 1.0019f
 private const val NAV_BOTTOM_NAV_ITEM_SELECTED_CORNER = 19.7f
 private const val NAV_BOTTOM_NAV_ITEM_PRESSED_SELECTED_CORNER = 17.3f
+private const val NAV_BOTTOM_NAV_ITEM_PRESSED_CORNER = 18f
+private const val NAV_BOTTOM_NAV_ITEM_UNPRESSED_CORNER = 16f
 private const val NAV_BOTTOM_NAV_ITEM_SELECTED_PRESS_SCALE = 0.9992f
 private const val NAV_RAIL_ITEM_PRESSED_SELECTED_ELEVATION = 0.32f
 private const val NAV_RAIL_ITEM_PRESSED_SELECTED_HEIGHT = 49.9f
@@ -1556,6 +1558,8 @@ private const val NAV_RAIL_ITEM_UNSELECTED_HEIGHT = 47.8f
 private const val NAV_RAIL_ITEM_SELECTED_SCALE = 1.0013f
 private const val NAV_RAIL_ITEM_SELECTED_CORNER = 18.2f
 private const val NAV_RAIL_ITEM_PRESSED_SELECTED_CORNER = 17.6f
+private const val NAV_RAIL_ITEM_PRESSED_CORNER = 16.5f
+private const val NAV_RAIL_ITEM_UNPRESSED_CORNER = 14.5f
 private const val NAV_RAIL_ITEM_SELECTED_PRESS_SCALE = 0.9992f
 private const val NAV_NAV_ITEM_PRESSED_SCALE = 0.9978f
 private const val NAV_ICON_LIFT_SELECTED_DP = -0.12f
@@ -1630,6 +1634,8 @@ private const val NAV_ICON_HALO_SIZE_SELECTED = 35f
 private const val NAV_ICON_HALO_SIZE_SELECTED_PRESSED = 33.9f
 private const val NAV_SHELL_SURFACE_DARK_ALPHA = 0.89f
 private const val NAV_SHELL_SURFACE_LIGHT_ALPHA = 0.935f
+private const val NAV_SHELL_BAR_OUTER_BORDER_WIDTH = 0.25f
+private const val NAV_SHELL_RAIL_OUTER_BORDER_WIDTH = 0.25f
 private const val NAV_SHELL_BAR_TONAL_ELEVATION = 4.88f
 private const val NAV_SHELL_BAR_SHADOW_ELEVATION = 6.4f
 private const val NAV_SHELL_BAR_SHADOW_SURFACE_DARK = 6.5f
