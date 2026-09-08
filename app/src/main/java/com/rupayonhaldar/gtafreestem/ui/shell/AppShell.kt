@@ -142,9 +142,9 @@ private fun PrimaryNavigationBar(
     destinationLabel: (PrimaryDestination) -> String,
 ) {
     val isDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
-    val barShape = RoundedCornerShape(topStart = 26.dp, topEnd = 26.dp)
+    val barShape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp)
     val barSurface = if (isDark) {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.84f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.86f)
     } else {
         MaterialTheme.colorScheme.surface.copy(alpha = 0.92f)
     }
@@ -154,12 +154,12 @@ private fun PrimaryNavigationBar(
         Color.Black.copy(alpha = 0.055f)
     }
     val barBottomGlow = if (isDark) {
-        MaterialTheme.colorScheme.primary.copy(alpha = 0.055f)
+        MaterialTheme.colorScheme.primary.copy(alpha = 0.056f)
     } else {
         MaterialTheme.colorScheme.primary.copy(alpha = 0.030f)
     }
     val barContainer = if (isDark) {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.68f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.70f)
     } else {
         MaterialTheme.colorScheme.surface.copy(alpha = 0.82f)
     }
@@ -171,8 +171,8 @@ private fun PrimaryNavigationBar(
             .padding(horizontal = 12.dp, vertical = 6.dp),
         shape = barShape,
         color = barSurface,
-        tonalElevation = 4.6.dp,
-        shadowElevation = 6.0.dp,
+        tonalElevation = 4.7.dp,
+        shadowElevation = 6.2.dp,
         border = BorderStroke(0.25.dp, barBorder),
     ) {
         Box(
@@ -180,7 +180,7 @@ private fun PrimaryNavigationBar(
                 .matchParentSize()
                 .clip(barShape)
                 .shadow(
-                    elevation = if (isDark) 6.2.dp else 4.8.dp,
+                    elevation = if (isDark) 6.4.dp else 5.0.dp,
                     shape = barShape,
                     ambientColor = barBottomGlow,
                     spotColor = barBottomGlow,
@@ -722,7 +722,7 @@ private fun PrimaryNavigationRail(
     destinationLabel: (PrimaryDestination) -> String,
 ) {
     val isDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
-    val railShape = RoundedCornerShape(26.dp)
+    val railShape = RoundedCornerShape(28.dp)
     val railSurface = if (isDark) {
         MaterialTheme.colorScheme.surface.copy(alpha = 0.84f)
     } else {
