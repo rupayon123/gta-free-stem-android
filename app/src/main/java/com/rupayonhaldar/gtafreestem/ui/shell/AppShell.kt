@@ -299,6 +299,7 @@ private fun PrimaryNavigationBar(
                     val activeItemShape = RoundedCornerShape(activeItemCorner)
                     val activeItemOffset by animateDpAsState(
                         targetValue = when {
+                            isPressed && isSelected -> NAV_BOTTOM_NAV_ITEM_SELECTED_OFFSET_PRESSED_DP.dp
                             isPressed && !isSelected -> NAV_BOTTOM_NAV_ITEM_OFFSET_PRESSED_DP.dp
                             isSelected -> (-0.30).dp
                             else -> 0.dp
@@ -892,6 +893,7 @@ private fun PrimaryNavigationRail(
                     val activeItemOffset by animateDpAsState(
                         targetValue = when {
                                 isPressed && !isSelected -> NAV_RAIL_ITEM_OFFSET_PRESSED_DP.dp
+                                isPressed && isSelected -> NAV_RAIL_ITEM_SELECTED_OFFSET_PRESSED_DP.dp
                                 isSelected -> (-0.32).dp
                                 else -> 0.dp
                         },
@@ -1439,6 +1441,8 @@ private const val NAV_LABEL_OFFSET_SELECTED_PRESSED_DP = -0.10f
 private const val NAV_LABEL_SELECTED_PRESS_SCALE = 1.0065f
 private const val NAV_BOTTOM_NAV_ITEM_OFFSET_PRESSED_DP = -0.16f
 private const val NAV_RAIL_ITEM_OFFSET_PRESSED_DP = -0.14f
+private const val NAV_BOTTOM_NAV_ITEM_SELECTED_OFFSET_PRESSED_DP = -0.34f
+private const val NAV_RAIL_ITEM_SELECTED_OFFSET_PRESSED_DP = -0.33f
 private const val NAV_BOTTOM_NAV_ITEM_PRESSED_SELECTED_ELEVATION = 0.38f
 private const val NAV_BOTTOM_NAV_ITEM_PRESSED_SELECTED_HEIGHT = 57.8f
 private const val NAV_BOTTOM_NAV_ITEM_SELECTED_PRESS_SCALE = 0.9992f
