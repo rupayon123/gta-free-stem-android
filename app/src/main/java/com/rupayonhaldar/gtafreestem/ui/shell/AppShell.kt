@@ -1442,8 +1442,8 @@ private fun DestinationLabel(
     val labelOffset by animateDpAsState(
         targetValue = when {
             isSelected && isPressed -> NAV_LABEL_OFFSET_SELECTED_PRESSED_DP.dp
+            isPressed -> NAV_LABEL_OFFSET_PRESSED_DP.dp
             isSelected -> NAV_LABEL_OFFSET_SELECTED_DP.dp
-            isPressed -> 0.dp
             else -> 0.dp
         },
         animationSpec = if (isPressed) {
@@ -1515,6 +1515,7 @@ private const val NAV_LABEL_PRESS_ALPHA = 0.99f
 private const val NAV_LABEL_PRESSED_ALPHA = 0.88f
 private const val NAV_LABEL_SELECTED_PRESS_ALPHA = 0.995f
 private const val NAV_LABEL_SELECTED_PRESS_ALPHA_VISIBILITY = 0.992f
+private const val NAV_LABEL_OFFSET_PRESSED_DP = -0.08f
 private const val NAV_LABEL_OFFSET_SELECTED_DP = -0.12f
 private const val NAV_LABEL_OFFSET_SELECTED_PRESSED_DP = -0.12f
 private const val NAV_LABEL_SELECTED_PRESS_SCALE = 1.0032f
