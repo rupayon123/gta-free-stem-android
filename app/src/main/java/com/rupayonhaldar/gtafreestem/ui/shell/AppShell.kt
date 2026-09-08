@@ -360,7 +360,7 @@ private fun PrimaryNavigationBar(
                             )
                             .border(
                                 border = BorderStroke(
-                                    width = if (isSelected || isPressed) 0.85.dp else 0.dp,
+                                    width = if (isSelected || isPressed) 0.9.dp else 0.dp,
                                     color = selectedPillBorderColor,
                                 ),
                                 shape = activeItemShape,
@@ -903,7 +903,7 @@ private fun PrimaryNavigationRail(
                             )
                             .border(
                                 border = BorderStroke(
-                                    width = if (isSelected || isPressed) 0.75.dp else 0.dp,
+                                    width = if (isSelected || isPressed) 0.8.dp else 0.dp,
                                     color = selectedPillBorderColor,
                                 ),
                                 shape = activeItemShape,
