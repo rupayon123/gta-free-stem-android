@@ -1298,15 +1298,15 @@ private fun DestinationLabel(
 ) {
     val resolvedStyle = if (compact) {
         MaterialTheme.typography.labelSmall.copy(
-            fontSize = if (isSelected) 12.4.sp else if (isPressed) 11.7.sp else 12.0.sp,
-            lineHeight = if (isPressed) 13.1.sp else 14.0.sp,
+            fontSize = if (isSelected) 12.46.sp else if (isPressed) 11.72.sp else 12.03.sp,
+            lineHeight = if (isPressed) 13.16.sp else 14.02.sp,
             fontWeight = if (isSelected) FontWeight.SemiBold else if (isPressed) FontWeight.Medium else FontWeight.Normal,
             letterSpacing = 0.01.sp,
         )
     } else {
         MaterialTheme.typography.labelSmall.copy(
-            fontSize = if (isSelected) 12.0.sp else if (isPressed) 11.5.sp else 11.3.sp,
-            lineHeight = if (isPressed) 12.6.sp else 12.7.sp,
+            fontSize = if (isSelected) 12.06.sp else if (isPressed) 11.57.sp else 11.36.sp,
+            lineHeight = if (isPressed) 12.64.sp else 12.72.sp,
             fontWeight = if (isSelected) FontWeight.SemiBold else if (isPressed) FontWeight.Medium else FontWeight.Normal,
             letterSpacing = 0.00.sp,
         )
@@ -1314,7 +1314,7 @@ private fun DestinationLabel(
     val labelGlowColor by animateColorAsState(
         targetValue = when {
             isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.78f)
-            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.70f)
+            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.73f)
             isPressed -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.56f)
             else -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.58f)
         },
@@ -1373,7 +1373,7 @@ private fun DestinationLabel(
         targetValue = when {
             isPressed && !isSelected -> 0.2.dp
             isPressed && isSelected -> 0.dp
-            isSelected -> (-0.1).dp
+            isSelected -> (-0.12).dp
             else -> if (compact) 0.58.dp else 0.42.dp
         },
         animationSpec = if (isPressed) {
@@ -1388,7 +1388,7 @@ private fun DestinationLabel(
     val labelScale by animateFloatAsState(
         targetValue = when {
             isPressed && !isSelected -> 0.985f
-            isSelected -> 1f
+            isSelected -> 1.002f
             else -> 0.998f
         },
         animationSpec = if (isPressed) {
