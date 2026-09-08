@@ -48,12 +48,10 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
-import androidx.compose.ui.text.Shadow
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -1305,35 +1303,20 @@ private fun DestinationLabel(
             fontSize = if (isSelected) 12.2.sp else 11.8.sp,
             lineHeight = if (isSelected) 14.1.sp else 13.4.sp,
             fontWeight = if (isSelected) FontWeight.Medium else FontWeight.Normal,
-            letterSpacing = 0.00.sp,
+            letterSpacing = 0.01.sp,
         )
     } else {
         MaterialTheme.typography.labelSmall.copy(
             fontSize = if (isSelected) 12.2.sp else 11.75.sp,
             lineHeight = if (isSelected) 13.4.sp else 12.9.sp,
             fontWeight = if (isSelected) FontWeight.Medium else FontWeight.Normal,
-            letterSpacing = 0.00.sp,
+            letterSpacing = 0.01.sp,
         )
     }
-    val labelGlowColor by animateColorAsState(
-        targetValue = when {
-            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.20f)
-            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.26f)
-            else -> Color.Transparent
-        },
-        animationSpec = if (isPressed) {
-            navPressColorAnimationSpec
-        } else if (isSelected) {
-            navSelectedSettleColorAnimationSpec
-        } else {
-            navSelectionColorAnimationSpec
-        },
-        label = "destination-label-glow-color",
-    )
     val labelColor by animateColorAsState(
         targetValue = when {
             isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.96f)
-            isPressed -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.86f)
+            isPressed -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.72f)
             isSelected -> MaterialTheme.colorScheme.primary
             else -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = NAV_LABEL_UNSELECTED_ALPHA)
         },
@@ -1347,7 +1330,7 @@ private fun DestinationLabel(
         label = "destination-label-color",
     )
     val labelAlpha by animateFloatAsState(
-        targetValue = if (isPressed && !isSelected) 0.98f else if (isSelected) 1f else 0.985f,
+        targetValue = if (isPressed && !isSelected) 0.96f else if (isSelected) 1f else 0.985f,
         animationSpec = if (isPressed) {
             navPressFloatAnimationSpec
         } else if (isSelected) {
@@ -1372,24 +1355,9 @@ private fun DestinationLabel(
         },
         label = "destination-label-offset",
     )
-    val labelLift by animateDpAsState(
-        targetValue = when {
-            isSelected -> (-0.08).dp
-            isPressed && !isSelected -> 0.01.dp
-            else -> 0.dp
-        },
-        animationSpec = if (isPressed) {
-            navPressDpAnimationSpec
-        } else if (isSelected) {
-            navSelectedSettleDpAnimationSpec
-        } else {
-            navSelectionDpAnimationSpec
-        },
-        label = "destination-label-lift",
-    )
     val labelScale by animateFloatAsState(
         targetValue = when {
-            isPressed && !isSelected -> 0.9988f
+            isPressed && !isSelected -> 0.9958f
             isSelected -> 1.004f
             else -> 1f
         },
@@ -1402,51 +1370,16 @@ private fun DestinationLabel(
         },
         label = "destination-label-scale",
     )
-    val labelShadowColor by animateColorAsState(
-        targetValue = when {
-            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = if (isPressed) 0.028f else 0.032f)
-            isPressed -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.028f)
-            else -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.009f)
-        },
-        animationSpec = if (isPressed) {
-            navPressColorAnimationSpec
-        } else if (isSelected) {
-            navSelectedSettleColorAnimationSpec
-        } else {
-            navSelectionColorAnimationSpec
-        },
-        label = "destination-label-shadow-color",
-    )
-    val labelShadowRadius by animateFloatAsState(
-        targetValue = when {
-            isSelected -> 0.289f
-            isPressed -> 0.041f
-            else -> 0.009f
-        },
-        animationSpec = if (isPressed) {
-            navPressFloatAnimationSpec
-        } else if (isSelected) {
-            navSelectedSettleFloatAnimationSpec
-        } else {
-            navSelectionFloatAnimationSpec
-        },
-        label = "destination-label-shadow-radius",
-    )
     Text(
         text = label,
         modifier = Modifier
-            .offset(y = labelOffset + labelLift)
+            .offset(y = labelOffset)
                     .scale(labelScale),
         color = labelColor.copy(alpha = labelAlpha),
         style = resolvedStyle,
         maxLines = 1,
         textAlign = TextAlign.Center,
         overflow = TextOverflow.Ellipsis,
-        shadow = Shadow(
-            color = labelShadowColor,
-            offset = Offset(0f, 1f),
-            blurRadius = labelShadowRadius,
-        ),
     )
 }
 
