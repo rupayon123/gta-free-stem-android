@@ -374,7 +374,11 @@ private fun PrimaryNavigationBar(
                             .scale(activeItemScale),
                     icon = {
                     val iconLift by animateDpAsState(
-                        targetValue = 0.dp,
+                        targetValue = when {
+                            isPressed -> NAV_ICON_LIFT_PRESSED_DP.dp
+                            isSelected -> NAV_ICON_LIFT_SELECTED_DP.dp
+                            else -> 0.dp
+                        },
                         animationSpec = if (isPressed) {
                             navPressDpAnimationSpec
                             } else if (isSelected) {
@@ -946,7 +950,11 @@ private fun PrimaryNavigationRail(
                             .scale(activeItemScale),
                     icon = {
                     val iconLift by animateDpAsState(
-                        targetValue = 0.dp,
+                        targetValue = when {
+                            isPressed -> NAV_ICON_LIFT_PRESSED_DP.dp
+                            isSelected -> NAV_ICON_LIFT_SELECTED_DP.dp
+                            else -> 0.dp
+                        },
                             animationSpec = if (isPressed) {
                                 navPressDpAnimationSpec
                                 } else if (isSelected) {
@@ -1395,6 +1403,8 @@ private const val NAV_LABEL_PRESS_ALPHA = 0.99f
 private const val NAV_LABEL_PRESSED_ALPHA = 0.82f
 private const val NAV_LABEL_SELECTED_PRESS_ALPHA = 0.98f
 private const val NAV_LABEL_OFFSET_SELECTED_DP = -0.12f
+private const val NAV_ICON_LIFT_SELECTED_DP = -0.12f
+private const val NAV_ICON_LIFT_PRESSED_DP = -0.26f
 private const val NAV_ICON_GLYPH_SELECTED_ALPHA = 1f
 private const val NAV_ICON_GLYPH_PRESSED_ALPHA = 0.94f
 private const val NAV_ICON_GLYPH_UNSELECTED_ALPHA = 0.86f
