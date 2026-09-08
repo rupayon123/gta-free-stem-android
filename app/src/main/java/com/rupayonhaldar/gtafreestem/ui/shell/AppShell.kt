@@ -752,8 +752,8 @@ private fun PrimaryNavigationRail(
             .testTag("primary-navigation-rail"),
         color = railSurface,
         shape = railShape,
-        tonalElevation = 4.0.dp,
-        shadowElevation = 5.4.dp,
+        tonalElevation = 4.6.dp,
+        shadowElevation = 6.0.dp,
         border = BorderStroke(0.25.dp, railBorder),
     ) {
         Box(
