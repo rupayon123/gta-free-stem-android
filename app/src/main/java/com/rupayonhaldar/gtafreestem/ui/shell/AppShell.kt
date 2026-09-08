@@ -159,9 +159,9 @@ private fun PrimaryNavigationBar(
         MaterialTheme.colorScheme.primary.copy(alpha = 0.05f)
     }
     val barContainer = if (isDark) {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.70f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.72f)
     } else {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.82f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.83f)
     }
 
     Surface(
@@ -190,11 +190,11 @@ private fun PrimaryNavigationBar(
                         colors = listOf(
                             Color.Transparent,
                             if (isDark) {
-                                Color.White.copy(alpha = 0.022f)
+                                Color.White.copy(alpha = 0.026f)
                             } else {
-                                Color.Black.copy(alpha = 0.01f)
+                                Color.Black.copy(alpha = 0.012f)
                             },
-                            MaterialTheme.colorScheme.onSurface.copy(alpha = if (isDark) 0.05f else 0.025f),
+                            MaterialTheme.colorScheme.onSurface.copy(alpha = if (isDark) 0.048f else 0.03f),
                         ),
                     ),
                 ),
@@ -739,9 +739,9 @@ private fun PrimaryNavigationRail(
         MaterialTheme.colorScheme.primary.copy(alpha = 0.05f)
     }
     val railContainer = if (isDark) {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.74f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.76f)
     } else {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.84f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.85f)
     }
 
     Surface(
@@ -770,11 +770,11 @@ private fun PrimaryNavigationRail(
                     Brush.horizontalGradient(
                         colors = listOf(
                             if (isDark) {
-                                Color.White.copy(alpha = 0.022f)
+                                Color.White.copy(alpha = 0.024f)
                             } else {
-                                Color.Black.copy(alpha = 0.01f)
+                                Color.Black.copy(alpha = 0.012f)
                             },
-                            MaterialTheme.colorScheme.onSurface.copy(alpha = if (isDark) 0.05f else 0.025f),
+                            MaterialTheme.colorScheme.onSurface.copy(alpha = if (isDark) 0.048f else 0.03f),
                             Color.Transparent,
                         ),
                     ),
