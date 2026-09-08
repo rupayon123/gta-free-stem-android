@@ -379,7 +379,7 @@ private fun PrimaryNavigationBar(
                         val iconLift by animateDpAsState(
                             targetValue = when {
                                 isPressed -> 0.dp
-                                isSelected -> (-1.0).dp
+                                isSelected -> (-0.9).dp
                                 else -> 0.dp
                             },
                             animationSpec = if (isPressed) {
@@ -393,8 +393,8 @@ private fun PrimaryNavigationBar(
                         )
                         val iconElevation by animateFloatAsState(
                             targetValue = when {
-                                isPressed -> 1.75f
-                                isSelected -> 3.85f
+                                isPressed -> 1.6f
+                                isSelected -> 3.7f
                                 else -> 0f
                             },
                             animationSpec = if (isPressed) {
@@ -406,10 +406,10 @@ private fun PrimaryNavigationBar(
                                 },
                             label = "bottom-nav-icon-elevation-${destination.name}",
                         )
-                    val iconContainerScale by animateFloatAsState(
-                        targetValue = when {
-                            isPressed -> 1.012f
-                            isSelected -> 1.011f
+                        val iconContainerScale by animateFloatAsState(
+                            targetValue = when {
+                            isPressed -> 1.01f
+                            isSelected -> 1.01f
                             else -> 1f
                         },
                             animationSpec = if (isPressed) {
@@ -423,7 +423,7 @@ private fun PrimaryNavigationBar(
                         )
                         val iconScale by animateFloatAsState(
                         targetValue = when {
-                            isPressed -> 0.992f
+                            isPressed -> 0.995f
                             isSelected -> 1.016f
                             else -> 1f
                         },
@@ -954,7 +954,7 @@ private fun PrimaryNavigationRail(
                         val iconLift by animateDpAsState(
                             targetValue = when {
                                 isPressed -> 0.dp
-                                isSelected -> (-1.1).dp
+                                isSelected -> (-1.0).dp
                                 else -> 0.dp
                             },
                             animationSpec = if (isPressed) {
@@ -968,8 +968,8 @@ private fun PrimaryNavigationRail(
                         )
                         val iconElevation by animateFloatAsState(
                             targetValue = when {
-                                isPressed -> 1.9f
-                                isSelected -> 4.0f
+                                isPressed -> 1.72f
+                                isSelected -> 3.8f
                                 else -> 0f
                             },
                             animationSpec = if (isPressed) {
@@ -981,10 +981,10 @@ private fun PrimaryNavigationRail(
                                 },
                             label = "rail-icon-elevation-${destination.name}",
                         )
-                    val iconContainerScale by animateFloatAsState(
-                        targetValue = when {
-                            isPressed -> 1.012f
-                            isSelected -> 1.011f
+                        val iconContainerScale by animateFloatAsState(
+                            targetValue = when {
+                            isPressed -> 1.01f
+                            isSelected -> 1.01f
                             else -> 1f
                         },
                             animationSpec = if (isPressed) {
@@ -998,7 +998,7 @@ private fun PrimaryNavigationRail(
                         )
                         val iconScale by animateFloatAsState(
                         targetValue = when {
-                            isPressed -> 0.995f
+                            isPressed -> 0.997f
                             isSelected -> 1.016f
                             else -> 1f
                         },
