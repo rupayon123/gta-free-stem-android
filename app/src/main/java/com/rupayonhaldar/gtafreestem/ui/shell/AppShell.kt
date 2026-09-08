@@ -1300,7 +1300,7 @@ private fun DestinationLabel(
         MaterialTheme.typography.labelSmall.copy(
             fontSize = if (isSelected) 12.50.sp else if (isPressed) 11.72.sp else 12.03.sp,
             lineHeight = if (isPressed) 13.16.sp else 14.02.sp,
-            fontWeight = if (isSelected) FontWeight.SemiBold else if (isPressed) FontWeight.Medium else FontWeight.Normal,
+            fontWeight = if (isSelected) FontWeight.Medium else if (isPressed) FontWeight.Medium else FontWeight.Normal,
             letterSpacing = 0.01.sp,
         )
     } else {
@@ -1329,9 +1329,9 @@ private fun DestinationLabel(
     )
     val labelColor by animateColorAsState(
         targetValue = when {
-            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.70f)
+            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.64f)
             isPressed -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.47f)
-            isSelected -> MaterialTheme.colorScheme.primary
+            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.94f)
             else -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.44f)
         },
         animationSpec = if (isPressed) {
