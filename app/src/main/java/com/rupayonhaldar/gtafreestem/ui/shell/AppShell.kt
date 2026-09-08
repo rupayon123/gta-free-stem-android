@@ -301,7 +301,7 @@ private fun PrimaryNavigationBar(
                         targetValue = when {
                             isPressed && isSelected -> NAV_BOTTOM_NAV_ITEM_SELECTED_OFFSET_PRESSED_DP.dp
                             isPressed && !isSelected -> NAV_BOTTOM_NAV_ITEM_OFFSET_PRESSED_DP.dp
-                            isSelected -> (-0.30).dp
+                            isSelected -> NAV_BOTTOM_NAV_ITEM_SELECTED_OFFSET_DP.dp
                             else -> 0.dp
                         },
                         animationSpec = if (isPressed) {
@@ -903,7 +903,7 @@ private fun PrimaryNavigationRail(
                         targetValue = when {
                                 isPressed && !isSelected -> NAV_RAIL_ITEM_OFFSET_PRESSED_DP.dp
                                 isPressed && isSelected -> NAV_RAIL_ITEM_SELECTED_OFFSET_PRESSED_DP.dp
-                                isSelected -> (-0.32).dp
+                                isSelected -> NAV_RAIL_ITEM_SELECTED_OFFSET_DP.dp
                                 else -> 0.dp
                         },
                         animationSpec = if (isPressed) {
@@ -1458,9 +1458,11 @@ private const val NAV_LABEL_OFFSET_SELECTED_DP = -0.12f
 private const val NAV_LABEL_OFFSET_SELECTED_PRESSED_DP = -0.12f
 private const val NAV_LABEL_SELECTED_PRESS_SCALE = 1.0032f
 private const val NAV_BOTTOM_NAV_ITEM_OFFSET_PRESSED_DP = -0.16f
-private const val NAV_RAIL_ITEM_OFFSET_PRESSED_DP = -0.14f
+private const val NAV_RAIL_ITEM_OFFSET_PRESSED_DP = -0.15f
 private const val NAV_BOTTOM_NAV_ITEM_SELECTED_OFFSET_PRESSED_DP = -0.34f
-private const val NAV_RAIL_ITEM_SELECTED_OFFSET_PRESSED_DP = -0.33f
+private const val NAV_RAIL_ITEM_SELECTED_OFFSET_PRESSED_DP = -0.34f
+private const val NAV_BOTTOM_NAV_ITEM_SELECTED_OFFSET_DP = -0.30f
+private const val NAV_RAIL_ITEM_SELECTED_OFFSET_DP = -0.31f
 private const val NAV_BOTTOM_NAV_ITEM_PRESSED_SELECTED_ELEVATION = 0.38f
 private const val NAV_BOTTOM_NAV_ITEM_PRESSED_SELECTED_HEIGHT = 57.8f
 private const val NAV_BOTTOM_NAV_ITEM_SELECTED_SCALE = 1.0019f
