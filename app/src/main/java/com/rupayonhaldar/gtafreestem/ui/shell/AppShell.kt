@@ -144,24 +144,24 @@ private fun PrimaryNavigationBar(
     val isDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
     val barShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
     val barSurface = if (isDark) {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.93f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.90f)
     } else {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.97f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.95f)
     }
     val barBorder = if (isDark) {
-        Color.White.copy(alpha = 0.10f)
+        Color.White.copy(alpha = 0.08f)
     } else {
-        Color.Black.copy(alpha = 0.052f)
+        Color.Black.copy(alpha = 0.04f)
     }
     val barBottomGlow = if (isDark) {
-        MaterialTheme.colorScheme.primary.copy(alpha = 0.11f)
+        MaterialTheme.colorScheme.primary.copy(alpha = 0.095f)
     } else {
-        MaterialTheme.colorScheme.primary.copy(alpha = 0.04f)
+        MaterialTheme.colorScheme.primary.copy(alpha = 0.03f)
     }
     val barContainer = if (isDark) {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.69f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.64f)
     } else {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.80f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.74f)
     }
 
     Surface(
@@ -171,16 +171,16 @@ private fun PrimaryNavigationBar(
             .padding(horizontal = 12.dp, vertical = 6.dp),
         shape = barShape,
         color = barSurface,
-        tonalElevation = 5.4.dp,
-        shadowElevation = 8.4.dp,
-        border = BorderStroke(0.42.dp, barBorder),
+        tonalElevation = 4.8.dp,
+        shadowElevation = 7.2.dp,
+        border = BorderStroke(0.36.dp, barBorder),
     ) {
         Box(
             modifier = Modifier
                 .matchParentSize()
                 .clip(barShape)
                 .shadow(
-                    elevation = if (isDark) 7.4.dp else 5.6.dp,
+                    elevation = if (isDark) 6.6.dp else 5.0.dp,
                     shape = barShape,
                     ambientColor = barBottomGlow,
                     spotColor = barBottomGlow,
@@ -190,11 +190,11 @@ private fun PrimaryNavigationBar(
                         colors = listOf(
                             Color.Transparent,
                             if (isDark) {
-                                Color.White.copy(alpha = 0.02f)
+                                Color.White.copy(alpha = 0.015f)
                             } else {
-                                Color.Black.copy(alpha = 0.01f)
+                                Color.Black.copy(alpha = 0.008f)
                             },
-                            MaterialTheme.colorScheme.onSurface.copy(alpha = if (isDark) 0.042f else 0.026f),
+                            MaterialTheme.colorScheme.onSurface.copy(alpha = if (isDark) 0.038f else 0.018f),
                         ),
                     ),
                 ),
@@ -704,8 +704,8 @@ private fun PrimaryNavigationBar(
                     colors = NavigationBarItemDefaults.colors(
                         selectedIconColor = MaterialTheme.colorScheme.primary,
                         selectedTextColor = MaterialTheme.colorScheme.primary,
-                        unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.54f),
-                        unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.54f),
+                        unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
+                        unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
                         indicatorColor = Color.Transparent,
                         disabledIndicatorColor = Color.Transparent,
                     ),
@@ -724,24 +724,24 @@ private fun PrimaryNavigationRail(
     val isDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
     val railShape = RoundedCornerShape(24.dp)
     val railSurface = if (isDark) {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.93f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.90f)
     } else {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.97f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.95f)
     }
     val railBorder = if (isDark) {
-        Color.White.copy(alpha = 0.10f)
+        Color.White.copy(alpha = 0.08f)
     } else {
-        Color.Black.copy(alpha = 0.052f)
+        Color.Black.copy(alpha = 0.04f)
     }
     val railBottomGlow = if (isDark) {
-        MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)
+        MaterialTheme.colorScheme.primary.copy(alpha = 0.095f)
     } else {
-        MaterialTheme.colorScheme.primary.copy(alpha = 0.043f)
+        MaterialTheme.colorScheme.primary.copy(alpha = 0.032f)
     }
     val railContainer = if (isDark) {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.73f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.68f)
     } else {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.82f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.76f)
     }
 
     Surface(
@@ -752,16 +752,16 @@ private fun PrimaryNavigationRail(
             .testTag("primary-navigation-rail"),
         color = railSurface,
         shape = railShape,
-        tonalElevation = 5.4.dp,
-        shadowElevation = 8.4.dp,
-        border = BorderStroke(0.42.dp, railBorder),
+        tonalElevation = 4.8.dp,
+        shadowElevation = 7.2.dp,
+        border = BorderStroke(0.36.dp, railBorder),
     ) {
         Box(
             modifier = Modifier
                 .matchParentSize()
                 .clip(railShape)
                 .shadow(
-                    elevation = if (isDark) 7.4.dp else 5.6.dp,
+                    elevation = if (isDark) 6.6.dp else 5.0.dp,
                     shape = railShape,
                     ambientColor = railBottomGlow,
                     spotColor = railBottomGlow,
@@ -770,11 +770,11 @@ private fun PrimaryNavigationRail(
                     Brush.horizontalGradient(
                         colors = listOf(
                             if (isDark) {
-                                Color.White.copy(alpha = 0.019f)
+                                Color.White.copy(alpha = 0.014f)
                             } else {
-                                Color.Black.copy(alpha = 0.01f)
+                                Color.Black.copy(alpha = 0.008f)
                             },
-                            MaterialTheme.colorScheme.onSurface.copy(alpha = if (isDark) 0.042f else 0.026f),
+                            MaterialTheme.colorScheme.onSurface.copy(alpha = if (isDark) 0.038f else 0.02f),
                             Color.Transparent,
                         ),
                     ),
@@ -1278,8 +1278,8 @@ private fun PrimaryNavigationRail(
                 colors = NavigationRailItemDefaults.colors(
                     selectedIconColor = MaterialTheme.colorScheme.primary,
                     selectedTextColor = MaterialTheme.colorScheme.primary,
-                    unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.54f),
-                    unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.54f),
+                    unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
+                    unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
                     indicatorColor = Color.Transparent,
                     disabledIndicatorColor = Color.Transparent,
                 ),
