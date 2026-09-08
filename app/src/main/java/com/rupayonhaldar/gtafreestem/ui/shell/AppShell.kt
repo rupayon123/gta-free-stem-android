@@ -837,7 +837,7 @@ private fun PrimaryNavigationRail(
                     )
                     val selectedPillElevation by animateDpAsState(
                         targetValue = when {
-                            isSelected -> 0.99.dp
+                            isSelected -> 1.00.dp
                             isPressed -> 0.68.dp
                             else -> 0.dp
                         },
@@ -850,8 +850,8 @@ private fun PrimaryNavigationRail(
                     )
                     val activeNavItemWidth by animateDpAsState(
                         targetValue = when {
-                            isSelected -> 88.6.dp
-                            isPressed -> 77.0.dp
+                            isSelected -> 88.8.dp
+                            isPressed -> 77.2.dp
                             else -> 76.0.dp
                         },
                         animationSpec = if (isPressed) {
@@ -863,8 +863,8 @@ private fun PrimaryNavigationRail(
                     )
                     val activeItemCorner by animateDpAsState(
                         targetValue = when {
-                            isSelected -> 19.0.dp
-                            isPressed -> 16.0.dp
+                            isSelected -> 19.1.dp
+                            isPressed -> 16.1.dp
                             else -> 13.6.dp
                         },
                         animationSpec = if (isPressed) {
@@ -878,7 +878,7 @@ private fun PrimaryNavigationRail(
                     val activeItemOffset by animateDpAsState(
                         targetValue = when {
                                 isSelected -> (-0.46).dp
-                                isPressed -> 0.20.dp
+                                isPressed -> 0.19.dp
                                 else -> 0.dp
                         },
                         animationSpec = if (isPressed) {
@@ -890,8 +890,8 @@ private fun PrimaryNavigationRail(
                     )
                     val activeItemHeight by animateDpAsState(
                         targetValue = when {
-                            isSelected -> 50.6.dp
-                            isPressed -> 48.0.dp
+                            isSelected -> 50.7.dp
+                            isPressed -> 47.9.dp
                             else -> 48.0.dp
                         },
                         animationSpec = if (isPressed) {
