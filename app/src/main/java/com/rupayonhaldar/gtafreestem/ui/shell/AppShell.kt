@@ -1298,14 +1298,14 @@ private fun DestinationLabel(
 ) {
     val resolvedStyle = if (compact) {
         MaterialTheme.typography.labelSmall.copy(
-            fontSize = if (isSelected) 12.48.sp else if (isPressed) 12.06.sp else 12.02.sp,
-            lineHeight = if (isPressed) 13.10.sp else 13.64.sp,
+            fontSize = if (isSelected) 12.50.sp else if (isPressed) 12.06.sp else 12.02.sp,
+            lineHeight = if (isPressed) 13.10.sp else if (isSelected) 13.72.sp else 13.64.sp,
             fontWeight = if (isSelected) FontWeight.SemiBold else if (isPressed) FontWeight.Medium else FontWeight.Normal,
             letterSpacing = 0.00.sp,
         )
     } else {
         MaterialTheme.typography.labelSmall.copy(
-            fontSize = if (isSelected) 12.30.sp else if (isPressed) 12.00.sp else 11.66.sp,
+            fontSize = if (isSelected) 12.33.sp else if (isPressed) 12.00.sp else 11.66.sp,
             lineHeight = if (isPressed) 12.70.sp else 12.80.sp,
             fontWeight = if (isSelected) FontWeight.SemiBold else if (isPressed) FontWeight.Medium else FontWeight.Normal,
             letterSpacing = 0.00.sp,
