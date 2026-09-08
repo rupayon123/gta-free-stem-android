@@ -1356,9 +1356,9 @@ private fun DestinationLabel(
     )
     val labelOffset by animateDpAsState(
         targetValue = when {
-            isPressed && !isSelected -> 0.29.dp
+            isPressed && !isSelected -> 0.27.dp
             isSelected -> 0.dp
-            else -> if (compact) 0.53.dp else 0.43.dp
+            else -> if (compact) 0.52.dp else 0.42.dp
         },
         animationSpec = if (isPressed) {
             navPressDpAnimationSpec
@@ -1371,10 +1371,10 @@ private fun DestinationLabel(
     )
     val labelLift by animateDpAsState(
         targetValue = when {
-            isPressed && !isSelected -> 0.09.dp
+            isPressed && !isSelected -> 0.08.dp
             isPressed && isSelected -> 0.dp
             isSelected -> (-0.14).dp
-            else -> if (compact) 0.55.dp else 0.39.dp
+            else -> if (compact) 0.54.dp else 0.38.dp
         },
         animationSpec = if (isPressed) {
             navPressDpAnimationSpec
@@ -1387,8 +1387,8 @@ private fun DestinationLabel(
     )
     val labelScale by animateFloatAsState(
         targetValue = when {
-            isPressed && !isSelected -> 0.989f
-            isSelected -> 1.003f
+            isPressed && !isSelected -> 0.988f
+            isSelected -> 1.002f
             else -> 0.998f
         },
         animationSpec = if (isPressed) {
