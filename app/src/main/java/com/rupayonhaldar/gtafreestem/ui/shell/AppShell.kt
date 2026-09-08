@@ -580,11 +580,11 @@ private fun PrimaryNavigationBar(
                         )
                         val iconHaloSize by animateDpAsState(
                             targetValue = if (isSelected) {
-                                37.6.dp
+                                37.8.dp
                             } else if (isPressed) {
-                                26.1.dp
+                                26.0.dp
                             } else {
-                                21.6.dp
+                                21.5.dp
                             },
                             animationSpec = if (isPressed) {
                                 navPressDpAnimationSpec
@@ -596,7 +596,7 @@ private fun PrimaryNavigationBar(
                             label = "bottom-nav-icon-halo-size-${destination.name}",
                         )
                         val iconHaloBorderWidth by animateDpAsState(
-                            targetValue = if (isSelected || isPressed) 0.6.dp else 0.dp,
+                            targetValue = if (isSelected || isPressed) 0.62.dp else 0.dp,
                             animationSpec = if (isPressed) {
                                 navPressDpAnimationSpec
                                 } else if (isSelected) {
@@ -1155,11 +1155,11 @@ private fun PrimaryNavigationRail(
                         )
                         val iconHaloSize by animateDpAsState(
                             targetValue = if (isSelected) {
-                                35.8.dp
+                                36.0.dp
                             } else if (isPressed) {
                                 26.0.dp
                             } else {
-                                22.2.dp
+                                22.0.dp
                             },
                             animationSpec = if (isPressed) {
                                 navPressDpAnimationSpec
@@ -1171,7 +1171,7 @@ private fun PrimaryNavigationRail(
                             label = "rail-icon-halo-size-${destination.name}",
                         )
                         val iconHaloBorderWidth by animateDpAsState(
-                            targetValue = if (isSelected || isPressed) 0.6.dp else 0.dp,
+                            targetValue = if (isSelected || isPressed) 0.62.dp else 0.dp,
                             animationSpec = if (isPressed) {
                                 navPressDpAnimationSpec
                                 } else if (isSelected) {
@@ -1314,7 +1314,7 @@ private fun DestinationLabel(
     val labelGlowColor by animateColorAsState(
         targetValue = when {
             isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)
-            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.50f)
+            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.52f)
             isPressed -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.40f)
             else -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.50f)
         },
@@ -1331,7 +1331,7 @@ private fun DestinationLabel(
         targetValue = when {
             isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.64f)
             isPressed -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.62f)
-            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.96f)
+            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.98f)
             else -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.70f)
         },
         animationSpec = if (isPressed) {
@@ -1357,7 +1357,7 @@ private fun DestinationLabel(
     val labelOffset by animateDpAsState(
         targetValue = when {
             isPressed && !isSelected -> 0.14.dp
-            isSelected -> (-0.02).dp
+            isSelected -> (-0.03).dp
             else -> if (compact) 0.18.dp else 0.14.dp
         },
         animationSpec = if (isPressed) {
@@ -1373,7 +1373,7 @@ private fun DestinationLabel(
         targetValue = when {
             isPressed && !isSelected -> 0.03.dp
             isPressed && isSelected -> 0.dp
-            isSelected -> (-0.12).dp
+            isSelected -> (-0.13).dp
             else -> if (compact) 0.18.dp else 0.14.dp
         },
         animationSpec = if (isPressed) {
@@ -1388,7 +1388,7 @@ private fun DestinationLabel(
     val labelScale by animateFloatAsState(
         targetValue = when {
             isPressed && !isSelected -> 0.9961f
-            isSelected -> 1.0001f
+            isSelected -> 1.0004f
             else -> 0.9994f
         },
         animationSpec = if (isPressed) {
