@@ -1403,7 +1403,7 @@ private fun DestinationLabel(
     val labelShadowColor by animateColorAsState(
         targetValue = when {
             isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = if (isPressed) 0.03f else 0.035f)
-            isPressed -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.02f)
+            isPressed -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.032f)
             else -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.01f)
         },
         animationSpec = if (isPressed) {
@@ -1417,8 +1417,8 @@ private fun DestinationLabel(
     )
     val labelShadowRadius by animateFloatAsState(
         targetValue = when {
-            isSelected -> 0.34f
-            isPressed -> 0.06f
+            isSelected -> 0.30f
+            isPressed -> 0.05f
             else -> 0.01f
         },
         animationSpec = if (isPressed) {
