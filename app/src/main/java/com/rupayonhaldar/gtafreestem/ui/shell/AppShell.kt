@@ -166,7 +166,10 @@ private fun PrimaryNavigationBar(
         modifier = Modifier
             .testTag("primary-navigation-bar")
             .fillMaxWidth()
-            .padding(horizontal = 12.dp, vertical = 5.6.dp),
+            .padding(
+                horizontal = NAV_BOTTOM_NAV_BAR_OUTER_HORIZONTAL_PADDING.dp,
+                vertical = NAV_BOTTOM_NAV_BAR_OUTER_VERTICAL_PADDING.dp,
+            ),
         shape = barShape,
         color = barSurface,
         tonalElevation = NAV_SHELL_BAR_TONAL_ELEVATION.dp,
@@ -199,7 +202,11 @@ private fun PrimaryNavigationBar(
             )
         NavigationBar(
             modifier = Modifier
-                .padding(horizontal = 7.3.dp, top = 0.dp, bottom = 0.dp)
+                .padding(
+                    horizontal = NAV_BOTTOM_NAV_BAR_INNER_PADDING.dp,
+                    top = 0.dp,
+                    bottom = 0.dp,
+                )
                 .clip(barShape),
             containerColor = barContainer,
             tonalElevation = 0.dp,
@@ -271,9 +278,9 @@ private fun PrimaryNavigationBar(
                     )
                     val activeNavItemWidth by animateDpAsState(
                         targetValue = when {
-                            isSelected -> 80.dp
-                            isPressed -> 80.dp
-                            else -> 79.dp
+                            isSelected -> NAV_BOTTOM_NAV_ITEM_SELECTED_WIDTH.dp
+                            isPressed -> NAV_BOTTOM_NAV_ITEM_SELECTED_WIDTH.dp
+                            else -> NAV_BOTTOM_NAV_ITEM_UNSELECTED_WIDTH.dp
                         },
                         animationSpec = if (isPressed) {
                             navPressDpAnimationSpec
@@ -347,9 +354,12 @@ private fun PrimaryNavigationBar(
                         selected = isSelected,
                         onClick = { onDestinationSelected(destination) },
                         interactionSource = destinationInteractionSource,
-                        modifier = Modifier
+                            modifier = Modifier
                             .testTag(destination.testTag)
-                            .padding(horizontal = 4.8.dp, vertical = 2.4.dp)
+                            .padding(
+                                horizontal = NAV_BOTTOM_NAV_ITEM_PADDING_HORIZONTAL.dp,
+                                vertical = NAV_BOTTOM_NAV_ITEM_PADDING_VERTICAL.dp,
+                            )
                             .clip(activeItemShape)
                             .shadow(
                                 elevation = selectedPillElevation,
@@ -768,8 +778,8 @@ private fun PrimaryNavigationRail(
     Surface(
         modifier = Modifier
         .fillMaxHeight()
-            .widthIn(min = 87.8.dp)
-            .padding(8.dp)
+            .widthIn(min = NAV_RAIL_WIDTH.dp)
+            .padding(NAV_RAIL_OUTER_PADDING.dp)
             .testTag("primary-navigation-rail"),
         color = railSurface,
         shape = railShape,
@@ -804,7 +814,12 @@ private fun PrimaryNavigationRail(
         NavigationRail(
             modifier = Modifier
                 .fillMaxHeight()
-                .padding(start = 6.9.dp, end = 6.9.dp, top = 9.4.dp, bottom = 9.4.dp)
+                .padding(
+                    start = NAV_RAIL_INNER_PADDING_HORIZONTAL.dp,
+                    end = NAV_RAIL_INNER_PADDING_HORIZONTAL.dp,
+                    top = NAV_RAIL_INNER_PADDING_VERTICAL.dp,
+                    bottom = NAV_RAIL_INNER_PADDING_VERTICAL.dp,
+                )
             .clip(railShape),
             containerColor = railContainer,
             windowInsets = WindowInsets(0, 0, 0, 0),
@@ -873,9 +888,9 @@ private fun PrimaryNavigationRail(
                     )
                     val activeNavItemWidth by animateDpAsState(
                         targetValue = when {
-                            isSelected -> 86.dp
-                            isPressed -> 86.dp
-                            else -> 85.dp
+                            isSelected -> NAV_RAIL_ITEM_SELECTED_WIDTH.dp
+                            isPressed -> NAV_RAIL_ITEM_SELECTED_WIDTH.dp
+                            else -> NAV_RAIL_ITEM_UNSELECTED_WIDTH.dp
                         },
                         animationSpec = if (isPressed) {
                             navPressDpAnimationSpec
@@ -947,7 +962,10 @@ private fun PrimaryNavigationRail(
                         interactionSource = destinationInteractionSource,
                         modifier = Modifier
                             .testTag(destination.testTag)
-                            .padding(horizontal = 2.4.dp, vertical = 2.6.dp)
+                            .padding(
+                                horizontal = NAV_RAIL_ITEM_PADDING_HORIZONTAL.dp,
+                                vertical = NAV_RAIL_ITEM_PADDING_VERTICAL.dp,
+                            )
                             .clip(activeItemShape)
                             .shadow(
                                 elevation = selectedPillElevation,
@@ -1457,6 +1475,21 @@ private const val NAV_LABEL_SELECTED_PRESS_ALPHA_VISIBILITY = 0.992f
 private const val NAV_LABEL_OFFSET_SELECTED_DP = -0.12f
 private const val NAV_LABEL_OFFSET_SELECTED_PRESSED_DP = -0.12f
 private const val NAV_LABEL_SELECTED_PRESS_SCALE = 1.0032f
+private const val NAV_BOTTOM_NAV_BAR_OUTER_HORIZONTAL_PADDING = 12f
+private const val NAV_BOTTOM_NAV_BAR_OUTER_VERTICAL_PADDING = 5.6f
+private const val NAV_BOTTOM_NAV_BAR_INNER_PADDING = 7.2f
+private const val NAV_BOTTOM_NAV_ITEM_SELECTED_WIDTH = 80.2f
+private const val NAV_BOTTOM_NAV_ITEM_UNSELECTED_WIDTH = 79.2f
+private const val NAV_BOTTOM_NAV_ITEM_PADDING_HORIZONTAL = 4.8f
+private const val NAV_BOTTOM_NAV_ITEM_PADDING_VERTICAL = 2.35f
+private const val NAV_RAIL_WIDTH = 88f
+private const val NAV_RAIL_OUTER_PADDING = 8.1f
+private const val NAV_RAIL_INNER_PADDING_HORIZONTAL = 7f
+private const val NAV_RAIL_INNER_PADDING_VERTICAL = 9.3f
+private const val NAV_RAIL_ITEM_SELECTED_WIDTH = 86.4f
+private const val NAV_RAIL_ITEM_UNSELECTED_WIDTH = 85.4f
+private const val NAV_RAIL_ITEM_PADDING_HORIZONTAL = 2.4f
+private const val NAV_RAIL_ITEM_PADDING_VERTICAL = 2.6f
 private const val NAV_BOTTOM_NAV_ITEM_OFFSET_PRESSED_DP = -0.16f
 private const val NAV_RAIL_ITEM_OFFSET_PRESSED_DP = -0.15f
 private const val NAV_BOTTOM_NAV_ITEM_SELECTED_OFFSET_PRESSED_DP = -0.34f
