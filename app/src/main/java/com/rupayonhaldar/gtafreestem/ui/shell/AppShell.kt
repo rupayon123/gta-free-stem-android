@@ -1290,15 +1290,15 @@ private fun DestinationLabel(
 ) {
     val resolvedStyle = if (compact) {
         MaterialTheme.typography.labelSmall.copy(
-            fontSize = if (isSelected) 12.2.sp else 11.8.sp,
-            lineHeight = if (isSelected) 14.2.sp else 13.4.sp,
+            fontSize = if (isSelected) 12.25.sp else 11.8.sp,
+            lineHeight = if (isSelected) 14.25.sp else 13.5.sp,
             fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
             letterSpacing = 0.01.sp,
         )
     } else {
             MaterialTheme.typography.labelSmall.copy(
-            fontSize = if (isSelected) 12.35.sp else 11.75.sp,
-            lineHeight = if (isSelected) 13.6.sp else 12.9.sp,
+            fontSize = if (isSelected) 12.4.sp else 11.75.sp,
+            lineHeight = if (isSelected) 13.7.sp else 13.0.sp,
             fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
             letterSpacing = 0.01.sp,
         )
@@ -1320,7 +1320,7 @@ private fun DestinationLabel(
         label = "destination-label-color",
     )
     val labelAlpha by animateFloatAsState(
-        targetValue = if (isPressed && !isSelected) NAV_LABEL_PRESS_ALPHA else if (isSelected) 1f else NAV_LABEL_UNSELECTED_ALPHA,
+        targetValue = if (isPressed && !isSelected) NAV_LABEL_PRESS_ALPHA else if (isSelected) 1f else NAV_LABEL_UNSELECTED_VISIBILITY_ALPHA,
         animationSpec = if (isPressed) {
             navPressFloatAnimationSpec
         } else if (isSelected) {
