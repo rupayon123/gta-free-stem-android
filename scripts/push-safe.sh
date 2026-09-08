@@ -56,17 +56,24 @@ if [ -z "$(git status --short)" ]; then
   echo "No changes detected; nothing new to commit."
 else
   if [ "$INCLUDE_UNTRACKED" = "--with-untracked" ]; then
-    git add -A
+    git add -u
+    if [ -z "$(git diff --cached --name-only)" ]; then
+      git add -A
+    fi
   else
     git add -u
   fi
 
   if [ -z "$(git diff --cached --name-only)" ]; then
-    echo "No staged tracked changes. Use --with-untracked to include new files." >&2
-    exit 1
+    echo "No tracked file changes to commit. Set --with-untracked to include new files."
+  else
+    git commit -m "$COMMIT_MESSAGE"
   fi
 
-  git commit -m "$COMMIT_MESSAGE"
+  if [ "$INCLUDE_UNTRACKED" = "--with-untracked" ] && [ -z "$(git diff --cached --name-only)" ]; then
+    echo "No tracked/untracked changes were available to commit." >&2
+    exit 1
+  fi
 fi
 
 attempt=0
