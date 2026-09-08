@@ -394,7 +394,7 @@ private fun PrimaryNavigationBar(
                         val iconElevation by animateFloatAsState(
                         targetValue = when {
                             isPressed -> 1.5f
-                            isSelected -> 2.52f
+                            isSelected -> 2.54f
                             else -> 0f
                         },
                             animationSpec = if (isPressed) {
@@ -408,8 +408,8 @@ private fun PrimaryNavigationBar(
                         )
                         val iconContainerScale by animateFloatAsState(
                             targetValue = when {
-                                isPressed -> 1.006f
-                                isSelected -> 1.004f
+                                isPressed -> 1.007f
+                                isSelected -> 1.005f
                                 else -> 1f
                             },
                             animationSpec = if (isPressed) {
@@ -423,8 +423,8 @@ private fun PrimaryNavigationBar(
                         )
                     val iconScale by animateFloatAsState(
                         targetValue = when {
-                            isPressed -> 0.998f
-                            isSelected -> 1.001f
+                            isPressed -> 0.997f
+                            isSelected -> 1.002f
                             else -> 1f
                         },
                             animationSpec = if (isPressed) {
@@ -469,8 +469,8 @@ private fun PrimaryNavigationBar(
                         val iconGlyphSize by animateDpAsState(
                             targetValue = when {
                             isPressed -> 19.dp
-                            isSelected -> 20.5.dp
-                            else -> 19.6.dp
+                            isSelected -> 20.55.dp
+                            else -> 19.58.dp
                             },
                             animationSpec = if (isPressed) {
                                 navPressDpAnimationSpec
@@ -484,8 +484,8 @@ private fun PrimaryNavigationBar(
                         val iconFaceSize by animateDpAsState(
                             targetValue = when {
                             isPressed -> 33.dp
-                            isSelected -> 35.4.dp
-                            else -> 34.2.dp
+                            isSelected -> 35.5.dp
+                            else -> 34.25.dp
                             },
                             animationSpec = if (isPressed) {
                                 navPressDpAnimationSpec
@@ -969,7 +969,7 @@ private fun PrimaryNavigationRail(
                         val iconElevation by animateFloatAsState(
                         targetValue = when {
                             isPressed -> 1.6f
-                            isSelected -> 2.72f
+                            isSelected -> 2.74f
                             else -> 0f
                         },
                             animationSpec = if (isPressed) {
@@ -984,7 +984,7 @@ private fun PrimaryNavigationRail(
                         val iconContainerScale by animateFloatAsState(
                             targetValue = when {
                                 isPressed -> 1.006f
-                                isSelected -> 1.004f
+                                isSelected -> 1.005f
                                 else -> 1f
                             },
                             animationSpec = if (isPressed) {
@@ -998,8 +998,8 @@ private fun PrimaryNavigationRail(
                         )
                     val iconScale by animateFloatAsState(
                         targetValue = when {
-                            isPressed -> 0.999f
-                            isSelected -> 1.001f
+                            isPressed -> 0.998f
+                            isSelected -> 1.002f
                             else -> 1f
                         },
                             animationSpec = if (isPressed) {
@@ -1044,8 +1044,8 @@ private fun PrimaryNavigationRail(
                         val iconGlyphSize by animateDpAsState(
                         targetValue = when {
                             isPressed -> 19.dp
-                            isSelected -> 20.5.dp
-                            else -> 19.6.dp
+                            isSelected -> 20.55.dp
+                            else -> 19.58.dp
                             },
                             animationSpec = if (isPressed) {
                                 navPressDpAnimationSpec
@@ -1059,8 +1059,8 @@ private fun PrimaryNavigationRail(
                         val iconFaceSize by animateDpAsState(
                         targetValue = when {
                             isPressed -> 33.dp
-                            isSelected -> 35.4.dp
-                            else -> 34.2.dp
+                            isSelected -> 35.5.dp
+                            else -> 34.25.dp
                             },
                             animationSpec = if (isPressed) {
                                 navPressDpAnimationSpec
