@@ -440,7 +440,7 @@ private fun PrimaryNavigationBar(
                             targetValue = when {
                             isSelected -> 1f
                             isPressed -> 0.88f
-                            else -> 0.78f
+                            else -> 0.76f
                             },
                             animationSpec = if (isPressed) {
                                 navPressFloatAnimationSpec
@@ -455,7 +455,7 @@ private fun PrimaryNavigationBar(
                             targetValue = when {
                             isSelected -> 1f
                             isPressed -> 0.9f
-                            else -> 0.84f
+                            else -> 0.80f
                             },
                             animationSpec = if (isPressed) {
                                 navPressFloatAnimationSpec
@@ -1015,7 +1015,7 @@ private fun PrimaryNavigationRail(
                             targetValue = when {
                             isSelected -> 1f
                             isPressed -> 0.88f
-                            else -> 0.78f
+                            else -> 0.76f
                             },
                             animationSpec = if (isPressed) {
                                 navPressFloatAnimationSpec
@@ -1030,7 +1030,7 @@ private fun PrimaryNavigationRail(
                             targetValue = when {
                             isSelected -> 1f
                             isPressed -> 0.9f
-                            else -> 0.84f
+                            else -> 0.80f
                             },
                             animationSpec = if (isPressed) {
                                 navPressFloatAnimationSpec
