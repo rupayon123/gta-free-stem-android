@@ -354,7 +354,9 @@ private fun PrimaryNavigationBar(
                             .shadow(
                                 elevation = selectedPillElevation,
                                 shape = activeItemShape,
-                                ambientColor = selectedPillBorderColor.copy(alpha = if (isDark) 0.18f else 0.10f),
+                                ambientColor = selectedPillBorderColor.copy(
+                                    alpha = if (isDark) NAV_NAV_ITEM_ACTIVE_SHADOW_DARK_ALPHA else NAV_NAV_ITEM_ACTIVE_SHADOW_LIGHT_ALPHA,
+                                ),
                                 spotColor = selectedPillColor,
                             )
                             .background(
@@ -950,7 +952,9 @@ private fun PrimaryNavigationRail(
                             .shadow(
                                 elevation = selectedPillElevation,
                                 shape = activeItemShape,
-                                ambientColor = selectedPillBorderColor.copy(alpha = 0.18f),
+                                ambientColor = selectedPillBorderColor.copy(
+                                    alpha = if (isDark) NAV_NAV_ITEM_ACTIVE_SHADOW_DARK_ALPHA else NAV_NAV_ITEM_ACTIVE_SHADOW_LIGHT_ALPHA,
+                                ),
                                 spotColor = selectedPillColor,
                             )
                             .background(
@@ -1490,6 +1494,8 @@ private const val NAV_ICON_CONTAINER_UNSELECTED_ALPHA = 0.86f
 private const val NAV_ICON_TINT_PRESSED_ALPHA = 0.9f
 private const val NAV_ICON_GLYPH_SELECTED_PRESSED_ALPHA = 0.985f
 private const val NAV_NAV_ITEM_ACTIVE_BORDER = 0.42f
+private const val NAV_NAV_ITEM_ACTIVE_SHADOW_DARK_ALPHA = 0.18f
+private const val NAV_NAV_ITEM_ACTIVE_SHADOW_LIGHT_ALPHA = 0.10f
 private const val NAV_ICON_FACE_BORDER = 0.35f
 private const val NAV_ICON_HALO_BORDER_PRESSED = 0.16f
 private const val NAV_ICON_HALO_SIZE_UNSELECTED = 21.8f
