@@ -595,10 +595,12 @@ private fun PrimaryNavigationBar(
                             label = "bottom-nav-icon-halo-highlight-${destination.name}",
                         )
                         val iconHaloSize by animateDpAsState(
-                            targetValue = if (isSelected) {
-                                35.dp
+                            targetValue = if (isSelected && isPressed) {
+                                NAV_ICON_HALO_SIZE_SELECTED_PRESSED.dp
+                            } else if (isSelected) {
+                                NAV_ICON_HALO_SIZE_SELECTED.dp
                             } else if (isPressed) {
-                                30.dp
+                                NAV_ICON_HALO_SIZE_PRESSED.dp
                             } else {
                                 NAV_ICON_HALO_SIZE_UNSELECTED.dp
                             },
@@ -1188,10 +1190,12 @@ private fun PrimaryNavigationRail(
                             label = "rail-icon-halo-highlight-${destination.name}",
                         )
                         val iconHaloSize by animateDpAsState(
-                            targetValue = if (isSelected) {
-                                35.dp
+                            targetValue = if (isSelected && isPressed) {
+                                NAV_ICON_HALO_SIZE_SELECTED_PRESSED.dp
+                            } else if (isSelected) {
+                                NAV_ICON_HALO_SIZE_SELECTED.dp
                             } else if (isPressed) {
-                                30.dp
+                                NAV_ICON_HALO_SIZE_PRESSED.dp
                             } else {
                                 NAV_ICON_HALO_SIZE_UNSELECTED.dp
                             },
@@ -1476,3 +1480,6 @@ private const val NAV_ICON_TINT_PRESSED_ALPHA = 0.9f
 private const val NAV_NAV_ITEM_ACTIVE_BORDER = 0.42f
 private const val NAV_ICON_FACE_BORDER = 0.35f
 private const val NAV_ICON_HALO_SIZE_UNSELECTED = 21.8f
+private const val NAV_ICON_HALO_SIZE_PRESSED = 30f
+private const val NAV_ICON_HALO_SIZE_SELECTED = 35f
+private const val NAV_ICON_HALO_SIZE_SELECTED_PRESSED = 33.9f
