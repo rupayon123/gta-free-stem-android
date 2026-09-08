@@ -144,7 +144,7 @@ private fun PrimaryNavigationBar(
     val isDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
     val barShape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp)
     val barSurface = if (isDark) {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.87f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.88f)
     } else {
         MaterialTheme.colorScheme.surface.copy(alpha = 0.92f)
     }
@@ -171,8 +171,8 @@ private fun PrimaryNavigationBar(
             .padding(horizontal = 12.dp, vertical = 5.6.dp),
         shape = barShape,
         color = barSurface,
-        tonalElevation = 4.8.dp,
-        shadowElevation = 6.3.dp,
+        tonalElevation = 4.85.dp,
+        shadowElevation = 6.35.dp,
         border = BorderStroke(0.25.dp, barBorder),
     ) {
         Box(
@@ -180,7 +180,7 @@ private fun PrimaryNavigationBar(
                 .matchParentSize()
                 .clip(barShape)
                 .shadow(
-                    elevation = if (isDark) 6.4.dp else 5.0.dp,
+                    elevation = if (isDark) 6.45.dp else 5.1.dp,
                     shape = barShape,
                     ambientColor = barBottomGlow,
                     spotColor = barBottomGlow,
@@ -724,7 +724,7 @@ private fun PrimaryNavigationRail(
     val isDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
     val railShape = RoundedCornerShape(28.dp)
     val railSurface = if (isDark) {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.83f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.84f)
     } else {
         MaterialTheme.colorScheme.surface.copy(alpha = 0.92f)
     }
@@ -739,7 +739,7 @@ private fun PrimaryNavigationRail(
         MaterialTheme.colorScheme.primary.copy(alpha = 0.030f)
     }
     val railContainer = if (isDark) {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.69f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.70f)
     } else {
         MaterialTheme.colorScheme.surface.copy(alpha = 0.82f)
     }
@@ -752,8 +752,8 @@ private fun PrimaryNavigationRail(
             .testTag("primary-navigation-rail"),
         color = railSurface,
         shape = railShape,
-        tonalElevation = 4.6.dp,
-        shadowElevation = 6.2.dp,
+        tonalElevation = 4.65.dp,
+        shadowElevation = 6.25.dp,
         border = BorderStroke(0.25.dp, railBorder),
     ) {
         Box(
@@ -761,7 +761,7 @@ private fun PrimaryNavigationRail(
                 .matchParentSize()
                 .clip(railShape)
                 .shadow(
-                    elevation = if (isDark) 6.2.dp else 4.8.dp,
+                    elevation = if (isDark) 6.3.dp else 4.9.dp,
                     shape = railShape,
                     ambientColor = railBottomGlow,
                     spotColor = railBottomGlow,
