@@ -1362,7 +1362,7 @@ private fun DestinationLabel(
         targetValue = when {
             isPressed && !isSelected -> 0.09.dp
             isSelected -> (-0.03).dp
-            else -> if (compact) 0.17.dp else 0.13.dp
+            else -> if (compact) 0.168.dp else 0.128.dp
         },
         animationSpec = if (isPressed) {
             navPressDpAnimationSpec
@@ -1378,7 +1378,7 @@ private fun DestinationLabel(
             isPressed && !isSelected -> 0.011.dp
             isPressed && isSelected -> 0.dp
             isSelected -> (-0.12).dp
-            else -> if (compact) 0.17.dp else 0.13.dp
+            else -> if (compact) 0.168.dp else 0.128.dp
         },
         animationSpec = if (isPressed) {
             navPressDpAnimationSpec
