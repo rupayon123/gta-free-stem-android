@@ -218,7 +218,7 @@ private fun PrimaryNavigationBar(
                     val selectedPillColor by animateColorAsState(
                         targetValue = when {
                             isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.23f)
-                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.18f)
+                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.17f)
                             isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.06f)
                             else -> Color.Transparent
                         },
@@ -231,8 +231,8 @@ private fun PrimaryNavigationBar(
                     )
                     val selectedPillTopColor by animateColorAsState(
                         targetValue = when {
-                            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.23f)
-                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.19f)
+                            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.22f)
+                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.18f)
                             isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.07f)
                             else -> Color.Transparent
                         },
@@ -245,7 +245,7 @@ private fun PrimaryNavigationBar(
                     )
                     val selectedPillBorderColor by animateColorAsState(
                         targetValue = when {
-                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.20f)
+                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.19f)
                             isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.11f)
                             else -> Color.Transparent
                         },
@@ -796,8 +796,8 @@ private fun PrimaryNavigationRail(
                     val isPressed by destinationInteractionSource.collectIsPressedAsState()
                     val selectedPillColor by animateColorAsState(
                         targetValue = when {
-                            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.19f)
-                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.17f)
+                            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.18f)
+                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.16f)
                             isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.06f)
                             else -> Color.Transparent
                         },
@@ -810,8 +810,8 @@ private fun PrimaryNavigationRail(
                     )
                     val selectedPillTopColor by animateColorAsState(
                         targetValue = when {
-                            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.21f)
-                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.19f)
+                            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.20f)
+                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.18f)
                             isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.07f)
                             else -> Color.Transparent
                         },
@@ -824,7 +824,7 @@ private fun PrimaryNavigationRail(
                     )
                     val selectedPillBorderColor by animateColorAsState(
                         targetValue = when {
-                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.21f)
+                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.20f)
                             isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.11f)
                             else -> Color.Transparent
                         },
