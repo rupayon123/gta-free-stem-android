@@ -146,7 +146,7 @@ private fun PrimaryNavigationBar(
     val barSurface = if (isDark) {
         MaterialTheme.colorScheme.surface.copy(alpha = 0.94f)
     } else {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.98f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.99f)
     }
     val barBorder = if (isDark) {
         Color.White.copy(alpha = 0.14f)
@@ -156,7 +156,7 @@ private fun PrimaryNavigationBar(
     val barBottomGlow = if (isDark) {
         MaterialTheme.colorScheme.primary.copy(alpha = 0.14f)
     } else {
-        MaterialTheme.colorScheme.primary.copy(alpha = 0.05f)
+        MaterialTheme.colorScheme.primary.copy(alpha = 0.04f)
     }
     val barContainer = if (isDark) {
         MaterialTheme.colorScheme.surface.copy(alpha = 0.68f)
@@ -171,9 +171,9 @@ private fun PrimaryNavigationBar(
             .padding(horizontal = 12.dp, vertical = 6.dp),
         shape = barShape,
         color = barSurface,
-        tonalElevation = 7.dp,
-        shadowElevation = 10.dp,
-        border = BorderStroke(0.5.dp, barBorder),
+        tonalElevation = 6.dp,
+        shadowElevation = 9.dp,
+        border = BorderStroke(0.45.dp, barBorder),
     ) {
         Box(
             modifier = Modifier
@@ -752,9 +752,9 @@ private fun PrimaryNavigationRail(
             .testTag("primary-navigation-rail"),
         color = railSurface,
         shape = railShape,
-        tonalElevation = 7.dp,
-        shadowElevation = 10.dp,
-        border = BorderStroke(0.5.dp, railBorder),
+        tonalElevation = 6.dp,
+        shadowElevation = 9.dp,
+        border = BorderStroke(0.45.dp, railBorder),
     ) {
         Box(
             modifier = Modifier
