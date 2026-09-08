@@ -1417,9 +1417,9 @@ private fun DestinationLabel(
     )
     val labelShadowRadius by animateFloatAsState(
         targetValue = when {
-            isSelected -> 0.58f
-            isPressed -> 0.1f
-            else -> 0.02f
+            isSelected -> 0.38f
+            isPressed -> 0.08f
+            else -> 0.012f
         },
         animationSpec = if (isPressed) {
             navPressFloatAnimationSpec
