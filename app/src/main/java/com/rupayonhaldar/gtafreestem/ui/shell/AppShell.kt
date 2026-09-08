@@ -1448,10 +1448,10 @@ private val navSelectedSettleDpAnimationSpec = tween<Dp>(220, easing = FastOutSl
 private const val NAV_UNSELECTED_LABEL_ALPHA = 0.68f
 private const val NAV_LABEL_UNSELECTED_ALPHA = 0.84f
 private const val NAV_LABEL_UNSELECTED_VISIBILITY_ALPHA = 0.985f
-private const val NAV_LABEL_SELECTED_SCALE = 1.008f
-private const val NAV_LABEL_PRESS_SCALE = 0.9988f
+private const val NAV_LABEL_SELECTED_SCALE = 1.005f
+private const val NAV_LABEL_PRESS_SCALE = 0.9992f
 private const val NAV_LABEL_PRESS_ALPHA = 0.99f
-private const val NAV_LABEL_PRESSED_ALPHA = 0.86f
+private const val NAV_LABEL_PRESSED_ALPHA = 0.88f
 private const val NAV_LABEL_SELECTED_PRESS_ALPHA = 0.995f
 private const val NAV_LABEL_SELECTED_PRESS_ALPHA_VISIBILITY = 0.992f
 private const val NAV_LABEL_OFFSET_SELECTED_DP = -0.12f
