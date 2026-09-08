@@ -431,9 +431,9 @@ private fun PrimaryNavigationBar(
                         )
                         val iconGlyphAlpha by animateFloatAsState(
                             targetValue = when {
-                            isSelected -> 1f
-                            isPressed -> 0.93f
-                            else -> 0.82f
+                            isSelected -> NAV_ICON_GLYPH_SELECTED_ALPHA
+                            isPressed -> NAV_ICON_GLYPH_PRESSED_ALPHA
+                            else -> NAV_ICON_GLYPH_UNSELECTED_ALPHA
                             },
                             animationSpec = if (isPressed) {
                                 navPressFloatAnimationSpec
@@ -446,9 +446,9 @@ private fun PrimaryNavigationBar(
                         )
                         val iconContainerAlpha by animateFloatAsState(
                             targetValue = when {
-                            isSelected -> 1f
-                            isPressed -> 0.97f
-                            else -> 0.8f
+                            isSelected -> NAV_ICON_CONTAINER_SELECTED_ALPHA
+                            isPressed -> NAV_ICON_CONTAINER_PRESSED_ALPHA
+                            else -> NAV_ICON_CONTAINER_UNSELECTED_ALPHA
                             },
                             animationSpec = if (isPressed) {
                                 navPressFloatAnimationSpec
@@ -526,7 +526,7 @@ private fun PrimaryNavigationBar(
                             targetValue = if (isSelected) {
                                 MaterialTheme.colorScheme.primary
                             } else if (isPressed) {
-                                MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.86f)
+                                MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = NAV_ICON_TINT_PRESSED_ALPHA)
                             } else {
                                 MaterialTheme.colorScheme.onSurfaceVariant
                             },
@@ -1003,9 +1003,9 @@ private fun PrimaryNavigationRail(
                         )
                         val iconGlyphAlpha by animateFloatAsState(
                             targetValue = when {
-                                isSelected -> 1f
-                            isPressed -> 0.93f
-                            else -> 0.82f
+                                isSelected -> NAV_ICON_GLYPH_SELECTED_ALPHA
+                            isPressed -> NAV_ICON_GLYPH_PRESSED_ALPHA
+                            else -> NAV_ICON_GLYPH_UNSELECTED_ALPHA
                             },
                             animationSpec = if (isPressed) {
                                 navPressFloatAnimationSpec
@@ -1018,9 +1018,9 @@ private fun PrimaryNavigationRail(
                         )
                         val iconContainerAlpha by animateFloatAsState(
                             targetValue = when {
-                                isSelected -> 1f
-                            isPressed -> 0.97f
-                            else -> 0.8f
+                                isSelected -> NAV_ICON_CONTAINER_SELECTED_ALPHA
+                            isPressed -> NAV_ICON_CONTAINER_PRESSED_ALPHA
+                            else -> NAV_ICON_CONTAINER_UNSELECTED_ALPHA
                             },
                             animationSpec = if (isPressed) {
                                 navPressFloatAnimationSpec
@@ -1098,7 +1098,7 @@ private fun PrimaryNavigationRail(
                             targetValue = if (isSelected) {
                                 MaterialTheme.colorScheme.primary
                             } else if (isPressed) {
-                                MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.86f)
+                                MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = NAV_ICON_TINT_PRESSED_ALPHA)
                             } else {
                                 MaterialTheme.colorScheme.onSurfaceVariant
                             },
@@ -1296,9 +1296,9 @@ private fun DestinationLabel(
             letterSpacing = 0.01.sp,
         )
     } else {
-        MaterialTheme.typography.labelSmall.copy(
-            fontSize = if (isSelected) 12.2.sp else 11.75.sp,
-            lineHeight = if (isSelected) 13.4.sp else 12.9.sp,
+            MaterialTheme.typography.labelSmall.copy(
+            fontSize = if (isSelected) 12.3.sp else 11.75.sp,
+            lineHeight = if (isSelected) 13.5.sp else 12.9.sp,
             fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
             letterSpacing = 0.01.sp,
         )
@@ -1394,3 +1394,10 @@ private const val NAV_LABEL_PRESS_ALPHA = 0.96f
 private const val NAV_LABEL_PRESSED_ALPHA = 0.82f
 private const val NAV_LABEL_SELECTED_PRESS_ALPHA = 0.98f
 private const val NAV_LABEL_OFFSET_SELECTED_DP = -0.1f
+private const val NAV_ICON_GLYPH_SELECTED_ALPHA = 1f
+private const val NAV_ICON_GLYPH_PRESSED_ALPHA = 0.94f
+private const val NAV_ICON_GLYPH_UNSELECTED_ALPHA = 0.84f
+private const val NAV_ICON_CONTAINER_SELECTED_ALPHA = 1f
+private const val NAV_ICON_CONTAINER_PRESSED_ALPHA = 0.98f
+private const val NAV_ICON_CONTAINER_UNSELECTED_ALPHA = 0.84f
+private const val NAV_ICON_TINT_PRESSED_ALPHA = 0.88f
