@@ -412,6 +412,7 @@ private fun PrimaryNavigationBar(
                         )
                         val iconContainerScale by animateFloatAsState(
                             targetValue = when {
+                                isSelected && isPressed -> NAV_ICON_CONTAINER_SELECTED_PRESS_SCALE
                                 isPressed -> 1f
                                 isSelected -> 1.003f
                                 else -> 1f
@@ -427,6 +428,7 @@ private fun PrimaryNavigationBar(
                         )
                     val iconScale by animateFloatAsState(
                         targetValue = when {
+                            isSelected && isPressed -> NAV_ICON_SCALE_SELECTED_PRESS_SCALE
                             isPressed -> 0.999f
                             isSelected -> 1.002f
                             else -> 1f
@@ -474,6 +476,7 @@ private fun PrimaryNavigationBar(
                         )
                         val iconGlyphSize by animateDpAsState(
                             targetValue = when {
+                            isSelected && isPressed -> NAV_ICON_GLYPH_SELECTED_PRESSED_SIZE.dp
                             isPressed -> 19.3.dp
                             isSelected -> 20.2.dp
                             else -> 19.3.dp
@@ -489,6 +492,7 @@ private fun PrimaryNavigationBar(
                         )
                         val iconFaceSize by animateDpAsState(
                             targetValue = when {
+                            isSelected && isPressed -> NAV_ICON_FACE_SELECTED_PRESSED_SIZE.dp
                             isPressed -> 33.2.dp
                             isSelected -> 34.8.dp
                             else -> 33.8.dp
@@ -1001,6 +1005,7 @@ private fun PrimaryNavigationRail(
                         )
                         val iconContainerScale by animateFloatAsState(
                             targetValue = when {
+                                isSelected && isPressed -> NAV_ICON_CONTAINER_SELECTED_PRESS_SCALE
                                 isPressed -> 1f
                                 isSelected -> 1.003f
                                 else -> 1f
@@ -1016,10 +1021,11 @@ private fun PrimaryNavigationRail(
                         )
                         val iconScale by animateFloatAsState(
                             targetValue = when {
-                            isPressed -> 0.999f
-                            isSelected -> 1.002f
-                            else -> 1f
-                        },
+                                isSelected && isPressed -> NAV_ICON_SCALE_SELECTED_PRESS_SCALE
+                                isPressed -> 0.999f
+                                isSelected -> 1.002f
+                                else -> 1f
+                            },
                             animationSpec = if (isPressed) {
                                 navPressFloatAnimationSpec
                                 } else if (isSelected) {
@@ -1063,6 +1069,7 @@ private fun PrimaryNavigationRail(
                         )
                         val iconGlyphSize by animateDpAsState(
                         targetValue = when {
+                            isSelected && isPressed -> NAV_ICON_GLYPH_SELECTED_PRESSED_SIZE.dp
                             isPressed -> 19.3.dp
                             isSelected -> 20.2.dp
                             else -> 19.3.dp
@@ -1078,6 +1085,7 @@ private fun PrimaryNavigationRail(
                         )
                         val iconFaceSize by animateDpAsState(
                         targetValue = when {
+                            isSelected && isPressed -> NAV_ICON_FACE_SELECTED_PRESSED_SIZE.dp
                             isPressed -> 33.2.dp
                             isSelected -> 34.8.dp
                             else -> 33.8.dp
@@ -1457,6 +1465,10 @@ private const val NAV_ICON_GLYPH_UNSELECTED_ALPHA = 0.86f
 private const val NAV_ICON_CONTAINER_SELECTED_ALPHA = 1f
 private const val NAV_ICON_CONTAINER_PRESSED_SELECTED_ALPHA = 0.985f
 private const val NAV_ICON_CONTAINER_PRESSED_ALPHA = 0.99f
+private const val NAV_ICON_CONTAINER_SELECTED_PRESS_SCALE = 1.001f
+private const val NAV_ICON_SCALE_SELECTED_PRESS_SCALE = 1.001f
+private const val NAV_ICON_GLYPH_SELECTED_PRESSED_SIZE = 20.0f
+private const val NAV_ICON_FACE_SELECTED_PRESSED_SIZE = 34.4f
 private const val NAV_ICON_CONTAINER_UNSELECTED_ALPHA = 0.86f
 private const val NAV_ICON_TINT_PRESSED_ALPHA = 0.9f
 private const val NAV_NAV_ITEM_ACTIVE_BORDER = 0.42f
