@@ -258,8 +258,8 @@ private fun PrimaryNavigationBar(
                     )
                     val selectedPillElevation by animateDpAsState(
                         targetValue = when {
-                            isSelected -> 1.05.dp
-                            isPressed -> 0.84.dp
+                            isSelected -> 0.99.dp
+                            isPressed -> 0.8.dp
                             else -> 0.dp
                         },
                         animationSpec = if (isPressed) {
@@ -298,8 +298,8 @@ private fun PrimaryNavigationBar(
                     val activeItemShape = RoundedCornerShape(activeItemCorner)
                     val activeItemOffset by animateDpAsState(
                         targetValue = when {
-                            isSelected -> (-0.35).dp
-                            isPressed -> 0.38.dp
+                            isSelected -> (-0.28).dp
+                            isPressed -> 0.30.dp
                             else -> 0.dp
                         },
                         animationSpec = if (isPressed) {
@@ -313,8 +313,8 @@ private fun PrimaryNavigationBar(
                     )
                     val activeItemHeight by animateDpAsState(
                         targetValue = when {
-                            isSelected -> 58.dp
-                            isPressed -> 54.8.dp
+                            isSelected -> 57.6.dp
+                            isPressed -> 54.6.dp
                             else -> 53.9.dp
                         },
                         animationSpec = if (isPressed) {
@@ -837,8 +837,8 @@ private fun PrimaryNavigationRail(
                     )
                     val selectedPillElevation by animateDpAsState(
                         targetValue = when {
-                            isSelected -> 1.0.dp
-                            isPressed -> 0.72.dp
+                            isSelected -> 0.96.dp
+                            isPressed -> 0.68.dp
                             else -> 0.dp
                         },
                         animationSpec = if (isPressed) {
@@ -877,8 +877,8 @@ private fun PrimaryNavigationRail(
                     val activeItemShape = RoundedCornerShape(activeItemCorner)
                     val activeItemOffset by animateDpAsState(
                         targetValue = when {
-                                isSelected -> (-0.65).dp
-                                isPressed -> 0.25.dp
+                                isSelected -> (-0.42).dp
+                                isPressed -> 0.21.dp
                                 else -> 0.dp
                         },
                         animationSpec = if (isPressed) {
@@ -890,8 +890,8 @@ private fun PrimaryNavigationRail(
                     )
                     val activeItemHeight by animateDpAsState(
                         targetValue = when {
-                            isSelected -> 50.dp
-                            isPressed -> 48.dp
+                            isSelected -> 49.8.dp
+                            isPressed -> 47.9.dp
                             else -> 47.8.dp
                         },
                         animationSpec = if (isPressed) {
@@ -1461,6 +1461,6 @@ private val navSelectionDpAnimationSpec = tween<Dp>(240, easing = FastOutSlowInE
 private val navPressDpAnimationSpec = tween<Dp>(145, easing = FastOutSlowInEasing)
 private val navPressColorAnimationSpec = tween<Color>(145, easing = FastOutSlowInEasing)
 private val navSelectionColorAnimationSpec = tween<Color>(240, easing = FastOutSlowInEasing)
-private val navSelectedSettleColorAnimationSpec = tween<Color>(290, easing = FastOutSlowInEasing)
-private val navSelectedSettleFloatAnimationSpec = tween<Float>(290, easing = FastOutSlowInEasing)
-private val navSelectedSettleDpAnimationSpec = tween<Dp>(290, easing = FastOutSlowInEasing)
+private val navSelectedSettleColorAnimationSpec = tween<Color>(234, easing = FastOutSlowInEasing)
+private val navSelectedSettleFloatAnimationSpec = tween<Float>(234, easing = FastOutSlowInEasing)
+private val navSelectedSettleDpAnimationSpec = tween<Dp>(234, easing = FastOutSlowInEasing)
