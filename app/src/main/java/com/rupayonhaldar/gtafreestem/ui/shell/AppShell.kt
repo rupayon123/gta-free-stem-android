@@ -1315,8 +1315,8 @@ private fun DestinationLabel(
         targetValue = when {
             isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)
             isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.46f)
-            isPressed -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.32f)
-            else -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.32f)
+            isPressed -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.38f)
+            else -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.36f)
         },
         animationSpec = if (isPressed) {
             navPressColorAnimationSpec
@@ -1330,9 +1330,9 @@ private fun DestinationLabel(
     val labelColor by animateColorAsState(
         targetValue = when {
             isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.64f)
-            isPressed -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.47f)
+            isPressed -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.52f)
             isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.92f)
-            else -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.44f)
+            else -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.56f)
         },
         animationSpec = if (isPressed) {
             navPressColorAnimationSpec
