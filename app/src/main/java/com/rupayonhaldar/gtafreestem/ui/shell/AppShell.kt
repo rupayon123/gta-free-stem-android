@@ -350,6 +350,23 @@ private fun PrimaryNavigationBar(
                         },
                         label = "bottom-nav-item-scale-${destination.name}",
                     )
+                    val activeItemBorderWidth by animateDpAsState(
+                        targetValue = if (isSelected) {
+                            NAV_NAV_ITEM_ACTIVE_BORDER_SELECTED.dp
+                        } else if (isPressed) {
+                            NAV_NAV_ITEM_ACTIVE_BORDER_PRESSED.dp
+                        } else {
+                            NAV_NAV_ITEM_ACTIVE_BORDER_UNSELECTED.dp
+                        },
+                        animationSpec = if (isPressed) {
+                            navPressDpAnimationSpec
+                            } else if (isSelected) {
+                            navSelectedSettleDpAnimationSpec
+                            } else {
+                            navSelectionDpAnimationSpec
+                            },
+                        label = "bottom-nav-item-border-width-${destination.name}",
+                    )
                     NavigationBarItem(
                         selected = isSelected,
                         onClick = { onDestinationSelected(destination) },
@@ -380,7 +397,7 @@ private fun PrimaryNavigationBar(
                             )
                             .border(
                                 border = BorderStroke(
-                                    width = if (isSelected || isPressed) NAV_NAV_ITEM_ACTIVE_BORDER.dp else 0.dp,
+                                    width = activeItemBorderWidth,
                                     color = selectedPillBorderColor,
                                 ),
                                 shape = activeItemShape,
@@ -956,6 +973,23 @@ private fun PrimaryNavigationRail(
                         },
                         label = "rail-item-scale-${destination.name}",
                     )
+                    val activeItemBorderWidth by animateDpAsState(
+                        targetValue = if (isSelected) {
+                            NAV_NAV_ITEM_ACTIVE_BORDER_SELECTED.dp
+                        } else if (isPressed) {
+                            NAV_NAV_ITEM_ACTIVE_BORDER_PRESSED.dp
+                        } else {
+                            NAV_NAV_ITEM_ACTIVE_BORDER_UNSELECTED.dp
+                        },
+                        animationSpec = if (isPressed) {
+                            navPressDpAnimationSpec
+                            } else if (isSelected) {
+                            navSelectedSettleDpAnimationSpec
+                            } else {
+                            navSelectionDpAnimationSpec
+                            },
+                        label = "rail-item-border-width-${destination.name}",
+                    )
                     NavigationRailItem(
                         selected = isSelected,
                         onClick = { onDestinationSelected(destination) },
@@ -986,7 +1020,7 @@ private fun PrimaryNavigationRail(
                             )
                             .border(
                                 border = BorderStroke(
-                                    width = if (isSelected || isPressed) NAV_NAV_ITEM_ACTIVE_BORDER.dp else 0.dp,
+                                    width = activeItemBorderWidth,
                                     color = selectedPillBorderColor,
                                 ),
                                 shape = activeItemShape,
@@ -1557,6 +1591,9 @@ private const val NAV_ICON_CONTAINER_UNSELECTED_ALPHA = 0.86f
 private const val NAV_ICON_TINT_PRESSED_ALPHA = 0.9f
 private const val NAV_ICON_GLYPH_SELECTED_PRESSED_ALPHA = 0.985f
 private const val NAV_NAV_ITEM_ACTIVE_BORDER = 0.42f
+private const val NAV_NAV_ITEM_ACTIVE_BORDER_SELECTED = NAV_NAV_ITEM_ACTIVE_BORDER
+private const val NAV_NAV_ITEM_ACTIVE_BORDER_PRESSED = NAV_NAV_ITEM_ACTIVE_BORDER
+private const val NAV_NAV_ITEM_ACTIVE_BORDER_UNSELECTED = 0f
 private const val NAV_NAV_ITEM_ACTIVE_SHADOW_DARK_ALPHA = 0.18f
 private const val NAV_NAV_ITEM_ACTIVE_SHADOW_LIGHT_ALPHA = 0.10f
 private const val NAV_ICON_FACE_GLOW_SELECTED_PRESSED_ALPHA = 0.046f
