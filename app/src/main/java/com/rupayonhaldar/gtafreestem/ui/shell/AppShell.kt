@@ -231,8 +231,8 @@ private fun PrimaryNavigationBar(
                     )
                     val selectedPillTopColor by animateColorAsState(
                         targetValue = when {
-                            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.172f)
-                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.148f)
+                            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.168f)
+                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.142f)
                             isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.052f)
                             else -> Color.Transparent
                         },
@@ -408,10 +408,10 @@ private fun PrimaryNavigationBar(
                         )
                         val iconContainerScale by animateFloatAsState(
                             targetValue = when {
-                            isPressed -> 1.01f
-                            isSelected -> 1.01f
-                            else -> 1f
-                        },
+                                isPressed -> 1.01f
+                                isSelected -> 1.008f
+                                else -> 1f
+                            },
                             animationSpec = if (isPressed) {
                                 navPressFloatAnimationSpec
                                 } else if (isSelected) {
@@ -422,11 +422,11 @@ private fun PrimaryNavigationBar(
                             label = "bottom-nav-icon-container-scale-${destination.name}",
                         )
                         val iconScale by animateFloatAsState(
-                        targetValue = when {
-                            isPressed -> 0.995f
-                            isSelected -> 1.016f
-                            else -> 1f
-                        },
+                            targetValue = when {
+                                isPressed -> 0.995f
+                                isSelected -> 1.013f
+                                else -> 1f
+                            },
                             animationSpec = if (isPressed) {
                                 navPressFloatAnimationSpec
                                 } else if (isSelected) {
@@ -440,7 +440,7 @@ private fun PrimaryNavigationBar(
                             targetValue = when {
                             isSelected -> 1f
                             isPressed -> 0.875f
-                            else -> 0.73f
+                            else -> 0.7f
                             },
                             animationSpec = if (isPressed) {
                                 navPressFloatAnimationSpec
@@ -452,10 +452,10 @@ private fun PrimaryNavigationBar(
                             label = "bottom-nav-icon-glyph-alpha-${destination.name}",
                         )
                         val iconContainerAlpha by animateFloatAsState(
-                        targetValue = when {
+                            targetValue = when {
                             isSelected -> 1f
                             isPressed -> 0.89f
-                            else -> 0.76f
+                            else -> 0.71f
                             },
                             animationSpec = if (isPressed) {
                                 navPressFloatAnimationSpec
@@ -516,7 +516,7 @@ private fun PrimaryNavigationBar(
                         val iconFaceGlow by animateColorAsState(
                             targetValue = when {
                                 isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
-                                isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.13f)
+                                isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)
                                 isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.08f)
                                 else -> Color.Transparent
                             },
@@ -546,7 +546,7 @@ private fun PrimaryNavigationBar(
                         )
                         val iconHalo by animateColorAsState(
                             targetValue = if (isSelected) {
-                                MaterialTheme.colorScheme.primary.copy(alpha = 0.108f)
+                                MaterialTheme.colorScheme.primary.copy(alpha = 0.09f)
                             } else if (isPressed) {
                                 MaterialTheme.colorScheme.primary.copy(alpha = 0.052f)
                             } else {
@@ -563,7 +563,7 @@ private fun PrimaryNavigationBar(
                         )
                         val iconHaloHighlight by animateColorAsState(
                             targetValue = if (isSelected) {
-                                MaterialTheme.colorScheme.primary.copy(alpha = 0.085f)
+                                MaterialTheme.colorScheme.primary.copy(alpha = 0.07f)
                             } else if (isPressed) {
                                 MaterialTheme.colorScheme.primary.copy(alpha = 0.022f)
                             } else {
@@ -596,7 +596,7 @@ private fun PrimaryNavigationBar(
                             label = "bottom-nav-icon-halo-size-${destination.name}",
                         )
                         val iconHaloBorderWidth by animateDpAsState(
-                            targetValue = if (isSelected || isPressed) 0.72.dp else 0.dp,
+                            targetValue = if (isSelected || isPressed) 0.66.dp else 0.dp,
                             animationSpec = if (isPressed) {
                                 navPressDpAnimationSpec
                                 } else if (isSelected) {
@@ -608,9 +608,9 @@ private fun PrimaryNavigationBar(
                         )
                         val iconShadowColor by animateColorAsState(
                             targetValue = when {
-                                isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.095f)
-                                isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.047f)
-                                isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.072f)
+                                isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.085f)
+                                isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.038f)
+                                isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.064f)
                                 else -> Color.Transparent
                             },
                             animationSpec = if (isPressed) {
@@ -983,10 +983,10 @@ private fun PrimaryNavigationRail(
                         )
                         val iconContainerScale by animateFloatAsState(
                             targetValue = when {
-                            isPressed -> 1.01f
-                            isSelected -> 1.01f
-                            else -> 1f
-                        },
+                                isPressed -> 1.01f
+                                isSelected -> 1.008f
+                                else -> 1f
+                            },
                             animationSpec = if (isPressed) {
                                 navPressFloatAnimationSpec
                                 } else if (isSelected) {
@@ -997,11 +997,11 @@ private fun PrimaryNavigationRail(
                             label = "rail-icon-container-scale-${destination.name}",
                         )
                         val iconScale by animateFloatAsState(
-                        targetValue = when {
-                            isPressed -> 0.997f
-                            isSelected -> 1.016f
-                            else -> 1f
-                        },
+                            targetValue = when {
+                                isPressed -> 0.997f
+                                isSelected -> 1.013f
+                                else -> 1f
+                            },
                             animationSpec = if (isPressed) {
                                 navPressFloatAnimationSpec
                                 } else if (isSelected) {
@@ -1013,9 +1013,9 @@ private fun PrimaryNavigationRail(
                         )
                         val iconGlyphAlpha by animateFloatAsState(
                             targetValue = when {
-                            isSelected -> 1f
-                            isPressed -> 0.875f
-                            else -> 0.73f
+                                isSelected -> 1f
+                                isPressed -> 0.875f
+                                else -> 0.7f
                             },
                             animationSpec = if (isPressed) {
                                 navPressFloatAnimationSpec
@@ -1027,10 +1027,10 @@ private fun PrimaryNavigationRail(
                             label = "rail-icon-glyph-alpha-${destination.name}",
                         )
                         val iconContainerAlpha by animateFloatAsState(
-                        targetValue = when {
-                            isSelected -> 1f
-                            isPressed -> 0.89f
-                            else -> 0.76f
+                            targetValue = when {
+                                isSelected -> 1f
+                                isPressed -> 0.89f
+                                else -> 0.71f
                             },
                             animationSpec = if (isPressed) {
                                 navPressFloatAnimationSpec
@@ -1091,7 +1091,7 @@ private fun PrimaryNavigationRail(
                         val iconFaceGlow by animateColorAsState(
                             targetValue = when {
                                 isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
-                                isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.14f)
+                                isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.13f)
                                 isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.08f)
                                 else -> Color.Transparent
                             },
@@ -1121,7 +1121,7 @@ private fun PrimaryNavigationRail(
                         )
                         val iconHalo by animateColorAsState(
                             targetValue = if (isSelected) {
-                                MaterialTheme.colorScheme.primary.copy(alpha = 0.108f)
+                                MaterialTheme.colorScheme.primary.copy(alpha = 0.09f)
                             } else if (isPressed) {
                                 MaterialTheme.colorScheme.primary.copy(alpha = 0.054f)
                             } else {
@@ -1138,7 +1138,7 @@ private fun PrimaryNavigationRail(
                         )
                         val iconHaloHighlight by animateColorAsState(
                             targetValue = if (isSelected) {
-                                MaterialTheme.colorScheme.primary.copy(alpha = 0.048f)
+                                MaterialTheme.colorScheme.primary.copy(alpha = 0.04f)
                             } else if (isPressed) {
                                 MaterialTheme.colorScheme.primary.copy(alpha = 0.015f)
                             } else {
@@ -1171,7 +1171,7 @@ private fun PrimaryNavigationRail(
                             label = "rail-icon-halo-size-${destination.name}",
                         )
                         val iconHaloBorderWidth by animateDpAsState(
-                            targetValue = if (isSelected || isPressed) 0.72.dp else 0.dp,
+                            targetValue = if (isSelected || isPressed) 0.66.dp else 0.dp,
                             animationSpec = if (isPressed) {
                                 navPressDpAnimationSpec
                                 } else if (isSelected) {
@@ -1183,9 +1183,9 @@ private fun PrimaryNavigationRail(
                         )
                         val iconShadowColor by animateColorAsState(
                             targetValue = when {
-                                isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.088f)
-                                isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.044f)
-                                isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.07f)
+                                isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.08f)
+                                isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.038f)
+                                isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.062f)
                                 else -> Color.Transparent
                             },
                             animationSpec = if (isPressed) {
@@ -1313,10 +1313,10 @@ private fun DestinationLabel(
     }
     val labelGlowColor by animateColorAsState(
         targetValue = when {
-            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.695f)
-            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.67f)
-            isPressed -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.39f)
-            else -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.42f)
+            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.665f)
+            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.645f)
+            isPressed -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.34f)
+            else -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.36f)
         },
         animationSpec = if (isPressed) {
             navPressColorAnimationSpec
@@ -1329,10 +1329,10 @@ private fun DestinationLabel(
     )
     val labelColor by animateColorAsState(
         targetValue = when {
-            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.82f)
-            isPressed -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.51f)
+            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.81f)
+            isPressed -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.47f)
             isSelected -> MaterialTheme.colorScheme.primary
-            else -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.55f)
+            else -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
         },
         animationSpec = if (isPressed) {
             navPressColorAnimationSpec
@@ -1344,7 +1344,7 @@ private fun DestinationLabel(
         label = "destination-label-color",
     )
     val labelAlpha by animateFloatAsState(
-        targetValue = if (isPressed && !isSelected) 0.985f else if (isSelected) 1f else 0.975f,
+        targetValue = if (isPressed && !isSelected) 0.98f else if (isSelected) 1f else 0.965f,
         animationSpec = if (isPressed) {
             navPressFloatAnimationSpec
         } else if (isSelected) {
@@ -1402,9 +1402,9 @@ private fun DestinationLabel(
     )
     val labelShadowColor by animateColorAsState(
         targetValue = when {
-            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = if (isPressed) 0.05f else 0.06f)
-            isPressed -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.025f)
-            else -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.008f)
+            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = if (isPressed) 0.04f else 0.05f)
+            isPressed -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.02f)
+            else -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.006f)
         },
         animationSpec = if (isPressed) {
             navPressColorAnimationSpec
@@ -1417,7 +1417,7 @@ private fun DestinationLabel(
     )
     val labelShadowRadius by animateFloatAsState(
         targetValue = when {
-            isSelected -> 0.9f
+            isSelected -> 0.72f
             isPressed -> 0.1f
             else -> 0.02f
         },
