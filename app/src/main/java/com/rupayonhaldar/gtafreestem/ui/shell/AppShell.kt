@@ -144,9 +144,9 @@ private fun PrimaryNavigationBar(
     val isDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
     val barShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
     val barSurface = if (isDark) {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.84f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.80f)
     } else {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.90f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.86f)
     }
     val barBorder = if (isDark) {
         Color.White.copy(alpha = 0.06f)
@@ -159,9 +159,9 @@ private fun PrimaryNavigationBar(
         MaterialTheme.colorScheme.primary.copy(alpha = 0.02f)
     }
     val barContainer = if (isDark) {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.55f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.50f)
     } else {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.67f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.62f)
     }
 
     Surface(
@@ -724,9 +724,9 @@ private fun PrimaryNavigationRail(
     val isDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
     val railShape = RoundedCornerShape(24.dp)
     val railSurface = if (isDark) {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.84f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.80f)
     } else {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.90f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.86f)
     }
     val railBorder = if (isDark) {
         Color.White.copy(alpha = 0.06f)
@@ -739,9 +739,9 @@ private fun PrimaryNavigationRail(
         MaterialTheme.colorScheme.primary.copy(alpha = 0.02f)
     }
     val railContainer = if (isDark) {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.58f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.54f)
     } else {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.68f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.66f)
     }
 
     Surface(
