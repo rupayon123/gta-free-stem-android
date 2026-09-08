@@ -144,9 +144,9 @@ private fun PrimaryNavigationBar(
     val isDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
     val barShape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp)
     val barSurface = if (isDark) {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.88f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.885f)
     } else {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.92f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.915f)
     }
     val barBorder = if (isDark) {
         Color.White.copy(alpha = 0.10f)
@@ -159,9 +159,9 @@ private fun PrimaryNavigationBar(
         MaterialTheme.colorScheme.primary.copy(alpha = 0.030f)
     }
     val barContainer = if (isDark) {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.70f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.705f)
     } else {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.82f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.825f)
     }
 
     Surface(
@@ -171,8 +171,8 @@ private fun PrimaryNavigationBar(
             .padding(horizontal = 12.dp, vertical = 5.6.dp),
         shape = barShape,
         color = barSurface,
-        tonalElevation = 4.85.dp,
-        shadowElevation = 6.35.dp,
+        tonalElevation = 4.88.dp,
+        shadowElevation = 6.4.dp,
         border = BorderStroke(0.25.dp, barBorder),
     ) {
         Box(
@@ -180,7 +180,7 @@ private fun PrimaryNavigationBar(
                 .matchParentSize()
                 .clip(barShape)
                 .shadow(
-                    elevation = if (isDark) 6.45.dp else 5.1.dp,
+                    elevation = if (isDark) 6.5.dp else 5.2.dp,
                     shape = barShape,
                     ambientColor = barBottomGlow,
                     spotColor = barBottomGlow,
@@ -201,7 +201,7 @@ private fun PrimaryNavigationBar(
             )
         NavigationBar(
             modifier = Modifier
-                .padding(horizontal = 7.2.dp, top = 0.dp, bottom = 0.dp)
+                .padding(horizontal = 7.3.dp, top = 0.dp, bottom = 0.dp)
                 .clip(barShape),
             containerColor = barContainer,
             tonalElevation = 0.dp,
@@ -724,7 +724,7 @@ private fun PrimaryNavigationRail(
     val isDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
     val railShape = RoundedCornerShape(28.dp)
     val railSurface = if (isDark) {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.84f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.845f)
     } else {
         MaterialTheme.colorScheme.surface.copy(alpha = 0.92f)
     }
@@ -739,9 +739,9 @@ private fun PrimaryNavigationRail(
         MaterialTheme.colorScheme.primary.copy(alpha = 0.030f)
     }
     val railContainer = if (isDark) {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.70f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.705f)
     } else {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.82f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.825f)
     }
 
     Surface(
@@ -752,8 +752,8 @@ private fun PrimaryNavigationRail(
             .testTag("primary-navigation-rail"),
         color = railSurface,
         shape = railShape,
-        tonalElevation = 4.65.dp,
-        shadowElevation = 6.25.dp,
+        tonalElevation = 4.68.dp,
+        shadowElevation = 6.3.dp,
         border = BorderStroke(0.25.dp, railBorder),
     ) {
         Box(
@@ -761,7 +761,7 @@ private fun PrimaryNavigationRail(
                 .matchParentSize()
                 .clip(railShape)
                 .shadow(
-                    elevation = if (isDark) 6.3.dp else 4.9.dp,
+                    elevation = if (isDark) 6.35.dp else 5.0.dp,
                     shape = railShape,
                     ambientColor = railBottomGlow,
                     spotColor = railBottomGlow,
@@ -784,6 +784,7 @@ private fun PrimaryNavigationRail(
             modifier = Modifier
                 .fillMaxHeight()
             .padding(start = 6.8.dp, end = 6.8.dp, top = 9.4.dp, bottom = 9.4.dp)
+            .padding(start = 0.1.dp, end = 0.1.dp, top = 0.dp, bottom = 0.dp)
             .clip(railShape),
             containerColor = railContainer,
             windowInsets = WindowInsets(0, 0, 0, 0),
