@@ -361,7 +361,7 @@ private fun PrimaryNavigationBar(
                             )
                             .border(
                                 border = BorderStroke(
-                                    width = if (isSelected || isPressed) 0.42.dp else 0.dp,
+                                    width = if (isSelected || isPressed) NAV_NAV_ITEM_ACTIVE_BORDER.dp else 0.dp,
                                     color = selectedPillBorderColor,
                                 ),
                                 shape = activeItemShape,
@@ -579,7 +579,7 @@ private fun PrimaryNavigationBar(
                             } else if (isPressed) {
                                 30.dp
                             } else {
-                                21.5.dp
+                                NAV_ICON_HALO_SIZE_UNSELECTED.dp
                             },
                             animationSpec = if (isPressed) {
                                 navPressDpAnimationSpec
@@ -591,7 +591,7 @@ private fun PrimaryNavigationBar(
                             label = "bottom-nav-icon-halo-size-${destination.name}",
                         )
                         val iconHaloBorderWidth by animateDpAsState(
-                            targetValue = if (isSelected) 0.42.dp else if (isPressed) 0.dp else 0.dp,
+                            targetValue = if (isSelected) NAV_NAV_ITEM_ACTIVE_BORDER.dp else if (isPressed) 0.dp else 0.dp,
                             animationSpec = if (isPressed) {
                                 navPressDpAnimationSpec
                                 } else if (isSelected) {
@@ -668,7 +668,7 @@ private fun PrimaryNavigationBar(
                                     ),
                                     .border(
                                         border = BorderStroke(
-                                            width = 0.38.dp,
+                                            width = NAV_ICON_FACE_BORDER.dp,
                                             color = iconFaceGlow,
                                         ),
                                         shape = RoundedCornerShape(iconFaceSize / 2),
@@ -933,7 +933,7 @@ private fun PrimaryNavigationRail(
                             )
                             .border(
                                 border = BorderStroke(
-                                    width = if (isSelected || isPressed) 0.42.dp else 0.dp,
+                                    width = if (isSelected || isPressed) NAV_NAV_ITEM_ACTIVE_BORDER.dp else 0.dp,
                                     color = selectedPillBorderColor,
                                 ),
                                 shape = activeItemShape,
@@ -1151,7 +1151,7 @@ private fun PrimaryNavigationRail(
                             } else if (isPressed) {
                                 30.dp
                             } else {
-                                22.0.dp
+                                NAV_ICON_HALO_SIZE_UNSELECTED.dp
                             },
                             animationSpec = if (isPressed) {
                                 navPressDpAnimationSpec
@@ -1163,7 +1163,7 @@ private fun PrimaryNavigationRail(
                             label = "rail-icon-halo-size-${destination.name}",
                         )
                         val iconHaloBorderWidth by animateDpAsState(
-                            targetValue = if (isSelected) 0.42.dp else if (isPressed) 0.dp else 0.dp,
+                            targetValue = if (isSelected) NAV_NAV_ITEM_ACTIVE_BORDER.dp else if (isPressed) 0.dp else 0.dp,
                             animationSpec = if (isPressed) {
                                 navPressDpAnimationSpec
                                 } else if (isSelected) {
@@ -1239,7 +1239,7 @@ private fun PrimaryNavigationRail(
                                     )
                                     .border(
                                         border = BorderStroke(
-                                            width = 0.33.dp,
+                                            width = NAV_ICON_FACE_BORDER.dp,
                                             color = iconFaceGlow,
                                         ),
                                         shape = RoundedCornerShape(iconFaceSize / 2),
@@ -1401,3 +1401,6 @@ private const val NAV_ICON_CONTAINER_SELECTED_ALPHA = 1f
 private const val NAV_ICON_CONTAINER_PRESSED_ALPHA = 0.99f
 private const val NAV_ICON_CONTAINER_UNSELECTED_ALPHA = 0.86f
 private const val NAV_ICON_TINT_PRESSED_ALPHA = 0.9f
+private const val NAV_NAV_ITEM_ACTIVE_BORDER = 0.42f
+private const val NAV_ICON_FACE_BORDER = 0.35f
+private const val NAV_ICON_HALO_SIZE_UNSELECTED = 21.8f
