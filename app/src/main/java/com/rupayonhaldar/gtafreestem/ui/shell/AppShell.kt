@@ -747,7 +747,7 @@ private fun PrimaryNavigationRail(
     Surface(
         modifier = Modifier
             .fillMaxHeight()
-            .widthIn(min = 86.dp)
+            .widthIn(min = 88.dp)
             .padding(8.dp)
             .testTag("primary-navigation-rail"),
         color = railSurface,
