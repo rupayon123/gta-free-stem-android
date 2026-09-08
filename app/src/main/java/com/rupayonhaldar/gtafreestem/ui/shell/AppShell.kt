@@ -1348,7 +1348,7 @@ private fun DestinationLabel(
         label = "destination-label-color",
     )
     val labelAlpha by animateFloatAsState(
-        targetValue = if (isPressed && !isSelected) 0.989f else if (isSelected) 1f else 0.970f,
+        targetValue = if (isPressed && !isSelected) 0.988f else if (isSelected) 1f else 0.968f,
         animationSpec = if (isPressed) {
             navPressFloatAnimationSpec
         } else if (isSelected) {
