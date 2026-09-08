@@ -546,9 +546,9 @@ private fun PrimaryNavigationBar(
                         )
                         val iconHalo by animateColorAsState(
                             targetValue = if (isSelected) {
-                                MaterialTheme.colorScheme.primary.copy(alpha = 0.035f)
+                                MaterialTheme.colorScheme.primary.copy(alpha = 0.036f)
                             } else if (isPressed) {
-                                MaterialTheme.colorScheme.primary.copy(alpha = 0.039f)
+                                MaterialTheme.colorScheme.primary.copy(alpha = 0.040f)
                             } else {
                                 Color.Transparent
                             },
@@ -563,9 +563,9 @@ private fun PrimaryNavigationBar(
                         )
                         val iconHaloHighlight by animateColorAsState(
                             targetValue = if (isSelected) {
-                                MaterialTheme.colorScheme.primary.copy(alpha = 0.033f)
+                                MaterialTheme.colorScheme.primary.copy(alpha = 0.034f)
                             } else if (isPressed) {
-                                MaterialTheme.colorScheme.primary.copy(alpha = 0.017f)
+                                MaterialTheme.colorScheme.primary.copy(alpha = 0.018f)
                             } else {
                                 Color.Transparent
                             },
@@ -608,9 +608,9 @@ private fun PrimaryNavigationBar(
                         )
                         val iconShadowColor by animateColorAsState(
                             targetValue = when {
-                                isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.071f)
-                                isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.031f)
-                                isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.033f)
+                                isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.072f)
+                                isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.032f)
+                                isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.034f)
                                 else -> Color.Transparent
                             },
                             animationSpec = if (isPressed) {
@@ -1121,9 +1121,9 @@ private fun PrimaryNavigationRail(
                         )
                         val iconHalo by animateColorAsState(
                             targetValue = if (isSelected) {
-                                MaterialTheme.colorScheme.primary.copy(alpha = 0.035f)
+                                MaterialTheme.colorScheme.primary.copy(alpha = 0.036f)
                             } else if (isPressed) {
-                                MaterialTheme.colorScheme.primary.copy(alpha = 0.041f)
+                                MaterialTheme.colorScheme.primary.copy(alpha = 0.042f)
                             } else {
                                 Color.Transparent
                             },
@@ -1138,9 +1138,9 @@ private fun PrimaryNavigationRail(
                         )
                         val iconHaloHighlight by animateColorAsState(
                             targetValue = if (isSelected) {
-                                MaterialTheme.colorScheme.primary.copy(alpha = 0.033f)
+                                MaterialTheme.colorScheme.primary.copy(alpha = 0.034f)
                             } else if (isPressed) {
-                                MaterialTheme.colorScheme.primary.copy(alpha = 0.013f)
+                                MaterialTheme.colorScheme.primary.copy(alpha = 0.014f)
                             } else {
                                 Color.Transparent
                             },
@@ -1183,9 +1183,9 @@ private fun PrimaryNavigationRail(
                         )
                         val iconShadowColor by animateColorAsState(
                             targetValue = when {
-                                isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.064f)
-                                isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.031f)
-                                isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.033f)
+                                isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.066f)
+                                isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.032f)
+                                isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.034f)
                                 else -> Color.Transparent
                             },
                             animationSpec = if (isPressed) {
