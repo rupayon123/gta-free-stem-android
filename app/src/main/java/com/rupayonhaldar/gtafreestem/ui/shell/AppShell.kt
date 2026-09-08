@@ -225,7 +225,7 @@ private fun PrimaryNavigationBar(
                         animationSpec = if (isPressed) {
                             navPressColorAnimationSpec
                         } else {
-                            navSelectionColorAnimationSpec
+                            navSelectedSettleColorAnimationSpec
                         },
                         label = "bottom-nav-pill-color-${destination.name}",
                     )
@@ -239,7 +239,7 @@ private fun PrimaryNavigationBar(
                         animationSpec = if (isPressed) {
                             navPressColorAnimationSpec
                         } else {
-                            navSelectionColorAnimationSpec
+                            navSelectedSettleColorAnimationSpec
                         },
                         label = "bottom-nav-pill-top-color-${destination.name}",
                     )
@@ -252,7 +252,7 @@ private fun PrimaryNavigationBar(
                         animationSpec = if (isPressed) {
                             navPressColorAnimationSpec
                         } else {
-                            navSelectionColorAnimationSpec
+                            navSelectedSettleColorAnimationSpec
                         },
                         label = "bottom-nav-pill-border-color-${destination.name}",
                     )
@@ -265,7 +265,7 @@ private fun PrimaryNavigationBar(
                         animationSpec = if (isPressed) {
                             navPressDpAnimationSpec
                         } else {
-                            navSelectionDpAnimationSpec
+                            navSelectedSettleDpAnimationSpec
                         },
                         label = "bottom-nav-pill-elevation-${destination.name}",
                     )
@@ -278,7 +278,7 @@ private fun PrimaryNavigationBar(
                         animationSpec = if (isPressed) {
                             navPressDpAnimationSpec
                         } else {
-                            navSelectionDpAnimationSpec
+                            navSelectedSettleDpAnimationSpec
                         },
                         label = "bottom-nav-item-width-${destination.name}",
                     )
@@ -291,7 +291,7 @@ private fun PrimaryNavigationBar(
                         animationSpec = if (isPressed) {
                             navPressDpAnimationSpec
                         } else {
-                            navSelectionDpAnimationSpec
+                            navSelectedSettleDpAnimationSpec
                         },
                         label = "bottom-nav-item-corner-${destination.name}",
                     )
@@ -331,7 +331,7 @@ private fun PrimaryNavigationBar(
                         animationSpec = if (isPressed) {
                             navPressFloatAnimationSpec
                         } else {
-                            navSelectionFloatAnimationSpec
+                            navSelectedSettleFloatAnimationSpec
                         },
                         label = "bottom-nav-item-scale-${destination.name}",
                     )
@@ -768,7 +768,7 @@ private fun PrimaryNavigationRail(
                         animationSpec = if (isPressed) {
                             navPressColorAnimationSpec
                         } else {
-                            navSelectionColorAnimationSpec
+                            navSelectedSettleColorAnimationSpec
                         },
                         label = "rail-pill-color-${destination.name}",
                     )
@@ -782,7 +782,7 @@ private fun PrimaryNavigationRail(
                         animationSpec = if (isPressed) {
                             navPressColorAnimationSpec
                         } else {
-                            navSelectionColorAnimationSpec
+                            navSelectedSettleColorAnimationSpec
                         },
                         label = "rail-pill-top-color-${destination.name}",
                     )
@@ -795,7 +795,7 @@ private fun PrimaryNavigationRail(
                         animationSpec = if (isPressed) {
                             navPressColorAnimationSpec
                         } else {
-                            navSelectionColorAnimationSpec
+                            navSelectedSettleColorAnimationSpec
                         },
                         label = "rail-pill-border-color-${destination.name}",
                     )
@@ -808,7 +808,7 @@ private fun PrimaryNavigationRail(
                         animationSpec = if (isPressed) {
                             navPressDpAnimationSpec
                         } else {
-                            navSelectionDpAnimationSpec
+                            navSelectedSettleDpAnimationSpec
                         },
                         label = "rail-pill-elevation-${destination.name}",
                     )
@@ -821,7 +821,7 @@ private fun PrimaryNavigationRail(
                         animationSpec = if (isPressed) {
                             navPressDpAnimationSpec
                         } else {
-                            navSelectionDpAnimationSpec
+                            navSelectedSettleDpAnimationSpec
                         },
                         label = "rail-item-width-${destination.name}",
                     )
@@ -834,7 +834,7 @@ private fun PrimaryNavigationRail(
                         animationSpec = if (isPressed) {
                             navPressDpAnimationSpec
                         } else {
-                            navSelectionDpAnimationSpec
+                            navSelectedSettleDpAnimationSpec
                         },
                         label = "rail-item-corner-${destination.name}",
                     )
@@ -848,7 +848,7 @@ private fun PrimaryNavigationRail(
                         animationSpec = if (isPressed) {
                             navPressDpAnimationSpec
                         } else {
-                            navSelectionDpAnimationSpec
+                            navSelectedSettleDpAnimationSpec
                         },
                         label = "rail-item-offset-${destination.name}",
                     )
@@ -861,7 +861,7 @@ private fun PrimaryNavigationRail(
                         animationSpec = if (isPressed) {
                             navPressDpAnimationSpec
                         } else {
-                            navSelectionDpAnimationSpec
+                            navSelectedSettleDpAnimationSpec
                         },
                         label = "rail-item-height-${destination.name}",
                     )
@@ -874,7 +874,7 @@ private fun PrimaryNavigationRail(
                         animationSpec = if (isPressed) {
                             navPressFloatAnimationSpec
                         } else {
-                            navSelectionFloatAnimationSpec
+                            navSelectedSettleFloatAnimationSpec
                         },
                         label = "rail-item-scale-${destination.name}",
                     )
@@ -1377,3 +1377,5 @@ private val navSelectionDpAnimationSpec = tween<Dp>(240, easing = FastOutSlowInE
 private val navPressDpAnimationSpec = tween<Dp>(145, easing = FastOutSlowInEasing)
 private val navPressColorAnimationSpec = tween<Color>(145, easing = FastOutSlowInEasing)
 private val navSelectionColorAnimationSpec = tween<Color>(240, easing = FastOutSlowInEasing)
+private val navSelectedSettleFloatAnimationSpec = tween<Float>(290, easing = FastOutSlowInEasing)
+private val navSelectedSettleDpAnimationSpec = tween<Dp>(290, easing = FastOutSlowInEasing)
