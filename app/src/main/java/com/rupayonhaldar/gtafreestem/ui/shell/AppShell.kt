@@ -142,24 +142,24 @@ private fun PrimaryNavigationBar(
     val isDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
     val barShape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp)
     val barSurface = if (isDark) {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.9f)
+        MaterialTheme.colorScheme.surface.copy(alpha = NAV_SHELL_SURFACE_DARK_ALPHA)
     } else {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.93f)
+        MaterialTheme.colorScheme.surface.copy(alpha = NAV_SHELL_SURFACE_LIGHT_ALPHA)
     }
     val barBorder = if (isDark) {
-        Color.White.copy(alpha = 0.12f)
+        Color.White.copy(alpha = NAV_SHELL_BORDER_DARK_ALPHA)
     } else {
-        Color.Black.copy(alpha = 0.065f)
+        Color.Black.copy(alpha = NAV_SHELL_BORDER_LIGHT_ALPHA)
     }
     val barBottomGlow = if (isDark) {
-        MaterialTheme.colorScheme.primary.copy(alpha = 0.067f)
+        MaterialTheme.colorScheme.primary.copy(alpha = NAV_SHELL_GLOW_DARK_ALPHA)
     } else {
-        MaterialTheme.colorScheme.primary.copy(alpha = 0.04f)
+        MaterialTheme.colorScheme.primary.copy(alpha = NAV_SHELL_GLOW_LIGHT_ALPHA)
     }
     val barContainer = if (isDark) {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.77f)
+        MaterialTheme.colorScheme.surface.copy(alpha = NAV_SHELL_CONTAINER_DARK_ALPHA)
     } else {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.88f)
+        MaterialTheme.colorScheme.surface.copy(alpha = NAV_SHELL_CONTAINER_LIGHT_ALPHA)
     }
 
     Surface(
@@ -188,11 +188,11 @@ private fun PrimaryNavigationBar(
                         colors = listOf(
                             Color.Transparent,
                             if (isDark) {
-                                Color.White.copy(alpha = 0.011f)
+                                Color.White.copy(alpha = NAV_SHELL_SURFACE_TOP_GLOW_DARK_ALPHA)
                             } else {
-                                Color.Black.copy(alpha = 0.007f)
+                                Color.Black.copy(alpha = NAV_SHELL_SURFACE_TOP_GLOW_LIGHT_ALPHA)
                             },
-                            MaterialTheme.colorScheme.onSurface.copy(alpha = if (isDark) 0.034f else 0.016f),
+                            MaterialTheme.colorScheme.onSurface.copy(alpha = if (isDark) NAV_SHELL_SURFACE_EDGE_DARK_ALPHA else NAV_SHELL_SURFACE_EDGE_LIGHT_ALPHA),
                         ),
                     ),
                 ),
@@ -743,24 +743,24 @@ private fun PrimaryNavigationRail(
     val isDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
     val railShape = RoundedCornerShape(30.dp)
     val railSurface = if (isDark) {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.875f)
+        MaterialTheme.colorScheme.surface.copy(alpha = NAV_SHELL_SURFACE_DARK_ALPHA)
     } else {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.95f)
+        MaterialTheme.colorScheme.surface.copy(alpha = NAV_SHELL_SURFACE_LIGHT_ALPHA)
     }
     val railBorder = if (isDark) {
-        Color.White.copy(alpha = 0.12f)
+        Color.White.copy(alpha = NAV_SHELL_BORDER_DARK_ALPHA)
     } else {
-        Color.Black.copy(alpha = 0.065f)
+        Color.Black.copy(alpha = NAV_SHELL_BORDER_LIGHT_ALPHA)
     }
     val railBottomGlow = if (isDark) {
-        MaterialTheme.colorScheme.primary.copy(alpha = 0.067f)
+        MaterialTheme.colorScheme.primary.copy(alpha = NAV_SHELL_GLOW_DARK_ALPHA)
     } else {
-        MaterialTheme.colorScheme.primary.copy(alpha = 0.04f)
+        MaterialTheme.colorScheme.primary.copy(alpha = NAV_SHELL_GLOW_LIGHT_ALPHA)
     }
     val railContainer = if (isDark) {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.77f)
+        MaterialTheme.colorScheme.surface.copy(alpha = NAV_SHELL_CONTAINER_DARK_ALPHA)
     } else {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.88f)
+        MaterialTheme.colorScheme.surface.copy(alpha = NAV_SHELL_CONTAINER_LIGHT_ALPHA)
     }
 
     Surface(
@@ -789,11 +789,11 @@ private fun PrimaryNavigationRail(
                     Brush.horizontalGradient(
                         colors = listOf(
                             if (isDark) {
-                                Color.White.copy(alpha = 0.011f)
+                                Color.White.copy(alpha = NAV_SHELL_SURFACE_TOP_GLOW_DARK_ALPHA)
                             } else {
-                                Color.Black.copy(alpha = 0.007f)
+                                Color.Black.copy(alpha = NAV_SHELL_SURFACE_TOP_GLOW_LIGHT_ALPHA)
                             },
-                            MaterialTheme.colorScheme.onSurface.copy(alpha = if (isDark) 0.034f else 0.016f),
+                            MaterialTheme.colorScheme.onSurface.copy(alpha = if (isDark) NAV_SHELL_SURFACE_EDGE_DARK_ALPHA else NAV_SHELL_SURFACE_EDGE_LIGHT_ALPHA),
                             Color.Transparent,
                         ),
                     ),
@@ -1495,3 +1495,15 @@ private const val NAV_ICON_HALO_SIZE_UNSELECTED = 21.8f
 private const val NAV_ICON_HALO_SIZE_PRESSED = 30f
 private const val NAV_ICON_HALO_SIZE_SELECTED = 35f
 private const val NAV_ICON_HALO_SIZE_SELECTED_PRESSED = 33.9f
+private const val NAV_SHELL_SURFACE_DARK_ALPHA = 0.895f
+private const val NAV_SHELL_SURFACE_LIGHT_ALPHA = 0.94f
+private const val NAV_SHELL_BORDER_DARK_ALPHA = 0.108f
+private const val NAV_SHELL_BORDER_LIGHT_ALPHA = 0.061f
+private const val NAV_SHELL_GLOW_DARK_ALPHA = 0.058f
+private const val NAV_SHELL_GLOW_LIGHT_ALPHA = 0.036f
+private const val NAV_SHELL_CONTAINER_DARK_ALPHA = 0.76f
+private const val NAV_SHELL_CONTAINER_LIGHT_ALPHA = 0.89f
+private const val NAV_SHELL_SURFACE_TOP_GLOW_DARK_ALPHA = 0.009f
+private const val NAV_SHELL_SURFACE_TOP_GLOW_LIGHT_ALPHA = 0.006f
+private const val NAV_SHELL_SURFACE_EDGE_DARK_ALPHA = 0.028f
+private const val NAV_SHELL_SURFACE_EDGE_LIGHT_ALPHA = 0.015f
