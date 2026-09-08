@@ -446,7 +446,7 @@ private fun PrimaryNavigationBar(
                         )
                         val iconGlyphAlpha by animateFloatAsState(
                             targetValue = when {
-                            isSelected && isPressed -> 0.985f
+                            isSelected && isPressed -> NAV_ICON_GLYPH_SELECTED_PRESSED_ALPHA
                             isSelected -> NAV_ICON_GLYPH_SELECTED_ALPHA
                             isPressed -> NAV_ICON_GLYPH_PRESSED_ALPHA
                             else -> NAV_ICON_GLYPH_UNSELECTED_ALPHA
@@ -1042,7 +1042,7 @@ private fun PrimaryNavigationRail(
                         )
                         val iconGlyphAlpha by animateFloatAsState(
                             targetValue = when {
-                                isSelected && isPressed -> 0.985f
+                            isSelected && isPressed -> NAV_ICON_GLYPH_SELECTED_PRESSED_ALPHA
                                 isSelected -> NAV_ICON_GLYPH_SELECTED_ALPHA
                             isPressed -> NAV_ICON_GLYPH_PRESSED_ALPHA
                             else -> NAV_ICON_GLYPH_UNSELECTED_ALPHA
@@ -1488,6 +1488,7 @@ private const val NAV_ICON_GLYPH_SELECTED_PRESSED_SIZE = 20.0f
 private const val NAV_ICON_FACE_SELECTED_PRESSED_SIZE = 34.4f
 private const val NAV_ICON_CONTAINER_UNSELECTED_ALPHA = 0.86f
 private const val NAV_ICON_TINT_PRESSED_ALPHA = 0.9f
+private const val NAV_ICON_GLYPH_SELECTED_PRESSED_ALPHA = 0.985f
 private const val NAV_NAV_ITEM_ACTIVE_BORDER = 0.42f
 private const val NAV_ICON_FACE_BORDER = 0.35f
 private const val NAV_ICON_HALO_BORDER_PRESSED = 0.16f
