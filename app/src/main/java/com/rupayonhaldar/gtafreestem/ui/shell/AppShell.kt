@@ -218,7 +218,7 @@ private fun PrimaryNavigationBar(
                     val selectedPillColor by animateColorAsState(
                         targetValue = when {
                             isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.24f)
-                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.17f)
+                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.19f)
                             isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.06f)
                             else -> Color.Transparent
                         },
@@ -245,7 +245,7 @@ private fun PrimaryNavigationBar(
                     )
                     val selectedPillBorderColor by animateColorAsState(
                         targetValue = when {
-                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.22f)
+                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.21f)
                             isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)
                             else -> Color.Transparent
                         },
@@ -704,8 +704,8 @@ private fun PrimaryNavigationBar(
                     colors = NavigationBarItemDefaults.colors(
                         selectedIconColor = MaterialTheme.colorScheme.primary,
                         selectedTextColor = MaterialTheme.colorScheme.primary,
-                        unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.70f),
-                        unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.70f),
+                        unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.68f),
+                        unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.68f),
                         indicatorColor = Color.Transparent,
                         disabledIndicatorColor = Color.Transparent,
                     ),
@@ -797,7 +797,7 @@ private fun PrimaryNavigationRail(
                     val selectedPillColor by animateColorAsState(
                         targetValue = when {
                             isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.20f)
-                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.16f)
+                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.18f)
                             isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.06f)
                             else -> Color.Transparent
                         },
@@ -1278,8 +1278,8 @@ private fun PrimaryNavigationRail(
                 colors = NavigationRailItemDefaults.colors(
                     selectedIconColor = MaterialTheme.colorScheme.primary,
                     selectedTextColor = MaterialTheme.colorScheme.primary,
-                    unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.70f),
-                    unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.70f),
+                    unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.68f),
+                    unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.68f),
                     indicatorColor = Color.Transparent,
                     disabledIndicatorColor = Color.Transparent,
                 ),
