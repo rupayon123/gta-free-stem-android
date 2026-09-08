@@ -144,9 +144,9 @@ private fun PrimaryNavigationBar(
     val isDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
     val barShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
     val barSurface = if (isDark) {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.96f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.94f)
     } else {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.96f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.98f)
     }
     val barBorder = if (isDark) {
         Color.White.copy(alpha = 0.14f)
@@ -154,14 +154,14 @@ private fun PrimaryNavigationBar(
         Color.Black.copy(alpha = 0.08f)
     }
     val barBottomGlow = if (isDark) {
-        MaterialTheme.colorScheme.primary.copy(alpha = 0.16f)
+        MaterialTheme.colorScheme.primary.copy(alpha = 0.14f)
     } else {
-        MaterialTheme.colorScheme.primary.copy(alpha = 0.06f)
+        MaterialTheme.colorScheme.primary.copy(alpha = 0.05f)
     }
     val barContainer = if (isDark) {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.64f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.68f)
     } else {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.74f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.80f)
     }
 
     Surface(
@@ -688,7 +688,7 @@ private fun PrimaryNavigationRail(
     val isDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
     val railShape = RoundedCornerShape(24.dp)
     val railSurface = if (isDark) {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.96f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.95f)
     } else {
         MaterialTheme.colorScheme.surface.copy(alpha = 0.98f)
     }
@@ -703,7 +703,7 @@ private fun PrimaryNavigationRail(
         MaterialTheme.colorScheme.primary.copy(alpha = 0.06f)
     }
     val railContainer = if (isDark) {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.70f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.72f)
     } else {
         MaterialTheme.colorScheme.surface.copy(alpha = 0.82f)
     }
