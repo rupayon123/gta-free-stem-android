@@ -144,24 +144,24 @@ private fun PrimaryNavigationBar(
     val isDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
     val barShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
     val barSurface = if (isDark) {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.80f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.82f)
     } else {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.86f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.90f)
     }
     val barBorder = if (isDark) {
-        Color.White.copy(alpha = 0.08f)
+        Color.White.copy(alpha = 0.10f)
     } else {
-        Color.Black.copy(alpha = 0.045f)
+        Color.Black.copy(alpha = 0.055f)
     }
     val barBottomGlow = if (isDark) {
-        MaterialTheme.colorScheme.primary.copy(alpha = 0.048f)
+        MaterialTheme.colorScheme.primary.copy(alpha = 0.055f)
     } else {
-        MaterialTheme.colorScheme.primary.copy(alpha = 0.022f)
+        MaterialTheme.colorScheme.primary.copy(alpha = 0.030f)
     }
     val barContainer = if (isDark) {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.50f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.58f)
     } else {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.62f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.72f)
     }
 
     Surface(
@@ -171,8 +171,8 @@ private fun PrimaryNavigationBar(
             .padding(horizontal = 12.dp, vertical = 6.dp),
         shape = barShape,
         color = barSurface,
-        tonalElevation = 4.0.dp,
-        shadowElevation = 5.4.dp,
+        tonalElevation = 4.6.dp,
+        shadowElevation = 6.0.dp,
         border = BorderStroke(0.25.dp, barBorder),
     ) {
         Box(
@@ -724,24 +724,24 @@ private fun PrimaryNavigationRail(
     val isDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
     val railShape = RoundedCornerShape(24.dp)
     val railSurface = if (isDark) {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.80f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.82f)
     } else {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.86f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.90f)
     }
     val railBorder = if (isDark) {
-        Color.White.copy(alpha = 0.08f)
+        Color.White.copy(alpha = 0.10f)
     } else {
-        Color.Black.copy(alpha = 0.045f)
+        Color.Black.copy(alpha = 0.055f)
     }
     val railBottomGlow = if (isDark) {
-        MaterialTheme.colorScheme.primary.copy(alpha = 0.048f)
+        MaterialTheme.colorScheme.primary.copy(alpha = 0.055f)
     } else {
-        MaterialTheme.colorScheme.primary.copy(alpha = 0.022f)
+        MaterialTheme.colorScheme.primary.copy(alpha = 0.030f)
     }
     val railContainer = if (isDark) {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.54f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.60f)
     } else {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.66f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.72f)
     }
 
     Surface(
