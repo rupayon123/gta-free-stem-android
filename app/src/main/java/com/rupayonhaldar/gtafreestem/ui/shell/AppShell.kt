@@ -218,7 +218,7 @@ private fun PrimaryNavigationBar(
                     val selectedPillColor by animateColorAsState(
                         targetValue = when {
                             isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.146f)
-                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.098f)
+                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.104f)
                             isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.038f)
                             else -> Color.Transparent
                         },
@@ -232,7 +232,7 @@ private fun PrimaryNavigationBar(
                     val selectedPillTopColor by animateColorAsState(
                         targetValue = when {
                             isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.124f)
-                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.094f)
+                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.096f)
                             isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.038f)
                             else -> Color.Transparent
                         },
@@ -1090,7 +1090,7 @@ private fun PrimaryNavigationRail(
                         )
                         val iconFaceGlow by animateColorAsState(
                             targetValue = when {
-                                isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.132f)
+                                isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.110f)
                                 isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.06f)
                                 isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.05f)
                                 else -> Color.Transparent
@@ -1123,7 +1123,7 @@ private fun PrimaryNavigationRail(
                             targetValue = if (isSelected) {
                                 MaterialTheme.colorScheme.primary.copy(alpha = 0.034f)
                             } else if (isPressed) {
-                                MaterialTheme.colorScheme.primary.copy(alpha = 0.044f)
+                                MaterialTheme.colorScheme.primary.copy(alpha = 0.040f)
                             } else {
                                 Color.Transparent
                             },
