@@ -532,6 +532,8 @@ private fun PrimaryNavigationBar(
                         val iconTint by animateColorAsState(
                             targetValue = if (isSelected) {
                                 MaterialTheme.colorScheme.primary
+                            } else if (isPressed) {
+                                MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.78f)
                             } else {
                                 MaterialTheme.colorScheme.onSurfaceVariant
                             },
@@ -704,8 +706,8 @@ private fun PrimaryNavigationBar(
                 colors = NavigationBarItemDefaults.colors(
                     selectedIconColor = MaterialTheme.colorScheme.primary,
                     selectedTextColor = MaterialTheme.colorScheme.primary,
-                    unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.73f),
-                    unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.73f),
+                    unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.70f),
+                    unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.70f),
                     indicatorColor = Color.Transparent,
                     disabledIndicatorColor = Color.Transparent,
                 ),
@@ -1107,6 +1109,8 @@ private fun PrimaryNavigationRail(
                         val iconTint by animateColorAsState(
                             targetValue = if (isSelected) {
                                 MaterialTheme.colorScheme.primary
+                            } else if (isPressed) {
+                                MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.78f)
                             } else {
                                 MaterialTheme.colorScheme.onSurfaceVariant
                             },
@@ -1278,8 +1282,8 @@ private fun PrimaryNavigationRail(
                 colors = NavigationRailItemDefaults.colors(
                     selectedIconColor = MaterialTheme.colorScheme.primary,
                     selectedTextColor = MaterialTheme.colorScheme.primary,
-                    unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.73f),
-                    unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.73f),
+                    unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.70f),
+                    unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.70f),
                     indicatorColor = Color.Transparent,
                     disabledIndicatorColor = Color.Transparent,
                 ),
