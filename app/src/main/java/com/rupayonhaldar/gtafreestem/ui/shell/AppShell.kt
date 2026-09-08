@@ -1313,8 +1313,8 @@ private fun DestinationLabel(
     }
     val labelGlowColor by animateColorAsState(
         targetValue = when {
-            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.635f)
-            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.615f)
+            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.52f)
+            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.48f)
             isPressed -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.32f)
             else -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.32f)
         },
@@ -1329,7 +1329,7 @@ private fun DestinationLabel(
     )
     val labelColor by animateColorAsState(
         targetValue = when {
-            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.81f)
+            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.70f)
             isPressed -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.47f)
             isSelected -> MaterialTheme.colorScheme.primary
             else -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.44f)
@@ -1402,7 +1402,7 @@ private fun DestinationLabel(
     )
     val labelShadowColor by animateColorAsState(
         targetValue = when {
-            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = if (isPressed) 0.04f else 0.05f)
+            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = if (isPressed) 0.03f else 0.035f)
             isPressed -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.02f)
             else -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.006f)
         },
@@ -1417,7 +1417,7 @@ private fun DestinationLabel(
     )
     val labelShadowRadius by animateFloatAsState(
         targetValue = when {
-            isSelected -> 0.72f
+            isSelected -> 0.58f
             isPressed -> 0.1f
             else -> 0.02f
         },
