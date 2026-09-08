@@ -189,11 +189,16 @@ private fun PrimaryNavigationBar(
                     Brush.verticalGradient(
                         colors = listOf(
                             Color.Transparent,
-                        MaterialTheme.colorScheme.onSurface.copy(alpha = if (isDark) 0.05f else 0.025f),
+                            if (isDark) {
+                                Color.White.copy(alpha = 0.022f)
+                            } else {
+                                Color.Black.copy(alpha = 0.01f)
+                            },
+                            MaterialTheme.colorScheme.onSurface.copy(alpha = if (isDark) 0.05f else 0.025f),
                         ),
                     ),
                 ),
-        )
+            )
         NavigationBar(
             modifier = Modifier
                 .padding(horizontal = 4.dp, top = 1.dp, bottom = 1.dp)
@@ -728,6 +733,11 @@ private fun PrimaryNavigationRail(
                 .background(
                     Brush.horizontalGradient(
                         colors = listOf(
+                            if (isDark) {
+                                Color.White.copy(alpha = 0.022f)
+                            } else {
+                                Color.Black.copy(alpha = 0.01f)
+                            },
                             MaterialTheme.colorScheme.onSurface.copy(alpha = if (isDark) 0.05f else 0.025f),
                             Color.Transparent,
                         ),
