@@ -217,7 +217,7 @@ private fun PrimaryNavigationBar(
                         targetValue = when {
                             isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.11f)
                             isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.085f)
-                            isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.018f)
+                            isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PRESSED_ALPHA)
                             else -> Color.Transparent
                         },
                         animationSpec = if (isPressed) {
@@ -231,7 +231,7 @@ private fun PrimaryNavigationBar(
                         targetValue = when {
                             isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.09f)
                             isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.072f)
-                            isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.018f)
+                            isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PRESSED_ALPHA)
                             else -> Color.Transparent
                         },
                         animationSpec = if (isPressed) {
@@ -580,7 +580,7 @@ private fun PrimaryNavigationBar(
                         )
                         val iconHaloHighlight by animateColorAsState(
                             targetValue = if (isSelected && isPressed) {
-                                MaterialTheme.colorScheme.primary.copy(alpha = 0.018f)
+                                MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_HALO_HIGHLIGHT_PRESSED_ALPHA)
                             } else if (isSelected) {
                                 MaterialTheme.colorScheme.primary.copy(alpha = 0.024f)
                             } else if (isPressed) {
@@ -630,7 +630,7 @@ private fun PrimaryNavigationBar(
                         val iconShadowColor by animateColorAsState(
                             targetValue = when {
                                 isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.024f)
-                                isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.018f)
+                                isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_ICON_SHADOW_PRESSED_ALPHA)
                                 isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.028f)
                                 else -> Color.Transparent
                             },
@@ -819,7 +819,7 @@ private fun PrimaryNavigationRail(
                         targetValue = when {
                             isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.11f)
                             isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.085f)
-                            isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.018f)
+                            isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PRESSED_ALPHA)
                             else -> Color.Transparent
                         },
                         animationSpec = if (isPressed) {
@@ -833,7 +833,7 @@ private fun PrimaryNavigationRail(
                         targetValue = when {
                             isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.09f)
                             isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.072f)
-                            isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.018f)
+                            isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PRESSED_ALPHA)
                             else -> Color.Transparent
                         },
                         animationSpec = if (isPressed) {
@@ -1178,7 +1178,7 @@ private fun PrimaryNavigationRail(
                         )
                         val iconHaloHighlight by animateColorAsState(
                             targetValue = if (isSelected && isPressed) {
-                                MaterialTheme.colorScheme.primary.copy(alpha = 0.018f)
+                                MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_HALO_HIGHLIGHT_PRESSED_ALPHA)
                             } else if (isSelected) {
                                 MaterialTheme.colorScheme.primary.copy(alpha = 0.024f)
                             } else if (isPressed) {
@@ -1228,7 +1228,7 @@ private fun PrimaryNavigationRail(
                         val iconShadowColor by animateColorAsState(
                             targetValue = when {
                                 isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.024f)
-                                isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.018f)
+                                isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_ICON_SHADOW_PRESSED_ALPHA)
                                 isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.028f)
                                 else -> Color.Transparent
                             },
@@ -1497,6 +1497,9 @@ private const val NAV_NAV_ITEM_ACTIVE_BORDER = 0.42f
 private const val NAV_NAV_ITEM_ACTIVE_SHADOW_DARK_ALPHA = 0.18f
 private const val NAV_NAV_ITEM_ACTIVE_SHADOW_LIGHT_ALPHA = 0.10f
 private const val NAV_ICON_FACE_BORDER = 0.35f
+private const val NAV_NAV_ITEM_PRESSED_ALPHA = 0.02f
+private const val NAV_ICON_HALO_HIGHLIGHT_PRESSED_ALPHA = 0.018f
+private const val NAV_NAV_ITEM_ICON_SHADOW_PRESSED_ALPHA = 0.018f
 private const val NAV_ICON_HALO_BORDER_PRESSED = 0.16f
 private const val NAV_ICON_HALO_SIZE_UNSELECTED = 21.8f
 private const val NAV_ICON_HALO_SIZE_PRESSED = 30f
