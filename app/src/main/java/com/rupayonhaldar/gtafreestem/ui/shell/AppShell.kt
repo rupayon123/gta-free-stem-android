@@ -397,6 +397,7 @@ private fun PrimaryNavigationBar(
                         )
                         val iconElevation by animateFloatAsState(
                         targetValue = when {
+                            isPressed && isSelected -> NAV_ICON_SELECTED_PRESSED_ELEVATION
                             isPressed -> 0.8f
                             isSelected -> 2.0f
                             else -> 0f
@@ -990,6 +991,7 @@ private fun PrimaryNavigationRail(
                         )
                         val iconElevation by animateFloatAsState(
                         targetValue = when {
+                            isPressed && isSelected -> NAV_ICON_SELECTED_PRESSED_ELEVATION
                             isPressed -> 0.8f
                             isSelected -> 2.0f
                             else -> 0f
@@ -1465,6 +1467,7 @@ private const val NAV_ICON_GLYPH_UNSELECTED_ALPHA = 0.86f
 private const val NAV_ICON_CONTAINER_SELECTED_ALPHA = 1f
 private const val NAV_ICON_CONTAINER_PRESSED_SELECTED_ALPHA = 0.985f
 private const val NAV_ICON_CONTAINER_PRESSED_ALPHA = 0.99f
+private const val NAV_ICON_SELECTED_PRESSED_ELEVATION = 1.6f
 private const val NAV_ICON_CONTAINER_SELECTED_PRESS_SCALE = 1.001f
 private const val NAV_ICON_SCALE_SELECTED_PRESS_SCALE = 1.001f
 private const val NAV_ICON_GLYPH_SELECTED_PRESSED_SIZE = 20.0f
