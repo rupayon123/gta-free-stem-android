@@ -469,8 +469,8 @@ private fun PrimaryNavigationBar(
                         val iconGlyphSize by animateDpAsState(
                             targetValue = when {
                             isPressed -> 19.dp
-                            isSelected -> 20.4.dp
-                            else -> 19.5.dp
+                            isSelected -> 20.5.dp
+                            else -> 19.6.dp
                             },
                             animationSpec = if (isPressed) {
                                 navPressDpAnimationSpec
@@ -484,8 +484,8 @@ private fun PrimaryNavigationBar(
                         val iconFaceSize by animateDpAsState(
                             targetValue = when {
                             isPressed -> 33.dp
-                            isSelected -> 35.3.dp
-                            else -> 34.0.dp
+                            isSelected -> 35.4.dp
+                            else -> 34.2.dp
                             },
                             animationSpec = if (isPressed) {
                                 navPressDpAnimationSpec
@@ -1044,8 +1044,8 @@ private fun PrimaryNavigationRail(
                         val iconGlyphSize by animateDpAsState(
                         targetValue = when {
                             isPressed -> 19.dp
-                            isSelected -> 20.4.dp
-                            else -> 19.5.dp
+                            isSelected -> 20.5.dp
+                            else -> 19.6.dp
                             },
                             animationSpec = if (isPressed) {
                                 navPressDpAnimationSpec
@@ -1059,8 +1059,8 @@ private fun PrimaryNavigationRail(
                         val iconFaceSize by animateDpAsState(
                         targetValue = when {
                             isPressed -> 33.dp
-                            isSelected -> 35.3.dp
-                            else -> 34.0.dp
+                            isSelected -> 35.4.dp
+                            else -> 34.2.dp
                             },
                             animationSpec = if (isPressed) {
                                 navPressDpAnimationSpec
@@ -1298,15 +1298,15 @@ private fun DestinationLabel(
 ) {
     val resolvedStyle = if (compact) {
         MaterialTheme.typography.labelSmall.copy(
-            fontSize = if (isSelected) 12.45.sp else if (isPressed) 12.03.sp else 11.98.sp,
-            lineHeight = if (isPressed) 13.08.sp else 13.62.sp,
+            fontSize = if (isSelected) 12.48.sp else if (isPressed) 12.06.sp else 12.02.sp,
+            lineHeight = if (isPressed) 13.10.sp else 13.64.sp,
             fontWeight = if (isSelected) FontWeight.SemiBold else if (isPressed) FontWeight.Medium else FontWeight.Normal,
             letterSpacing = 0.00.sp,
         )
     } else {
         MaterialTheme.typography.labelSmall.copy(
-            fontSize = if (isSelected) 12.2.sp else if (isPressed) 11.88.sp else 11.62.sp,
-            lineHeight = if (isPressed) 12.68.sp else 12.74.sp,
+            fontSize = if (isSelected) 12.30.sp else if (isPressed) 12.00.sp else 11.66.sp,
+            lineHeight = if (isPressed) 12.70.sp else 12.80.sp,
             fontWeight = if (isSelected) FontWeight.SemiBold else if (isPressed) FontWeight.Medium else FontWeight.Normal,
             letterSpacing = 0.00.sp,
         )
