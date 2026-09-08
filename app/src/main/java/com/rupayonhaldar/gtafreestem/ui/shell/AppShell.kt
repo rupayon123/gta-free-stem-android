@@ -372,7 +372,7 @@ private fun PrimaryNavigationBar(
                             .sizeIn(
                                 minWidth = activeNavItemWidth,
                                 minHeight = activeItemHeight,
-                            ),
+                            )
                             .offset(y = activeItemOffset)
                             .scale(activeItemScale),
                     icon = {
@@ -947,7 +947,7 @@ private fun PrimaryNavigationRail(
                             .sizeIn(
                                 minWidth = activeNavItemWidth,
                                 minHeight = activeItemHeight,
-                            ),
+                            )
                             .offset(y = activeItemOffset)
                             .scale(activeItemScale),
                     icon = {
