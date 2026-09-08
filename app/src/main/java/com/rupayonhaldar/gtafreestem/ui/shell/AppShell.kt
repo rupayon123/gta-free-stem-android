@@ -144,24 +144,24 @@ private fun PrimaryNavigationBar(
     val isDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
     val barShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
     val barSurface = if (isDark) {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.95f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.93f)
     } else {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.98f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.97f)
     }
     val barBorder = if (isDark) {
-        Color.White.copy(alpha = 0.11f)
+        Color.White.copy(alpha = 0.10f)
     } else {
-        Color.Black.copy(alpha = 0.055f)
+        Color.Black.copy(alpha = 0.052f)
     }
     val barBottomGlow = if (isDark) {
-        MaterialTheme.colorScheme.primary.copy(alpha = 0.13f)
+        MaterialTheme.colorScheme.primary.copy(alpha = 0.11f)
     } else {
-        MaterialTheme.colorScheme.primary.copy(alpha = 0.045f)
+        MaterialTheme.colorScheme.primary.copy(alpha = 0.04f)
     }
     val barContainer = if (isDark) {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.71f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.69f)
     } else {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.82f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.80f)
     }
 
     Surface(
@@ -171,8 +171,8 @@ private fun PrimaryNavigationBar(
             .padding(horizontal = 12.dp, vertical = 6.dp),
         shape = barShape,
         color = barSurface,
-        tonalElevation = 6.dp,
-        shadowElevation = 9.dp,
+        tonalElevation = 5.4.dp,
+        shadowElevation = 8.4.dp,
         border = BorderStroke(0.42.dp, barBorder),
     ) {
         Box(
@@ -180,7 +180,7 @@ private fun PrimaryNavigationBar(
                 .matchParentSize()
                 .clip(barShape)
                 .shadow(
-                    elevation = if (isDark) 8.dp else 6.dp,
+                    elevation = if (isDark) 7.4.dp else 5.6.dp,
                     shape = barShape,
                     ambientColor = barBottomGlow,
                     spotColor = barBottomGlow,
@@ -724,24 +724,24 @@ private fun PrimaryNavigationRail(
     val isDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
     val railShape = RoundedCornerShape(24.dp)
     val railSurface = if (isDark) {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.95f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.93f)
     } else {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.98f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.97f)
     }
     val railBorder = if (isDark) {
-        Color.White.copy(alpha = 0.11f)
+        Color.White.copy(alpha = 0.10f)
     } else {
-        Color.Black.copy(alpha = 0.055f)
+        Color.Black.copy(alpha = 0.052f)
     }
     val railBottomGlow = if (isDark) {
-        MaterialTheme.colorScheme.primary.copy(alpha = 0.13f)
+        MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)
     } else {
-        MaterialTheme.colorScheme.primary.copy(alpha = 0.045f)
+        MaterialTheme.colorScheme.primary.copy(alpha = 0.043f)
     }
     val railContainer = if (isDark) {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.75f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.73f)
     } else {
-        MaterialTheme.colorScheme.surface.copy(alpha = 0.84f)
+        MaterialTheme.colorScheme.surface.copy(alpha = 0.82f)
     }
 
     Surface(
@@ -752,8 +752,8 @@ private fun PrimaryNavigationRail(
             .testTag("primary-navigation-rail"),
         color = railSurface,
         shape = railShape,
-        tonalElevation = 6.dp,
-        shadowElevation = 9.dp,
+        tonalElevation = 5.4.dp,
+        shadowElevation = 8.4.dp,
         border = BorderStroke(0.42.dp, railBorder),
     ) {
         Box(
@@ -761,7 +761,7 @@ private fun PrimaryNavigationRail(
                 .matchParentSize()
                 .clip(railShape)
                 .shadow(
-                    elevation = if (isDark) 8.dp else 6.dp,
+                    elevation = if (isDark) 7.4.dp else 5.6.dp,
                     shape = railShape,
                     ambientColor = railBottomGlow,
                     spotColor = railBottomGlow,
