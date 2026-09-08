@@ -541,12 +541,11 @@ private fun PrimaryNavigationBar(
                             label = "bottom-nav-icon-face-glow-${destination.name}",
                         )
                         val iconTint by animateColorAsState(
-                            targetValue = if (isSelected) {
-                                MaterialTheme.colorScheme.primary
-                            } else if (isPressed) {
-                                MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = NAV_ICON_TINT_PRESSED_ALPHA)
-                            } else {
-                                MaterialTheme.colorScheme.onSurfaceVariant
+                            targetValue = when {
+                                isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_TINT_SELECTED_PRESSED_ALPHA)
+                                isSelected -> MaterialTheme.colorScheme.primary
+                                isPressed -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = NAV_ICON_TINT_PRESSED_ALPHA)
+                                else -> MaterialTheme.colorScheme.onSurfaceVariant
                             },
                             animationSpec = if (isPressed) {
                                 navPressColorAnimationSpec
@@ -1135,12 +1134,11 @@ private fun PrimaryNavigationRail(
                             label = "rail-icon-face-glow-${destination.name}",
                         )
                         val iconTint by animateColorAsState(
-                            targetValue = if (isSelected) {
-                                MaterialTheme.colorScheme.primary
-                            } else if (isPressed) {
-                                MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = NAV_ICON_TINT_PRESSED_ALPHA)
-                            } else {
-                                MaterialTheme.colorScheme.onSurfaceVariant
+                            targetValue = when {
+                                isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_TINT_SELECTED_PRESSED_ALPHA)
+                                isSelected -> MaterialTheme.colorScheme.primary
+                                isPressed -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = NAV_ICON_TINT_PRESSED_ALPHA)
+                                else -> MaterialTheme.colorScheme.onSurfaceVariant
                             },
                             animationSpec = if (isPressed) {
                                 navPressColorAnimationSpec
@@ -1468,6 +1466,7 @@ private const val NAV_ICON_CONTAINER_SELECTED_ALPHA = 1f
 private const val NAV_ICON_CONTAINER_PRESSED_SELECTED_ALPHA = 0.985f
 private const val NAV_ICON_CONTAINER_PRESSED_ALPHA = 0.99f
 private const val NAV_ICON_SELECTED_PRESSED_ELEVATION = 1.6f
+private const val NAV_ICON_TINT_SELECTED_PRESSED_ALPHA = 0.95f
 private const val NAV_ICON_CONTAINER_SELECTED_PRESS_SCALE = 1.001f
 private const val NAV_ICON_SCALE_SELECTED_PRESS_SCALE = 1.001f
 private const val NAV_ICON_GLYPH_SELECTED_PRESSED_SIZE = 20.0f
