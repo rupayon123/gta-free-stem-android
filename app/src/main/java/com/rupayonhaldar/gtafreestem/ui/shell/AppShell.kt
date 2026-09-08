@@ -824,7 +824,7 @@ private fun PrimaryNavigationRail(
                     )
                     val selectedPillBorderColor by animateColorAsState(
                         targetValue = when {
-                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.10f)
+                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.088f)
                             isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.064f)
                             else -> Color.Transparent
                         },
@@ -1091,7 +1091,7 @@ private fun PrimaryNavigationRail(
                         val iconFaceGlow by animateColorAsState(
                             targetValue = when {
                                 isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.132f)
-                                isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.062f)
+                                isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.06f)
                                 isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.05f)
                                 else -> Color.Transparent
                             },
@@ -1358,7 +1358,7 @@ private fun DestinationLabel(
         targetValue = when {
             isPressed && !isSelected -> 0.17.dp
             isSelected -> 0.dp
-            else -> if (compact) 0.30.dp else 0.24.dp
+            else -> if (compact) 0.26.dp else 0.22.dp
         },
         animationSpec = if (isPressed) {
             navPressDpAnimationSpec
@@ -1374,7 +1374,7 @@ private fun DestinationLabel(
             isPressed && !isSelected -> 0.04.dp
             isPressed && isSelected -> 0.dp
             isSelected -> (-0.08).dp
-            else -> if (compact) 0.30.dp else 0.24.dp
+            else -> if (compact) 0.26.dp else 0.22.dp
         },
         animationSpec = if (isPressed) {
             navPressDpAnimationSpec
