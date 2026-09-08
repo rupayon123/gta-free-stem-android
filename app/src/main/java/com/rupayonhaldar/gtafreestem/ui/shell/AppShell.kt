@@ -1298,16 +1298,16 @@ private fun DestinationLabel(
 ) {
     val resolvedStyle = if (compact) {
         MaterialTheme.typography.labelSmall.copy(
-            fontSize = if (isSelected) 12.50.sp else if (isPressed) 11.72.sp else 12.03.sp,
-            lineHeight = if (isPressed) 13.16.sp else 14.02.sp,
-            fontWeight = if (isSelected) FontWeight.SemiBold else if (isPressed) FontWeight.Medium else FontWeight.Normal,
+            fontSize = if (isSelected) 12.38.sp else if (isPressed) 11.68.sp else 12.02.sp,
+            lineHeight = if (isPressed) 12.98.sp else 13.72.sp,
+            fontWeight = if (isSelected) FontWeight.Medium else if (isPressed) FontWeight.Medium else FontWeight.Normal,
             letterSpacing = 0.01.sp,
         )
     } else {
         MaterialTheme.typography.labelSmall.copy(
-            fontSize = if (isSelected) 12.08.sp else if (isPressed) 11.57.sp else 11.36.sp,
-            lineHeight = if (isPressed) 12.64.sp else 12.72.sp,
-            fontWeight = if (isSelected) FontWeight.SemiBold else if (isPressed) FontWeight.Medium else FontWeight.Normal,
+            fontSize = if (isSelected) 12.02.sp else if (isPressed) 11.53.sp else 11.34.sp,
+            lineHeight = if (isPressed) 12.52.sp else 12.62.sp,
+            fontWeight = if (isSelected) FontWeight.Medium else if (isPressed) FontWeight.Medium else FontWeight.Normal,
             letterSpacing = 0.00.sp,
         )
     }
@@ -1330,9 +1330,9 @@ private fun DestinationLabel(
     val labelColor by animateColorAsState(
         targetValue = when {
             isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.64f)
-            isPressed -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.52f)
+            isPressed -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.54f)
             isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.92f)
-            else -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.56f)
+            else -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.58f)
         },
         animationSpec = if (isPressed) {
             navPressColorAnimationSpec
@@ -1358,7 +1358,7 @@ private fun DestinationLabel(
         targetValue = when {
             isPressed && !isSelected -> 0.17.dp
             isSelected -> 0.dp
-            else -> if (compact) 0.26.dp else 0.22.dp
+            else -> if (compact) 0.24.dp else 0.20.dp
         },
         animationSpec = if (isPressed) {
             navPressDpAnimationSpec
@@ -1374,7 +1374,7 @@ private fun DestinationLabel(
             isPressed && !isSelected -> 0.04.dp
             isPressed && isSelected -> 0.dp
             isSelected -> (-0.08).dp
-            else -> if (compact) 0.26.dp else 0.22.dp
+            else -> if (compact) 0.24.dp else 0.20.dp
         },
         animationSpec = if (isPressed) {
             navPressDpAnimationSpec
@@ -1387,9 +1387,9 @@ private fun DestinationLabel(
     )
     val labelScale by animateFloatAsState(
         targetValue = when {
-            isPressed && !isSelected -> 0.995f
-            isSelected -> 1.0002f
-            else -> 0.9993f
+            isPressed && !isSelected -> 0.9947f
+            isSelected -> 1.0001f
+            else -> 0.9994f
         },
         animationSpec = if (isPressed) {
             navPressFloatAnimationSpec
@@ -1417,9 +1417,9 @@ private fun DestinationLabel(
     )
     val labelShadowRadius by animateFloatAsState(
         targetValue = when {
-            isSelected -> 0.38f
-            isPressed -> 0.08f
-            else -> 0.012f
+            isSelected -> 0.34f
+            isPressed -> 0.06f
+            else -> 0.01f
         },
         animationSpec = if (isPressed) {
             navPressFloatAnimationSpec
