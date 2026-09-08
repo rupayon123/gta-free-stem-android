@@ -498,7 +498,7 @@ private fun PrimaryNavigationBar(
                         )
                         val iconBackground by animateColorAsState(
                             targetValue = if (isSelected) {
-                                MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.34f)
+                                MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.30f)
                             } else if (isPressed) {
                                 MaterialTheme.colorScheme.primary.copy(alpha = 0.10f)
                             } else {
@@ -1073,7 +1073,7 @@ private fun PrimaryNavigationRail(
                         )
                         val iconBackground by animateColorAsState(
                             targetValue = if (isSelected) {
-                                MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.34f)
+                                MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.30f)
                             } else if (isPressed) {
                                 MaterialTheme.colorScheme.primary.copy(alpha = 0.10f)
                             } else {
