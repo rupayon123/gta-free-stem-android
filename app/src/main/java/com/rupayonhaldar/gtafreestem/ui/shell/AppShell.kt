@@ -298,7 +298,7 @@ private fun PrimaryNavigationBar(
                     val activeItemShape = RoundedCornerShape(activeItemCorner)
                     val activeItemOffset by animateDpAsState(
                         targetValue = when {
-                            isSelected -> (-0.8).dp
+                            isSelected -> (-0.7).dp
                             isPressed -> 0.5.dp
                             else -> 0.dp
                         },
@@ -877,7 +877,7 @@ private fun PrimaryNavigationRail(
                     val activeItemShape = RoundedCornerShape(activeItemCorner)
                     val activeItemOffset by animateDpAsState(
                         targetValue = when {
-                                isSelected -> (-1.05).dp
+                                isSelected -> (-0.98).dp
                                 isPressed -> 0.35.dp
                                 else -> 0.dp
                         },
@@ -1356,9 +1356,9 @@ private fun DestinationLabel(
     )
     val labelOffset by animateDpAsState(
         targetValue = when {
-            isPressed && !isSelected -> 0.45.dp
+            isPressed && !isSelected -> 0.43.dp
             isSelected -> 0.dp
-            else -> if (compact) 0.55.dp else 0.45.dp
+            else -> if (compact) 0.54.dp else 0.44.dp
         },
         animationSpec = if (isPressed) {
             navPressDpAnimationSpec
@@ -1374,7 +1374,7 @@ private fun DestinationLabel(
             isPressed && !isSelected -> 0.2.dp
             isPressed && isSelected -> 0.dp
             isSelected -> (-0.14).dp
-            else -> if (compact) 0.58.dp else 0.42.dp
+            else -> if (compact) 0.56.dp else 0.40.dp
         },
         animationSpec = if (isPressed) {
             navPressDpAnimationSpec
@@ -1387,9 +1387,9 @@ private fun DestinationLabel(
     )
     val labelScale by animateFloatAsState(
         targetValue = when {
-            isPressed && !isSelected -> 0.985f
+            isPressed && !isSelected -> 0.986f
             isSelected -> 1.004f
-            else -> 0.997f
+            else -> 0.998f
         },
         animationSpec = if (isPressed) {
             navPressFloatAnimationSpec
