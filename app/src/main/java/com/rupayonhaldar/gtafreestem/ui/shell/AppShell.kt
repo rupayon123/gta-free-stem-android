@@ -1291,14 +1291,14 @@ private fun DestinationLabel(
     val resolvedStyle = if (compact) {
         MaterialTheme.typography.labelSmall.copy(
             fontSize = if (isSelected) 12.2.sp else 11.8.sp,
-            lineHeight = if (isSelected) 14.1.sp else 13.4.sp,
+            lineHeight = if (isSelected) 14.2.sp else 13.4.sp,
             fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
             letterSpacing = 0.01.sp,
         )
     } else {
             MaterialTheme.typography.labelSmall.copy(
-            fontSize = if (isSelected) 12.3.sp else 11.75.sp,
-            lineHeight = if (isSelected) 13.5.sp else 12.9.sp,
+            fontSize = if (isSelected) 12.35.sp else 11.75.sp,
+            lineHeight = if (isSelected) 13.6.sp else 12.9.sp,
             fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
             letterSpacing = 0.01.sp,
         )
@@ -1320,7 +1320,7 @@ private fun DestinationLabel(
         label = "destination-label-color",
     )
     val labelAlpha by animateFloatAsState(
-        targetValue = if (isPressed && !isSelected) NAV_LABEL_PRESS_ALPHA else if (isSelected) 1f else 0.985f,
+        targetValue = if (isPressed && !isSelected) NAV_LABEL_PRESS_ALPHA else if (isSelected) 1f else NAV_LABEL_UNSELECTED_ALPHA,
         animationSpec = if (isPressed) {
             navPressFloatAnimationSpec
         } else if (isSelected) {
@@ -1388,6 +1388,7 @@ private val navSelectedSettleDpAnimationSpec = tween<Dp>(220, easing = FastOutSl
 
 private const val NAV_UNSELECTED_LABEL_ALPHA = 0.68f
 private const val NAV_LABEL_UNSELECTED_ALPHA = 0.84f
+private const val NAV_LABEL_UNSELECTED_VISIBILITY_ALPHA = 0.985f
 private const val NAV_LABEL_SELECTED_SCALE = 1.01f
 private const val NAV_LABEL_PRESS_SCALE = 0.996f
 private const val NAV_LABEL_PRESS_ALPHA = 0.985f
