@@ -350,7 +350,7 @@ private fun PrimaryNavigationBar(
                             .shadow(
                                 elevation = selectedPillElevation,
                                 shape = activeItemShape,
-                                ambientColor = selectedPillBorderColor.copy(alpha = if (isDark) 0.23f else 0.13f),
+                                ambientColor = selectedPillBorderColor.copy(alpha = if (isDark) 0.22f else 0.12f),
                                 spotColor = selectedPillColor,
                             )
                             .background(
@@ -379,7 +379,7 @@ private fun PrimaryNavigationBar(
                         val iconLift by animateDpAsState(
                             targetValue = when {
                                 isPressed -> 0.dp
-                                isSelected -> (-1.1).dp
+                                isSelected -> (-1.0).dp
                                 else -> 0.dp
                             },
                             animationSpec = if (isPressed) {
@@ -393,8 +393,8 @@ private fun PrimaryNavigationBar(
                         )
                         val iconElevation by animateFloatAsState(
                             targetValue = when {
-                                isPressed -> 1.9f
-                                isSelected -> 4.0f
+                                isPressed -> 1.75f
+                                isSelected -> 3.85f
                                 else -> 0f
                             },
                             animationSpec = if (isPressed) {
@@ -704,8 +704,8 @@ private fun PrimaryNavigationBar(
                     colors = NavigationBarItemDefaults.colors(
                         selectedIconColor = MaterialTheme.colorScheme.primary,
                         selectedTextColor = MaterialTheme.colorScheme.primary,
-                        unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.59f),
-                        unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.59f),
+                        unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.58f),
+                        unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.58f),
                         indicatorColor = Color.Transparent,
                         disabledIndicatorColor = Color.Transparent,
                     ),
@@ -925,7 +925,7 @@ private fun PrimaryNavigationRail(
                             .shadow(
                                 elevation = selectedPillElevation,
                                 shape = activeItemShape,
-                                ambientColor = selectedPillBorderColor.copy(alpha = 0.21f),
+                                ambientColor = selectedPillBorderColor.copy(alpha = 0.20f),
                                 spotColor = selectedPillColor,
                             )
                             .background(
@@ -1278,8 +1278,8 @@ private fun PrimaryNavigationRail(
                 colors = NavigationRailItemDefaults.colors(
                     selectedIconColor = MaterialTheme.colorScheme.primary,
                     selectedTextColor = MaterialTheme.colorScheme.primary,
-                    unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.59f),
-                    unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.59f),
+                    unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.58f),
+                    unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.58f),
                     indicatorColor = Color.Transparent,
                     disabledIndicatorColor = Color.Transparent,
                 ),
