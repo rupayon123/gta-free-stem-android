@@ -1302,21 +1302,21 @@ private fun DestinationLabel(
         MaterialTheme.typography.labelSmall.copy(
             fontSize = if (isSelected) 12.2.sp else 11.8.sp,
             lineHeight = if (isSelected) 14.1.sp else 13.4.sp,
-            fontWeight = if (isSelected) FontWeight.Medium else FontWeight.Normal,
+            fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
             letterSpacing = 0.01.sp,
         )
     } else {
         MaterialTheme.typography.labelSmall.copy(
             fontSize = if (isSelected) 12.2.sp else 11.75.sp,
             lineHeight = if (isSelected) 13.4.sp else 12.9.sp,
-            fontWeight = if (isSelected) FontWeight.Medium else FontWeight.Normal,
+            fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
             letterSpacing = 0.01.sp,
         )
     }
     val labelColor by animateColorAsState(
         targetValue = when {
-            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = 0.96f)
-            isPressed -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.72f)
+            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_LABEL_SELECTED_PRESS_ALPHA)
+            isPressed -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = NAV_LABEL_PRESSED_ALPHA)
             isSelected -> MaterialTheme.colorScheme.primary
             else -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = NAV_LABEL_UNSELECTED_ALPHA)
         },
@@ -1330,7 +1330,7 @@ private fun DestinationLabel(
         label = "destination-label-color",
     )
     val labelAlpha by animateFloatAsState(
-        targetValue = if (isPressed && !isSelected) 0.96f else if (isSelected) 1f else 0.985f,
+        targetValue = if (isPressed && !isSelected) NAV_LABEL_PRESS_ALPHA else if (isSelected) 1f else 0.985f,
         animationSpec = if (isPressed) {
             navPressFloatAnimationSpec
         } else if (isSelected) {
@@ -1342,8 +1342,8 @@ private fun DestinationLabel(
     )
     val labelOffset by animateDpAsState(
         targetValue = when {
-            isSelected -> (-0.10).dp
-            isPressed && !isSelected -> 0.02.dp
+            isSelected -> NAV_LABEL_OFFSET_SELECTED_DP.dp
+            isPressed -> 0.dp
             else -> 0.dp
         },
         animationSpec = if (isPressed) {
@@ -1357,8 +1357,8 @@ private fun DestinationLabel(
     )
     val labelScale by animateFloatAsState(
         targetValue = when {
-            isPressed && !isSelected -> 0.9958f
-            isSelected -> 1.004f
+            isPressed && !isSelected -> NAV_LABEL_PRESS_SCALE
+            isSelected -> NAV_LABEL_SELECTED_SCALE
             else -> 1f
         },
         animationSpec = if (isPressed) {
@@ -1398,3 +1398,9 @@ private val navSelectedSettleDpAnimationSpec = tween<Dp>(234, easing = FastOutSl
 
 private const val NAV_UNSELECTED_LABEL_ALPHA = 0.62f
 private const val NAV_LABEL_UNSELECTED_ALPHA = 0.76f
+private const val NAV_LABEL_SELECTED_SCALE = 1.004f
+private const val NAV_LABEL_PRESS_SCALE = 0.9958f
+private const val NAV_LABEL_PRESS_ALPHA = 0.96f
+private const val NAV_LABEL_PRESSED_ALPHA = 0.82f
+private const val NAV_LABEL_SELECTED_PRESS_ALPHA = 0.98f
+private const val NAV_LABEL_OFFSET_SELECTED_DP = -0.08f
