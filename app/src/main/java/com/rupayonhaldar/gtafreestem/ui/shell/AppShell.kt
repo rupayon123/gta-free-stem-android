@@ -783,7 +783,7 @@ private fun PrimaryNavigationRail(
         NavigationRail(
             modifier = Modifier
                 .fillMaxHeight()
-                .padding(start = 6.dp, end = 6.dp, top = 9.dp, bottom = 9.dp)
+                .padding(start = 6.8.dp, end = 6.8.dp, top = 9.4.dp, bottom = 9.4.dp)
                 .clip(railShape),
             containerColor = railContainer,
             windowInsets = WindowInsets(0, 0, 0, 0),
