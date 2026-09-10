@@ -270,8 +270,8 @@ private fun PrimaryNavigationBar(
                         targetValue = when {
                             isPressed && isSelected -> NAV_BOTTOM_NAV_ITEM_PRESSED_SELECTED_ELEVATION.dp
                             isSelected -> NAV_BOTTOM_NAV_ITEM_SELECTED_ELEVATION.dp
-                            isPressed -> 0.dp
-                            else -> 0.dp
+                            isPressed -> NAV_BOTTOM_NAV_ITEM_PRESSED_UNSELECTED_ELEVATION.dp
+                            else -> NAV_BOTTOM_NAV_ITEM_UNSELECTED_ELEVATION.dp
                         },
                         animationSpec = if (isPressed) {
                             navPressDpAnimationSpec
@@ -873,8 +873,8 @@ private fun PrimaryNavigationRail(
                         targetValue = when {
                             isPressed && isSelected -> NAV_RAIL_ITEM_PRESSED_SELECTED_ELEVATION.dp
                             isSelected -> NAV_RAIL_ITEM_SELECTED_ELEVATION.dp
-                            isPressed -> 0.dp
-                            else -> 0.dp
+                            isPressed -> NAV_RAIL_ITEM_PRESSED_UNSELECTED_ELEVATION.dp
+                            else -> NAV_RAIL_ITEM_UNSELECTED_ELEVATION.dp
                         },
                         animationSpec = if (isPressed) {
                             navPressDpAnimationSpec
@@ -1564,7 +1564,11 @@ private const val NAV_RAIL_ITEM_SELECTED_OFFSET_PRESSED_DP = -0.36f
 private const val NAV_BOTTOM_NAV_ITEM_SELECTED_OFFSET_DP = -0.32f
 private const val NAV_RAIL_ITEM_SELECTED_OFFSET_DP = -0.36f
 private const val NAV_BOTTOM_NAV_ITEM_SELECTED_ELEVATION = 0.54f
+private const val NAV_BOTTOM_NAV_ITEM_UNSELECTED_ELEVATION = 0.08f
+private const val NAV_BOTTOM_NAV_ITEM_PRESSED_UNSELECTED_ELEVATION = 0.02f
 private const val NAV_RAIL_ITEM_SELECTED_ELEVATION = 0.58f
+private const val NAV_RAIL_ITEM_UNSELECTED_ELEVATION = 0.1f
+private const val NAV_RAIL_ITEM_PRESSED_UNSELECTED_ELEVATION = 0.03f
 private const val NAV_BOTTOM_NAV_ITEM_PRESSED_SELECTED_ELEVATION = 0.38f
 private const val NAV_BOTTOM_NAV_ITEM_PRESSED_SELECTED_HEIGHT = 57.9f
 private const val NAV_BOTTOM_NAV_ITEM_SELECTED_HEIGHT = 59.4f
