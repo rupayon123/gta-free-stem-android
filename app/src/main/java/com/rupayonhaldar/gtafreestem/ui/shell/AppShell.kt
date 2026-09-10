@@ -1503,12 +1503,12 @@ private val navSelectionDpAnimationSpec = tween<Dp>(240, easing = FastOutSlowInE
 private val navPressDpAnimationSpec = tween<Dp>(120, easing = FastOutSlowInEasing)
 private val navPressColorAnimationSpec = tween<Color>(120, easing = FastOutSlowInEasing)
 private val navSelectionColorAnimationSpec = tween<Color>(240, easing = FastOutSlowInEasing)
-private val navSelectedSettleColorAnimationSpec = tween<Color>(220, easing = FastOutSlowInEasing)
-private val navSelectedSettleFloatAnimationSpec = tween<Float>(220, easing = FastOutSlowInEasing)
-private val navSelectedSettleDpAnimationSpec = tween<Dp>(220, easing = FastOutSlowInEasing)
-private val navUnselectedSettleColorAnimationSpec = tween<Color>(165, easing = FastOutSlowInEasing)
-private val navUnselectedSettleFloatAnimationSpec = tween<Float>(165, easing = FastOutSlowInEasing)
-private val navUnselectedSettleDpAnimationSpec = tween<Dp>(165, easing = FastOutSlowInEasing)
+private val navSelectedSettleColorAnimationSpec = tween<Color>(250, easing = FastOutSlowInEasing)
+private val navSelectedSettleFloatAnimationSpec = tween<Float>(250, easing = FastOutSlowInEasing)
+private val navSelectedSettleDpAnimationSpec = tween<Dp>(250, easing = FastOutSlowInEasing)
+private val navUnselectedSettleColorAnimationSpec = tween<Color>(205, easing = FastOutSlowInEasing)
+private val navUnselectedSettleFloatAnimationSpec = tween<Float>(205, easing = FastOutSlowInEasing)
+private val navUnselectedSettleDpAnimationSpec = tween<Dp>(205, easing = FastOutSlowInEasing)
 
 private const val NAV_UNSELECTED_LABEL_ALPHA = 0.68f
 private const val NAV_LABEL_UNSELECTED_ALPHA = 0.84f
