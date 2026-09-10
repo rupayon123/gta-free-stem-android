@@ -1,7 +1,7 @@
 package com.rupayonhaldar.gtafreestem.ui.shell
 
 import androidx.annotation.DrawableRes
-import androidx.compose.animation.core.animateColorAsState
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.FastOutSlowInEasing
@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
@@ -40,6 +41,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -176,6 +178,7 @@ private fun PrimaryNavigationBar(
         shadowElevation = NAV_SHELL_BAR_SHADOW_ELEVATION.dp,
         border = BorderStroke(NAV_SHELL_BAR_OUTER_BORDER_WIDTH.dp, barBorder),
     ) {
+        Box {
         Box(
             modifier = Modifier
                 .matchParentSize()
@@ -203,7 +206,8 @@ private fun PrimaryNavigationBar(
         NavigationBar(
             modifier = Modifier
                 .padding(
-                    horizontal = NAV_BOTTOM_NAV_BAR_INNER_PADDING.dp,
+                    start = NAV_BOTTOM_NAV_BAR_INNER_PADDING.dp,
+                    end = NAV_BOTTOM_NAV_BAR_INNER_PADDING.dp,
                     top = 0.dp,
                     bottom = 0.dp,
                 )
@@ -718,7 +722,7 @@ private fun PrimaryNavigationBar(
                                                 iconBackground,
                                             ),
                                         ),
-                                    ),
+                                    )
                                     .border(
                                         border = BorderStroke(
                                             width = NAV_ICON_FACE_BORDER.dp,
@@ -755,10 +759,10 @@ private fun PrimaryNavigationBar(
                     unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = NAV_UNSELECTED_LABEL_ALPHA),
                     unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = NAV_UNSELECTED_LABEL_ALPHA),
                     indicatorColor = Color.Transparent,
-                    disabledIndicatorColor = Color.Transparent,
                 ),
                 )
             }
+        }
         }
     }
 }
@@ -804,6 +808,7 @@ private fun PrimaryNavigationRail(
         shadowElevation = NAV_SHELL_RAIL_SHADOW_ELEVATION.dp,
         border = BorderStroke(NAV_SHELL_RAIL_OUTER_BORDER_WIDTH.dp, railBorder),
     ) {
+        Box {
         Box(
             modifier = Modifier
                 .matchParentSize()
@@ -1377,10 +1382,10 @@ private fun PrimaryNavigationRail(
                     unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = NAV_UNSELECTED_LABEL_ALPHA),
                     unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = NAV_UNSELECTED_LABEL_ALPHA),
                     indicatorColor = Color.Transparent,
-                    disabledIndicatorColor = Color.Transparent,
                 ),
                 )
             }
+        }
         }
     }
 }
@@ -1392,6 +1397,36 @@ private fun DestinationLabel(
     isSelected: Boolean = false,
     isPressed: Boolean = false,
 ) {
+    val selectedPressOffsetDp = if (compact) {
+        NAV_LABEL_COMPACT_OFFSET_SELECTED_PRESSED_DP
+    } else {
+        NAV_LABEL_OFFSET_SELECTED_PRESSED_DP
+    }
+    val selectedOffsetDp = if (compact) {
+        NAV_LABEL_COMPACT_OFFSET_SELECTED_DP
+    } else {
+        NAV_LABEL_OFFSET_SELECTED_DP
+    }
+    val unselectedPressOffsetDp = if (compact) {
+        NAV_LABEL_COMPACT_OFFSET_UNSELECTED_PRESSED_DP
+    } else {
+        NAV_LABEL_OFFSET_UNSELECTED_PRESSED_DP
+    }
+    val selectedScale = if (compact) {
+        NAV_LABEL_COMPACT_SELECTED_SCALE
+    } else {
+        NAV_LABEL_SELECTED_SCALE
+    }
+    val selectedPressedScale = if (compact) {
+        NAV_LABEL_COMPACT_SELECTED_PRESS_SCALE
+    } else {
+        NAV_LABEL_SELECTED_PRESS_SCALE
+    }
+    val pressedScale = if (compact) {
+        NAV_LABEL_COMPACT_PRESS_SCALE
+    } else {
+        NAV_LABEL_PRESS_SCALE
+    }
     val resolvedStyle = if (compact) {
         MaterialTheme.typography.labelSmall.copy(
             fontSize = if (isSelected) NAV_LABEL_COMPACT_FONT_SELECTED.sp else NAV_LABEL_COMPACT_FONT_UNSELECTED.sp,
@@ -1441,9 +1476,9 @@ private fun DestinationLabel(
     )
     val labelOffset by animateDpAsState(
         targetValue = when {
-            isSelected && isPressed -> NAV_LABEL_OFFSET_SELECTED_PRESSED_DP.dp
-            isPressed && !isSelected -> NAV_LABEL_OFFSET_UNSELECTED_PRESSED_DP.dp
-            isSelected -> NAV_LABEL_OFFSET_SELECTED_DP.dp
+            isSelected && isPressed -> selectedPressOffsetDp.dp
+            isPressed && !isSelected -> unselectedPressOffsetDp.dp
+            isSelected -> selectedOffsetDp.dp
             else -> 0.dp
         },
         animationSpec = if (isPressed) {
@@ -1457,9 +1492,9 @@ private fun DestinationLabel(
     )
     val labelScale by animateFloatAsState(
         targetValue = when {
-            isPressed && isSelected -> NAV_LABEL_SELECTED_PRESS_SCALE
-            isPressed && !isSelected -> NAV_LABEL_PRESS_SCALE
-            isSelected -> NAV_LABEL_SELECTED_SCALE
+            isPressed && isSelected -> selectedPressedScale
+            isPressed && !isSelected -> pressedScale
+            isSelected -> selectedScale
             else -> NAV_LABEL_UNSELECTED_SCALE
         },
         animationSpec = if (isPressed) {
@@ -1507,6 +1542,7 @@ private const val NAV_LABEL_UNSELECTED_VISIBILITY_ALPHA = 0.985f
 private const val NAV_LABEL_UNSELECTED_SCALE = 1f
 private const val NAV_LABEL_SELECTED_SCALE = 1.005f
 private const val NAV_LABEL_PRESS_SCALE = 0.9992f
+private const val NAV_LABEL_COMPACT_PRESS_SCALE = 0.9998f
 private const val NAV_LABEL_COMPACT_FONT_SELECTED = 12.15f
 private const val NAV_LABEL_COMPACT_FONT_UNSELECTED = 11.75f
 private const val NAV_LABEL_COMPACT_LINE_HEIGHT_SELECTED = 14.1f
@@ -1524,7 +1560,12 @@ private const val NAV_LABEL_OFFSET_PRESSED_DP = -0.08f
 private const val NAV_LABEL_OFFSET_UNSELECTED_PRESSED_DP = 0f
 private const val NAV_LABEL_OFFSET_SELECTED_DP = -0.12f
 private const val NAV_LABEL_OFFSET_SELECTED_PRESSED_DP = -0.12f
+private const val NAV_LABEL_COMPACT_OFFSET_UNSELECTED_PRESSED_DP = 0f
+private const val NAV_LABEL_COMPACT_OFFSET_SELECTED_DP = -0.06f
+private const val NAV_LABEL_COMPACT_OFFSET_SELECTED_PRESSED_DP = -0.10f
 private const val NAV_LABEL_SELECTED_PRESS_SCALE = 1.0032f
+private const val NAV_LABEL_COMPACT_SELECTED_SCALE = 1.0041f
+private const val NAV_LABEL_COMPACT_SELECTED_PRESS_SCALE = 1.0029f
 private const val NAV_BOTTOM_NAV_BAR_OUTER_HORIZONTAL_PADDING = 12f
 private const val NAV_BOTTOM_NAV_BAR_OUTER_VERTICAL_PADDING = 5.6f
 private const val NAV_BOTTOM_NAV_BAR_INNER_PADDING = 7.2f
