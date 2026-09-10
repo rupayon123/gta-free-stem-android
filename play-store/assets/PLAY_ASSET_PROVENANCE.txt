@@ -1,0 +1,115 @@
+GTA FREE STEM Android 1.1.0 (versionCode 3)
+Play visual asset provenance
+Captured: 2026-08-19T14:33:00Z through 2026-08-19T17:45:59Z
+
+SUPERSEDED HISTORICAL SNAPSHOT — NOT CURRENT RELEASE EVIDENCE
+
+Everything recorded below, including the screenshots, source/catalog/feed/APK
+hashes, runtime state, and capture claims, applies only to the August 19, 2026
+snapshot identified by aggregate SHA-256 b405953bcdab3fb5ee4c3ec1430b326697907a4f79fd3f324375a040c45c2448.
+The app source has materially changed since that capture, so these images and
+hashes do not describe or verify the current working tree or a current release
+candidate. They must not be uploaded or presented as current evidence.
+
+A current candidate requires a source freeze, clean rebuild, fresh automated
+and device verification, screenshot recapture from that exact build, and new
+provenance hashes. No Play upload or publication is authorized by this record.
+
+HISTORICAL EVIDENCE CLASSIFICATION
+
+At capture time, these screenshots were exact-to-that-working-tree DEBUG visual
+evidence. They were captured from the APK identified below after a clean
+install-state launch, with the public live feed successfully refreshed over
+validated Wi-Fi. They are not evidence for today's source, a current signed
+release AAB, a Play Console upload, review, or publication.
+
+HISTORICAL CANDIDATE IDENTITY
+
+Git branch: main
+Base commit: bb67cbbcaf5dda20c8f6408768faa64d3ab51b2f
+app/src/main aggregate SHA-256: b405953bcdab3fb5ee4c3ec1430b326697907a4f79fd3f324375a040c45c2448
+app_strings.json SHA-256: a5f8eee787db084843d2cf9a5bb337187fa4d0e75c7832c3dd0079b13671457d
+opportunities.json SHA-256: 2da9c4dadbce14feb16b3306d366b48ef0535febd0d9cfee314266d3e3fd211f
+Installed debug base.apk (capture runtime) SHA-256: be36ce0e1abe16544bf3f7e514dcade51c23031a55d17464013baf099723286b
+Preserved assembleDebug APK installed for capture SHA-256: be36ce0e1abe16544bf3f7e514dcade51c23031a55d17464013baf099723286b
+Fresh post-capture assembleDebug output SHA-256: be36ce0e1abe16544bf3f7e514dcade51c23031a55d17464013baf099723286b
+
+The app/src/main aggregate was calculated with:
+find app/src/main -type f -not -path '*/build/*' -print0 | LC_ALL=C sort -z |
+  xargs -0 shasum -a 256 | shasum -a 256
+
+The installed APK is the exact capture runtime and was pulled from the emulator
+after the final Profile recapture. It is byte-identical to the preserved APK that
+was installed for this capture session and to the post-capture build output.
+
+CAPTURE ENVIRONMENT AND STATE
+
+Device: emulator-5554, sdk_gphone64_arm64
+OS: Android 16 / API 36
+Capture viewport: 1080 x 1920 at 420 dpi
+Physical emulator display: 1080 x 2400 at 420 dpi
+System language: English
+Connectivity: airplane mode off; AndroidWifi connected and VALIDATED
+Notifications: cleared before capture
+App state: local Guest profile, no saved opportunities, no permission prompts
+Feed state: Public live feed; 71 visible at capture time
+
+The Wi-Fi, emulator cellular-status, and battery symbols that remain in the status
+bar are the emulator's genuine system state; no status bar or app pixels were
+painted or composited over.
+
+One Google Adservices system notification was snoozed for 24 hours through Android's
+notification service before capture; no pixels were altered. No emulator restart,
+app reinstall, or app source/resource change occurred between these six captures.
+The visible count changed honestly as time-sensitive opportunities expired.
+
+BUILD AND CAPTURE COMMANDS
+
+JAVA_HOME=/Users/rh_mac/Documents/Codex/2026-08-16/let/work/android-toolchain/jdk/jdk-17.0.20+8/Contents/Home
+ANDROID_HOME=/Users/rh_mac/Documents/Codex/2026-08-16/let/work/android-toolchain/sdk
+./gradlew --no-daemon :app:assembleDebug
+cp app/build/outputs/apk/debug/app-debug.apk /tmp/gta-free-stem-b405-final-debug.apk
+adb -s emulator-5554 install -r /tmp/gta-free-stem-b405-final-debug.apk
+adb -s emulator-5554 shell pm clear com.rupayonhaldar.gtafreestem
+adb -s emulator-5554 shell am start -W -n com.rupayonhaldar.gtafreestem/.MainActivity
+adb -s emulator-5554 shell settings put global airplane_mode_on 0
+adb -s emulator-5554 shell svc wifi enable
+adb -s emulator-5554 shell cmd notification snooze --for 86400000 <notification-key>
+adb -s emulator-5554 shell wm size 1080x1920
+adb -s emulator-5554 shell screencap -p /sdcard/<screenshot-name>.png
+adb -s emulator-5554 pull /sdcard/<screenshot-name>.png play-store/assets/screenshots/phone/<screenshot-name>.png
+adb -s emulator-5554 shell pm path com.rupayonhaldar.gtafreestem
+adb -s emulator-5554 pull <installed-base.apk-path> /tmp/gta-free-stem-b405-installed-base.apk
+adb -s emulator-5554 shell wm size reset
+adb -s emulator-5554 shell wm density reset
+
+After capture, every fully opaque RGBA screenshot was losslessly exported as an
+8-bit RGB PNG. All six images are 1080 x 1920 and have unique SHA-256 hashes.
+
+PHONE SCREENSHOTS
+
+332b6e4155b4ea4425c78b2ba71204e3d6f29eefe5b6b6658389d66f66b15446  01-home.png
+51ac1537f5a03acf3450b1ba177ae8452024c1a7caf60e95caa402ac42e3dcce  02-browse-controls.png
+9f1d32f4d35cac67e35420b73820b24f1c700214ed8b4f6edcc2f6d33de433ec  03-browse-list.png
+3b6529c51fa0f9bc0801b8c4a343b0e28b4a4711dff4536a508ad5bdaa1903ef  04-browse-map.png
+426de0030753c6f4cdf916927238acfb81992f2a10c8f5a0e209597f6f9a846b  05-opportunity-detail.png
+ea56480a3003ddc67b1bbb333e5ccd5253d5bded6cad7b4b248049d9f1c27bdf  06-profile.png
+
+Visual/name audit:
+- 01: Home hero and search entry point
+- 02: Browse controls at the natural top with full safe-area spacing
+- 03: Browse list with the concise live-feed status and honest Aug 19 cards
+- 04: Browse Map with the concise status and readable deterministic count clusters
+- 05: Active exact-260 RSS Google Prompting Essentials detail; description ends
+      cleanly with "By completing this Learning Circle…"
+- 06: Local Guest Profile with a clean, settled status bar
+
+OTHER PLAY GRAPHICAL ASSETS
+
+14b5288bf662744c9c8e050a636893d1acdba300860683e9c20ee8f25bc0c92e  feature-graphic-1024x500.png
+e611e1b167bc535adc61f6552e964377122ea060e676dd33309d287a2e0a8e8f  icon-512.png
+
+Asset properties:
+- Feature graphic: 1024 x 500, 8-bit RGB PNG
+- Play icon: 512 x 512, 8-bit RGBA PNG
+- Phone screenshots: 1080 x 1920, 8-bit RGB PNG

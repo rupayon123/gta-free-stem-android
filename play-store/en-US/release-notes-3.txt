@@ -1,0 +1,9 @@
+Meet the redesigned GTA FREE STEM experience.
+
+• New storybook-inspired Home, browse, details, Saved and Profile screens
+• List and offline schematic-map browsing
+• Optional approximate Nearby sorting and New Finds
+• Opt-in local new-match alerts
+• GTA FREE STEM deep links and Opportunities/High School shortcuts
+• Improved 18-language, RTL, tablet, large-text and accessibility support
+• Updated verified 104-opportunity feed

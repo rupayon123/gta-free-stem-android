@@ -10,9 +10,8 @@ print_usage() {
   printf 'Usage: %s <commit-message> [--with-untracked]\n' "$(basename "$0")"
   printf 'Example: %s "Refine nav tint contrast"\n' "$(basename "$0")"
   printf '\n' 
-  printf 'If --with-untracked is passed, all tracked and untracked file changes are included.\n' 
-  printf 'If --with-untracked is omitted, tracked file changes are included and\n'
-  printf 'untracked files are also included only when they are the only local changes.\n'
+  printf 'All tracked and untracked file changes are included by default.\n'
+  printf 'If --with-untracked is passed, the behavior is explicit and unchanged (legacy compatibility).\n'
 }
 
 if [ "$#" -lt 1 ]; then
@@ -23,6 +22,12 @@ fi
 
 COMMIT_MESSAGE=$1
 INCLUDE_UNTRACKED=${2:-}
+
+if [ -n "$INCLUDE_UNTRACKED" ] && [ "$INCLUDE_UNTRACKED" != "--with-untracked" ]; then
+  echo "Unsupported option: $INCLUDE_UNTRACKED" >&2
+  print_usage
+  exit 2
+fi
 
 check_sync_state() {
   LOCAL_AHEAD=$(git rev-list --count "${UPSTREAM}..${CURRENT_BRANCH}" || echo 0)
@@ -78,18 +83,8 @@ fi
 if [ -z "$(git status --short)" ]; then
   echo "No changes detected; nothing new to commit."
 else
-  if [ "$INCLUDE_UNTRACKED" = "--with-untracked" ] || {
-    ! has_tracked_changes && has_untracked_changes;
-  }; then
-    if [ "$INCLUDE_UNTRACKED" != "--with-untracked" ] && ! has_tracked_changes && has_untracked_changes; then
-      echo "No tracked changes detected; auto-including untracked files for commit."
-    elif [ "$INCLUDE_UNTRACKED" = "--with-untracked" ] && has_tracked_changes && has_untracked_changes; then
-      echo "Including both tracked and untracked changes for commit (--with-untracked)."
-    fi
-    git add -A
-  else
-    git add -u
-  fi
+  echo "Including tracked + untracked changes for commit."
+  git add -A
 
   if ! has_staged_changes; then
     if has_untracked_changes && [ "$INCLUDE_UNTRACKED" != "--with-untracked" ]; then
