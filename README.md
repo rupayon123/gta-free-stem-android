@@ -9,7 +9,17 @@ GTA FREE STEM is a native Android app for browsing free STEM opportunities. This
 > testers. Complete every remaining gate in the release runbook before a
 > broader rollout.
 
-## Candidate scope
+## Ownership And Engineering Evidence
+
+Personal project by **Rupayon Haldar**, separate from SARIT employment. My work covers the Kotlin/Compose app, local persistence, feed integration, search and filters, and Android-specific navigation and alert behavior.
+
+- [App and platform integration](app/src/main/java/com/rupayonhaldar/gtafreestem/), [unit tests](app/src/test/), and [device tests](app/src/androidTest/) expose the implementation and its checks.
+- [CI runs](https://github.com/rupayon123/gta-free-stem-android/actions) are the source for committed-build status. A locally passing build is not evidence that GitHub CI or Play distribution passed.
+- Suggested demo: browse → search/filter → save a listing → reopen saved items offline → test alert permission denial. Validate the exact candidate on a device before claiming that journey works.
+
+## Historical Candidate Scope
+
+The scope below was recorded in August 2026. It is not current end-to-end signoff: a later build repair does not automatically verify every screen, map, animation, or Play-distribution claim.
 
 As of August 18, 2026, the version 1.1.0 source brings the Android experience
 up to the current iOS product scope while using Android-native interaction and

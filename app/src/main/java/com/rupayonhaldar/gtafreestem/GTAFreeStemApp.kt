@@ -11,7 +11,6 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -44,13 +43,8 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.Bookmark
-import androidx.compose.material.icons.filled.Warning
-import androidx.compose.material.icons.outlined.BookmarkBorder
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -83,6 +77,10 @@ import com.rupayonhaldar.gtafreestem.localization.AppLanguage
 import com.rupayonhaldar.gtafreestem.localization.AppStringCatalog
 import com.rupayonhaldar.gtafreestem.localization.LocalizedOpportunityText
 import com.rupayonhaldar.gtafreestem.localization.OpportunityLocalization
+import com.rupayonhaldar.gtafreestem.platform.navigation.LocalPlatformNavigationCoordinator
+import com.rupayonhaldar.gtafreestem.platform.location.NearbyLocationState
+import com.rupayonhaldar.gtafreestem.platform.alerts.OpportunityAlertPlatform
+import com.rupayonhaldar.gtafreestem.ui.preferences.OpportunityAlertFeedback
 import com.rupayonhaldar.gtafreestem.ui.browse.AppDestination
 import com.rupayonhaldar.gtafreestem.ui.browse.BrowseUiState
 import com.rupayonhaldar.gtafreestem.ui.browse.BrowseViewModel
@@ -99,6 +97,8 @@ import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
 import java.util.Locale
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
 
 private val AppScreenMaxWidth = 840.dp
 private val AppScreenPadding = 16.dp
@@ -113,6 +113,8 @@ data class AppPreferenceActions(
     val selectLanguage: (AppLanguage?) -> Boolean,
     val selectTheme: (AppThemePreference) -> Boolean,
     val setOpportunityAlertsPreferred: (Boolean) -> Boolean,
+    val refreshPreferenceState: () -> Unit = {},
+    val opportunityAlertFeedback: Flow<OpportunityAlertFeedback> = emptyFlow(),
 ) {
     companion object {
         val NONE = AppPreferenceActions(
@@ -129,6 +131,9 @@ data class AppPreferenceActions(
 fun GTAFreeStemApp(
     preferences: AppPreferencesUiState,
     preferenceActions: AppPreferenceActions = AppPreferenceActions.NONE,
+    nearbyLocationState: NearbyLocationState = NearbyLocationState.Idle,
+    onUseNearby: () -> Unit = {},
+    onClearNearby: () -> Unit = {},
     viewModel: BrowseViewModel = viewModel(
         factory = BrowseViewModel.factory(LocalContext.current),
     ),
@@ -136,6 +141,14 @@ fun GTAFreeStemApp(
     val context = LocalContext.current
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val selected = state.selectedOpportunity
+    LaunchedEffect(preferences.resolvedLanguage) {
+        viewModel.setSearchLanguage(preferences.resolvedLanguage)
+    }
+    LaunchedEffect(nearbyLocationState) {
+        (nearbyLocationState as? NearbyLocationState.Located)?.fix?.let { fix ->
+            viewModel.setNearbyLocation(fix.latitude, fix.longitude)
+        }
+    }
     var selectedDestinationName by rememberSaveable {
         mutableStateOf(PrimaryDestination.HOME.name)
     }
@@ -153,12 +166,17 @@ fun GTAFreeStemApp(
             deleteProfile = preferenceActions.clearProfile,
             deleteSearchHistory = viewModel::clearSearchHistory,
             deleteSavedOpportunities = viewModel::clearSavedOpportunities,
+            deleteLocalAlerts = {
+                val disabled = preferenceActions.setOpportunityAlertsPreferred(false)
+                val cleared = OpportunityAlertPlatform.clearLocalHistory(context)
+                disabled && cleared
+            },
         )
     }
 
     fun openPolicy(url: String, label: String) {
         if (!openHttps(context, url)) {
-            Toast.makeText(context, "$label is unavailable.", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, preferences.externalLinkUnavailableText(label), Toast.LENGTH_LONG).show()
         }
     }
 
@@ -171,6 +189,12 @@ fun GTAFreeStemApp(
         showingSavedOpportunities = false
         showingFilters = false
         viewModel.setDestination(AppDestination.EXPLORE)
+    }
+
+    val navigationRequest = LocalPlatformNavigationCoordinator.current?.request
+        ?.collectAsStateWithLifecycle()?.value
+    LaunchedEffect(navigationRequest?.sequence) {
+        navigationRequest?.let { openPrimaryDestination(it.destination) }
     }
 
     BackHandler(
@@ -190,6 +214,7 @@ fun GTAFreeStemApp(
         }
     }
 
+    Box(Modifier.fillMaxSize()) {
     AdaptiveAppShell(
         selectedDestination = selectedDestination,
         onDestinationSelected = { destination -> openPrimaryDestination(destination) },
@@ -247,6 +272,11 @@ fun GTAFreeStemApp(
 
                 PrimaryDestination.OPPORTUNITIES -> BrowseScreen(
                     state = state,
+                    nearbyLocationState = nearbyLocationState,
+                    onUseNearby = onUseNearby,
+                    onClearNearby = { viewModel.clearNearbyLocation(); onClearNearby() },
+                    alertsEnabled = preferences.opportunityAlertsPreferred,
+                    onToggleAlerts = { preferenceActions.setOpportunityAlertsPreferred(!preferences.opportunityAlertsPreferred) },
                     mode = BrowseMode.OPPORTUNITIES,
                     highSchoolFocus = HighSchoolFocus.ALL,
                     onHighSchoolFocusChanged = {},
@@ -265,6 +295,11 @@ fun GTAFreeStemApp(
 
                 PrimaryDestination.HIGH_SCHOOL -> BrowseScreen(
                     state = state,
+                    nearbyLocationState = nearbyLocationState,
+                    onUseNearby = onUseNearby,
+                    onClearNearby = { viewModel.clearNearbyLocation(); onClearNearby() },
+                    alertsEnabled = preferences.opportunityAlertsPreferred,
+                    onToggleAlerts = { preferenceActions.setOpportunityAlertsPreferred(!preferences.opportunityAlertsPreferred) },
                     mode = BrowseMode.HIGH_SCHOOL,
                     highSchoolFocus = highSchoolFocus,
                     onHighSchoolFocusChanged = { highSchoolFocusName = it.name },
@@ -299,7 +334,11 @@ fun GTAFreeStemApp(
                         viewModel.setDestination(AppDestination.SAVED)
                     },
                     onDeleteAllLocalData = {
-                        deletionCoordinator.deleteAllLocalAccountData()
+                        val result = deletionCoordinator.deleteAllLocalAccountData()
+                        viewModel.clearNearbyLocation()
+                        onClearNearby()
+                        preferenceActions.refreshPreferenceState()
+                        result
                     },
                     onOpenSupport = {
                         openPrimaryDestination(PrimaryDestination.SUPPORT)
@@ -320,6 +359,13 @@ fun GTAFreeStemApp(
             }
         }
     }
+        OpportunityAlertFeedbackHost(
+            feedback = preferenceActions.opportunityAlertFeedback,
+            languageKey = preferences.resolvedLanguage,
+            text = preferences::shellText,
+            modifier = Modifier.align(Alignment.TopCenter).padding(16.dp).widthIn(max = 600.dp),
+        )
+    }
 }
 
 internal fun AppPreferencesUiState.shellText(key: String, fallback: String): String {
@@ -328,9 +374,6 @@ internal fun AppPreferencesUiState.shellText(key: String, fallback: String): Str
 }
 
 internal fun AppPreferencesUiState.navigationLabel(destination: PrimaryDestination): String {
-    if (destination == PrimaryDestination.ACCOUNT && resolvedLanguage == AppLanguage.ENGLISH) {
-        return destination.fallbackLabel
-    }
     return shellText(destination.catalogKey, destination.fallbackLabel)
 }
 
@@ -369,7 +412,7 @@ private fun HomeScreen(
             filters = OpportunitySearchFilters(),
         ).take(3)
     }
-    BoxWithConstraints(
+    Box(
         modifier = Modifier.fillMaxHeight(),
         contentAlignment = Alignment.TopCenter,
     ) {
@@ -605,7 +648,7 @@ private fun FilterScreen(
     onFiltersChanged: (OpportunitySearchFilters) -> Unit,
     text: (String, String) -> String,
 ) {
-    BoxWithConstraints(
+    Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.TopCenter,
     ) {
@@ -662,11 +705,13 @@ private fun FilterScreen(
     }
 }
 
-private fun localizedFilterLabels(
+internal fun localizedFilterLabels(
     text: (String, String) -> String,
 ): OpportunityFilterPanelLabels = OpportunityFilterPanelLabels.English.copy(
     title = text("filters", "Filters"),
     reset = text("reset", "Reset filters"),
+    selectedState = text("selectedState", "Selected"),
+    notSelectedState = text("notSelectedState", "Not selected"),
     programDetailsSection = text("programDetails", "Program details"),
     pathwaysSection = text("pathway", "Pathways"),
     communityFocusSection = text("communityFocus", "Community focus"),
@@ -692,6 +737,11 @@ private fun localizedFilterLabels(
 @Composable
 private fun BrowseScreen(
     state: BrowseUiState,
+    nearbyLocationState: NearbyLocationState,
+    onUseNearby: () -> Unit,
+    onClearNearby: () -> Unit,
+    alertsEnabled: Boolean,
+    onToggleAlerts: () -> Unit,
     mode: BrowseMode,
     highSchoolFocus: HighSchoolFocus,
     onHighSchoolFocusChanged: (HighSchoolFocus) -> Unit,
@@ -718,7 +768,7 @@ private fun BrowseScreen(
         state.filters.hasActiveFilters ||
         (mode == BrowseMode.HIGH_SCHOOL && highSchoolFocus != HighSchoolFocus.ALL)
 
-    BoxWithConstraints(
+    Box(
         modifier = Modifier.fillMaxHeight(),
         contentAlignment = Alignment.TopCenter,
     ) {
@@ -757,6 +807,15 @@ private fun BrowseScreen(
                         .padding(horizontal = 16.dp, vertical = 14.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
+                    NearbyAndAlertsControls(
+                        filters = state.filters,
+                        nearbyLocationState = nearbyLocationState,
+                        onUseNearby = onUseNearby,
+                        onClearNearby = onClearNearby,
+                        alertsEnabled = alertsEnabled,
+                        onToggleAlerts = onToggleAlerts,
+                        text = shellText,
+                    )
                     OutlinedTextField(
                         value = state.query,
                         onValueChange = onQueryChanged,
@@ -774,7 +833,7 @@ private fun BrowseScreen(
                         singleLine = true,
                         leadingIcon = {
                             Icon(
-                                imageVector = Icons.Default.Search,
+                                painter = painterResource(R.drawable.ic_search),
                                 contentDescription = shellText("searchIcon", "Search"),
                             )
                         },
@@ -784,7 +843,7 @@ private fun BrowseScreen(
                                     onClick = { onQueryChanged("") },
                                 ) {
                                     Icon(
-                                        imageVector = Icons.Default.Clear,
+                                        painter = painterResource(R.drawable.ic_clear),
                                         contentDescription = shellText("clearSearch", "Clear search"),
                                     )
                                 }
@@ -1173,11 +1232,11 @@ private fun OpportunityCard(
                         },
                 ) {
                     Icon(
-                        imageVector = if (isFavorite) {
-                            Icons.Default.Bookmark
+                        painter = painterResource(if (isFavorite) {
+                            R.drawable.ic_bookmark
                         } else {
-                            Icons.Outlined.BookmarkBorder
-                        },
+                            R.drawable.ic_bookmark_border
+                        }),
                         contentDescription = null,
                     )
                     Spacer(modifier = Modifier.width(8.dp))
@@ -1286,7 +1345,7 @@ private fun ErrorBanner(
             horizontalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             Icon(
-                imageVector = Icons.Default.Warning,
+                painter = painterResource(R.drawable.ic_warning),
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onErrorContainer,
             )
@@ -1375,7 +1434,7 @@ private fun OpportunityDetailScreen(
     val localized = remember(opportunity, language, catalog) {
         OpportunityLocalization.resolve(opportunity, language, catalog)
     }
-    BoxWithConstraints(
+    Box(
         modifier = Modifier.fillMaxHeight(),
         contentAlignment = Alignment.TopCenter,
     ) {
@@ -1706,7 +1765,7 @@ private fun SupportScreen(text: (String, String) -> String) {
         ),
     )
 
-    BoxWithConstraints(
+    Box(
         modifier = Modifier.fillMaxHeight(),
         contentAlignment = Alignment.TopCenter,
     ) {

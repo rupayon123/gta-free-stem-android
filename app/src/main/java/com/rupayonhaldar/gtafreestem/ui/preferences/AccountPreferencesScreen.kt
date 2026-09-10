@@ -281,7 +281,7 @@ fun AccountPreferencesScreen(
                         SectionHeading(labels.alertsTitle)
                         PreferenceToggleRow(
                             label = labels.alertsPreference,
-                            supportingText = labels.alertsNotActive,
+                            supportingText = labels.alertsExplanation,
                             checked = state.opportunityAlertsPreferred,
                             onCheckedChange = { preferred ->
                                 val saved = runCatching {
