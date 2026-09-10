@@ -1497,18 +1497,18 @@ private fun DestinationLabel(
 private val PrimaryDestination.testTag: String
     get() = "primary-navigation-${name.lowercase()}"
 
-private val navSelectionFloatAnimationSpec = tween<Float>(240, easing = FastOutSlowInEasing)
-private val navPressFloatAnimationSpec = tween<Float>(120, easing = FastOutSlowInEasing)
+private val navSelectionFloatAnimationSpec = tween<Float>(232, easing = FastOutSlowInEasing)
+private val navPressFloatAnimationSpec = tween<Float>(102, easing = FastOutSlowInEasing)
 private val navSelectionDpAnimationSpec = tween<Dp>(240, easing = FastOutSlowInEasing)
-private val navPressDpAnimationSpec = tween<Dp>(120, easing = FastOutSlowInEasing)
-private val navPressColorAnimationSpec = tween<Color>(120, easing = FastOutSlowInEasing)
+private val navPressDpAnimationSpec = tween<Dp>(102, easing = FastOutSlowInEasing)
+private val navPressColorAnimationSpec = tween<Color>(102, easing = FastOutSlowInEasing)
 private val navSelectionColorAnimationSpec = tween<Color>(240, easing = FastOutSlowInEasing)
 private val navSelectedSettleColorAnimationSpec = tween<Color>(250, easing = FastOutSlowInEasing)
-private val navSelectedSettleFloatAnimationSpec = tween<Float>(255, easing = FastOutSlowInEasing)
-private val navSelectedSettleDpAnimationSpec = tween<Dp>(255, easing = FastOutSlowInEasing)
-private val navUnselectedSettleColorAnimationSpec = tween<Color>(230, easing = FastOutSlowInEasing)
-private val navUnselectedSettleFloatAnimationSpec = tween<Float>(230, easing = FastOutSlowInEasing)
-private val navUnselectedSettleDpAnimationSpec = tween<Dp>(230, easing = FastOutSlowInEasing)
+private val navSelectedSettleFloatAnimationSpec = tween<Float>(262, easing = FastOutSlowInEasing)
+private val navSelectedSettleDpAnimationSpec = tween<Dp>(262, easing = FastOutSlowInEasing)
+private val navUnselectedSettleColorAnimationSpec = tween<Color>(238, easing = FastOutSlowInEasing)
+private val navUnselectedSettleFloatAnimationSpec = tween<Float>(238, easing = FastOutSlowInEasing)
+private val navUnselectedSettleDpAnimationSpec = tween<Dp>(238, easing = FastOutSlowInEasing)
 
 private const val NAV_UNSELECTED_LABEL_ALPHA = 0.70f
 private const val NAV_LABEL_UNSELECTED_ALPHA = 0.78f
