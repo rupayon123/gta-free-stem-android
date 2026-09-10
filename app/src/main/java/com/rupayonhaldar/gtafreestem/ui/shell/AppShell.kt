@@ -1511,7 +1511,7 @@ private val navUnselectedSettleFloatAnimationSpec = tween<Float>(238, easing = F
 private val navUnselectedSettleDpAnimationSpec = tween<Dp>(238, easing = FastOutSlowInEasing)
 
 private const val NAV_UNSELECTED_LABEL_ALPHA = 0.70f
-private const val NAV_LABEL_UNSELECTED_ALPHA = 0.78f
+private const val NAV_LABEL_UNSELECTED_ALPHA = 0.80f
 private const val NAV_LABEL_SELECTED_ALPHA = 1f
 private const val NAV_LABEL_UNSELECTED_VISIBILITY_ALPHA = 0.97f
 private const val NAV_LABEL_UNSELECTED_SCALE = 1f
@@ -1625,8 +1625,8 @@ private const val NAV_ICON_FACE_SELECTED_PRESSED_SIZE = 34.4f
 private const val NAV_ICON_FACE_PRESSED_SIZE = NAV_ICON_FACE_SIZE_PRESSED
 private const val NAV_ICON_FACE_SELECTED_SIZE = 34.9f
 private const val NAV_ICON_FACE_UNSELECTED_SIZE = NAV_ICON_FACE_SIZE_BASE
-private const val NAV_ICON_CONTAINER_UNSELECTED_ALPHA = 0.86f
-private const val NAV_ICON_TINT_PRESSED_ALPHA = 0.88f
+private const val NAV_ICON_CONTAINER_UNSELECTED_ALPHA = 0.87f
+private const val NAV_ICON_TINT_PRESSED_ALPHA = 0.90f
 private const val NAV_ICON_GLYPH_SELECTED_PRESSED_ALPHA = 0.985f
 private const val NAV_NAV_ITEM_ACTIVE_BORDER = 0.42f
 private const val NAV_NAV_ITEM_ACTIVE_BORDER_SELECTED = NAV_NAV_ITEM_ACTIVE_BORDER
@@ -1639,9 +1639,9 @@ private const val NAV_ICON_FACE_GLOW_SELECTED_ALPHA = 0.052f
 private const val NAV_ICON_FACE_GLOW_PRESSED_ALPHA = 0.02f
 private const val NAV_ICON_HALO_SELECTED_PRESSED_ALPHA = 0.032f
 private const val NAV_ICON_HALO_SELECTED_ALPHA = 0.045f
-private const val NAV_ICON_HALO_PRESSED_ALPHA = 0.012f
+private const val NAV_ICON_HALO_PRESSED_ALPHA = 0.011f
 private const val NAV_ICON_HALO_HIGHLIGHT_SELECTED_ALPHA = 0.024f
-private const val NAV_ICON_HALO_HIGHLIGHT_PRESSED_ONLY_ALPHA = 0.01f
+private const val NAV_ICON_HALO_HIGHLIGHT_PRESSED_ONLY_ALPHA = 0.008f
 private const val NAV_ICON_HALO_BORDER_SELECTED_ALPHA = 0.06f
 private const val NAV_ICON_HALO_BORDER_PRESSED_ALPHA = 0.03f
 private const val NAV_ICON_HALO_BORDER_SELECTED = NAV_NAV_ITEM_ACTIVE_BORDER
