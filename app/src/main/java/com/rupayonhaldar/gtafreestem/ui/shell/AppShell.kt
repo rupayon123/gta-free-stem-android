@@ -416,7 +416,7 @@ private fun PrimaryNavigationBar(
                     val iconLift by animateDpAsState(
                         targetValue = when {
                             isPressed && isSelected -> NAV_ICON_LIFT_SELECTED_PRESSED_DP.dp
-                            isPressed -> NAV_ICON_LIFT_PRESSED_DP.dp
+                            isPressed -> NAV_ICON_LIFT_BOTTOM_PRESSED_DP.dp
                             isSelected -> NAV_ICON_LIFT_SELECTED_DP.dp
                             else -> 0.dp
                         },
@@ -447,9 +447,9 @@ private fun PrimaryNavigationBar(
                         )
                         val iconContainerScale by animateFloatAsState(
                             targetValue = when {
-                                isSelected && isPressed -> NAV_ICON_CONTAINER_SELECTED_PRESS_SCALE
-                                isPressed -> 1f
-                                isSelected -> NAV_ICON_CONTAINER_SELECTED_SCALE
+                                isSelected && isPressed -> NAV_ICON_BOTTOM_CONTAINER_SELECTED_PRESS_SCALE
+                                isPressed -> NAV_ICON_BOTTOM_CONTAINER_PRESSED_SCALE
+                                isSelected -> NAV_ICON_BOTTOM_CONTAINER_SELECTED_SCALE
                                 else -> 1f
                             },
                             animationSpec = if (isPressed) {
@@ -463,9 +463,9 @@ private fun PrimaryNavigationBar(
                         )
                     val iconScale by animateFloatAsState(
                         targetValue = when {
-                            isSelected && isPressed -> NAV_ICON_SCALE_SELECTED_PRESS_SCALE
-                            isPressed -> NAV_ICON_SCALE_PRESSED
-                            isSelected -> NAV_ICON_SCALE_SELECTED
+                            isSelected && isPressed -> NAV_ICON_BOTTOM_ICON_SCALE_SELECTED_PRESS
+                            isPressed -> NAV_ICON_BOTTOM_ICON_SCALE_PRESSED
+                            isSelected -> NAV_ICON_BOTTOM_ICON_SCALE_SELECTED
                             else -> 1f
                         },
                             animationSpec = if (isPressed) {
@@ -1613,6 +1613,7 @@ private const val NAV_NAV_ITEM_PRESSED_SCALE = 0.9978f
 private const val NAV_ICON_LIFT_SELECTED_DP = -0.12f
 private const val NAV_ICON_LIFT_PRESSED_DP = -0.24f
 private const val NAV_ICON_LIFT_SELECTED_PRESSED_DP = -0.18f
+private const val NAV_ICON_LIFT_BOTTOM_PRESSED_DP = -0.14f
 private const val NAV_ICON_GLYPH_SELECTED_ALPHA = 1f
 private const val NAV_ICON_GLYPH_PRESSED_ALPHA = 0.94f
 private const val NAV_ICON_GLYPH_UNSELECTED_ALPHA = 0.86f
@@ -1626,8 +1627,14 @@ private const val NAV_ICON_SCALE_PRESSED = 0.999f
 private const val NAV_ICON_TINT_SELECTED_PRESSED_ALPHA = 0.95f
 private const val NAV_ICON_CONTAINER_SELECTED_PRESS_SCALE = 0.9994f
 private const val NAV_ICON_CONTAINER_SELECTED_SCALE = 1.0012f
+private const val NAV_ICON_BOTTOM_CONTAINER_SELECTED_PRESS_SCALE = 0.99935f
+private const val NAV_ICON_BOTTOM_CONTAINER_PRESSED_SCALE = 0.9999f
+private const val NAV_ICON_BOTTOM_CONTAINER_SELECTED_SCALE = 1.00115f
 private const val NAV_ICON_SCALE_SELECTED_PRESS_SCALE = 0.9994f
 private const val NAV_ICON_SCALE_SELECTED = 1.0018f
+private const val NAV_ICON_BOTTOM_ICON_SCALE_SELECTED_PRESS = 0.99955f
+private const val NAV_ICON_BOTTOM_ICON_SCALE_PRESSED = 0.9992f
+private const val NAV_ICON_BOTTOM_ICON_SCALE_SELECTED = 1.0015f
 private const val NAV_ICON_GLYPH_SIZE_BASE = 19.3f
 private const val NAV_ICON_GLYPH_SELECTED_PRESSED_SIZE = 20.0f
 private const val NAV_ICON_GLYPH_SELECTED_SIZE = 20.2f
