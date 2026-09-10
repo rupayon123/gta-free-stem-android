@@ -457,7 +457,7 @@ private fun PrimaryNavigationBar(
                                 } else if (isSelected) {
                                 navSelectedSettleFloatAnimationSpec
                                 } else {
-                                navSelectionFloatAnimationSpec
+                                navUnselectedSettleFloatAnimationSpec
                                 },
                             label = "bottom-nav-icon-container-scale-${destination.name}",
                         )
@@ -473,7 +473,7 @@ private fun PrimaryNavigationBar(
                                 } else if (isSelected) {
                                 navSelectedSettleFloatAnimationSpec
                                 } else {
-                                navSelectionFloatAnimationSpec
+                                navUnselectedSettleFloatAnimationSpec
                                 },
                             label = "bottom-nav-icon-scale-${destination.name}",
                         )
@@ -494,7 +494,7 @@ private fun PrimaryNavigationBar(
                                 } else if (isSelected) {
                                 navSelectedSettleFloatAnimationSpec
                                 } else {
-                                navSelectionFloatAnimationSpec
+                                navUnselectedSettleFloatAnimationSpec
                                 },
                             label = "bottom-nav-icon-glyph-alpha-${destination.name}",
                         )
@@ -510,7 +510,7 @@ private fun PrimaryNavigationBar(
                                 } else if (isSelected) {
                                 navSelectedSettleFloatAnimationSpec
                                 } else {
-                                navSelectionFloatAnimationSpec
+                                navUnselectedSettleFloatAnimationSpec
                                 },
                             label = "bottom-nav-icon-container-alpha-${destination.name}",
                         )
@@ -526,7 +526,7 @@ private fun PrimaryNavigationBar(
                                 } else if (isSelected) {
                                 navSelectedSettleDpAnimationSpec
                                 } else {
-                                navSelectionDpAnimationSpec
+                                navUnselectedSettleDpAnimationSpec
                                 },
                             label = "bottom-nav-icon-glyph-size-${destination.name}",
                         )
@@ -542,7 +542,7 @@ private fun PrimaryNavigationBar(
                                 } else if (isSelected) {
                                 navSelectedSettleDpAnimationSpec
                                 } else {
-                                navSelectionDpAnimationSpec
+                                navUnselectedSettleDpAnimationSpec
                                 },
                             label = "bottom-nav-icon-face-size-${destination.name}",
                         )
@@ -618,7 +618,7 @@ private fun PrimaryNavigationBar(
                                 } else if (isSelected) {
                                 navSelectedSettleDpAnimationSpec
                                 } else {
-                                navSelectionDpAnimationSpec
+                                navUnselectedSettleDpAnimationSpec
                                 },
                             label = "bottom-nav-icon-halo-size-${destination.name}",
                         )
@@ -629,7 +629,7 @@ private fun PrimaryNavigationBar(
                                 } else if (isSelected) {
                                 navSelectedSettleDpAnimationSpec
                                 } else {
-                                navSelectionDpAnimationSpec
+                                navUnselectedSettleDpAnimationSpec
                                 },
                             label = "bottom-nav-icon-halo-border-width-${destination.name}",
                         )
