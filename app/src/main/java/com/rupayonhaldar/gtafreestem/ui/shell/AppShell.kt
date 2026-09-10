@@ -461,13 +461,13 @@ private fun PrimaryNavigationBar(
                                 },
                             label = "bottom-nav-icon-container-scale-${destination.name}",
                         )
-                    val iconScale by animateFloatAsState(
-                        targetValue = when {
-                            isSelected && isPressed -> NAV_ICON_BOTTOM_ICON_SCALE_SELECTED_PRESS
-                            isPressed -> NAV_ICON_BOTTOM_ICON_SCALE_PRESSED
-                            isSelected -> NAV_ICON_BOTTOM_ICON_SCALE_SELECTED
-                            else -> 1f
-                        },
+                        val iconScale by animateFloatAsState(
+                            targetValue = when {
+                                isSelected && isPressed -> NAV_ICON_BOTTOM_ICON_SCALE_SELECTED_PRESS
+                                isPressed -> NAV_ICON_BOTTOM_ICON_SCALE_PRESSED
+                                isSelected -> NAV_ICON_BOTTOM_ICON_SCALE_SELECTED
+                                else -> 1f
+                            },
                             animationSpec = if (isPressed) {
                                 navPressFloatAnimationSpec
                                 } else if (isSelected) {
@@ -477,6 +477,11 @@ private fun PrimaryNavigationBar(
                                 },
                             label = "bottom-nav-icon-scale-${destination.name}",
                         )
+                        val iconColorAnimationSpec = if (isSelected) {
+                            if (isPressed) navPressColorAnimationSpec else navSelectedSettleColorAnimationSpec
+                        } else {
+                            if (isPressed) navPressColorAnimationSpec else navUnselectedSettleColorAnimationSpec
+                        }
                         val iconGlyphAlpha by animateFloatAsState(
                             targetValue = when {
                             isSelected && isPressed -> NAV_ICON_GLYPH_SELECTED_PRESSED_ALPHA
@@ -549,13 +554,7 @@ private fun PrimaryNavigationBar(
                             } else {
                                 Color.Transparent
                             },
-                            animationSpec = if (isPressed) {
-                                navPressColorAnimationSpec
-                                } else if (isSelected) {
-                                navSelectedSettleColorAnimationSpec
-                                } else {
-                                navSelectionColorAnimationSpec
-                                },
+                            animationSpec = iconColorAnimationSpec,
                             label = "bottom-nav-icon-background-${destination.name}",
                         )
                         val iconFaceGlow by animateColorAsState(
@@ -565,13 +564,7 @@ private fun PrimaryNavigationBar(
                                 isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_FACE_GLOW_PRESSED_ALPHA)
                                 else -> Color.Transparent
                             },
-                            animationSpec = if (isPressed) {
-                                navPressColorAnimationSpec
-                                } else if (isSelected) {
-                                navSelectedSettleColorAnimationSpec
-                                } else {
-                                navSelectionColorAnimationSpec
-                                },
+                            animationSpec = iconColorAnimationSpec,
                             label = "bottom-nav-icon-face-glow-${destination.name}",
                         )
                         val iconTint by animateColorAsState(
@@ -581,13 +574,7 @@ private fun PrimaryNavigationBar(
                                 isPressed -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = NAV_ICON_TINT_PRESSED_ALPHA)
                                 else -> MaterialTheme.colorScheme.onSurfaceVariant
                             },
-                            animationSpec = if (isPressed) {
-                                navPressColorAnimationSpec
-                                } else if (isSelected) {
-                                navSelectedSettleColorAnimationSpec
-                                } else {
-                                navSelectionColorAnimationSpec
-                                },
+                            animationSpec = iconColorAnimationSpec,
                             label = "bottom-nav-icon-tint-${destination.name}",
                         )
                         val iconHalo by animateColorAsState(
@@ -600,13 +587,7 @@ private fun PrimaryNavigationBar(
                             } else {
                                 Color.Transparent
                             },
-                            animationSpec = if (isPressed) {
-                                navPressColorAnimationSpec
-                                } else if (isSelected) {
-                                navSelectedSettleColorAnimationSpec
-                                } else {
-                                navSelectionColorAnimationSpec
-                                },
+                            animationSpec = iconColorAnimationSpec,
                             label = "bottom-nav-icon-halo-${destination.name}",
                         )
                         val iconHaloHighlight by animateColorAsState(
@@ -619,13 +600,7 @@ private fun PrimaryNavigationBar(
                             } else {
                                 Color.Transparent
                             },
-                            animationSpec = if (isPressed) {
-                                navPressColorAnimationSpec
-                                } else if (isSelected) {
-                                navSelectedSettleColorAnimationSpec
-                                } else {
-                                navSelectionColorAnimationSpec
-                                },
+                            animationSpec = iconColorAnimationSpec,
                             label = "bottom-nav-icon-halo-highlight-${destination.name}",
                         )
                         val iconHaloSize by animateDpAsState(
