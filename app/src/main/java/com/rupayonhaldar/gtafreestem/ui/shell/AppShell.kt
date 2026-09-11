@@ -255,6 +255,24 @@ private fun PrimaryNavigationBar(
                     ),
                 ),
         )
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(NAV_SHELL_BOTTOM_RIM_HEIGHT.dp)
+                .align(Alignment.BottomCenter)
+                .background(
+                    Brush.verticalGradient(
+                        colors = listOf(
+                            Color.Transparent,
+                            if (isDark) {
+                                Color.Black.copy(alpha = NAV_SHELL_BOTTOM_RIM_DARK_ALPHA)
+                            } else {
+                                Color.Black.copy(alpha = NAV_SHELL_BOTTOM_RIM_LIGHT_ALPHA)
+                            },
+                        ),
+                    ),
+                ),
+        )
         NavigationBar(
             modifier = Modifier
                 .padding(
@@ -905,6 +923,24 @@ private fun PrimaryNavigationRail(
                                 Color.Black.copy(alpha = NAV_SHELL_TOP_RIM_LIGHT_ALPHA)
                             },
                             Color.Transparent,
+                        ),
+                    ),
+                ),
+        )
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(NAV_SHELL_BOTTOM_RIM_HEIGHT.dp)
+                .align(Alignment.BottomCenter)
+                .background(
+                    Brush.verticalGradient(
+                        colors = listOf(
+                            Color.Transparent,
+                            if (isDark) {
+                                Color.Black.copy(alpha = NAV_SHELL_BOTTOM_RIM_DARK_ALPHA)
+                            } else {
+                                Color.Black.copy(alpha = NAV_SHELL_BOTTOM_RIM_LIGHT_ALPHA)
+                            },
                         ),
                     ),
                 ),
@@ -1835,6 +1871,9 @@ private const val NAV_SHELL_SURFACE_EDGE_LIGHT_ALPHA = 0.0172f
     private const val NAV_SHELL_TOP_RIM_HEIGHT = 1.64f
     private const val NAV_SHELL_TOP_RIM_DARK_ALPHA = 0.214f
     private const val NAV_SHELL_TOP_RIM_LIGHT_ALPHA = 0.168f
+private const val NAV_SHELL_BOTTOM_RIM_HEIGHT = 1.10f
+private const val NAV_SHELL_BOTTOM_RIM_DARK_ALPHA = 0.126f
+private const val NAV_SHELL_BOTTOM_RIM_LIGHT_ALPHA = 0.095f
 private const val NAV_SHELL_RAIL_CENTER_GLOW_DARK_ALPHA = 0.020f
 private const val NAV_SHELL_RAIL_CENTER_GLOW_LIGHT_ALPHA = 0.013f
 private const val NAV_SHELL_RAIL_CENTER_GLOW_HORIZONTAL_PADDING = 4.9f
