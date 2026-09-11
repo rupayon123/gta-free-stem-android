@@ -2004,8 +2004,8 @@ private val navLabelUnselectedColorAnimationSpec = tween<Color>(162, easing = Fa
 private val navLabelAlphaAnimationSpec = tween<Float>(168, easing = FastOutSlowInEasing)
 private val navLabelScaleAnimationSpec = tween<Float>(176, easing = FastOutSlowInEasing)
 
-private const val NAV_UNSELECTED_LABEL_ALPHA = 0.64f
-private const val NAV_LABEL_UNSELECTED_ALPHA = 0.7f
+private const val NAV_UNSELECTED_LABEL_ALPHA = 0.67f
+private const val NAV_LABEL_UNSELECTED_ALPHA = 0.74f
 private const val NAV_LABEL_UNSELECTED_PRESSED_ALPHA = 0.81f
 private const val NAV_LABEL_SELECTED_ALPHA = 1f
 private const val NAV_LABEL_SELECTED_PRESSED_ALPHA = 0.985f
@@ -2119,8 +2119,8 @@ private const val NAV_ICON_GLYPH_SELECTED_PRESSED_ALPHA = 0.9885f
 private const val NAV_ICON_GLYPH_UNSELECTED_PRESSED_ALPHA = 0.9f
 private const val NAV_NAV_ITEM_ACTIVE_BORDER = 0.4f
 private const val NAV_NAV_ITEM_ACTIVE_BORDER_SELECTED = 0.42f
-private const val NAV_NAV_ITEM_ACTIVE_SHADOW_DARK_ALPHA = 0.082f
-private const val NAV_NAV_ITEM_ACTIVE_SHADOW_LIGHT_ALPHA = 0.044f
+private const val NAV_NAV_ITEM_ACTIVE_SHADOW_DARK_ALPHA = 0.076f
+private const val NAV_NAV_ITEM_ACTIVE_SHADOW_LIGHT_ALPHA = 0.038f
 private const val NAV_ICON_FACE_GLOW_SELECTED_PRESSED_ALPHA = 0.03f
 private const val NAV_ICON_FACE_GLOW_SELECTED_ALPHA = 0.055f
 private const val NAV_ICON_HALO_SELECTED_PRESSED_ALPHA = 0.028f
