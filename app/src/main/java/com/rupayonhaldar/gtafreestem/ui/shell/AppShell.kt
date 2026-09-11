@@ -314,7 +314,7 @@ private fun PrimaryNavigationBar(
                     val activeNavItemWidth by animateDpAsState(
                         targetValue = when {
                             isSelected -> NAV_BOTTOM_NAV_ITEM_SELECTED_WIDTH.dp
-                            isPressed -> NAV_BOTTOM_NAV_ITEM_SELECTED_WIDTH.dp
+                            isPressed -> NAV_BOTTOM_NAV_ITEM_PRESSED_UNSELECTED_WIDTH.dp
                             else -> NAV_BOTTOM_NAV_ITEM_UNSELECTED_WIDTH.dp
                         },
                         animationSpec = if (isPressed) {
@@ -945,7 +945,7 @@ private fun PrimaryNavigationRail(
                     val activeNavItemWidth by animateDpAsState(
                         targetValue = when {
                             isSelected -> NAV_RAIL_ITEM_SELECTED_WIDTH.dp
-                            isPressed -> NAV_RAIL_ITEM_SELECTED_WIDTH.dp
+                            isPressed -> NAV_RAIL_ITEM_PRESSED_UNSELECTED_WIDTH.dp
                             else -> NAV_RAIL_ITEM_UNSELECTED_WIDTH.dp
                         },
                         animationSpec = if (isPressed) {
@@ -1616,7 +1616,7 @@ private const val NAV_LABEL_RAIL_LINE_HEIGHT_SELECTED = 13.64f
 private const val NAV_LABEL_RAIL_LINE_HEIGHT_UNSELECTED = 12.84f
 private const val NAV_LABEL_LETTER_SPACING = 0.0060f
 private const val NAV_LABEL_PRESS_ALPHA = 0.9744f
-private const val NAV_LABEL_PRESSED_ALPHA = 0.9730f
+private const val NAV_LABEL_PRESSED_ALPHA = 0.9682f
 private const val NAV_LABEL_SELECTED_PRESS_ALPHA = 0.9864f
 private const val NAV_LABEL_SELECTED_PRESS_ALPHA_VISIBILITY = 0.9922f
 private const val NAV_LABEL_SELECTED_SHADOW_ALPHA = 0.0352f
@@ -1637,6 +1637,7 @@ private const val NAV_BOTTOM_NAV_BAR_OUTER_HORIZONTAL_PADDING = 12.30f
 private const val NAV_BOTTOM_NAV_BAR_OUTER_VERTICAL_PADDING = 4.23f
 private const val NAV_BOTTOM_NAV_BAR_INNER_PADDING = 8.2f
 private const val NAV_BOTTOM_NAV_ITEM_SELECTED_WIDTH = 83.05f
+private const val NAV_BOTTOM_NAV_ITEM_PRESSED_UNSELECTED_WIDTH = 81.95f
 private const val NAV_BOTTOM_NAV_ITEM_UNSELECTED_WIDTH = 79.70f
 private const val NAV_BOTTOM_NAV_ITEM_PADDING_HORIZONTAL = 5.3f
 private const val NAV_BOTTOM_NAV_ITEM_PADDING_VERTICAL = 2.65f
@@ -1645,6 +1646,7 @@ private const val NAV_RAIL_OUTER_PADDING = 7.92f
     private const val NAV_RAIL_INNER_PADDING_HORIZONTAL = 7.25f
 private const val NAV_RAIL_INNER_PADDING_VERTICAL = 8.0f
 private const val NAV_RAIL_ITEM_SELECTED_WIDTH = 89.35f
+private const val NAV_RAIL_ITEM_PRESSED_UNSELECTED_WIDTH = 88.02f
 private const val NAV_RAIL_ITEM_UNSELECTED_WIDTH = 85.30f
 private const val NAV_RAIL_ITEM_PADDING_HORIZONTAL = 2.52f
     private const val NAV_RAIL_ITEM_PADDING_VERTICAL = 3.10f
@@ -1688,7 +1690,7 @@ private const val NAV_ICON_RAIL_LIFT_SELECTED_DP = -0.0605f
 private const val NAV_ICON_RAIL_LIFT_PRESSED_DP = -0.0585f
 private const val NAV_ICON_RAIL_LIFT_SELECTED_PRESSED_DP = -0.0795f
 private const val NAV_ICON_GLYPH_SELECTED_ALPHA = 1f
-private const val NAV_ICON_GLYPH_PRESSED_ALPHA = 0.9822f
+private const val NAV_ICON_GLYPH_PRESSED_ALPHA = 0.9755f
     private const val NAV_ICON_GLYPH_UNSELECTED_ALPHA = 0.90f
 private const val NAV_ICON_CONTAINER_SELECTED_ALPHA = 0.9992f
 private const val NAV_ICON_CONTAINER_PRESSED_SELECTED_ALPHA = 0.9690f
@@ -1735,7 +1737,7 @@ private const val NAV_ICON_FACE_GLOW_SELECTED_ALPHA = 0.0728f
 private const val NAV_ICON_FACE_GLOW_PRESSED_ALPHA = 0.0130f
 private const val NAV_ICON_HALO_SELECTED_PRESSED_ALPHA = 0.0323f
 private const val NAV_ICON_HALO_SELECTED_ALPHA = 0.0754f
-private const val NAV_ICON_HALO_PRESSED_ALPHA = 0.0080f
+private const val NAV_ICON_HALO_PRESSED_ALPHA = 0.0101f
 private const val NAV_ICON_HALO_HIGHLIGHT_SELECTED_ALPHA = 0.0246f
 private const val NAV_ICON_HALO_HIGHLIGHT_PRESSED_ONLY_ALPHA = 0.0126f
 private const val NAV_ICON_HALO_BORDER_SELECTED_ALPHA = 0.063f
