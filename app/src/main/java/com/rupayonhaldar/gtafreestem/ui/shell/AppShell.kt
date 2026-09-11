@@ -1859,13 +1859,11 @@ private fun DestinationLabel(
             letterSpacing = if (isSelected) selectedLetterSpacing.sp else unselectedLetterSpacing.sp,
         )
     }
-    val selectedBaseColor = MaterialTheme.colorScheme.primary.copy(alpha = if (isSelected) NAV_LABEL_SELECTED_ALPHA else NAV_LABEL_UNSELECTED_ALPHA)
-    val unselectedBaseColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = NAV_LABEL_UNSELECTED_ALPHA)
-    val selectedColor = if (isSelected) selectedBaseColor else unselectedBaseColor
     val labelColor by animateColorAsState(
         targetValue = when {
+            isSelected && isActivePress -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_LABEL_SELECTED_ALPHA * 0.96f)
             isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_LABEL_SELECTED_ALPHA)
-            else -> selectedColor
+            else -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = NAV_LABEL_UNSELECTED_ALPHA)
         },
         animationSpec = if (isSelected) {
             navSelectedSettleColorAnimationSpec
@@ -1928,7 +1926,7 @@ private fun DestinationLabel(
     )
     val labelGlow by animateFloatAsState(
         targetValue = when {
-            isActivePress -> 0.82f
+            isActivePress -> 0.9f
             isSelected -> 1f
             else -> 0f
         },
@@ -1943,8 +1941,7 @@ private fun DestinationLabel(
     )
     val labelShadowProgress by animateFloatAsState(
         targetValue = when {
-            isSelected && !isActivePress -> 1f
-            isActivePress -> 0.96f
+            isSelected -> 1f
             else -> 0f
         },
         animationSpec = if (isActivePress) navPressFloatAnimationSpec else navSelectedSettleFloatAnimationSpec,
@@ -2028,7 +2025,7 @@ private fun DestinationLabel(
                 overflow = TextOverflow.Ellipsis,
             )
         }
-        if (labelUnderlineVisibility > 0.001f) {
+        if (isSelected && labelUnderlineVisibility > 0.001f) {
             Box(
                 modifier = Modifier
                     .padding(top = 1.dp)
@@ -2061,10 +2058,10 @@ private val navUnselectedSettleColorAnimationSpec = tween<Color>(276, easing = F
 private val navUnselectedSettleFloatAnimationSpec = tween<Float>(286, easing = FastOutSlowInEasing)
 private val navUnselectedSettleDpAnimationSpec = tween<Dp>(276, easing = FastOutSlowInEasing)
 
-private const val NAV_UNSELECTED_LABEL_ALPHA = 0.86f
-    private const val NAV_LABEL_UNSELECTED_ALPHA = 0.95f
+private const val NAV_UNSELECTED_LABEL_ALPHA = 0.78f
+private const val NAV_LABEL_UNSELECTED_ALPHA = 0.84f
 private const val NAV_LABEL_SELECTED_ALPHA = 1f
-private const val NAV_LABEL_UNSELECTED_VISIBILITY_ALPHA = 0.955f
+private const val NAV_LABEL_UNSELECTED_VISIBILITY_ALPHA = 0.855f
 private const val NAV_LABEL_UNSELECTED_SCALE = 1f
 private const val NAV_LABEL_SELECTED_SCALE = 1.0106f
 private const val NAV_LABEL_COMPACT_FONT_SELECTED = 12.28f
