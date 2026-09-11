@@ -1889,9 +1889,9 @@ private fun DestinationLabel(
             else -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = NAV_LABEL_UNSELECTED_ALPHA)
         },
         animationSpec = if (isSelected) {
-            navSelectedSettleColorAnimationSpec
+            navLabelColorAnimationSpec
         } else {
-            navUnselectedSettleColorAnimationSpec
+            navLabelUnselectedColorAnimationSpec
         },
         label = "destination-label-color",
     )
@@ -1968,6 +1968,8 @@ private val navSelectedSettleDpAnimationSpec = tween<Dp>(202, easing = FastOutSl
 private val navUnselectedSettleColorAnimationSpec = tween<Color>(210, easing = FastOutSlowInEasing)
 private val navUnselectedSettleFloatAnimationSpec = tween<Float>(170, easing = FastOutSlowInEasing)
 private val navUnselectedSettleDpAnimationSpec = tween<Dp>(170, easing = FastOutSlowInEasing)
+private val navLabelColorAnimationSpec = tween<Color>(178, easing = FastOutSlowInEasing)
+private val navLabelUnselectedColorAnimationSpec = tween<Color>(162, easing = FastOutSlowInEasing)
 private val navLabelAlphaAnimationSpec = tween<Float>(168, easing = FastOutSlowInEasing)
 private val navLabelScaleAnimationSpec = tween<Float>(176, easing = FastOutSlowInEasing)
 
