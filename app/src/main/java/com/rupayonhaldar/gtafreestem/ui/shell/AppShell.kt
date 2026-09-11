@@ -1598,10 +1598,10 @@ private val navUnselectedSettleColorAnimationSpec = tween<Color>(276, easing = F
 private val navUnselectedSettleFloatAnimationSpec = tween<Float>(276, easing = FastOutSlowInEasing)
 private val navUnselectedSettleDpAnimationSpec = tween<Dp>(276, easing = FastOutSlowInEasing)
 
-private const val NAV_UNSELECTED_LABEL_ALPHA = 0.548f
+private const val NAV_UNSELECTED_LABEL_ALPHA = 0.535f
 private const val NAV_LABEL_UNSELECTED_ALPHA = 0.642f
 private const val NAV_LABEL_SELECTED_ALPHA = 1f
-private const val NAV_LABEL_UNSELECTED_VISIBILITY_ALPHA = 0.892f
+private const val NAV_LABEL_UNSELECTED_VISIBILITY_ALPHA = 0.905f
 private const val NAV_LABEL_UNSELECTED_SCALE = 1f
 private const val NAV_LABEL_SELECTED_SCALE = 1.0080f
 private const val NAV_LABEL_PRESS_SCALE = 0.9980f
@@ -1619,17 +1619,17 @@ private const val NAV_LABEL_PRESS_ALPHA = 0.969f
 private const val NAV_LABEL_PRESSED_ALPHA = 0.962f
 private const val NAV_LABEL_SELECTED_PRESS_ALPHA = 0.9860f
 private const val NAV_LABEL_SELECTED_PRESS_ALPHA_VISIBILITY = 0.9891f
-private const val NAV_LABEL_SELECTED_SHADOW_ALPHA = 0.028f
+private const val NAV_LABEL_SELECTED_SHADOW_ALPHA = 0.030f
 private const val NAV_LABEL_SELECTED_SHADOW_BLUR = 0.52f
 private const val NAV_LABEL_SELECTED_SHADOW_Y_OFFSET = 0.04f
 private const val NAV_NAV_ITEM_PRESSED_SCALE = 0.9995f
 private const val NAV_LABEL_OFFSET_PRESSED_DP = -0.040f
 private const val NAV_LABEL_OFFSET_UNSELECTED_PRESSED_DP = -0.032f
-private const val NAV_LABEL_OFFSET_SELECTED_DP = -0.092f
-private const val NAV_LABEL_OFFSET_SELECTED_PRESSED_DP = -0.078f
+private const val NAV_LABEL_OFFSET_SELECTED_DP = -0.088f
+private const val NAV_LABEL_OFFSET_SELECTED_PRESSED_DP = -0.074f
 private const val NAV_LABEL_COMPACT_OFFSET_UNSELECTED_PRESSED_DP = -0.010f
 private const val NAV_LABEL_COMPACT_OFFSET_SELECTED_DP = -0.038f
-private const val NAV_LABEL_COMPACT_OFFSET_SELECTED_PRESSED_DP = -0.074f
+private const val NAV_LABEL_COMPACT_OFFSET_SELECTED_PRESSED_DP = -0.070f
 private const val NAV_LABEL_SELECTED_PRESS_SCALE = 1.0060f
 private const val NAV_LABEL_COMPACT_SELECTED_SCALE = 1.0045f
 private const val NAV_LABEL_COMPACT_SELECTED_PRESS_SCALE = 1.0032f
