@@ -1901,11 +1901,7 @@ private fun DestinationLabel(
         } else {
             NAV_LABEL_UNSELECTED_VISIBILITY_ALPHA
         },
-        animationSpec = if (isSelected) {
-            navSelectedSettleFloatAnimationSpec
-        } else {
-            navUnselectedSettleFloatAnimationSpec
-        },
+        animationSpec = navLabelAlphaAnimationSpec,
         label = "destination-label-alpha",
     )
     val labelOffset by animateDpAsState(
@@ -1931,11 +1927,7 @@ private fun DestinationLabel(
         } else {
             NAV_LABEL_UNSELECTED_SCALE
         },
-        animationSpec = if (isSelected) {
-            navSelectedSettleFloatAnimationSpec
-        } else {
-            navUnselectedSettleFloatAnimationSpec
-        },
+        animationSpec = navLabelScaleAnimationSpec,
         label = "destination-label-scale",
     )
     Column(
@@ -1976,6 +1968,8 @@ private val navSelectedSettleDpAnimationSpec = tween<Dp>(202, easing = FastOutSl
 private val navUnselectedSettleColorAnimationSpec = tween<Color>(210, easing = FastOutSlowInEasing)
 private val navUnselectedSettleFloatAnimationSpec = tween<Float>(170, easing = FastOutSlowInEasing)
 private val navUnselectedSettleDpAnimationSpec = tween<Dp>(170, easing = FastOutSlowInEasing)
+private val navLabelAlphaAnimationSpec = tween<Float>(168, easing = FastOutSlowInEasing)
+private val navLabelScaleAnimationSpec = tween<Float>(176, easing = FastOutSlowInEasing)
 
 private const val NAV_UNSELECTED_LABEL_ALPHA = 0.64f
 private const val NAV_LABEL_UNSELECTED_ALPHA = 0.7f
