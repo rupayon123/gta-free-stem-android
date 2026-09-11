@@ -426,6 +426,8 @@ private fun PrimaryNavigationBar(
                             NAV_BOTTOM_NAV_ITEM_SELECTED_OFFSET_PRESSED_DP.dp
                         } else if (isSelected) {
                             NAV_BOTTOM_NAV_ITEM_SELECTED_OFFSET_DP.dp
+                        } else if (isPressed) {
+                            NAV_BOTTOM_NAV_ITEM_UNSELECTED_OFFSET_PRESSED_DP.dp
                         } else {
                             0.dp
                         },
@@ -542,6 +544,8 @@ private fun PrimaryNavigationBar(
                             NAV_ICON_LIFT_SELECTED_PRESSED_DP.dp
                         } else if (isSelected) {
                             NAV_ICON_LIFT_SELECTED_DP.dp
+                        } else if (isPressed) {
+                            NAV_ICON_UNSELECTED_PRESSED_LIFT_DP.dp
                         } else {
                             0.dp
                         },
@@ -1234,6 +1238,8 @@ private fun PrimaryNavigationRail(
                             NAV_RAIL_ITEM_SELECTED_OFFSET_PRESSED_DP.dp
                         } else if (isSelected) {
                             NAV_RAIL_ITEM_SELECTED_OFFSET_DP.dp
+                        } else if (isPressed) {
+                            NAV_RAIL_ITEM_UNSELECTED_OFFSET_PRESSED_DP.dp
                         } else {
                             0.dp
                         },
@@ -1346,6 +1352,8 @@ private fun PrimaryNavigationRail(
                             NAV_ICON_RAIL_LIFT_SELECTED_PRESSED_DP.dp
                         } else if (isSelected) {
                             NAV_ICON_RAIL_LIFT_SELECTED_DP.dp
+                        } else if (isPressed) {
+                            NAV_ICON_RAIL_UNSELECTED_PRESSED_LIFT_DP.dp
                         } else {
                             0.dp
                         },
@@ -2010,6 +2018,8 @@ private const val NAV_RAIL_ITEM_PADDING_HORIZONTAL = 2.5f
     private const val NAV_RAIL_ITEM_PADDING_VERTICAL = 3f
 private const val NAV_BOTTOM_NAV_ITEM_SELECTED_OFFSET_PRESSED_DP = -0.16f
 private const val NAV_RAIL_ITEM_SELECTED_OFFSET_PRESSED_DP = -0.15f
+private const val NAV_BOTTOM_NAV_ITEM_UNSELECTED_OFFSET_PRESSED_DP = -0.08f
+private const val NAV_RAIL_ITEM_UNSELECTED_OFFSET_PRESSED_DP = -0.075f
 private const val NAV_BOTTOM_NAV_ITEM_SELECTED_OFFSET_DP = -0.16f
 private const val NAV_RAIL_ITEM_SELECTED_OFFSET_DP = -0.15f
 private const val NAV_BOTTOM_NAV_ITEM_SELECTED_ELEVATION = 0.7f
@@ -2036,10 +2046,12 @@ private const val NAV_RAIL_ITEM_UNPRESSED_CORNER = 14.56f
     private const val NAV_RAIL_ITEM_SELECTED_PRESS_SCALE = 0.9972f
 private const val NAV_ICON_LIFT_SELECTED_DP = -0.0638f
 private const val NAV_ICON_LIFT_SELECTED_PRESSED_DP = -0.064f
+private const val NAV_ICON_UNSELECTED_PRESSED_LIFT_DP = -0.053f
 private const val NAV_ICON_HALO_SELECTED_SCALE = 1.0035f
 private const val NAV_ICON_HALO_SELECTED_PRESSED_SCALE = 1.012f
 private const val NAV_ICON_RAIL_LIFT_SELECTED_DP = -0.0682f
 private const val NAV_ICON_RAIL_LIFT_SELECTED_PRESSED_DP = -0.07f
+private const val NAV_ICON_RAIL_UNSELECTED_PRESSED_LIFT_DP = -0.056f
 private const val NAV_ICON_RAIL_HALO_SELECTED_SCALE = 1.006f
 private const val NAV_ICON_RAIL_HALO_SELECTED_PRESSED_SCALE = 1.012f
 private const val NAV_ICON_GLYPH_SELECTED_ALPHA = 0.9865f
