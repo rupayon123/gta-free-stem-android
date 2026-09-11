@@ -710,7 +710,6 @@ private fun PrimaryNavigationBar(
                             targetValue = when {
                                 isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_INNER_RIM_SELECTED_PRESSED_ALPHA)
                                 isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_INNER_RIM_SELECTED_ALPHA)
-                                isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_INNER_RIM_PRESSED_ALPHA)
                                 else -> Color.Transparent
                             },
                             animationSpec = iconColorAnimationSpec,
@@ -719,7 +718,6 @@ private fun PrimaryNavigationBar(
                         val iconInnerRimBorderWidth by animateDpAsState(
                             targetValue = when {
                                 isSelected -> NAV_ICON_INNER_RIM_BORDER_WIDTH.dp
-                                isPressed -> NAV_ICON_INNER_RIM_PRESSED_BORDER_WIDTH.dp
                                 else -> 0.dp
                             },
                             animationSpec = if (isPressed) {
@@ -1514,7 +1512,6 @@ private fun PrimaryNavigationRail(
                             targetValue = when {
                                 isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_INNER_RIM_SELECTED_PRESSED_ALPHA)
                                 isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_INNER_RIM_SELECTED_ALPHA)
-                                isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_INNER_RIM_PRESSED_ALPHA)
                                 else -> Color.Transparent
                             },
                             animationSpec = iconColorAnimationSpec,
@@ -1523,7 +1520,6 @@ private fun PrimaryNavigationRail(
                         val iconInnerRimBorderWidth by animateDpAsState(
                             targetValue = when {
                                 isSelected -> NAV_ICON_INNER_RIM_BORDER_WIDTH.dp
-                                isPressed -> NAV_ICON_INNER_RIM_PRESSED_BORDER_WIDTH.dp
                                 else -> 0.dp
                             },
                             animationSpec = if (isPressed) {
@@ -2230,9 +2226,7 @@ private const val NAV_ICON_HALO_BORDER_SELECTED_ALPHA = 0.063f
 private const val NAV_ICON_HALO_BORDER_PRESSED_ALPHA = 0.0221f
 private const val NAV_ICON_INNER_RIM_SELECTED_ALPHA = 0.044f
 private const val NAV_ICON_INNER_RIM_SELECTED_PRESSED_ALPHA = 0.036f
-private const val NAV_ICON_INNER_RIM_PRESSED_ALPHA = 0.014f
 private const val NAV_ICON_INNER_RIM_BORDER_WIDTH = 0.35f
-private const val NAV_ICON_INNER_RIM_PRESSED_BORDER_WIDTH = 0.16f
 private const val NAV_ICON_AMBIENT_GLOW_SIZE_SELECTED = 37.3f
 private const val NAV_ICON_AMBIENT_GLOW_SIZE_SELECTED_PRESSED = 35.9f
 private const val NAV_ICON_AMBIENT_GLOW_SELECTED_SCALE = 1.029f
