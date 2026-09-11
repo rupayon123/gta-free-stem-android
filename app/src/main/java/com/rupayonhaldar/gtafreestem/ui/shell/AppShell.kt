@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.offset
@@ -205,7 +206,25 @@ private fun PrimaryNavigationBar(
                         ),
                     ),
                 ),
-            )
+        )
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(NAV_SHELL_TOP_RIM_HEIGHT.dp)
+                .align(Alignment.TopCenter)
+                .background(
+                    Brush.verticalGradient(
+                        colors = listOf(
+                            if (isDark) {
+                                Color.White.copy(alpha = NAV_SHELL_TOP_RIM_DARK_ALPHA)
+                            } else {
+                                Color.Black.copy(alpha = NAV_SHELL_TOP_RIM_LIGHT_ALPHA)
+                            },
+                            Color.Transparent,
+                        ),
+                    ),
+                ),
+        )
         NavigationBar(
             modifier = Modifier
                 .padding(
@@ -806,6 +825,24 @@ private fun PrimaryNavigationRail(
                                 Color.Black.copy(alpha = NAV_SHELL_SURFACE_TOP_GLOW_LIGHT_ALPHA)
                             },
                             MaterialTheme.colorScheme.onSurface.copy(alpha = if (isDark) NAV_SHELL_SURFACE_EDGE_DARK_ALPHA else NAV_SHELL_SURFACE_EDGE_LIGHT_ALPHA),
+                            Color.Transparent,
+                        ),
+                    ),
+                ),
+        )
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(NAV_SHELL_TOP_RIM_HEIGHT.dp)
+                .align(Alignment.TopCenter)
+                .background(
+                    Brush.verticalGradient(
+                        colors = listOf(
+                            if (isDark) {
+                                Color.White.copy(alpha = NAV_SHELL_TOP_RIM_DARK_ALPHA)
+                            } else {
+                                Color.Black.copy(alpha = NAV_SHELL_TOP_RIM_LIGHT_ALPHA)
+                            },
                             Color.Transparent,
                         ),
                     ),
@@ -1506,12 +1543,12 @@ private val navSelectionDpAnimationSpec = tween<Dp>(244, easing = FastOutSlowInE
 private val navPressDpAnimationSpec = tween<Dp>(88, easing = FastOutSlowInEasing)
 private val navPressColorAnimationSpec = tween<Color>(88, easing = FastOutSlowInEasing)
 private val navSelectionColorAnimationSpec = tween<Color>(244, easing = FastOutSlowInEasing)
-private val navSelectedSettleColorAnimationSpec = tween<Color>(256, easing = FastOutSlowInEasing)
-private val navSelectedSettleFloatAnimationSpec = tween<Float>(256, easing = FastOutSlowInEasing)
-private val navSelectedSettleDpAnimationSpec = tween<Dp>(256, easing = FastOutSlowInEasing)
-private val navUnselectedSettleColorAnimationSpec = tween<Color>(248, easing = FastOutSlowInEasing)
-private val navUnselectedSettleFloatAnimationSpec = tween<Float>(248, easing = FastOutSlowInEasing)
-private val navUnselectedSettleDpAnimationSpec = tween<Dp>(248, easing = FastOutSlowInEasing)
+private val navSelectedSettleColorAnimationSpec = tween<Color>(286, easing = FastOutSlowInEasing)
+private val navSelectedSettleFloatAnimationSpec = tween<Float>(286, easing = FastOutSlowInEasing)
+private val navSelectedSettleDpAnimationSpec = tween<Dp>(286, easing = FastOutSlowInEasing)
+private val navUnselectedSettleColorAnimationSpec = tween<Color>(278, easing = FastOutSlowInEasing)
+private val navUnselectedSettleFloatAnimationSpec = tween<Float>(278, easing = FastOutSlowInEasing)
+private val navUnselectedSettleDpAnimationSpec = tween<Dp>(278, easing = FastOutSlowInEasing)
 
 private const val NAV_UNSELECTED_LABEL_ALPHA = 0.84f
 private const val NAV_LABEL_UNSELECTED_ALPHA = 0.88f
@@ -1691,5 +1728,8 @@ private const val NAV_SHELL_SURFACE_TOP_GLOW_DARK_ALPHA = 0.0118f
 private const val NAV_SHELL_SURFACE_TOP_GLOW_LIGHT_ALPHA = 0.01f
 private const val NAV_SHELL_SURFACE_EDGE_DARK_ALPHA = 0.034f
 private const val NAV_SHELL_SURFACE_EDGE_LIGHT_ALPHA = 0.0198f
+private const val NAV_SHELL_TOP_RIM_HEIGHT = 0.95f
+private const val NAV_SHELL_TOP_RIM_DARK_ALPHA = 0.16f
+private const val NAV_SHELL_TOP_RIM_LIGHT_ALPHA = 0.095f
 private const val NAV_SHELL_BAR_CORNER = 30.0f
 private const val NAV_SHELL_RAIL_CORNER = 30.0f
