@@ -13,6 +13,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
@@ -1795,6 +1796,19 @@ private fun DestinationLabel(
         },
         label = "destination-label-scale",
     )
+    val labelUnderlineVisibility by animateFloatAsState(
+        targetValue = if (isSelected) {
+            1f
+        } else {
+            0f
+        },
+        animationSpec = if (isSelected) {
+            navSelectedSettleFloatAnimationSpec
+        } else {
+            navUnselectedSettleFloatAnimationSpec
+        },
+        label = "destination-label-underline-visibility",
+    )
     val labelShadowProgress by animateFloatAsState(
         targetValue = when {
             isSelected && !isPressed -> 1f
@@ -1824,17 +1838,35 @@ private fun DestinationLabel(
     } else {
         resolvedStyle
     }
-    Text(
-        text = label,
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .offset(y = labelOffset)
-                    .scale(labelScale),
-        color = labelColor.copy(alpha = labelAlpha),
-        style = textStyle,
-        maxLines = 1,
-        textAlign = TextAlign.Center,
-        overflow = TextOverflow.Ellipsis,
-    )
+            .scale(labelScale),
+    ) {
+        Text(
+            text = label,
+            color = labelColor.copy(alpha = labelAlpha),
+            style = textStyle,
+            maxLines = 1,
+            textAlign = TextAlign.Center,
+            overflow = TextOverflow.Ellipsis,
+        )
+        if (labelUnderlineVisibility > 0.001f) {
+            Box(
+                modifier = Modifier
+                    .padding(top = 1.dp)
+                    .height(NAV_LABEL_SELECTED_UNDERLINE_HEIGHT.dp)
+                    .fillMaxWidth(NAV_LABEL_SELECTED_UNDERLINE_WIDTH_FRACTION * labelUnderlineVisibility)
+                    .clip(RoundedCornerShape(NAV_LABEL_SELECTED_UNDERLINE_HEIGHT.dp))
+                    .background(
+                        color = MaterialTheme.colorScheme.primary.copy(
+                            alpha = labelAlpha * NAV_LABEL_SELECTED_UNDERLINE_ALPHA * labelUnderlineVisibility,
+                        ),
+                    ),
+            )
+        }
+    }
 }
 
 private val PrimaryDestination.testTag: String
@@ -1881,6 +1913,9 @@ private const val NAV_LABEL_SELECTED_SHADOW_ALPHA = 0.0342f
 private const val NAV_LABEL_SELECTED_SHADOW_BLUR = 0.548f
 private const val NAV_LABEL_SELECTED_SHADOW_Y_OFFSET = 0.0418f
 private const val NAV_LABEL_UNSELECTED_SHADOW_ALPHA = 0.0102f
+private const val NAV_LABEL_SELECTED_UNDERLINE_ALPHA = 0.42f
+private const val NAV_LABEL_SELECTED_UNDERLINE_HEIGHT = 1.0f
+private const val NAV_LABEL_SELECTED_UNDERLINE_WIDTH_FRACTION = 0.58f
 private const val NAV_NAV_ITEM_PRESSED_SCALE = 0.9984f
 private const val NAV_LABEL_OFFSET_PRESSED_DP = -0.038f
 private const val NAV_LABEL_OFFSET_UNSELECTED_PRESSED_DP = -0.029f
