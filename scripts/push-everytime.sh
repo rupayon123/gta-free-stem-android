@@ -1,19 +1,11 @@
 #!/usr/bin/env bash
+
 set -euo pipefail
 
-cd "$(git rev-parse --show-toplevel)"
+SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd -P)
+PROJECT_ROOT=$(CDPATH= cd -- "$SCRIPT_DIR/.." && pwd -P)
 
-BRANCH="$(git rev-parse --abbrev-ref HEAD)"
-MESSAGE="${1:-chore: update Android app UI polish}"
+cd "$PROJECT_ROOT"
 
-git add -A
-if git diff --cached --quiet; then
-  echo "No staged changes. Pulling latest before push only."
-  git pull --rebase --autostash origin "$BRANCH"
-  git push origin "$BRANCH"
-  exit 0
-fi
-
-git commit -m "$MESSAGE"
-git pull --rebase --autostash origin "$BRANCH"
-git push origin "$BRANCH"
+# Keep backward-compatibility with earlier usage; delegate all heavy lifting to push-safe.
+"$SCRIPT_DIR/push-safe.sh" "$@"
