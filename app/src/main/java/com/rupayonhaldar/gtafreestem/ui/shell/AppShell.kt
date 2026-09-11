@@ -142,7 +142,10 @@ private fun PrimaryNavigationBar(
     destinationLabel: (PrimaryDestination) -> String,
 ) {
     val isDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
-    val barShape = RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp)
+    val barShape = RoundedCornerShape(
+        topStart = NAV_SHELL_BAR_CORNER.dp,
+        topEnd = NAV_SHELL_BAR_CORNER.dp,
+    )
     val barSurface = if (isDark) {
         MaterialTheme.colorScheme.surface.copy(alpha = NAV_SHELL_SURFACE_DARK_ALPHA)
     } else {
@@ -749,7 +752,7 @@ private fun PrimaryNavigationRail(
     destinationLabel: (PrimaryDestination) -> String,
 ) {
     val isDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
-    val railShape = RoundedCornerShape(30.dp)
+    val railShape = RoundedCornerShape(NAV_SHELL_RAIL_CORNER.dp)
     val railSurface = if (isDark) {
         MaterialTheme.colorScheme.surface.copy(alpha = NAV_SHELL_SURFACE_DARK_ALPHA)
     } else {
@@ -1666,25 +1669,27 @@ private const val NAV_ICON_HALO_SIZE_UNSELECTED = 22.3f
 private const val NAV_ICON_HALO_SIZE_PRESSED = 30.3f
 private const val NAV_ICON_HALO_SIZE_SELECTED = 35.2f
 private const val NAV_ICON_HALO_SIZE_SELECTED_PRESSED = 33.9f
-private const val NAV_SHELL_SURFACE_DARK_ALPHA = 0.915f
-private const val NAV_SHELL_SURFACE_LIGHT_ALPHA = 0.950f
+private const val NAV_SHELL_SURFACE_DARK_ALPHA = 0.922f
+private const val NAV_SHELL_SURFACE_LIGHT_ALPHA = 0.952f
 private const val NAV_SHELL_BAR_OUTER_BORDER_WIDTH = 0.18f
 private const val NAV_SHELL_RAIL_OUTER_BORDER_WIDTH = 0.25f
-private const val NAV_SHELL_BAR_TONAL_ELEVATION = 4.6f
-private const val NAV_SHELL_BAR_SHADOW_ELEVATION = 6.1f
-private const val NAV_SHELL_BAR_SHADOW_SURFACE_DARK = 6.0f
-private const val NAV_SHELL_BAR_SHADOW_SURFACE_LIGHT = 5.0f
-private const val NAV_SHELL_RAIL_TONAL_ELEVATION = 4.9f
-private const val NAV_SHELL_RAIL_SHADOW_ELEVATION = 6.6f
-private const val NAV_SHELL_RAIL_SHADOW_SURFACE_DARK = 6.6f
-private const val NAV_SHELL_RAIL_SHADOW_SURFACE_LIGHT = 5.3f
-private const val NAV_SHELL_BORDER_DARK_ALPHA = 0.12f
-private const val NAV_SHELL_BORDER_LIGHT_ALPHA = 0.07f
-private const val NAV_SHELL_GLOW_DARK_ALPHA = 0.064f
-private const val NAV_SHELL_GLOW_LIGHT_ALPHA = 0.041f
+private const val NAV_SHELL_BAR_TONAL_ELEVATION = 4.8f
+private const val NAV_SHELL_BAR_SHADOW_ELEVATION = 6.4f
+private const val NAV_SHELL_BAR_SHADOW_SURFACE_DARK = 6.2f
+private const val NAV_SHELL_BAR_SHADOW_SURFACE_LIGHT = 5.2f
+private const val NAV_SHELL_RAIL_TONAL_ELEVATION = 5.1f
+private const val NAV_SHELL_RAIL_SHADOW_ELEVATION = 6.8f
+private const val NAV_SHELL_RAIL_SHADOW_SURFACE_DARK = 6.7f
+private const val NAV_SHELL_RAIL_SHADOW_SURFACE_LIGHT = 5.5f
+private const val NAV_SHELL_BORDER_DARK_ALPHA = 0.118f
+private const val NAV_SHELL_BORDER_LIGHT_ALPHA = 0.074f
+private const val NAV_SHELL_GLOW_DARK_ALPHA = 0.062f
+private const val NAV_SHELL_GLOW_LIGHT_ALPHA = 0.043f
 private const val NAV_SHELL_CONTAINER_DARK_ALPHA = 0.796f
 private const val NAV_SHELL_CONTAINER_LIGHT_ALPHA = 0.905f
-private const val NAV_SHELL_SURFACE_TOP_GLOW_DARK_ALPHA = 0.0090f
-private const val NAV_SHELL_SURFACE_TOP_GLOW_LIGHT_ALPHA = 0.0070f
-private const val NAV_SHELL_SURFACE_EDGE_DARK_ALPHA = 0.028f
-private const val NAV_SHELL_SURFACE_EDGE_LIGHT_ALPHA = 0.016f
+private const val NAV_SHELL_SURFACE_TOP_GLOW_DARK_ALPHA = 0.0092f
+private const val NAV_SHELL_SURFACE_TOP_GLOW_LIGHT_ALPHA = 0.0076f
+private const val NAV_SHELL_SURFACE_EDGE_DARK_ALPHA = 0.027f
+private const val NAV_SHELL_SURFACE_EDGE_LIGHT_ALPHA = 0.015f
+private const val NAV_SHELL_BAR_CORNER = 30.0f
+private const val NAV_SHELL_RAIL_CORNER = 30.0f
