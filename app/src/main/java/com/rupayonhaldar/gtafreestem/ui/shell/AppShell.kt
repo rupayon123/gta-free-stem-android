@@ -1866,18 +1866,31 @@ private fun DestinationLabel(
             contentAlignment = Alignment.Center,
         ) {
             if (labelGlow > 0.001f) {
+                val labelGlowHeight = if (compact) {
+                    NAV_LABEL_SELECTED_GLOW_HEIGHT_COMPACT
+                } else {
+                    NAV_LABEL_SELECTED_GLOW_HEIGHT
+                }
                 Box(
                     modifier = Modifier
                         .fillMaxWidth(
                             if (isSelected) {
-                                NAV_LABEL_SELECTED_GLOW_WIDTH_FRACTION * labelGlow
+                                if (compact) {
+                                    NAV_LABEL_SELECTED_GLOW_WIDTH_COMPACT_FRACTION * labelGlow
+                                } else {
+                                    NAV_LABEL_SELECTED_GLOW_WIDTH_FRACTION * labelGlow
+                                }
                             } else {
-                                (NAV_LABEL_SELECTED_GLOW_WIDTH_FRACTION * 0.64f) * labelGlow
+                                ((if (compact) {
+                                    NAV_LABEL_SELECTED_GLOW_WIDTH_COMPACT_FRACTION * 0.64f
+                                } else {
+                                    NAV_LABEL_SELECTED_GLOW_WIDTH_FRACTION
+                                } * 0.64f)) * labelGlow
                             },
                         )
-                        .height(NAV_LABEL_SELECTED_GLOW_HEIGHT.dp)
+                        .height(labelGlowHeight.dp)
                         .offset(y = (-2).dp)
-                        .clip(RoundedCornerShape(NAV_LABEL_SELECTED_GLOW_HEIGHT.dp))
+                        .clip(RoundedCornerShape(labelGlowHeight.dp))
                         .background(
                             brush = Brush.radialGradient(
                                 colors = listOf(
@@ -1964,6 +1977,8 @@ private const val NAV_LABEL_SELECTED_UNDERLINE_ALPHA = 0.42f
 private const val NAV_LABEL_SELECTED_GLOW_ALPHA = 0.072f
 private const val NAV_LABEL_SELECTED_GLOW_WIDTH_FRACTION = 0.86f
 private const val NAV_LABEL_SELECTED_GLOW_HEIGHT = 1.6f
+private const val NAV_LABEL_SELECTED_GLOW_WIDTH_COMPACT_FRACTION = 0.74f
+private const val NAV_LABEL_SELECTED_GLOW_HEIGHT_COMPACT = 1.25f
 private const val NAV_LABEL_SELECTED_UNDERLINE_HEIGHT = 1.0f
 private const val NAV_LABEL_SELECTED_UNDERLINE_WIDTH_FRACTION = 0.58f
 private const val NAV_NAV_ITEM_PRESSED_SCALE = 0.9984f
