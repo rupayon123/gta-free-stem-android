@@ -706,6 +706,15 @@ private fun PrimaryNavigationBar(
                             animationSpec = iconColorAnimationSpec,
                             label = "bottom-nav-icon-halo-${destination.name}",
                         )
+                        val iconInnerRim by animateColorAsState(
+                            targetValue = when {
+                                isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_INNER_RIM_SELECTED_PRESSED_ALPHA)
+                                isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_INNER_RIM_SELECTED_ALPHA)
+                                else -> Color.Transparent
+                            },
+                            animationSpec = iconColorAnimationSpec,
+                            label = "bottom-nav-icon-inner-rim-${destination.name}",
+                        )
                         val iconHaloHighlight by animateColorAsState(
                             targetValue = if (isSelected && isPressed) {
                                 MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_HALO_HIGHLIGHT_PRESSED_ALPHA)
@@ -821,6 +830,21 @@ private fun PrimaryNavigationBar(
                                 .scale(iconContainerScale * iconHaloScale),
                             contentAlignment = Alignment.Center,
                         ) {
+                            if (isSelected) {
+                                val innerRimSize = (iconHaloSize - NAV_ICON_INNER_RIM_INNER_PADDING.dp).coerceAtLeast(1.dp)
+                                Box(
+                                    modifier = Modifier
+                                        .size(innerRimSize)
+                                        .clip(RoundedCornerShape(innerRimSize / 2))
+                                        .border(
+                                            border = BorderStroke(
+                                                width = NAV_ICON_INNER_RIM_BORDER_WIDTH.dp,
+                                                color = iconInnerRim,
+                                            ),
+                                            shape = RoundedCornerShape(innerRimSize / 2),
+                                        ),
+                                )
+                            }
                             Box(
                                 modifier = Modifier
                                     .size(iconFaceSize)
@@ -1410,6 +1434,15 @@ private fun PrimaryNavigationRail(
                                 },
                             label = "rail-icon-halo-${destination.name}",
                         )
+                        val iconInnerRim by animateColorAsState(
+                            targetValue = when {
+                                isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_INNER_RIM_SELECTED_PRESSED_ALPHA)
+                                isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_INNER_RIM_SELECTED_ALPHA)
+                                else -> Color.Transparent
+                            },
+                            animationSpec = iconColorAnimationSpec,
+                            label = "rail-icon-inner-rim-${destination.name}",
+                        )
                         val iconHaloHighlight by animateColorAsState(
                             targetValue = if (isSelected && isPressed) {
                                 MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_HALO_HIGHLIGHT_PRESSED_ALPHA)
@@ -1530,6 +1563,21 @@ private fun PrimaryNavigationRail(
                                 .scale(iconContainerScale * iconHaloScale),
                             contentAlignment = Alignment.Center,
                         ) {
+                            if (isSelected) {
+                                val innerRimSize = (iconHaloSize - NAV_ICON_INNER_RIM_INNER_PADDING.dp).coerceAtLeast(1.dp)
+                                Box(
+                                    modifier = Modifier
+                                        .size(innerRimSize)
+                                        .clip(RoundedCornerShape(innerRimSize / 2))
+                                        .border(
+                                            border = BorderStroke(
+                                                width = NAV_ICON_INNER_RIM_BORDER_WIDTH.dp,
+                                                color = iconInnerRim,
+                                            ),
+                                            shape = RoundedCornerShape(innerRimSize / 2),
+                                        ),
+                                )
+                            }
                             Box(
                                 modifier = Modifier
                                     .size(iconFaceSize)
@@ -1927,6 +1975,10 @@ private const val NAV_ICON_HALO_HIGHLIGHT_SELECTED_ALPHA = 0.0246f
 private const val NAV_ICON_HALO_HIGHLIGHT_PRESSED_ONLY_ALPHA = 0.0126f
 private const val NAV_ICON_HALO_BORDER_SELECTED_ALPHA = 0.063f
 private const val NAV_ICON_HALO_BORDER_PRESSED_ALPHA = 0.0221f
+private const val NAV_ICON_INNER_RIM_SELECTED_ALPHA = 0.044f
+private const val NAV_ICON_INNER_RIM_SELECTED_PRESSED_ALPHA = 0.036f
+private const val NAV_ICON_INNER_RIM_BORDER_WIDTH = 0.35f
+private const val NAV_ICON_INNER_RIM_INNER_PADDING = 1.05f
 private const val NAV_ICON_HALO_BORDER_SELECTED = NAV_NAV_ITEM_ACTIVE_BORDER
 private const val NAV_ICON_HALO_BORDER_PRESSED = 0.13f
 private const val NAV_ICON_HALO_BORDER_UNSELECTED = 0f
