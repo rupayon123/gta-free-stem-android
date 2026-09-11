@@ -102,6 +102,10 @@ has_upstream_config() {
     [ -n "$(git config --get "branch.${CURRENT_BRANCH}.merge")" ]
 }
 
+remote_head_sha() {
+  git ls-remote --heads "$UPSTREAM_REMOTE" "$TARGET_PUSH_BRANCH" 2>/dev/null | awk 'NF==2 {print $1; exit}'
+}
+
 cleanup_stale_locks() {
   local lock_file
   local lock_files=(
@@ -190,6 +194,10 @@ is_network_or_repo_busy_failure() {
   echo "$1" | grep -qiE "could not resolve host|Failed to connect to|network is unreachable|Connection timed out|RPC failed|remote hung up|The requested URL returned error|Unable to access|Connection refused|timeout|unable to access" 
 }
 
+is_auth_failure() {
+  echo "$1" | grep -qiE "authentication|Authentication failed|Permission denied|could not read Username|403|access denied|remote: Permission to .*denied"
+}
+
 fetch_with_retry() {
   local remote="$1"
   local attempt=0
@@ -208,7 +216,7 @@ fetch_with_retry() {
     echo "Fetch attempt ${attempt}/${max_attempts} failed."
     echo "$fetch_output"
 
-    if echo "$fetch_output" | grep -qiE "authentication|Authentication failed|Permission denied|could not read Username|403|access denied"; then
+    if is_auth_failure "$fetch_output"; then
       echo "Detected authentication/permission failure while fetching. This requires manual fix." >&2
       return 1
     fi
@@ -232,6 +240,28 @@ fetch_with_retry() {
     echo "Aborting fetch retries due unrecognized fetch failure." >&2
     return 1
   done
+}
+
+verify_remote_contains_head() {
+  local local_sha=$1
+  local remote_sha
+  remote_sha=$(remote_head_sha || true)
+
+  if [ -z "$remote_sha" ]; then
+    return 1
+  fi
+
+  if [ "$local_sha" = "$remote_sha" ]; then
+    return 0
+  fi
+
+  if git fetch --dry-run "$UPSTREAM_REMOTE" "$UPSTREAM_BRANCH" >/dev/null 2>&1; then
+    if git merge-base --is-ancestor "$local_sha" "$UPSTREAM_REMOTE/$TARGET_PUSH_BRANCH"; then
+      return 0
+    fi
+  fi
+
+  return 1
 }
 
 echo "Syncing branch ${CURRENT_BRANCH} with ${UPSTREAM_REF}"
@@ -279,28 +309,28 @@ while [ "$attempt" -lt "$max_attempts" ]; do
     echo "$push_output"
     echo "Push succeeded."
 
+    LOCAL_AFTER=$(git rev-parse "$CURRENT_BRANCH")
     if ! fetch_with_retry "$UPSTREAM_REMOTE"; then
-      echo "Push succeeded, but verification fetch failed; pushing likely completed. Continuing without remote confirmation." >&2
-      exit 0
+      echo "Push returned success, but fetch failed while verifying remote state." >&2
+      echo "Using ls-remote fallback verification." 
     fi
 
-    LOCAL_AFTER=$(git rev-parse "$CURRENT_BRANCH")
-    if git merge-base --is-ancestor "$LOCAL_AFTER" "${UPSTREAM_REMOTE}/${TARGET_PUSH_BRANCH}"; then
+    if verify_remote_contains_head "$LOCAL_AFTER"; then
       echo "Verified remote includes local HEAD $(git rev-parse --short "$CURRENT_BRANCH")"
       exit 0
     fi
 
-    echo "Push returned success, but remote does not contain local HEAD in this verification fetch." >&2
-    echo "Treating push as complete to avoid false failure noise." >&2
-    exit 0
+    echo "Push returned success, but remote verification failed; retrying." >&2
+    echo "$push_output"
+    # fall through to retry loop
   fi
 
   echo "Push attempt ${attempt}/${max_attempts} failed with exit code ${push_exit_code}."
   echo "$push_output"
 
-  if echo "$push_output" | grep -qiE "fatal: Not possible to fast-forward|non-fast-forward|Updates were rejected|failed to push"; then
+  if echo "$push_output" | grep -qiE "fatal: Not possible to fast-forward|non-fast-forward|Updates were rejected|failed to push|rejected"; then
     echo "Detected push rejection. Re-syncing before retry."
-  elif echo "$push_output" | grep -qiE "authentication|Authentication failed|Permission denied|could not read Username|403"; then
+  elif is_auth_failure "$push_output"; then
     echo "Detected authentication/permission failure. This requires manual fix before retry."
     exit 1
   elif is_network_or_repo_busy_failure "$push_output"; then
