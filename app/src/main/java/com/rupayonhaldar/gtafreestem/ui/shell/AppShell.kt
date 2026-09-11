@@ -1809,6 +1809,22 @@ private fun DestinationLabel(
         },
         label = "destination-label-underline-visibility",
     )
+    val labelGlow by animateFloatAsState(
+        targetValue = when {
+            isSelected && isPressed -> 0.82f
+            isSelected -> 1f
+            isPressed -> 0.28f
+            else -> 0f
+        },
+        animationSpec = if (isPressed) {
+            navPressFloatAnimationSpec
+        } else if (isSelected) {
+            navSelectedSettleFloatAnimationSpec
+        } else {
+            navUnselectedSettleFloatAnimationSpec
+        },
+        label = "destination-label-glow",
+    )
     val labelShadowProgress by animateFloatAsState(
         targetValue = when {
             isSelected && !isPressed -> 1f
@@ -1844,14 +1860,45 @@ private fun DestinationLabel(
             .offset(y = labelOffset)
             .scale(labelScale),
     ) {
-        Text(
-            text = label,
-            color = labelColor.copy(alpha = labelAlpha),
-            style = textStyle,
-            maxLines = 1,
-            textAlign = TextAlign.Center,
-            overflow = TextOverflow.Ellipsis,
-        )
+        Box(
+            modifier = Modifier
+                .fillMaxWidth(),
+            contentAlignment = Alignment.Center,
+        ) {
+            if (labelGlow > 0.001f) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth(
+                            if (isSelected) {
+                                NAV_LABEL_SELECTED_GLOW_WIDTH_FRACTION * labelGlow
+                            } else {
+                                (NAV_LABEL_SELECTED_GLOW_WIDTH_FRACTION * 0.64f) * labelGlow
+                            },
+                        )
+                        .height(NAV_LABEL_SELECTED_GLOW_HEIGHT.dp)
+                        .offset(y = (-2).dp)
+                        .clip(RoundedCornerShape(NAV_LABEL_SELECTED_GLOW_HEIGHT.dp))
+                        .background(
+                            brush = Brush.radialGradient(
+                                colors = listOf(
+                                    MaterialTheme.colorScheme.primary.copy(
+                                        alpha = NAV_LABEL_SELECTED_GLOW_ALPHA * labelAlpha,
+                                    ),
+                                    Color.Transparent,
+                                ),
+                            ),
+                        ),
+                )
+            }
+            Text(
+                text = label,
+                color = labelColor.copy(alpha = labelAlpha),
+                style = textStyle,
+                maxLines = 1,
+                textAlign = TextAlign.Center,
+                overflow = TextOverflow.Ellipsis,
+            )
+        }
         if (labelUnderlineVisibility > 0.001f) {
             Box(
                 modifier = Modifier
@@ -1914,6 +1961,9 @@ private const val NAV_LABEL_SELECTED_SHADOW_BLUR = 0.548f
 private const val NAV_LABEL_SELECTED_SHADOW_Y_OFFSET = 0.0418f
 private const val NAV_LABEL_UNSELECTED_SHADOW_ALPHA = 0.0102f
 private const val NAV_LABEL_SELECTED_UNDERLINE_ALPHA = 0.42f
+private const val NAV_LABEL_SELECTED_GLOW_ALPHA = 0.072f
+private const val NAV_LABEL_SELECTED_GLOW_WIDTH_FRACTION = 0.86f
+private const val NAV_LABEL_SELECTED_GLOW_HEIGHT = 1.6f
 private const val NAV_LABEL_SELECTED_UNDERLINE_HEIGHT = 1.0f
 private const val NAV_LABEL_SELECTED_UNDERLINE_WIDTH_FRACTION = 0.58f
 private const val NAV_NAV_ITEM_PRESSED_SCALE = 0.9984f
