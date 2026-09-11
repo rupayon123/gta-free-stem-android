@@ -48,39 +48,52 @@ if [ -z "$CURRENT_BRANCH" ] || [ "$CURRENT_BRANCH" = "HEAD" ]; then
   exit 1
 fi
 
-if ! git remote get-url origin >/dev/null 2>&1; then
-  echo "origin remote is required for push-safe" >&2
+UPSTREAM_REF=$(git rev-parse --abbrev-ref --symbolic-full-name '@{u}' 2>/dev/null || true)
+if [ -z "$UPSTREAM_REF" ]; then
+  UPSTREAM_REF="origin/$CURRENT_BRANCH"
+  echo "No upstream branch is configured for ${CURRENT_BRANCH}; defaulting to ${UPSTREAM_REF}."
+fi
+
+if [ -z "${UPSTREAM_REF#*/}" ]; then
+  echo "Malformed upstream ref: ${UPSTREAM_REF}" >&2
   exit 1
 fi
 
-UPSTREAM="origin/$CURRENT_BRANCH"
+UPSTREAM_REMOTE=${UPSTREAM_REF%%/*}
+UPSTREAM_BRANCH=${UPSTREAM_REF#*/}
+PUSH_REF="${UPSTREAM_REMOTE}/${CURRENT_BRANCH}"
+
+if ! git remote get-url "$UPSTREAM_REMOTE" >/dev/null 2>&1; then
+  echo "Configured remote '$UPSTREAM_REMOTE' is required for push-safe" >&2
+  exit 1
+fi
 
 sync_with_upstream() {
-  if ! git show-ref --verify --quiet "refs/remotes/$UPSTREAM"; then
+  if ! git show-ref --verify --quiet "refs/remotes/$UPSTREAM_REF"; then
     return 0
   fi
 
-  local_ahead=$(git rev-list --count "${UPSTREAM}..${CURRENT_BRANCH}" || echo 0)
-  remote_ahead=$(git rev-list --count "${CURRENT_BRANCH}..${UPSTREAM}" || echo 0)
+  local_ahead=$(git rev-list --count "${UPSTREAM_REF}..${CURRENT_BRANCH}" || echo 0)
+  remote_ahead=$(git rev-list --count "${CURRENT_BRANCH}..${UPSTREAM_REF}" || echo 0)
 
   if [ "$remote_ahead" -gt 0 ] && [ "$local_ahead" -gt 0 ]; then
-    echo "Branch is diverged from ${UPSTREAM}; rebasing to keep history linear."
-    if ! git pull --rebase --autostash origin "$CURRENT_BRANCH"; then
+    echo "Branch is diverged from ${UPSTREAM_REF}; rebasing to keep history linear."
+    if ! git pull --rebase --autostash "$UPSTREAM_REMOTE" "$UPSTREAM_BRANCH"; then
       echo "Rebase failed while resolving divergence. Resolve conflicts and rerun." >&2
       return 1
     fi
   elif [ "$remote_ahead" -gt 0 ]; then
-    echo "Branch is behind ${UPSTREAM}; rebasing onto remote."
-    if ! git pull --rebase --autostash origin "$CURRENT_BRANCH"; then
-      echo "Rebase failed while syncing from ${UPSTREAM}. Resolve conflicts and rerun." >&2
+    echo "Branch is behind ${UPSTREAM_REF}; rebasing onto remote."
+    if ! git pull --rebase --autostash "$UPSTREAM_REMOTE" "$UPSTREAM_BRANCH"; then
+      echo "Rebase failed while syncing from ${UPSTREAM_REF}. Resolve conflicts and rerun." >&2
       return 1
     fi
   fi
 }
 
-echo "Syncing branch ${CURRENT_BRANCH} with ${UPSTREAM}"
-if ! git fetch --prune --quiet origin; then
-  echo "Could not fetch from origin before syncing. Check network/auth first." >&2
+echo "Syncing branch ${CURRENT_BRANCH} with ${UPSTREAM_REF}"
+if ! git fetch --prune --quiet "$UPSTREAM_REMOTE"; then
+  echo "Could not fetch from ${UPSTREAM_REMOTE} before syncing. Check network/auth first." >&2
   exit 1
 fi
 
@@ -107,16 +120,16 @@ while [ "$attempt" -lt "$max_attempts" ]; do
   attempt=$((attempt + 1))
   echo "Push attempt ${attempt}/${max_attempts}"
 
-  if git push --set-upstream origin "$CURRENT_BRANCH"; then
+  if git push "$UPSTREAM_REMOTE" "$CURRENT_BRANCH"; then
     echo "Push succeeded."
 
-    if ! git fetch --prune --quiet origin; then
+    if ! git fetch --prune --quiet "$UPSTREAM_REMOTE"; then
       echo "Push succeeded, but refresh failed; remote confirmation will be skipped." >&2
       exit 2
     fi
 
     LOCAL_AFTER=$(git rev-parse "$CURRENT_BRANCH")
-    REMOTE_AFTER=$(git rev-parse "$UPSTREAM")
+    REMOTE_AFTER=$(git rev-parse "$PUSH_REF")
     if [ "$LOCAL_AFTER" = "$REMOTE_AFTER" ]; then
       echo "Verified remote includes local HEAD $(git rev-parse --short HEAD)"
       exit 0
@@ -127,7 +140,7 @@ while [ "$attempt" -lt "$max_attempts" ]; do
   fi
 
   echo "Push attempt ${attempt}/${max_attempts} failed. Fetching and retrying."
-  if ! git fetch --prune origin; then
+  if ! git fetch --prune "$UPSTREAM_REMOTE"; then
     echo "Network/fetch failure after push attempt ${attempt}; retrying." >&2
     continue
   fi
