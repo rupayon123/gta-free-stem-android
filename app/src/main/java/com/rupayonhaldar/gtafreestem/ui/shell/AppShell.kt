@@ -57,6 +57,9 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -407,6 +410,10 @@ private fun PrimaryNavigationBar(
                         interactionSource = destinationInteractionSource,
                             modifier = Modifier
                             .testTag(destination.testTag)
+                            .semantics {
+                                contentDescription = destinationLabel(destination)
+                                selected = isSelected
+                            }
                             .padding(
                                 horizontal = NAV_BOTTOM_NAV_ITEM_PADDING_HORIZONTAL.dp,
                                 vertical = NAV_BOTTOM_NAV_ITEM_PADDING_VERTICAL.dp,
@@ -1030,6 +1037,10 @@ private fun PrimaryNavigationRail(
                         interactionSource = destinationInteractionSource,
                         modifier = Modifier
                             .testTag(destination.testTag)
+                            .semantics {
+                                contentDescription = destinationLabel(destination)
+                                selected = isSelected
+                            }
                             .padding(
                                 horizontal = NAV_RAIL_ITEM_PADDING_HORIZONTAL.dp,
                                 vertical = NAV_RAIL_ITEM_PADDING_VERTICAL.dp,
