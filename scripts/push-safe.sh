@@ -63,12 +63,23 @@ has_upstream_config() {
     [ -n "$(git config --get "branch.${CURRENT_BRANCH}.merge")" ]
 }
 
-cleanup_stale_index_lock() {
-  local lock_file="$PROJECT_ROOT/.git/index.lock"
-  if [ -f "$lock_file" ]; then
-    echo "Removing stale index lock at $lock_file"
-    rm -f "$lock_file"
-  fi
+cleanup_stale_locks() {
+  local lock_file
+  local lock_files=(
+    "$PROJECT_ROOT/.git/index.lock"
+    "$PROJECT_ROOT/.git/FETCH_HEAD.lock"
+    "$PROJECT_ROOT/.git/HEAD.lock"
+    "$PROJECT_ROOT/.git/config.lock"
+    "$PROJECT_ROOT/.git/ORIG_HEAD.lock"
+    "$PROJECT_ROOT/.git/packed-refs.lock"
+  )
+
+  for lock_file in "${lock_files[@]}"; do
+    if [ -f "$lock_file" ]; then
+      echo "Removing stale lock file: $lock_file"
+      rm -f "$lock_file"
+    fi
+  done
 }
 
 if [ ! -d .git ]; then
@@ -76,7 +87,7 @@ if [ ! -d .git ]; then
   exit 1
 fi
 
-cleanup_stale_index_lock
+cleanup_stale_locks
 
 CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 if [ -z "$CURRENT_BRANCH" ] || [ "$CURRENT_BRANCH" = "HEAD" ]; then
@@ -134,6 +145,10 @@ sync_with_upstream() {
       return 1
     fi
   fi
+}
+
+is_network_or_repo_busy_failure() {
+  echo "$1" | grep -qiE "could not resolve host|Failed to connect to|network is unreachable|Connection timed out|RPC failed|remote hung up|The requested URL returned error|Unable to access|Connection refused|timeout|unable to access" 
 }
 
 echo "Syncing branch ${CURRENT_BRANCH} with ${UPSTREAM_REF}"
@@ -201,6 +216,8 @@ while [ "$attempt" -lt "$max_attempts" ]; do
   elif echo "$push_output" | grep -qiE "authentication|Authentication failed|Permission denied|could not read Username|403"; then
     echo "Detected authentication/permission failure. This requires manual fix before retry."
     exit 1
+  elif is_network_or_repo_busy_failure "$push_output"; then
+    echo "Detected transient network/repository access issue. Retrying after sync and backoff."
   else
     echo "Unknown push failure; retrying after sync."
   fi
