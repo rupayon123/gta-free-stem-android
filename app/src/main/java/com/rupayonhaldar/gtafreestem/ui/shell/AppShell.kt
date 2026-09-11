@@ -333,11 +333,12 @@ private fun PrimaryNavigationBar(
                     val isSelected = selectedDestination == destination
                     val isPressed by destinationInteractionSource.collectIsPressedAsState()
                     val selectedPillColor by animateColorAsState(
-                        targetValue = when {
-                            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PILL_SELECTED_PRESSED_ALPHA)
-                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PILL_SELECTED_ALPHA)
-                            isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PRESSED_ALPHA)
-                            else -> Color.Transparent
+                        targetValue = if (isSelected && isPressed) {
+                            MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PILL_SELECTED_PRESSED_ALPHA)
+                        } else if (isSelected) {
+                            MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PILL_SELECTED_ALPHA)
+                        } else {
+                            Color.Transparent
                         },
                         animationSpec = if (isPressed) {
                             navPressColorAnimationSpec
@@ -347,11 +348,12 @@ private fun PrimaryNavigationBar(
                         label = "bottom-nav-pill-color-${destination.name}",
                     )
                     val selectedPillTopColor by animateColorAsState(
-                        targetValue = when {
-                            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PILL_TOP_SELECTED_PRESSED_ALPHA)
-                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PILL_TOP_SELECTED_ALPHA)
-                            isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PRESSED_ALPHA)
-                            else -> Color.Transparent
+                        targetValue = if (isSelected && isPressed) {
+                            MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PILL_TOP_SELECTED_PRESSED_ALPHA)
+                        } else if (isSelected) {
+                            MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PILL_TOP_SELECTED_ALPHA)
+                        } else {
+                            Color.Transparent
                         },
                         animationSpec = if (isPressed) {
                             navPressColorAnimationSpec
@@ -361,11 +363,12 @@ private fun PrimaryNavigationBar(
                         label = "bottom-nav-pill-top-color-${destination.name}",
                     )
                     val selectedPillBorderColor by animateColorAsState(
-                        targetValue = when {
-                            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PILL_BORDER_SELECTED_PRESSED_ALPHA)
-                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PILL_BORDER_SELECTED_ALPHA)
-                            isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PILL_BORDER_PRESSED_ALPHA)
-                            else -> Color.Transparent
+                        targetValue = if (isSelected && isPressed) {
+                            MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PILL_BORDER_SELECTED_PRESSED_ALPHA)
+                        } else if (isSelected) {
+                            MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PILL_BORDER_SELECTED_ALPHA)
+                        } else {
+                            Color.Transparent
                         },
                         animationSpec = if (isPressed) {
                             navPressColorAnimationSpec
@@ -375,11 +378,12 @@ private fun PrimaryNavigationBar(
                         label = "bottom-nav-pill-border-color-${destination.name}",
                     )
                     val selectedPillElevation by animateDpAsState(
-                        targetValue = when {
-                            isPressed && isSelected -> NAV_BOTTOM_NAV_ITEM_PRESSED_SELECTED_ELEVATION.dp
-                            isSelected -> NAV_BOTTOM_NAV_ITEM_SELECTED_ELEVATION.dp
-                            isPressed -> NAV_BOTTOM_NAV_ITEM_PRESSED_UNSELECTED_ELEVATION.dp
-                            else -> NAV_BOTTOM_NAV_ITEM_UNSELECTED_ELEVATION.dp
+                        targetValue = if (isSelected && isPressed) {
+                            NAV_BOTTOM_NAV_ITEM_PRESSED_SELECTED_ELEVATION.dp
+                        } else if (isSelected) {
+                            NAV_BOTTOM_NAV_ITEM_SELECTED_ELEVATION.dp
+                        } else {
+                            NAV_BOTTOM_NAV_ITEM_UNSELECTED_ELEVATION.dp
                         },
                         animationSpec = if (isPressed) {
                             navPressDpAnimationSpec
@@ -389,10 +393,10 @@ private fun PrimaryNavigationBar(
                         label = "bottom-nav-pill-elevation-${destination.name}",
                     )
                     val activeNavItemWidth by animateDpAsState(
-                        targetValue = when {
-                            isSelected -> NAV_BOTTOM_NAV_ITEM_SELECTED_WIDTH.dp
-                            isPressed -> NAV_BOTTOM_NAV_ITEM_PRESSED_UNSELECTED_WIDTH.dp
-                            else -> NAV_BOTTOM_NAV_ITEM_UNSELECTED_WIDTH.dp
+                        targetValue = if (isSelected) {
+                            NAV_BOTTOM_NAV_ITEM_SELECTED_WIDTH.dp
+                        } else {
+                            NAV_BOTTOM_NAV_ITEM_UNSELECTED_WIDTH.dp
                         },
                         animationSpec = if (isPressed) {
                             navPressDpAnimationSpec
@@ -402,11 +406,12 @@ private fun PrimaryNavigationBar(
                         label = "bottom-nav-item-width-${destination.name}",
                     )
                     val activeItemCorner by animateDpAsState(
-                        targetValue = when {
-                            isPressed && isSelected -> NAV_BOTTOM_NAV_ITEM_PRESSED_SELECTED_CORNER.dp
-                            isSelected -> NAV_BOTTOM_NAV_ITEM_SELECTED_CORNER.dp
-                            isPressed -> NAV_BOTTOM_NAV_ITEM_PRESSED_CORNER.dp
-                            else -> NAV_BOTTOM_NAV_ITEM_UNPRESSED_CORNER.dp
+                        targetValue = if (isSelected && isPressed) {
+                            NAV_BOTTOM_NAV_ITEM_PRESSED_SELECTED_CORNER.dp
+                        } else if (isSelected) {
+                            NAV_BOTTOM_NAV_ITEM_SELECTED_CORNER.dp
+                        } else {
+                            NAV_BOTTOM_NAV_ITEM_UNPRESSED_CORNER.dp
                         },
                         animationSpec = if (isPressed) {
                             navPressDpAnimationSpec
@@ -417,11 +422,12 @@ private fun PrimaryNavigationBar(
                     )
                     val activeItemShape = RoundedCornerShape(activeItemCorner)
                     val activeItemOffset by animateDpAsState(
-                        targetValue = when {
-                            isPressed && isSelected -> NAV_BOTTOM_NAV_ITEM_SELECTED_OFFSET_PRESSED_DP.dp
-                            isPressed && !isSelected -> NAV_BOTTOM_NAV_ITEM_OFFSET_PRESSED_DP.dp
-                            isSelected -> NAV_BOTTOM_NAV_ITEM_SELECTED_OFFSET_DP.dp
-                            else -> 0.dp
+                        targetValue = if (isSelected && isPressed) {
+                            NAV_BOTTOM_NAV_ITEM_SELECTED_OFFSET_PRESSED_DP.dp
+                        } else if (isSelected) {
+                            NAV_BOTTOM_NAV_ITEM_SELECTED_OFFSET_DP.dp
+                        } else {
+                            0.dp
                         },
                         animationSpec = if (isPressed) {
                             navPressDpAnimationSpec
@@ -433,11 +439,12 @@ private fun PrimaryNavigationBar(
                         label = "bottom-nav-item-offset-${destination.name}",
                     )
                     val activeItemHeight by animateDpAsState(
-                        targetValue = when {
-                            isPressed && isSelected -> NAV_BOTTOM_NAV_ITEM_PRESSED_SELECTED_HEIGHT.dp
-                            isSelected -> NAV_BOTTOM_NAV_ITEM_SELECTED_HEIGHT.dp
-                            isPressed -> NAV_BOTTOM_NAV_ITEM_UNSELECTED_HEIGHT.dp
-                            else -> NAV_BOTTOM_NAV_ITEM_UNSELECTED_HEIGHT.dp
+                        targetValue = if (isSelected && isPressed) {
+                            NAV_BOTTOM_NAV_ITEM_PRESSED_SELECTED_HEIGHT.dp
+                        } else if (isSelected) {
+                            NAV_BOTTOM_NAV_ITEM_SELECTED_HEIGHT.dp
+                        } else {
+                            NAV_BOTTOM_NAV_ITEM_UNSELECTED_HEIGHT.dp
                         },
                         animationSpec = if (isPressed) {
                             navPressDpAnimationSpec
@@ -449,11 +456,12 @@ private fun PrimaryNavigationBar(
                         label = "bottom-nav-item-height-${destination.name}",
                     )
                     val activeItemScale by animateFloatAsState(
-                        targetValue = when {
-                            isPressed && isSelected -> NAV_BOTTOM_NAV_ITEM_SELECTED_PRESS_SCALE
-                            isSelected -> NAV_BOTTOM_NAV_ITEM_SELECTED_SCALE
-                            isPressed -> NAV_NAV_ITEM_PRESSED_SCALE
-                            else -> 1f
+                        targetValue = if (isSelected && isPressed) {
+                            NAV_BOTTOM_NAV_ITEM_SELECTED_PRESS_SCALE
+                        } else if (isSelected) {
+                            NAV_BOTTOM_NAV_ITEM_SELECTED_SCALE
+                        } else {
+                            1f
                         },
                         animationSpec = if (isPressed) {
                             navPressFloatAnimationSpec
@@ -1128,11 +1136,12 @@ private fun PrimaryNavigationRail(
                     val isSelected = selectedDestination == destination
                     val isPressed by destinationInteractionSource.collectIsPressedAsState()
                     val selectedPillColor by animateColorAsState(
-                        targetValue = when {
-                            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PILL_SELECTED_PRESSED_ALPHA)
-                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PILL_SELECTED_ALPHA)
-                            isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PRESSED_ALPHA)
-                            else -> Color.Transparent
+                        targetValue = if (isSelected && isPressed) {
+                            MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PILL_SELECTED_PRESSED_ALPHA)
+                        } else if (isSelected) {
+                            MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PILL_SELECTED_ALPHA)
+                        } else {
+                            Color.Transparent
                         },
                         animationSpec = if (isPressed) {
                             navPressColorAnimationSpec
@@ -1142,11 +1151,12 @@ private fun PrimaryNavigationRail(
                         label = "rail-pill-color-${destination.name}",
                     )
                     val selectedPillTopColor by animateColorAsState(
-                        targetValue = when {
-                            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PILL_TOP_SELECTED_PRESSED_ALPHA)
-                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PILL_TOP_SELECTED_ALPHA)
-                            isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PRESSED_ALPHA)
-                            else -> Color.Transparent
+                        targetValue = if (isSelected && isPressed) {
+                            MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PILL_TOP_SELECTED_PRESSED_ALPHA)
+                        } else if (isSelected) {
+                            MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PILL_TOP_SELECTED_ALPHA)
+                        } else {
+                            Color.Transparent
                         },
                         animationSpec = if (isPressed) {
                             navPressColorAnimationSpec
@@ -1156,11 +1166,12 @@ private fun PrimaryNavigationRail(
                         label = "rail-pill-top-color-${destination.name}",
                     )
                     val selectedPillBorderColor by animateColorAsState(
-                        targetValue = when {
-                            isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PILL_BORDER_SELECTED_PRESSED_ALPHA)
-                            isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PILL_BORDER_SELECTED_ALPHA)
-                            isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PILL_BORDER_PRESSED_ALPHA)
-                            else -> Color.Transparent
+                        targetValue = if (isSelected && isPressed) {
+                            MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PILL_BORDER_SELECTED_PRESSED_ALPHA)
+                        } else if (isSelected) {
+                            MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PILL_BORDER_SELECTED_ALPHA)
+                        } else {
+                            Color.Transparent
                         },
                         animationSpec = if (isPressed) {
                             navPressColorAnimationSpec
@@ -1170,11 +1181,12 @@ private fun PrimaryNavigationRail(
                         label = "rail-pill-border-color-${destination.name}",
                     )
                     val selectedPillElevation by animateDpAsState(
-                        targetValue = when {
-                            isPressed && isSelected -> NAV_RAIL_ITEM_PRESSED_SELECTED_ELEVATION.dp
-                            isSelected -> NAV_RAIL_ITEM_SELECTED_ELEVATION.dp
-                            isPressed -> NAV_RAIL_ITEM_PRESSED_UNSELECTED_ELEVATION.dp
-                            else -> NAV_RAIL_ITEM_UNSELECTED_ELEVATION.dp
+                        targetValue = if (isSelected && isPressed) {
+                            NAV_RAIL_ITEM_PRESSED_SELECTED_ELEVATION.dp
+                        } else if (isSelected) {
+                            NAV_RAIL_ITEM_SELECTED_ELEVATION.dp
+                        } else {
+                            NAV_RAIL_ITEM_UNSELECTED_ELEVATION.dp
                         },
                         animationSpec = if (isPressed) {
                             navPressDpAnimationSpec
@@ -1184,10 +1196,10 @@ private fun PrimaryNavigationRail(
                         label = "rail-pill-elevation-${destination.name}",
                     )
                     val activeNavItemWidth by animateDpAsState(
-                        targetValue = when {
-                            isSelected -> NAV_RAIL_ITEM_SELECTED_WIDTH.dp
-                            isPressed -> NAV_RAIL_ITEM_PRESSED_UNSELECTED_WIDTH.dp
-                            else -> NAV_RAIL_ITEM_UNSELECTED_WIDTH.dp
+                        targetValue = if (isSelected) {
+                            NAV_RAIL_ITEM_SELECTED_WIDTH.dp
+                        } else {
+                            NAV_RAIL_ITEM_UNSELECTED_WIDTH.dp
                         },
                         animationSpec = if (isPressed) {
                             navPressDpAnimationSpec
@@ -1197,11 +1209,12 @@ private fun PrimaryNavigationRail(
                         label = "rail-item-width-${destination.name}",
                     )
                     val activeItemCorner by animateDpAsState(
-                        targetValue = when {
-                            isPressed && isSelected -> NAV_RAIL_ITEM_PRESSED_SELECTED_CORNER.dp
-                            isSelected -> NAV_RAIL_ITEM_SELECTED_CORNER.dp
-                            isPressed -> NAV_RAIL_ITEM_PRESSED_CORNER.dp
-                            else -> NAV_RAIL_ITEM_UNPRESSED_CORNER.dp
+                        targetValue = if (isSelected && isPressed) {
+                            NAV_RAIL_ITEM_PRESSED_SELECTED_CORNER.dp
+                        } else if (isSelected) {
+                            NAV_RAIL_ITEM_SELECTED_CORNER.dp
+                        } else {
+                            NAV_RAIL_ITEM_UNPRESSED_CORNER.dp
                         },
                         animationSpec = if (isPressed) {
                             navPressDpAnimationSpec
@@ -1212,11 +1225,12 @@ private fun PrimaryNavigationRail(
                     )
                     val activeItemShape = RoundedCornerShape(activeItemCorner)
                     val activeItemOffset by animateDpAsState(
-                        targetValue = when {
-                                isPressed && !isSelected -> NAV_RAIL_ITEM_OFFSET_PRESSED_DP.dp
-                                isPressed && isSelected -> NAV_RAIL_ITEM_SELECTED_OFFSET_PRESSED_DP.dp
-                                isSelected -> NAV_RAIL_ITEM_SELECTED_OFFSET_DP.dp
-                                else -> 0.dp
+                        targetValue = if (isSelected && isPressed) {
+                            NAV_RAIL_ITEM_SELECTED_OFFSET_PRESSED_DP.dp
+                        } else if (isSelected) {
+                            NAV_RAIL_ITEM_SELECTED_OFFSET_DP.dp
+                        } else {
+                            0.dp
                         },
                         animationSpec = if (isPressed) {
                             navPressDpAnimationSpec
@@ -1226,11 +1240,12 @@ private fun PrimaryNavigationRail(
                         label = "rail-item-offset-${destination.name}",
                     )
                     val activeItemHeight by animateDpAsState(
-                        targetValue = when {
-                            isPressed && isSelected -> NAV_RAIL_ITEM_PRESSED_SELECTED_HEIGHT.dp
-                            isSelected -> NAV_RAIL_ITEM_SELECTED_HEIGHT.dp
-                            isPressed -> NAV_RAIL_ITEM_UNSELECTED_HEIGHT.dp
-                            else -> NAV_RAIL_ITEM_UNSELECTED_HEIGHT.dp
+                        targetValue = if (isSelected && isPressed) {
+                            NAV_RAIL_ITEM_PRESSED_SELECTED_HEIGHT.dp
+                        } else if (isSelected) {
+                            NAV_RAIL_ITEM_SELECTED_HEIGHT.dp
+                        } else {
+                            NAV_RAIL_ITEM_UNSELECTED_HEIGHT.dp
                         },
                         animationSpec = if (isPressed) {
                             navPressDpAnimationSpec
@@ -1240,11 +1255,12 @@ private fun PrimaryNavigationRail(
                         label = "rail-item-height-${destination.name}",
                     )
                     val activeItemScale by animateFloatAsState(
-                        targetValue = when {
-                            isPressed && isSelected -> NAV_RAIL_ITEM_SELECTED_PRESS_SCALE
-                            isSelected -> NAV_RAIL_ITEM_SELECTED_SCALE
-                            isPressed -> NAV_NAV_ITEM_PRESSED_SCALE
-                            else -> 1f
+                        targetValue = if (isSelected && isPressed) {
+                            NAV_RAIL_ITEM_SELECTED_PRESS_SCALE
+                        } else if (isSelected) {
+                            NAV_RAIL_ITEM_SELECTED_SCALE
+                        } else {
+                            1f
                         },
                         animationSpec = if (isPressed) {
                             navPressFloatAnimationSpec
@@ -2212,7 +2228,6 @@ private const val NAV_NAV_ITEM_PILL_BORDER_SELECTED_PRESSED_ALPHA = 0.124f
 private const val NAV_NAV_ITEM_PILL_BORDER_SELECTED_ALPHA = 0.155f
 private const val NAV_NAV_ITEM_PILL_BORDER_PRESSED_ALPHA = 0.038f
 private const val NAV_ICON_FACE_BORDER = 0.34f
-    private const val NAV_NAV_ITEM_PRESSED_ALPHA = 0.0375f
 private const val NAV_ICON_HALO_HIGHLIGHT_PRESSED_ALPHA = 0.0243f
 private const val NAV_ICON_HALO_SIZE_UNSELECTED = 20.9f
 private const val NAV_ICON_HALO_SIZE_SELECTED = 33.0f
