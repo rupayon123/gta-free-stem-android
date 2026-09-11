@@ -1586,10 +1586,10 @@ private val PrimaryDestination.testTag: String
     get() = "primary-navigation-${name.lowercase()}"
 
 private val navSelectionFloatAnimationSpec = tween<Float>(244, easing = FastOutSlowInEasing)
-private val navPressFloatAnimationSpec = tween<Float>(152, easing = FastOutSlowInEasing)
+private val navPressFloatAnimationSpec = tween<Float>(146, easing = FastOutSlowInEasing)
 private val navSelectionDpAnimationSpec = tween<Dp>(244, easing = FastOutSlowInEasing)
-private val navPressDpAnimationSpec = tween<Dp>(152, easing = FastOutSlowInEasing)
-private val navPressColorAnimationSpec = tween<Color>(152, easing = FastOutSlowInEasing)
+private val navPressDpAnimationSpec = tween<Dp>(146, easing = FastOutSlowInEasing)
+private val navPressColorAnimationSpec = tween<Color>(146, easing = FastOutSlowInEasing)
 private val navSelectionColorAnimationSpec = tween<Color>(244, easing = FastOutSlowInEasing)
 private val navSelectedSettleColorAnimationSpec = tween<Color>(294, easing = FastOutSlowInEasing)
 private val navSelectedSettleFloatAnimationSpec = tween<Float>(290, easing = FastOutSlowInEasing)
@@ -1622,7 +1622,7 @@ private const val NAV_LABEL_SELECTED_PRESS_ALPHA_VISIBILITY = 0.988f
 private const val NAV_LABEL_SELECTED_SHADOW_ALPHA = 0.082f
 private const val NAV_LABEL_SELECTED_SHADOW_BLUR = 0.84f
 private const val NAV_LABEL_SELECTED_SHADOW_Y_OFFSET = 0.18f
-private const val NAV_NAV_ITEM_PRESSED_SCALE = 0.9976f
+private const val NAV_NAV_ITEM_PRESSED_SCALE = 0.9981f
 private const val NAV_LABEL_OFFSET_PRESSED_DP = -0.048f
 private const val NAV_LABEL_OFFSET_UNSELECTED_PRESSED_DP = -0.056f
 private const val NAV_LABEL_OFFSET_SELECTED_DP = -0.138f
