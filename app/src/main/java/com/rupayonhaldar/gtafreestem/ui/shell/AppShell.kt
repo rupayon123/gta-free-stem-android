@@ -410,7 +410,7 @@ private fun PrimaryNavigationBar(
                         interactionSource = destinationInteractionSource,
                             modifier = Modifier
                             .testTag(destination.testTag)
-                            .semantics {
+                            .semantics(mergeDescendants = true) {
                                 contentDescription = destinationLabel(destination)
                                 selected = isSelected
                             }
@@ -746,7 +746,6 @@ private fun PrimaryNavigationBar(
                             ) {
                                 Icon(
                                     painter = painterResource(destination.iconResource),
-                                    contentDescription = destinationLabel(destination),
                                     modifier = Modifier
                                         .size(iconGlyphSize)
                                         .scale(iconScale)
@@ -1037,7 +1036,7 @@ private fun PrimaryNavigationRail(
                         interactionSource = destinationInteractionSource,
                         modifier = Modifier
                             .testTag(destination.testTag)
-                            .semantics {
+                            .semantics(mergeDescendants = true) {
                                 contentDescription = destinationLabel(destination)
                                 selected = isSelected
                             }
@@ -1397,7 +1396,6 @@ private fun PrimaryNavigationRail(
                             ) {
                                 Icon(
                                     painter = painterResource(destination.iconResource),
-                                    contentDescription = destinationLabel(destination),
                                     modifier = Modifier
                                         .size(iconGlyphSize)
                                         .scale(iconScale)
