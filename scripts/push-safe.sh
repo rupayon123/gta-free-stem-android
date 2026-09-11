@@ -135,13 +135,17 @@ else
 fi
 
 attempt=0
-max_attempts=3
+max_attempts=5
 
 while [ "$attempt" -lt "$max_attempts" ]; do
   attempt=$((attempt + 1))
   echo "Push attempt ${attempt}/${max_attempts}"
 
-  if git push "$UPSTREAM_REMOTE" "${CURRENT_BRANCH}:${UPSTREAM_BRANCH}"; then
+  push_output="$(git push "$UPSTREAM_REMOTE" "${CURRENT_BRANCH}:${UPSTREAM_BRANCH}" 2>&1 || true)"
+  push_exit_code=$?
+
+  if [ "$push_exit_code" -eq 0 ]; then
+    echo "$push_output"
     echo "Push succeeded."
 
     if ! git fetch --prune --quiet "$UPSTREAM_REMOTE"; then
@@ -159,7 +163,18 @@ while [ "$attempt" -lt "$max_attempts" ]; do
     exit 2
   fi
 
-  echo "Push attempt ${attempt}/${max_attempts} failed. Fetching and retrying."
+  echo "Push attempt ${attempt}/${max_attempts} failed with exit code ${push_exit_code}."
+  echo "$push_output"
+
+  if echo "$push_output" | grep -qiE "fatal: Not possible to fast-forward|non-fast-forward|Updates were rejected|failed to push"; then
+    echo "Detected push rejection. Re-syncing before retry."
+  elif echo "$push_output" | grep -qiE "authentication|Authentication failed|Permission denied|could not read Username|403"; then
+    echo "Detected authentication/permission failure. This requires manual fix before retry."
+    exit 1
+  else
+    echo "Unknown push failure; retrying after sync."
+  fi
+
   if ! git fetch --prune "$UPSTREAM_REMOTE"; then
     echo "Network/fetch failure after push attempt ${attempt}; retrying." >&2
     continue
