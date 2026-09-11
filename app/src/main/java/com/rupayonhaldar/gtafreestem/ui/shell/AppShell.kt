@@ -436,7 +436,7 @@ private fun PrimaryNavigationBar(
                             } else if (isSelected) {
                             navSelectedSettleDpAnimationSpec
                             } else {
-                            navSelectionDpAnimationSpec
+                            navUnselectedSettleDpAnimationSpec
                             },
                         label = "bottom-nav-item-offset-${destination.name}",
                     )
@@ -453,7 +453,7 @@ private fun PrimaryNavigationBar(
                             } else if (isSelected) {
                             navSelectedSettleDpAnimationSpec
                             } else {
-                            navSelectionDpAnimationSpec
+                            navUnselectedSettleDpAnimationSpec
                             },
                         label = "bottom-nav-item-height-${destination.name}",
                     )
@@ -483,7 +483,7 @@ private fun PrimaryNavigationBar(
                             } else if (isSelected) {
                             navSelectedSettleDpAnimationSpec
                             } else {
-                            navSelectionDpAnimationSpec
+                            navUnselectedSettleDpAnimationSpec
                             },
                         label = "bottom-nav-item-border-width-${destination.name}",
                     )
@@ -554,7 +554,7 @@ private fun PrimaryNavigationBar(
                             } else if (isSelected) {
                                 navSelectedSettleDpAnimationSpec
                                 } else {
-                                navSelectionDpAnimationSpec
+                                navUnselectedSettleDpAnimationSpec
                                 },
                             label = "bottom-nav-icon-lift-${destination.name}",
                     )
@@ -566,12 +566,12 @@ private fun PrimaryNavigationBar(
                         } else {
                             0f
                         },
-                            animationSpec = if (isActivePress) {
+                        animationSpec = if (isActivePress) {
                                 navPressFloatAnimationSpec
                                 } else if (isSelected) {
                                 navSelectedSettleFloatAnimationSpec
                                 } else {
-                                navSelectionFloatAnimationSpec
+                                navUnselectedSettleFloatAnimationSpec
                                 },
                             label = "bottom-nav-icon-elevation-${destination.name}",
                         )
@@ -1285,7 +1285,7 @@ private fun PrimaryNavigationRail(
                             } else if (isSelected) {
                             navSelectedSettleDpAnimationSpec
                             } else {
-                            navSelectionDpAnimationSpec
+                            navUnselectedSettleDpAnimationSpec
                             },
                         label = "rail-item-border-width-${destination.name}",
                     )
@@ -1356,7 +1356,7 @@ private fun PrimaryNavigationRail(
                                 } else if (isSelected) {
                                 navSelectedSettleDpAnimationSpec
                                 } else {
-                                navSelectionDpAnimationSpec
+                                navUnselectedSettleDpAnimationSpec
                                 },
                             label = "rail-icon-lift-${destination.name}",
                         )
@@ -1368,13 +1368,13 @@ private fun PrimaryNavigationRail(
                         } else {
                             0f
                         },
-                            animationSpec = if (isActivePress) {
-                                navPressFloatAnimationSpec
-                                } else if (isSelected) {
-                                navSelectedSettleFloatAnimationSpec
-                                } else {
-                                navSelectionFloatAnimationSpec
-                                },
+                        animationSpec = if (isActivePress) {
+                            navPressFloatAnimationSpec
+                            } else if (isSelected) {
+                            navSelectedSettleFloatAnimationSpec
+                            } else {
+                            navUnselectedSettleFloatAnimationSpec
+                            },
                             label = "rail-icon-elevation-${destination.name}",
                         )
                     val iconContainerScale by animateFloatAsState(
@@ -1387,13 +1387,13 @@ private fun PrimaryNavigationRail(
                         } else {
                             1f
                         },
-                            animationSpec = if (isActivePress) {
-                                navPressFloatAnimationSpec
-                                } else if (isSelected) {
-                                navSelectedSettleFloatAnimationSpec
-                                } else {
-                                navSelectionFloatAnimationSpec
-                                },
+                        animationSpec = if (isActivePress) {
+                            navPressFloatAnimationSpec
+                            } else if (isSelected) {
+                            navSelectedSettleFloatAnimationSpec
+                            } else {
+                            navUnselectedSettleFloatAnimationSpec
+                            },
                             label = "rail-icon-container-scale-${destination.name}",
                         )
                         val iconScale by animateFloatAsState(
@@ -1406,13 +1406,13 @@ private fun PrimaryNavigationRail(
                             } else {
                                 1f
                             },
-                            animationSpec = if (isActivePress) {
-                                navPressFloatAnimationSpec
-                                } else if (isSelected) {
-                                navSelectedSettleFloatAnimationSpec
-                                } else {
-                                navSelectionFloatAnimationSpec
-                                },
+                        animationSpec = if (isActivePress) {
+                            navPressFloatAnimationSpec
+                            } else if (isSelected) {
+                            navSelectedSettleFloatAnimationSpec
+                            } else {
+                            navUnselectedSettleFloatAnimationSpec
+                            },
                             label = "rail-icon-scale-${destination.name}",
                         )
                         val iconGlyphAlpha by animateFloatAsState(
@@ -1425,13 +1425,13 @@ private fun PrimaryNavigationRail(
                             } else {
                                 NAV_ICON_GLYPH_UNSELECTED_ALPHA
                             },
-                            animationSpec = if (isActivePress) {
-                                navPressFloatAnimationSpec
-                                } else if (isSelected) {
-                                navSelectedSettleFloatAnimationSpec
-                                } else {
-                                navSelectionFloatAnimationSpec
-                                },
+                        animationSpec = if (isActivePress) {
+                            navPressFloatAnimationSpec
+                            } else if (isSelected) {
+                            navSelectedSettleFloatAnimationSpec
+                            } else {
+                            navUnselectedSettleFloatAnimationSpec
+                            },
                             label = "rail-icon-glyph-alpha-${destination.name}",
                         )
                         val iconContainerAlpha by animateFloatAsState(
@@ -1447,7 +1447,7 @@ private fun PrimaryNavigationRail(
                                 } else if (isSelected) {
                                 navSelectedSettleFloatAnimationSpec
                                 } else {
-                                navSelectionFloatAnimationSpec
+                                navUnselectedSettleFloatAnimationSpec
                                 },
                             label = "rail-icon-container-alpha-${destination.name}",
                         )
@@ -1464,7 +1464,7 @@ private fun PrimaryNavigationRail(
                                 } else if (isSelected) {
                                 navSelectedSettleDpAnimationSpec
                                 } else {
-                                navSelectionDpAnimationSpec
+                                navUnselectedSettleDpAnimationSpec
                                 },
                             label = "rail-icon-glyph-size-${destination.name}",
                         )
@@ -1476,12 +1476,12 @@ private fun PrimaryNavigationRail(
                             } else {
                             NAV_ICON_FACE_UNSELECTED_SIZE.dp
                             },
-                            animationSpec = if (isActivePress) {
-                                navPressDpAnimationSpec
-                                } else if (isSelected) {
-                                navSelectedSettleDpAnimationSpec
-                                } else {
-                                navSelectionDpAnimationSpec
+                        animationSpec = if (isActivePress) {
+                            navPressDpAnimationSpec
+                            } else if (isSelected) {
+                            navSelectedSettleDpAnimationSpec
+                            } else {
+                            navUnselectedSettleDpAnimationSpec
                             },
                             label = "rail-icon-face-size-${destination.name}",
                         )
@@ -1604,12 +1604,12 @@ private fun PrimaryNavigationRail(
                             } else {
                                 NAV_ICON_HALO_SIZE_UNSELECTED.dp
                             },
-                            animationSpec = if (isActivePress) {
-                                navPressDpAnimationSpec
-                                } else if (isSelected) {
-                                navSelectedSettleDpAnimationSpec
-                                } else {
-                                navSelectionDpAnimationSpec
+                        animationSpec = if (isActivePress) {
+                            navPressDpAnimationSpec
+                            } else if (isSelected) {
+                            navSelectedSettleDpAnimationSpec
+                            } else {
+                            navUnselectedSettleDpAnimationSpec
                             },
                             label = "rail-icon-halo-size-${destination.name}",
                         )
@@ -1621,13 +1621,13 @@ private fun PrimaryNavigationRail(
                             } else {
                                 1f
                             },
-                            animationSpec = if (isActivePress) {
-                                navPressFloatAnimationSpec
-                                } else if (isSelected) {
-                                navSelectedSettleFloatAnimationSpec
-                                } else {
-                                navSelectionFloatAnimationSpec
-                                },
+                        animationSpec = if (isActivePress) {
+                            navPressFloatAnimationSpec
+                            } else if (isSelected) {
+                            navSelectedSettleFloatAnimationSpec
+                            } else {
+                            navUnselectedSettleFloatAnimationSpec
+                            },
                             label = "rail-icon-halo-scale-${destination.name}",
                         )
                         val iconHaloBorderWidth by animateDpAsState(
@@ -1641,7 +1641,7 @@ private fun PrimaryNavigationRail(
                                 } else if (isSelected) {
                                 navSelectedSettleDpAnimationSpec
                                 } else {
-                                navSelectionDpAnimationSpec
+                                navUnselectedSettleDpAnimationSpec
                                 },
                             label = "rail-icon-halo-border-width-${destination.name}",
                         )
@@ -1686,7 +1686,7 @@ private fun PrimaryNavigationRail(
                                 } else if (isSelected) {
                                 navSelectedSettleDpAnimationSpec
                                 } else {
-                                navSelectionDpAnimationSpec
+                                navUnselectedSettleDpAnimationSpec
                                 },
                             label = "rail-icon-ambient-glow-size-${destination.name}",
                         )
@@ -1703,7 +1703,7 @@ private fun PrimaryNavigationRail(
                                 } else if (isSelected) {
                                 navSelectedSettleFloatAnimationSpec
                                 } else {
-                                navSelectionFloatAnimationSpec
+                                navUnselectedSettleFloatAnimationSpec
                                 },
                             label = "rail-icon-ambient-glow-scale-${destination.name}",
                         )
