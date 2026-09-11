@@ -150,13 +150,12 @@ while [ "$attempt" -lt "$max_attempts" ]; do
     fi
 
     LOCAL_AFTER=$(git rev-parse "$CURRENT_BRANCH")
-    REMOTE_AFTER=$(git rev-parse "$UPSTREAM_PUSH_REF")
-    if [ "$LOCAL_AFTER" = "$REMOTE_AFTER" ]; then
-      echo "Verified remote includes local HEAD $(git rev-parse --short HEAD)"
+    if git merge-base --is-ancestor "$LOCAL_AFTER" "$UPSTREAM_PUSH_REF"; then
+      echo "Verified remote includes local HEAD $(git rev-parse --short "$CURRENT_BRANCH")"
       exit 0
     fi
 
-    echo "Push returned success, but remote HEAD differs. Investigate immediately." >&2
+    echo "Push returned success, but remote does not contain local HEAD. Investigate immediately." >&2
     exit 2
   fi
 
