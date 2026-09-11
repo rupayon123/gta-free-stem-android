@@ -2004,7 +2004,7 @@ private val navLabelUnselectedColorAnimationSpec = tween<Color>(162, easing = Fa
 private val navLabelAlphaAnimationSpec = tween<Float>(168, easing = FastOutSlowInEasing)
 private val navLabelScaleAnimationSpec = tween<Float>(176, easing = FastOutSlowInEasing)
 
-private const val NAV_UNSELECTED_LABEL_ALPHA = 0.67f
+private const val NAV_UNSELECTED_LABEL_ALPHA = 0.70f
 private const val NAV_LABEL_UNSELECTED_ALPHA = 0.74f
 private const val NAV_LABEL_UNSELECTED_PRESSED_ALPHA = 0.81f
 private const val NAV_LABEL_SELECTED_ALPHA = 1f

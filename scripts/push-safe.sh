@@ -208,8 +208,11 @@ fetch_with_retry() {
     attempt=$((attempt + 1))
 
     local fetch_output
-    fetch_output="$(git fetch --prune --quiet "$remote" 2>&1 || true)"
-    if [ $? -eq 0 ]; then
+    local fetch_status=0
+
+    fetch_output="$(git fetch --prune --quiet "$remote" 2>&1)"
+    fetch_status=$?
+    if [ "$fetch_status" -eq 0 ]; then
       return 0
     fi
 
