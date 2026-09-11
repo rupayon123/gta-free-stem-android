@@ -1937,10 +1937,10 @@ private val PrimaryDestination.testTag: String
     get() = "primary-navigation-${name.lowercase()}"
 
 private val navSelectionFloatAnimationSpec = tween<Float>(220, easing = FastOutSlowInEasing)
-private val navPressFloatAnimationSpec = tween<Float>(86, easing = FastOutSlowInEasing)
+private val navPressFloatAnimationSpec = tween<Float>(88, easing = FastOutSlowInEasing)
 private val navSelectionDpAnimationSpec = tween<Dp>(220, easing = FastOutSlowInEasing)
-private val navPressDpAnimationSpec = tween<Dp>(92, easing = FastOutSlowInEasing)
-private val navPressColorAnimationSpec = tween<Color>(90, easing = FastOutSlowInEasing)
+private val navPressDpAnimationSpec = tween<Dp>(95, easing = FastOutSlowInEasing)
+private val navPressColorAnimationSpec = tween<Color>(92, easing = FastOutSlowInEasing)
 private val navSelectionColorAnimationSpec = tween<Color>(228, easing = FastOutSlowInEasing)
 private val navSelectedSettleColorAnimationSpec = tween<Color>(232, easing = FastOutSlowInEasing)
 private val navSelectedSettleFloatAnimationSpec = tween<Float>(236, easing = FastOutSlowInEasing)
@@ -1949,10 +1949,10 @@ private val navUnselectedSettleColorAnimationSpec = tween<Color>(228, easing = F
 private val navUnselectedSettleFloatAnimationSpec = tween<Float>(236, easing = FastOutSlowInEasing)
 private val navUnselectedSettleDpAnimationSpec = tween<Dp>(236, easing = FastOutSlowInEasing)
 
-private const val NAV_UNSELECTED_LABEL_ALPHA = 0.73f
-private const val NAV_LABEL_UNSELECTED_ALPHA = 0.76f
+private const val NAV_UNSELECTED_LABEL_ALPHA = 0.72f
+private const val NAV_LABEL_UNSELECTED_ALPHA = 0.75f
 private const val NAV_LABEL_SELECTED_ALPHA = 1f
-private const val NAV_LABEL_UNSELECTED_VISIBILITY_ALPHA = 0.8f
+private const val NAV_LABEL_UNSELECTED_VISIBILITY_ALPHA = 0.79f
 private const val NAV_LABEL_UNSELECTED_SCALE = 1f
 private const val NAV_LABEL_SELECTED_SCALE = 1f
 private const val NAV_LABEL_COMPACT_FONT_SELECTED = 11.65f
@@ -2021,10 +2021,10 @@ private const val NAV_ICON_RAIL_HALO_SELECTED_SCALE = 1.006f
 private const val NAV_ICON_RAIL_HALO_SELECTED_PRESSED_SCALE = 1.012f
 private const val NAV_ICON_GLYPH_SELECTED_ALPHA = 0.99f
     private const val NAV_ICON_GLYPH_UNSELECTED_ALPHA = 0.93f
-private const val NAV_ICON_CONTAINER_SELECTED_ALPHA = 0.93f
-private const val NAV_ICON_CONTAINER_PRESSED_SELECTED_ALPHA = 0.88f
-private const val NAV_ICON_SELECTED_PRESSED_ELEVATION = 0.98f
-private const val NAV_ICON_SELECTED_ELEVATION = 1.08f
+private const val NAV_ICON_CONTAINER_SELECTED_ALPHA = 0.92f
+private const val NAV_ICON_CONTAINER_PRESSED_SELECTED_ALPHA = 0.87f
+private const val NAV_ICON_SELECTED_PRESSED_ELEVATION = 0.94f
+private const val NAV_ICON_SELECTED_ELEVATION = 1.05f
 private const val NAV_ICON_TINT_SELECTED_PRESSED_ALPHA = 0.96f
 private const val NAV_ICON_RAIL_CONTAINER_SELECTED_PRESS_SCALE = 1f
 private const val NAV_ICON_CONTAINER_SELECTED_SCALE = 1f
@@ -2054,7 +2054,7 @@ private const val NAV_NAV_ITEM_ACTIVE_SHADOW_LIGHT_ALPHA = 0.044f
 private const val NAV_ICON_FACE_GLOW_SELECTED_PRESSED_ALPHA = 0.038f
 private const val NAV_ICON_FACE_GLOW_SELECTED_ALPHA = 0.052f
 private const val NAV_ICON_HALO_SELECTED_PRESSED_ALPHA = 0.024f
-private const val NAV_ICON_HALO_SELECTED_ALPHA = 0.038f
+private const val NAV_ICON_HALO_SELECTED_ALPHA = 0.034f
 private const val NAV_ICON_HALO_HIGHLIGHT_SELECTED_ALPHA = 0.014f
 private const val NAV_ICON_AMBIENT_GLOW_SELECTED_ALPHA = 0.052f
 private const val NAV_ICON_AMBIENT_GLOW_SELECTED_PRESSED_ALPHA = 0.028f
@@ -2082,7 +2082,7 @@ private const val NAV_ICON_HALO_HIGHLIGHT_PRESSED_ALPHA = 0.018f
 private const val NAV_ICON_HALO_SIZE_UNSELECTED = 20.9f
 private const val NAV_ICON_HALO_SIZE_SELECTED = 31.2f
 private const val NAV_ICON_HALO_SIZE_SELECTED_PRESSED = 30.5f
-private const val NAV_SHELL_SURFACE_DARK_ALPHA = 0.938f
+private const val NAV_SHELL_SURFACE_DARK_ALPHA = 0.936f
 private const val NAV_SHELL_SURFACE_LIGHT_ALPHA = 0.968f
 private const val NAV_SHELL_BAR_OUTER_BORDER_WIDTH = 0.168f
 private const val NAV_SHELL_RAIL_OUTER_BORDER_WIDTH = 0.232f
