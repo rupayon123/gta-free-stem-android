@@ -1853,7 +1853,11 @@ private fun DestinationLabel(
         NAV_LABEL_SELECTED_SCALE
     }
     val destinationSelectedScale = if (isActivePress) {
-        NAV_LABEL_SELECTED_PRESSED_SCALE
+        if (compact) {
+            NAV_LABEL_COMPACT_SELECTED_PRESSED_SCALE
+        } else {
+            NAV_LABEL_SELECTED_PRESSED_SCALE
+        }
     } else {
         selectedScale
     }
@@ -1890,7 +1894,7 @@ private fun DestinationLabel(
     }
     val labelColor by animateColorAsState(
         targetValue = when {
-            isSelected && isActivePress -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_LABEL_SELECTED_ALPHA * 0.96f)
+            isSelected && isActivePress -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_LABEL_SELECTED_ALPHA * NAV_LABEL_SELECTED_PRESSED_ALPHA)
             isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_LABEL_SELECTED_ALPHA)
             isPressed -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = NAV_LABEL_UNSELECTED_PRESSED_ALPHA)
             else -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = NAV_LABEL_UNSELECTED_ALPHA)
@@ -2004,11 +2008,13 @@ private const val NAV_UNSELECTED_LABEL_ALPHA = 0.64f
 private const val NAV_LABEL_UNSELECTED_ALPHA = 0.7f
 private const val NAV_LABEL_UNSELECTED_PRESSED_ALPHA = 0.76f
 private const val NAV_LABEL_SELECTED_ALPHA = 1f
+private const val NAV_LABEL_SELECTED_PRESSED_ALPHA = 0.985f
 private const val NAV_LABEL_UNSELECTED_VISIBILITY_ALPHA = 0.72f
 private const val NAV_LABEL_UNSELECTED_PRESSED_OFFSET_DP = -0.15f
 private const val NAV_LABEL_UNSELECTED_SCALE = 1f
 private const val NAV_LABEL_SELECTED_SCALE = 1.03f
 private const val NAV_LABEL_SELECTED_PRESSED_SCALE = 1.014f
+private const val NAV_LABEL_COMPACT_SELECTED_PRESSED_SCALE = 1.02f
 private const val NAV_LABEL_COMPACT_FONT_SELECTED = 12.05f
 private const val NAV_LABEL_COMPACT_FONT_UNSELECTED = 11.1f
 private const val NAV_LABEL_COMPACT_LINE_HEIGHT_SELECTED = 13.90f
