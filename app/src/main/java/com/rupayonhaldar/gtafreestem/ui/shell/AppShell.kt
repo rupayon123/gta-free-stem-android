@@ -1832,7 +1832,7 @@ private fun DestinationLabel(
     } else {
         NAV_LABEL_SELECTED_SCALE
     }
-    val selectedFontWeight = if (isSelected) FontWeight.Medium else FontWeight.Medium
+    val selectedFontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal
     val unselectedLetterSpacing = if (compact) {
         NAV_LABEL_COMPACT_UNSELECTED_LETTER_SPACING
     } else {
@@ -1950,7 +1950,7 @@ private val navUnselectedSettleFloatAnimationSpec = tween<Float>(210, easing = F
 private val navUnselectedSettleDpAnimationSpec = tween<Dp>(210, easing = FastOutSlowInEasing)
 
 private const val NAV_UNSELECTED_LABEL_ALPHA = 0.64f
-private const val NAV_LABEL_UNSELECTED_ALPHA = 0.66f
+private const val NAV_LABEL_UNSELECTED_ALPHA = 0.7f
 private const val NAV_LABEL_SELECTED_ALPHA = 1f
 private const val NAV_LABEL_UNSELECTED_VISIBILITY_ALPHA = 0.72f
 private const val NAV_LABEL_UNSELECTED_SCALE = 1f
