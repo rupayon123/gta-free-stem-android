@@ -483,7 +483,7 @@ private fun PrimaryNavigationBar(
                         selected = isSelected,
                         onClick = {
                             if (!isSelected) {
-                                haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                                haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                                 onDestinationSelected(destination)
                             }
                         },
@@ -1270,7 +1270,7 @@ private fun PrimaryNavigationRail(
                         selected = isSelected,
                         onClick = {
                             if (!isSelected) {
-                                haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                                haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                                 onDestinationSelected(destination)
                             }
                         },
