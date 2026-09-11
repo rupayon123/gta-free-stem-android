@@ -465,10 +465,8 @@ private fun PrimaryNavigationBar(
                     val activeItemBorderWidth by animateDpAsState(
                         targetValue = if (isSelected) {
                             NAV_NAV_ITEM_ACTIVE_BORDER_SELECTED.dp
-                        } else if (isPressed) {
-                            NAV_NAV_ITEM_ACTIVE_BORDER_PRESSED.dp
                         } else {
-                            NAV_NAV_ITEM_ACTIVE_BORDER_UNSELECTED.dp
+                            0.dp
                         },
                         animationSpec = if (isPressed) {
                             navPressDpAnimationSpec
@@ -910,7 +908,7 @@ private fun PrimaryNavigationBar(
                                         ),
                                 )
                             }
-                            if (isSelected || isPressed) {
+                            if (isSelected) {
                                 val innerRimSize = (iconHaloSize - NAV_ICON_INNER_RIM_INNER_PADDING.dp).coerceAtLeast(1.dp)
                                 Box(
                                     modifier = Modifier
@@ -1252,10 +1250,8 @@ private fun PrimaryNavigationRail(
                     val activeItemBorderWidth by animateDpAsState(
                         targetValue = if (isSelected) {
                             NAV_NAV_ITEM_ACTIVE_BORDER_SELECTED.dp
-                        } else if (isPressed) {
-                            NAV_NAV_ITEM_ACTIVE_BORDER_PRESSED.dp
                         } else {
-                            NAV_NAV_ITEM_ACTIVE_BORDER_UNSELECTED.dp
+                            0.dp
                         },
                         animationSpec = if (isPressed) {
                             navPressDpAnimationSpec
@@ -1721,7 +1717,7 @@ private fun PrimaryNavigationRail(
                                         ),
                                 )
                             }
-                            if (isSelected || isPressed) {
+                            if (isSelected) {
                                 val innerRimSize = (iconHaloSize - NAV_ICON_INNER_RIM_INNER_PADDING.dp).coerceAtLeast(1.dp)
                                 Box(
                                     modifier = Modifier
