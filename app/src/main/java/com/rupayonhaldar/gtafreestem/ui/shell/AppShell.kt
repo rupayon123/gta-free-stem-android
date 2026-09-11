@@ -1936,38 +1936,38 @@ private fun DestinationLabel(
 private val PrimaryDestination.testTag: String
     get() = "primary-navigation-${name.lowercase()}"
 
-private val navSelectionFloatAnimationSpec = tween<Float>(228, easing = FastOutSlowInEasing)
-private val navPressFloatAnimationSpec = tween<Float>(90, easing = FastOutSlowInEasing)
-private val navSelectionDpAnimationSpec = tween<Dp>(228, easing = FastOutSlowInEasing)
-private val navPressDpAnimationSpec = tween<Dp>(96, easing = FastOutSlowInEasing)
-private val navPressColorAnimationSpec = tween<Color>(92, easing = FastOutSlowInEasing)
-private val navSelectionColorAnimationSpec = tween<Color>(236, easing = FastOutSlowInEasing)
-private val navSelectedSettleColorAnimationSpec = tween<Color>(238, easing = FastOutSlowInEasing)
-private val navSelectedSettleFloatAnimationSpec = tween<Float>(246, easing = FastOutSlowInEasing)
-private val navSelectedSettleDpAnimationSpec = tween<Dp>(244, easing = FastOutSlowInEasing)
-private val navUnselectedSettleColorAnimationSpec = tween<Color>(236, easing = FastOutSlowInEasing)
-private val navUnselectedSettleFloatAnimationSpec = tween<Float>(246, easing = FastOutSlowInEasing)
-private val navUnselectedSettleDpAnimationSpec = tween<Dp>(244, easing = FastOutSlowInEasing)
+private val navSelectionFloatAnimationSpec = tween<Float>(220, easing = FastOutSlowInEasing)
+private val navPressFloatAnimationSpec = tween<Float>(80, easing = FastOutSlowInEasing)
+private val navSelectionDpAnimationSpec = tween<Dp>(220, easing = FastOutSlowInEasing)
+private val navPressDpAnimationSpec = tween<Dp>(88, easing = FastOutSlowInEasing)
+private val navPressColorAnimationSpec = tween<Color>(84, easing = FastOutSlowInEasing)
+private val navSelectionColorAnimationSpec = tween<Color>(228, easing = FastOutSlowInEasing)
+private val navSelectedSettleColorAnimationSpec = tween<Color>(232, easing = FastOutSlowInEasing)
+private val navSelectedSettleFloatAnimationSpec = tween<Float>(236, easing = FastOutSlowInEasing)
+private val navSelectedSettleDpAnimationSpec = tween<Dp>(236, easing = FastOutSlowInEasing)
+private val navUnselectedSettleColorAnimationSpec = tween<Color>(228, easing = FastOutSlowInEasing)
+private val navUnselectedSettleFloatAnimationSpec = tween<Float>(236, easing = FastOutSlowInEasing)
+private val navUnselectedSettleDpAnimationSpec = tween<Dp>(236, easing = FastOutSlowInEasing)
 
-private const val NAV_UNSELECTED_LABEL_ALPHA = 0.77f
-private const val NAV_LABEL_UNSELECTED_ALPHA = 0.81f
+private const val NAV_UNSELECTED_LABEL_ALPHA = 0.76f
+private const val NAV_LABEL_UNSELECTED_ALPHA = 0.79f
 private const val NAV_LABEL_SELECTED_ALPHA = 1f
-private const val NAV_LABEL_UNSELECTED_VISIBILITY_ALPHA = 0.84f
+private const val NAV_LABEL_UNSELECTED_VISIBILITY_ALPHA = 0.82f
 private const val NAV_LABEL_UNSELECTED_SCALE = 1f
 private const val NAV_LABEL_SELECTED_SCALE = 1f
 private const val NAV_LABEL_COMPACT_FONT_SELECTED = 11.65f
 private const val NAV_LABEL_COMPACT_FONT_UNSELECTED = 11.5f
-private const val NAV_LABEL_COMPACT_LINE_HEIGHT_SELECTED = 14.00f
-private const val NAV_LABEL_COMPACT_LINE_HEIGHT_UNSELECTED = 13.28f
-private const val NAV_LABEL_RAIL_FONT_SELECTED = 11.75f
-private const val NAV_LABEL_RAIL_FONT_UNSELECTED = 11.58f
-private const val NAV_LABEL_RAIL_LINE_HEIGHT_SELECTED = 13.64f
-private const val NAV_LABEL_RAIL_LINE_HEIGHT_UNSELECTED = 12.84f
+private const val NAV_LABEL_COMPACT_LINE_HEIGHT_SELECTED = 13.90f
+private const val NAV_LABEL_COMPACT_LINE_HEIGHT_UNSELECTED = 13.18f
+private const val NAV_LABEL_RAIL_FONT_SELECTED = 11.70f
+private const val NAV_LABEL_RAIL_FONT_UNSELECTED = 11.55f
+private const val NAV_LABEL_RAIL_LINE_HEIGHT_SELECTED = 13.60f
+private const val NAV_LABEL_RAIL_LINE_HEIGHT_UNSELECTED = 12.76f
 private const val NAV_LABEL_SELECTED_LETTER_SPACING = 0.0f
-private const val NAV_LABEL_UNSELECTED_LETTER_SPACING = 0.009f
+private const val NAV_LABEL_UNSELECTED_LETTER_SPACING = 0.008f
 private const val NAV_LABEL_COMPACT_SELECTED_LETTER_SPACING = 0.0f
 private const val NAV_LABEL_COMPACT_UNSELECTED_LETTER_SPACING = 0.011f
-private const val NAV_LABEL_OFFSET_SELECTED_DP = -0.005f
+private const val NAV_LABEL_OFFSET_SELECTED_DP = 0f
 private const val NAV_LABEL_COMPACT_OFFSET_SELECTED_DP = 0f
 private const val NAV_LABEL_COMPACT_SELECTED_SCALE = 1f
 private const val NAV_BOTTOM_NAV_BAR_OUTER_HORIZONTAL_PADDING = 12f
