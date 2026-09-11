@@ -1598,7 +1598,7 @@ private val navUnselectedSettleColorAnimationSpec = tween<Color>(282, easing = F
 private val navUnselectedSettleFloatAnimationSpec = tween<Float>(282, easing = FastOutSlowInEasing)
 private val navUnselectedSettleDpAnimationSpec = tween<Dp>(282, easing = FastOutSlowInEasing)
 
-private const val NAV_UNSELECTED_LABEL_ALPHA = 0.74f
+private const val NAV_UNSELECTED_LABEL_ALPHA = 0.76f
     private const val NAV_LABEL_UNSELECTED_ALPHA = 0.88f
 private const val NAV_LABEL_SELECTED_ALPHA = 1f
 private const val NAV_LABEL_UNSELECTED_VISIBILITY_ALPHA = 0.900f
@@ -1780,12 +1780,12 @@ private const val NAV_SHELL_GLOW_DARK_ALPHA = 0.083f
 private const val NAV_SHELL_GLOW_LIGHT_ALPHA = 0.072f
 private const val NAV_SHELL_CONTAINER_DARK_ALPHA = 0.852f
 private const val NAV_SHELL_CONTAINER_LIGHT_ALPHA = 0.952f
-private const val NAV_SHELL_SURFACE_TOP_GLOW_DARK_ALPHA = 0.0215f
-private const val NAV_SHELL_SURFACE_TOP_GLOW_LIGHT_ALPHA = 0.0205f
+    private const val NAV_SHELL_SURFACE_TOP_GLOW_DARK_ALPHA = 0.0250f
+    private const val NAV_SHELL_SURFACE_TOP_GLOW_LIGHT_ALPHA = 0.0235f
 private const val NAV_SHELL_SURFACE_EDGE_DARK_ALPHA = 0.0310f
 private const val NAV_SHELL_SURFACE_EDGE_LIGHT_ALPHA = 0.0145f
-private const val NAV_SHELL_TOP_RIM_HEIGHT = 1.35f
-private const val NAV_SHELL_TOP_RIM_DARK_ALPHA = 0.176f
-private const val NAV_SHELL_TOP_RIM_LIGHT_ALPHA = 0.131f
+    private const val NAV_SHELL_TOP_RIM_HEIGHT = 1.45f
+    private const val NAV_SHELL_TOP_RIM_DARK_ALPHA = 0.188f
+    private const val NAV_SHELL_TOP_RIM_LIGHT_ALPHA = 0.142f
 	private const val NAV_SHELL_BAR_CORNER = 30.85f
 	private const val NAV_SHELL_RAIL_CORNER = 29.85f
