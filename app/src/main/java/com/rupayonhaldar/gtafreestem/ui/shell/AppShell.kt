@@ -29,6 +29,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -60,6 +61,7 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
+import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -961,6 +963,7 @@ private fun PrimaryNavigationBar(
                             ) {
                                 Icon(
                                     painter = painterResource(destination.iconResource),
+                                    contentDescription = null,
                                     modifier = Modifier
                                         .size(iconGlyphSize)
                                         .scale(iconScale)
@@ -1499,7 +1502,7 @@ private fun PrimaryNavigationRail(
                             animationSpec = if (isActivePress) {
                                 navPressColorAnimationSpec
                             } else {
-                                iconColorAnimationSpec,
+                                iconColorAnimationSpec
                             },
                             label = "rail-icon-background-${destination.name}",
                         )
@@ -1796,6 +1799,7 @@ private fun PrimaryNavigationRail(
                             ) {
                                 Icon(
                                     painter = painterResource(destination.iconResource),
+                                    contentDescription = null,
                                     modifier = Modifier
                                         .size(iconGlyphSize)
                                         .scale(iconScale)
