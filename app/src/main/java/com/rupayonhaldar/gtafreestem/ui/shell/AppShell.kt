@@ -739,7 +739,7 @@ private fun PrimaryNavigationBar(
                             ) {
                                 Icon(
                                     painter = painterResource(destination.iconResource),
-                                    contentDescription = null,
+                                    contentDescription = destinationLabel(destination),
                                     modifier = Modifier
                                         .size(iconGlyphSize)
                                         .scale(iconScale)
@@ -1386,7 +1386,7 @@ private fun PrimaryNavigationRail(
                             ) {
                                 Icon(
                                     painter = painterResource(destination.iconResource),
-                                    contentDescription = null,
+                                    contentDescription = destinationLabel(destination),
                                     modifier = Modifier
                                         .size(iconGlyphSize)
                                         .scale(iconScale)
