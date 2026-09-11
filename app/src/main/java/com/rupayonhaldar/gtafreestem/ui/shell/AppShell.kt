@@ -51,7 +51,9 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
@@ -143,6 +145,7 @@ private fun PrimaryNavigationBar(
     destinationLabel: (PrimaryDestination) -> String,
 ) {
     val isDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
+    val haptic = LocalHapticFeedback.current
     val barShape = RoundedCornerShape(
         topStart = NAV_SHELL_BAR_CORNER.dp,
         topEnd = NAV_SHELL_BAR_CORNER.dp,
@@ -395,7 +398,12 @@ private fun PrimaryNavigationBar(
                     )
                     NavigationBarItem(
                         selected = isSelected,
-                        onClick = { onDestinationSelected(destination) },
+                        onClick = {
+                            if (!isSelected) {
+                                haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                                onDestinationSelected(destination)
+                            }
+                        },
                         interactionSource = destinationInteractionSource,
                             modifier = Modifier
                             .testTag(destination.testTag)
@@ -771,6 +779,7 @@ private fun PrimaryNavigationRail(
     destinationLabel: (PrimaryDestination) -> String,
 ) {
     val isDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
+    val haptic = LocalHapticFeedback.current
     val railShape = RoundedCornerShape(NAV_SHELL_RAIL_CORNER.dp)
     val railSurface = if (isDark) {
         MaterialTheme.colorScheme.surface.copy(alpha = NAV_SHELL_SURFACE_DARK_ALPHA)
@@ -1012,7 +1021,12 @@ private fun PrimaryNavigationRail(
                     )
                     NavigationRailItem(
                         selected = isSelected,
-                        onClick = { onDestinationSelected(destination) },
+                        onClick = {
+                            if (!isSelected) {
+                                haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                                onDestinationSelected(destination)
+                            }
+                        },
                         interactionSource = destinationInteractionSource,
                         modifier = Modifier
                             .testTag(destination.testTag)
