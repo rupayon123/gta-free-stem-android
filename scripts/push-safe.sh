@@ -9,9 +9,9 @@ cd "$PROJECT_ROOT"
 print_usage() {
   printf 'Usage: %s <commit-message> [--with-untracked]\n' "$(basename "$0")"
   printf 'Example: %s "Refine nav tint contrast"\n' "$(basename "$0")"
-  printf '\n' 
-  printf 'All tracked and untracked file changes are included by default.\n'
-  printf 'If --with-untracked is passed, the behavior is explicit and unchanged (legacy compatibility).\n'
+  printf '\n'
+  printf 'Tracked and untracked file changes are included by default.\n'
+  printf 'If --with-untracked is passed, behavior is explicit for legacy callers.\n'
 }
 
 if [ "$#" -lt 1 ]; then
@@ -29,21 +29,12 @@ if [ -n "$INCLUDE_UNTRACKED" ] && [ "$INCLUDE_UNTRACKED" != "--with-untracked" ]
   exit 2
 fi
 
-check_sync_state() {
-  LOCAL_AHEAD=$(git rev-list --count "${UPSTREAM}..${CURRENT_BRANCH}" || echo 0)
-  REMOTE_AHEAD=$(git rev-list --count "${CURRENT_BRANCH}..${UPSTREAM}" || echo 0)
+has_changes() {
+  [ -n "$(git status --short --untracked-files=normal)" ]
 }
 
 has_staged_changes() {
   [ -n "$(git diff --cached --name-only)" ]
-}
-
-has_untracked_changes() {
-  [ -n "$(git status --short --untracked-files=normal | sed -n '/^??/p' | head -n 1)" ]
-}
-
-has_tracked_changes() {
-  [ -n "$(git status --short --untracked-files=no)" ]
 }
 
 if [ ! -d .git ]; then
@@ -57,49 +48,56 @@ if [ -z "$CURRENT_BRANCH" ] || [ "$CURRENT_BRANCH" = "HEAD" ]; then
   exit 1
 fi
 
-if ! git remote | grep -qx origin; then
+if ! git remote get-url origin >/dev/null 2>&1; then
   echo "origin remote is required for push-safe" >&2
   exit 1
 fi
 
 UPSTREAM="origin/$CURRENT_BRANCH"
 
-echo "Syncing branch ${CURRENT_BRANCH} with ${UPSTREAM}"
-git fetch origin
-
-if git show-ref --verify --quiet "refs/remotes/$UPSTREAM"; then
-  check_sync_state
-
-  if [ "$REMOTE_AHEAD" -gt 0 ]; then
-    if [ "$LOCAL_AHEAD" -gt 0 ]; then
-      echo "Branch is diverged from ${UPSTREAM}; rebasing to keep history linear."
-    else
-      echo "Branch is behind ${UPSTREAM}; rebasing to pick up remote commits."
-    fi
-    git pull --rebase origin "$CURRENT_BRANCH"
+sync_with_upstream() {
+  if ! git show-ref --verify --quiet "refs/remotes/$UPSTREAM"; then
+    return 0
   fi
+
+  local_ahead=$(git rev-list --count "${UPSTREAM}..${CURRENT_BRANCH}" || echo 0)
+  remote_ahead=$(git rev-list --count "${CURRENT_BRANCH}..${UPSTREAM}" || echo 0)
+
+  if [ "$remote_ahead" -gt 0 ] && [ "$local_ahead" -gt 0 ]; then
+    echo "Branch is diverged from ${UPSTREAM}; rebasing to keep history linear."
+    if ! git pull --rebase --autostash origin "$CURRENT_BRANCH"; then
+      echo "Rebase failed while resolving divergence. Resolve conflicts and rerun." >&2
+      return 1
+    fi
+  elif [ "$remote_ahead" -gt 0 ]; then
+    echo "Branch is behind ${UPSTREAM}; rebasing onto remote."
+    if ! git pull --rebase --autostash origin "$CURRENT_BRANCH"; then
+      echo "Rebase failed while syncing from ${UPSTREAM}. Resolve conflicts and rerun." >&2
+      return 1
+    fi
+  fi
+}
+
+echo "Syncing branch ${CURRENT_BRANCH} with ${UPSTREAM}"
+if ! git fetch --prune --quiet origin; then
+  echo "Could not fetch from origin before syncing. Check network/auth first." >&2
+  exit 1
 fi
 
-if [ -z "$(git status --short)" ]; then
-  echo "No changes detected; nothing new to commit."
-else
-  echo "Including tracked + untracked changes for commit."
+if ! sync_with_upstream; then
+  exit 1
+fi
+
+if has_changes; then
+  echo "Staging tracked + untracked changes for commit."
   git add -A
-
   if ! has_staged_changes; then
-    if has_untracked_changes && [ "$INCLUDE_UNTRACKED" != "--with-untracked" ]; then
-      echo "No tracked file changes were staged for commit. Set --with-untracked to include new files."
-      exit 1
-    fi
-    echo "No changed tracked files to commit."
-  else
-    git commit -m "$COMMIT_MESSAGE"
-  fi
-
-  if [ "$INCLUDE_UNTRACKED" = "--with-untracked" ] && [ -z "$(git diff --cached --name-only)" ]; then
-    echo "No tracked/untracked changes were available to commit." >&2
+    echo "No changes were staged." >&2
     exit 1
   fi
+  git commit -m "$COMMIT_MESSAGE"
+else
+  echo "No changes detected; nothing new to commit."
 fi
 
 attempt=0
@@ -109,13 +107,16 @@ while [ "$attempt" -lt "$max_attempts" ]; do
   attempt=$((attempt + 1))
   echo "Push attempt ${attempt}/${max_attempts}"
 
-  if git push origin "$CURRENT_BRANCH"; then
+  if git push --set-upstream origin "$CURRENT_BRANCH"; then
     echo "Push succeeded."
 
-    git fetch origin
+    if ! git fetch --prune --quiet origin; then
+      echo "Push succeeded, but refresh failed; remote confirmation will be skipped." >&2
+      exit 2
+    fi
+
     LOCAL_AFTER=$(git rev-parse "$CURRENT_BRANCH")
     REMOTE_AFTER=$(git rev-parse "$UPSTREAM")
-
     if [ "$LOCAL_AFTER" = "$REMOTE_AFTER" ]; then
       echo "Verified remote includes local HEAD $(git rev-parse --short HEAD)"
       exit 0
@@ -125,19 +126,15 @@ while [ "$attempt" -lt "$max_attempts" ]; do
     exit 2
   fi
 
-  echo "Push attempt ${attempt}/${max_attempts} failed, reconciling remote state and retrying..."
-  git fetch origin
-  check_sync_state
-
-  if [ "$REMOTE_AHEAD" -gt 0 ]; then
-    if [ "$LOCAL_AHEAD" -eq 0 ]; then
-      echo "Remote branch moved forward while pushing. Rebasing and retrying."
-    else
-      echo "Branch diverged from remote; rebasing local commits and retrying."
-    fi
-    git pull --rebase origin "$CURRENT_BRANCH"
+  echo "Push attempt ${attempt}/${max_attempts} failed. Fetching and retrying."
+  if ! git fetch --prune origin; then
+    echo "Network/fetch failure after push attempt ${attempt}; retrying." >&2
+    continue
   fi
 
+  if ! sync_with_upstream; then
+    exit 1
+  fi
 done
 
 echo "Push failed after ${max_attempts} attempts. Resolve any local errors and try again." >&2
