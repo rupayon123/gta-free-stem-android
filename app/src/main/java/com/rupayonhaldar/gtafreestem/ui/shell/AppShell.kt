@@ -698,8 +698,6 @@ private fun PrimaryNavigationBar(
                                 MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_HALO_SELECTED_PRESSED_ALPHA)
                             } else if (isSelected) {
                                 MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_HALO_SELECTED_ALPHA)
-                            } else if (isPressed) {
-                                MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_HALO_PRESSED_ALPHA)
                             } else {
                                 Color.Transparent
                             },
@@ -734,8 +732,6 @@ private fun PrimaryNavigationBar(
                                 MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_HALO_HIGHLIGHT_PRESSED_ALPHA)
                             } else if (isSelected) {
                                 MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_HALO_HIGHLIGHT_SELECTED_ALPHA)
-                            } else if (isPressed) {
-                                MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_HALO_HIGHLIGHT_PRESSED_ONLY_ALPHA)
                             } else {
                                 Color.Transparent
                             },
@@ -747,8 +743,6 @@ private fun PrimaryNavigationBar(
                                 NAV_ICON_HALO_SIZE_SELECTED_PRESSED.dp
                             } else if (isSelected) {
                                 NAV_ICON_HALO_SIZE_SELECTED.dp
-                            } else if (isPressed) {
-                                NAV_ICON_HALO_SIZE_PRESSED.dp
                             } else {
                                 NAV_ICON_HALO_SIZE_UNSELECTED.dp
                             },
@@ -766,8 +760,6 @@ private fun PrimaryNavigationBar(
                                 NAV_ICON_HALO_SELECTED_PRESSED_SCALE
                             } else if (isSelected) {
                                 NAV_ICON_HALO_SELECTED_SCALE
-                            } else if (isPressed) {
-                                NAV_ICON_HALO_PRESSED_SCALE
                             } else {
                                 1f
                             },
@@ -781,7 +773,11 @@ private fun PrimaryNavigationBar(
                             label = "bottom-nav-icon-halo-scale-${destination.name}",
                         )
                         val iconHaloBorderWidth by animateDpAsState(
-                            targetValue = if (isSelected) NAV_ICON_HALO_BORDER_SELECTED.dp else if (isPressed) NAV_ICON_HALO_BORDER_PRESSED.dp else NAV_ICON_HALO_BORDER_UNSELECTED.dp,
+                            targetValue = if (isSelected) {
+                                NAV_ICON_HALO_BORDER_SELECTED.dp
+                            } else {
+                                0.dp
+                            },
                             animationSpec = if (isPressed) {
                                 navPressDpAnimationSpec
                                 } else if (isSelected) {
@@ -794,7 +790,6 @@ private fun PrimaryNavigationBar(
                         val iconShadowColor by animateColorAsState(
                             targetValue = when {
                                 isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_SHADOW_SELECTED_PRESSED_ALPHA)
-                                isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_ICON_SHADOW_PRESSED_ALPHA)
                                 isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_SHADOW_SELECTED_ALPHA)
                                 else -> Color.Transparent
                             },
@@ -870,8 +865,6 @@ private fun PrimaryNavigationBar(
                                 width = iconHaloBorderWidth,
                                     color = if (isSelected) {
                                             MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_HALO_BORDER_SELECTED_ALPHA)
-                                        } else if (isPressed) {
-                                            MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_HALO_BORDER_PRESSED_ALPHA)
                                         } else {
                                             Color.Transparent
                                         },
@@ -1494,8 +1487,6 @@ private fun PrimaryNavigationRail(
                                 MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_HALO_SELECTED_PRESSED_ALPHA)
                             } else if (isSelected) {
                                 MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_HALO_SELECTED_ALPHA)
-                            } else if (isPressed) {
-                                MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_HALO_PRESSED_ALPHA)
                             } else {
                                 Color.Transparent
                             },
@@ -1536,8 +1527,6 @@ private fun PrimaryNavigationRail(
                                 MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_HALO_HIGHLIGHT_PRESSED_ALPHA)
                             } else if (isSelected) {
                                 MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_HALO_HIGHLIGHT_SELECTED_ALPHA)
-                            } else if (isPressed) {
-                                MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_HALO_HIGHLIGHT_PRESSED_ONLY_ALPHA)
                             } else {
                                 Color.Transparent
                             },
@@ -1555,8 +1544,6 @@ private fun PrimaryNavigationRail(
                                 NAV_ICON_HALO_SIZE_SELECTED_PRESSED.dp
                             } else if (isSelected) {
                                 NAV_ICON_HALO_SIZE_SELECTED.dp
-                            } else if (isPressed) {
-                                NAV_ICON_HALO_SIZE_PRESSED.dp
                             } else {
                                 NAV_ICON_HALO_SIZE_UNSELECTED.dp
                             },
@@ -1574,8 +1561,6 @@ private fun PrimaryNavigationRail(
                                 NAV_ICON_RAIL_HALO_SELECTED_PRESSED_SCALE
                             } else if (isSelected) {
                                 NAV_ICON_RAIL_HALO_SELECTED_SCALE
-                            } else if (isPressed) {
-                                NAV_ICON_RAIL_HALO_PRESSED_SCALE
                             } else {
                                 1f
                             },
@@ -1589,7 +1574,11 @@ private fun PrimaryNavigationRail(
                             label = "rail-icon-halo-scale-${destination.name}",
                         )
                         val iconHaloBorderWidth by animateDpAsState(
-                            targetValue = if (isSelected) NAV_ICON_HALO_BORDER_SELECTED.dp else if (isPressed) NAV_ICON_HALO_BORDER_PRESSED.dp else NAV_ICON_HALO_BORDER_UNSELECTED.dp,
+                            targetValue = if (isSelected) {
+                                NAV_ICON_HALO_BORDER_SELECTED.dp
+                            } else {
+                                0.dp
+                            },
                             animationSpec = if (isPressed) {
                                 navPressDpAnimationSpec
                                 } else if (isSelected) {
@@ -1602,7 +1591,6 @@ private fun PrimaryNavigationRail(
                         val iconShadowColor by animateColorAsState(
                             targetValue = when {
                                 isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_SHADOW_SELECTED_PRESSED_ALPHA)
-                                isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_ICON_SHADOW_PRESSED_ALPHA)
                                 isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_SHADOW_SELECTED_ALPHA)
                                 else -> Color.Transparent
                             },
@@ -1677,8 +1665,6 @@ private fun PrimaryNavigationRail(
                                         width = iconHaloBorderWidth,
                                     color = if (isSelected) {
                                             MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_HALO_BORDER_SELECTED_ALPHA)
-                                        } else if (isPressed) {
-                                            MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_HALO_BORDER_PRESSED_ALPHA)
                                         } else {
                                             Color.Transparent
                                         },
@@ -1815,11 +1801,6 @@ private fun DestinationLabel(
     } else {
         NAV_LABEL_SELECTED_PRESS_SCALE
     }
-    val pressedScale = if (compact) {
-        NAV_LABEL_COMPACT_PRESS_SCALE
-    } else {
-        NAV_LABEL_PRESS_SCALE
-    }
     val selectedFontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Medium
     val unselectedLetterSpacing = if (compact) {
         NAV_LABEL_COMPACT_UNSELECTED_LETTER_SPACING
@@ -1868,7 +1849,6 @@ private fun DestinationLabel(
     val labelAlpha by animateFloatAsState(
         targetValue = when {
             isPressed && isSelected -> NAV_LABEL_SELECTED_PRESS_ALPHA_VISIBILITY
-            isPressed && !isSelected -> NAV_LABEL_PRESS_ALPHA
             isSelected -> 1f
             else -> NAV_LABEL_UNSELECTED_VISIBILITY_ALPHA
         },
@@ -1884,7 +1864,6 @@ private fun DestinationLabel(
     val labelOffset by animateDpAsState(
         targetValue = when {
             isSelected && isPressed -> selectedPressOffsetDp.dp
-            isPressed && !isSelected -> unselectedPressOffsetDp.dp
             isSelected -> selectedOffsetDp.dp
             else -> 0.dp
         },
@@ -1900,7 +1879,6 @@ private fun DestinationLabel(
     val labelScale by animateFloatAsState(
         targetValue = when {
             isPressed && isSelected -> selectedPressedScale
-            isPressed && !isSelected -> pressedScale
             isSelected -> selectedScale
             else -> NAV_LABEL_UNSELECTED_SCALE
         },
@@ -1930,7 +1908,6 @@ private fun DestinationLabel(
         targetValue = when {
             isSelected && isPressed -> 0.82f
             isSelected -> 1f
-            isPressed -> 0.28f
             else -> 0f
         },
         animationSpec = if (isPressed) {
@@ -2068,8 +2045,6 @@ private const val NAV_LABEL_SELECTED_ALPHA = 1f
 private const val NAV_LABEL_UNSELECTED_VISIBILITY_ALPHA = 0.955f
 private const val NAV_LABEL_UNSELECTED_SCALE = 1f
 private const val NAV_LABEL_SELECTED_SCALE = 1.0106f
-private const val NAV_LABEL_PRESS_SCALE = 0.9974f
-private const val NAV_LABEL_COMPACT_PRESS_SCALE = 0.9982f
 private const val NAV_LABEL_COMPACT_FONT_SELECTED = 12.28f
 private const val NAV_LABEL_COMPACT_FONT_UNSELECTED = 11.75f
 private const val NAV_LABEL_COMPACT_LINE_HEIGHT_SELECTED = 14.00f
@@ -2082,7 +2057,6 @@ private const val NAV_LABEL_SELECTED_LETTER_SPACING = 0.0010f
 private const val NAV_LABEL_UNSELECTED_LETTER_SPACING = 0.011f
 private const val NAV_LABEL_COMPACT_SELECTED_LETTER_SPACING = 0.0016f
 private const val NAV_LABEL_COMPACT_UNSELECTED_LETTER_SPACING = 0.013f
-private const val NAV_LABEL_PRESS_ALPHA = 0.9744f
 private const val NAV_LABEL_PRESSED_ALPHA = 0.9724f
 private const val NAV_LABEL_SELECTED_PRESS_ALPHA = 0.9864f
 private const val NAV_LABEL_SELECTED_PRESS_ALPHA_VISIBILITY = 0.9930f
@@ -2162,14 +2136,12 @@ private const val NAV_ICON_LIFT_SELECTED_DP = -0.0638f
 private const val NAV_ICON_LIFT_PRESSED_DP = -0.0674f
 private const val NAV_ICON_LIFT_SELECTED_PRESSED_DP = -0.083f
 private const val NAV_ICON_HALO_SELECTED_SCALE = 1.012f
-private const val NAV_ICON_HALO_PRESSED_SCALE = 1.004f
 private const val NAV_ICON_HALO_SELECTED_PRESSED_SCALE = 1.018f
 private const val NAV_ICON_LIFT_BOTTOM_PRESSED_DP = -0.064f
 private const val NAV_ICON_RAIL_LIFT_SELECTED_DP = -0.0682f
 private const val NAV_ICON_RAIL_LIFT_PRESSED_DP = -0.0622f
 private const val NAV_ICON_RAIL_LIFT_SELECTED_PRESSED_DP = -0.0873f
 private const val NAV_ICON_RAIL_HALO_SELECTED_SCALE = 1.020f
-private const val NAV_ICON_RAIL_HALO_PRESSED_SCALE = 1.008f
 private const val NAV_ICON_RAIL_HALO_SELECTED_PRESSED_SCALE = 1.025f
 private const val NAV_ICON_GLYPH_SELECTED_ALPHA = 1f
 private const val NAV_ICON_GLYPH_PRESSED_ALPHA = 0.9732f
@@ -2217,13 +2189,10 @@ private const val NAV_ICON_FACE_GLOW_SELECTED_ALPHA = 0.0728f
 private const val NAV_ICON_FACE_GLOW_PRESSED_ALPHA = 0.0130f
 private const val NAV_ICON_HALO_SELECTED_PRESSED_ALPHA = 0.0323f
 private const val NAV_ICON_HALO_SELECTED_ALPHA = 0.0754f
-private const val NAV_ICON_HALO_PRESSED_ALPHA = 0.0099f
 private const val NAV_ICON_HALO_HIGHLIGHT_SELECTED_ALPHA = 0.0246f
-private const val NAV_ICON_HALO_HIGHLIGHT_PRESSED_ONLY_ALPHA = 0.0126f
 private const val NAV_ICON_AMBIENT_GLOW_SELECTED_ALPHA = 0.0388f
 private const val NAV_ICON_AMBIENT_GLOW_SELECTED_PRESSED_ALPHA = 0.0612f
 private const val NAV_ICON_HALO_BORDER_SELECTED_ALPHA = 0.063f
-private const val NAV_ICON_HALO_BORDER_PRESSED_ALPHA = 0.0221f
 private const val NAV_ICON_INNER_RIM_SELECTED_ALPHA = 0.044f
 private const val NAV_ICON_INNER_RIM_SELECTED_PRESSED_ALPHA = 0.036f
 private const val NAV_ICON_INNER_RIM_BORDER_WIDTH = 0.35f
@@ -2233,8 +2202,6 @@ private const val NAV_ICON_AMBIENT_GLOW_SELECTED_SCALE = 1.029f
 private const val NAV_ICON_AMBIENT_GLOW_SELECTED_PRESSED_SCALE = 1.032f
 private const val NAV_ICON_INNER_RIM_INNER_PADDING = 1.05f
 private const val NAV_ICON_HALO_BORDER_SELECTED = NAV_NAV_ITEM_ACTIVE_BORDER
-private const val NAV_ICON_HALO_BORDER_PRESSED = 0.13f
-private const val NAV_ICON_HALO_BORDER_UNSELECTED = 0f
 private const val NAV_ICON_SHADOW_SELECTED_PRESSED_ALPHA = 0.0182f
 private const val NAV_ICON_SHADOW_SELECTED_ALPHA = 0.0190f
 private const val NAV_ICON_BACKGROUND_SELECTED_ALPHA = 0.2068f
@@ -2249,9 +2216,7 @@ private const val NAV_NAV_ITEM_PILL_BORDER_PRESSED_ALPHA = 0.038f
 private const val NAV_ICON_FACE_BORDER = 0.34f
     private const val NAV_NAV_ITEM_PRESSED_ALPHA = 0.0375f
 private const val NAV_ICON_HALO_HIGHLIGHT_PRESSED_ALPHA = 0.0243f
-private const val NAV_NAV_ITEM_ICON_SHADOW_PRESSED_ALPHA = 0.0203f
 private const val NAV_ICON_HALO_SIZE_UNSELECTED = 20.9f
-private const val NAV_ICON_HALO_SIZE_PRESSED = 28.4f
 private const val NAV_ICON_HALO_SIZE_SELECTED = 33.0f
 private const val NAV_ICON_HALO_SIZE_SELECTED_PRESSED = 31.6f
 private const val NAV_SHELL_SURFACE_DARK_ALPHA = 0.948f
