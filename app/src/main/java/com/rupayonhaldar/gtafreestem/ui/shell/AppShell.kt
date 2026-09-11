@@ -1083,9 +1083,9 @@ private fun PrimaryNavigationRail(
                     icon = {
                     val iconLift by animateDpAsState(
                         targetValue = when {
-                            isPressed && isSelected -> NAV_ICON_LIFT_SELECTED_PRESSED_DP.dp
-                            isPressed -> NAV_ICON_LIFT_PRESSED_DP.dp
-                            isSelected -> NAV_ICON_LIFT_SELECTED_DP.dp
+                            isPressed && isSelected -> NAV_ICON_RAIL_LIFT_SELECTED_PRESSED_DP.dp
+                            isPressed -> NAV_ICON_RAIL_LIFT_PRESSED_DP.dp
+                            isSelected -> NAV_ICON_RAIL_LIFT_SELECTED_DP.dp
                             else -> 0.dp
                         },
                             animationSpec = if (isPressed) {
@@ -1115,7 +1115,7 @@ private fun PrimaryNavigationRail(
                         )
                         val iconContainerScale by animateFloatAsState(
                             targetValue = when {
-                                isSelected && isPressed -> NAV_ICON_CONTAINER_SELECTED_PRESS_SCALE
+                                isSelected && isPressed -> NAV_ICON_RAIL_CONTAINER_SELECTED_PRESS_SCALE
                                 isPressed -> 1f
                                 isSelected -> NAV_ICON_CONTAINER_SELECTED_SCALE
                                 else -> 1f
@@ -1684,6 +1684,9 @@ private const val NAV_ICON_LIFT_SELECTED_DP = -0.12f
 private const val NAV_ICON_LIFT_PRESSED_DP = -0.14f
 private const val NAV_ICON_LIFT_SELECTED_PRESSED_DP = -0.16f
 private const val NAV_ICON_LIFT_BOTTOM_PRESSED_DP = -0.085f
+private const val NAV_ICON_RAIL_LIFT_SELECTED_DP = -0.10f
+private const val NAV_ICON_RAIL_LIFT_PRESSED_DP = -0.10f
+private const val NAV_ICON_RAIL_LIFT_SELECTED_PRESSED_DP = -0.12f
 private const val NAV_ICON_GLYPH_SELECTED_ALPHA = 1f
 private const val NAV_ICON_GLYPH_PRESSED_ALPHA = 0.972f
 private const val NAV_ICON_GLYPH_UNSELECTED_ALPHA = 0.700f
@@ -1696,6 +1699,7 @@ private const val NAV_ICON_ELEVATION_PRESSED = 0.78f
 private const val NAV_ICON_SCALE_PRESSED = 0.9976f
 private const val NAV_ICON_TINT_SELECTED_PRESSED_ALPHA = 0.958f
 private const val NAV_ICON_CONTAINER_SELECTED_PRESS_SCALE = 0.9970f
+private const val NAV_ICON_RAIL_CONTAINER_SELECTED_PRESS_SCALE = 0.9974f
 private const val NAV_ICON_CONTAINER_SELECTED_SCALE = 1.0060f
 private const val NAV_ICON_BOTTOM_CONTAINER_SELECTED_PRESS_SCALE = 0.9968f
 private const val NAV_ICON_BOTTOM_CONTAINER_PRESSED_SCALE = 0.9985f
