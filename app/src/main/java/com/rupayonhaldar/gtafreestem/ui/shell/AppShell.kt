@@ -257,6 +257,42 @@ private fun PrimaryNavigationBar(
         )
         Box(
             modifier = Modifier
+                .fillMaxHeight()
+                .width(NAV_SHELL_BAR_SIDE_RIM_WIDTH.dp)
+                .align(Alignment.TopStart)
+                .background(
+                    Brush.horizontalGradient(
+                        colors = listOf(
+                            if (isDark) {
+                                Color.White.copy(alpha = NAV_SHELL_BAR_SIDE_RIM_DARK_ALPHA)
+                            } else {
+                                Color.Black.copy(alpha = NAV_SHELL_BAR_SIDE_RIM_LIGHT_ALPHA)
+                            },
+                            Color.Transparent,
+                        ),
+                    ),
+                ),
+        )
+        Box(
+            modifier = Modifier
+                .fillMaxHeight()
+                .width(NAV_SHELL_BAR_SIDE_RIM_WIDTH.dp)
+                .align(Alignment.TopEnd)
+                .background(
+                    Brush.horizontalGradient(
+                        colors = listOf(
+                            Color.Transparent,
+                            if (isDark) {
+                                Color.White.copy(alpha = NAV_SHELL_BAR_SIDE_RIM_DARK_ALPHA)
+                            } else {
+                                Color.Black.copy(alpha = NAV_SHELL_BAR_SIDE_RIM_LIGHT_ALPHA)
+                            },
+                        ),
+                    ),
+                ),
+        )
+        Box(
+            modifier = Modifier
                 .fillMaxWidth()
                 .height(NAV_SHELL_BOTTOM_RIM_HEIGHT.dp)
                 .align(Alignment.BottomCenter)
@@ -1866,6 +1902,9 @@ private const val NAV_SHELL_BAR_CENTER_GLOW_DARK_ALPHA = 0.024f
 private const val NAV_SHELL_BAR_CENTER_GLOW_LIGHT_ALPHA = 0.018f
 private const val NAV_SHELL_BAR_CENTER_GLOW_HORIZONTAL_PADDING = 5.6f
 private const val NAV_SHELL_BAR_CENTER_GLOW_VERTICAL_PADDING = 3.4f
+private const val NAV_SHELL_BAR_SIDE_RIM_WIDTH = 1.35f
+private const val NAV_SHELL_BAR_SIDE_RIM_DARK_ALPHA = 0.038f
+private const val NAV_SHELL_BAR_SIDE_RIM_LIGHT_ALPHA = 0.028f
 private const val NAV_SHELL_SURFACE_EDGE_DARK_ALPHA = 0.0352f
 private const val NAV_SHELL_SURFACE_EDGE_LIGHT_ALPHA = 0.0172f
     private const val NAV_SHELL_TOP_RIM_HEIGHT = 1.64f
