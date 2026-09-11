@@ -84,6 +84,17 @@ UPSTREAM_REMOTE=${UPSTREAM_REF%%/*}
 UPSTREAM_BRANCH=${UPSTREAM_REF#*/}
 UPSTREAM_PUSH_REF="${UPSTREAM_REF}"
 
+TARGET_PUSH_BRANCH="$CURRENT_BRANCH"
+
+if [ "$UPSTREAM_REMOTE/$UPSTREAM_BRANCH" != "$UPSTREAM_REMOTE/$TARGET_PUSH_BRANCH" ]; then
+  if git ls-remote --heads "$UPSTREAM_REMOTE" "$TARGET_PUSH_BRANCH" | grep -q "$TARGET_PUSH_BRANCH$"; then
+    echo "Remote already has branch ${UPSTREAM_REMOTE}/${TARGET_PUSH_BRANCH}; pushing with same-named branch to avoid retargeting main." 
+  else
+    echo "Current branch ${CURRENT_BRANCH} does not match configured upstream ${UPSTREAM_REF}; defaulting push target to ${UPSTREAM_BRANCH} to preserve current workflow."
+    TARGET_PUSH_BRANCH="$UPSTREAM_BRANCH"
+  fi
+fi
+
 if ! git remote get-url "$UPSTREAM_REMOTE" >/dev/null 2>&1; then
   echo "Configured remote '$UPSTREAM_REMOTE' is required for push-safe" >&2
   exit 1
@@ -141,7 +152,7 @@ while [ "$attempt" -lt "$max_attempts" ]; do
   attempt=$((attempt + 1))
   echo "Push attempt ${attempt}/${max_attempts}"
 
-  push_output="$(git push "$UPSTREAM_REMOTE" "${CURRENT_BRANCH}:${UPSTREAM_BRANCH}" 2>&1 || true)"
+  push_output="$(git push "$UPSTREAM_REMOTE" "${CURRENT_BRANCH}:${TARGET_PUSH_BRANCH}" 2>&1 || true)"
   push_exit_code=$?
 
   if [ "$push_exit_code" -eq 0 ]; then
