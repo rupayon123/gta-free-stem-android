@@ -899,17 +899,16 @@ private fun PrimaryNavigationBar(
                                 .scale(iconContainerScale * iconHaloScale),
                             contentAlignment = Alignment.Center,
                         ) {
-                            if (isSelected || isPressed) {
-                                Box(
-                                    modifier = Modifier
-                                        .size(iconAmbientGlowSize)
-                                        .scale(iconAmbientGlowScale)
-                                        .offset(y = iconLift)
-                                        .alpha(iconContainerAlpha)
-                                        .background(
-                                            brush = Brush.radialGradient(
-                                                colors = listOf(
-                                                    iconAmbientGlow,
+                                if (isSelected || isPressed) {
+                                    Box(
+                                        modifier = Modifier
+                                            .size(iconAmbientGlowSize)
+                                            .scale(iconAmbientGlowScale)
+                                            .alpha(iconContainerAlpha)
+                                            .background(
+                                                brush = Brush.radialGradient(
+                                                    colors = listOf(
+                                                        iconAmbientGlow,
                                                     Color.Transparent,
                                                 ),
                                             ),
@@ -1717,17 +1716,16 @@ private fun PrimaryNavigationRail(
                             .scale(iconContainerScale * iconHaloScale),
                             contentAlignment = Alignment.Center,
                         ) {
-                            if (isSelected || isPressed) {
-                                Box(
-                                    modifier = Modifier
-                                        .size(iconAmbientGlowSize)
-                                        .scale(iconAmbientGlowScale)
-                                        .offset(y = iconLift)
-                                        .alpha(iconContainerAlpha)
-                                        .background(
-                                            brush = Brush.radialGradient(
-                                                colors = listOf(
-                                                    iconAmbientGlow,
+                                if (isSelected || isPressed) {
+                                    Box(
+                                        modifier = Modifier
+                                            .size(iconAmbientGlowSize)
+                                            .scale(iconAmbientGlowScale)
+                                            .alpha(iconContainerAlpha)
+                                            .background(
+                                                brush = Brush.radialGradient(
+                                                    colors = listOf(
+                                                        iconAmbientGlow,
                                                     Color.Transparent,
                                                 ),
                                             ),
