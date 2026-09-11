@@ -1630,19 +1630,22 @@ private fun DestinationLabel(
             letterSpacing = NAV_LABEL_LETTER_SPACING.sp,
         )
     } else {
-            MaterialTheme.typography.labelSmall.copy(
+        MaterialTheme.typography.labelSmall.copy(
             fontSize = if (isSelected) NAV_LABEL_RAIL_FONT_SELECTED.sp else NAV_LABEL_RAIL_FONT_UNSELECTED.sp,
             lineHeight = if (isSelected) NAV_LABEL_RAIL_LINE_HEIGHT_SELECTED.sp else NAV_LABEL_RAIL_LINE_HEIGHT_UNSELECTED.sp,
             fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
             letterSpacing = NAV_LABEL_LETTER_SPACING.sp,
         )
     }
+    val selectedBaseColor = MaterialTheme.colorScheme.primary.copy(alpha = if (isSelected) NAV_LABEL_SELECTED_ALPHA else NAV_LABEL_UNSELECTED_ALPHA)
+    val unselectedBaseColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = NAV_LABEL_UNSELECTED_ALPHA)
+    val selectedColor = if (isSelected) selectedBaseColor else unselectedBaseColor
     val labelColor by animateColorAsState(
         targetValue = when {
             isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_LABEL_SELECTED_PRESS_ALPHA)
             isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_LABEL_SELECTED_ALPHA)
             isPressed -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = NAV_LABEL_PRESSED_ALPHA)
-            else -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = NAV_LABEL_UNSELECTED_ALPHA)
+            else -> selectedColor
         },
         animationSpec = if (isPressed) {
             navPressColorAnimationSpec
@@ -1704,7 +1707,7 @@ private fun DestinationLabel(
     val labelShadowProgress by animateFloatAsState(
         targetValue = when {
             isSelected && !isPressed -> 1f
-            isSelected && isPressed -> 0.95f
+            isSelected && isPressed -> 0.96f
             else -> 0f
         },
         animationSpec = if (isPressed) navPressFloatAnimationSpec else navSelectedSettleFloatAnimationSpec,
