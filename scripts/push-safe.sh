@@ -151,8 +151,52 @@ is_network_or_repo_busy_failure() {
   echo "$1" | grep -qiE "could not resolve host|Failed to connect to|network is unreachable|Connection timed out|RPC failed|remote hung up|The requested URL returned error|Unable to access|Connection refused|timeout|unable to access" 
 }
 
+fetch_with_retry() {
+  local remote="$1"
+  local attempt=0
+  local max_attempts=5
+  local delay=1
+
+  while [ "$attempt" -lt "$max_attempts" ]; do
+    attempt=$((attempt + 1))
+
+    local fetch_output
+    fetch_output="$(git fetch --prune --quiet "$remote" 2>&1 || true)"
+    if [ $? -eq 0 ]; then
+      return 0
+    fi
+
+    echo "Fetch attempt ${attempt}/${max_attempts} failed."
+    echo "$fetch_output"
+
+    if echo "$fetch_output" | grep -qiE "authentication|Authentication failed|Permission denied|could not read Username|403|access denied"; then
+      echo "Detected authentication/permission failure while fetching. This requires manual fix." >&2
+      return 1
+    fi
+
+    if [ "$attempt" -ge "$max_attempts" ]; then
+      echo "Fetch failed after ${max_attempts} attempts." >&2
+      return 1
+    fi
+
+    if is_network_or_repo_busy_failure "$fetch_output"; then
+      echo "Detected transient fetch/network issue. Retrying in ${delay}s."
+      sleep "$delay"
+      delay=$((delay * 2))
+      if [ "$delay" -gt 16 ]; then
+        delay=16
+      fi
+      continue
+    fi
+
+    # Unknown failure: do not retry blindly.
+    echo "Aborting fetch retries due unrecognized fetch failure." >&2
+    return 1
+  done
+}
+
 echo "Syncing branch ${CURRENT_BRANCH} with ${UPSTREAM_REF}"
-if ! git fetch --prune --quiet "$UPSTREAM_REMOTE"; then
+  if ! fetch_with_retry "$UPSTREAM_REMOTE"; then
   echo "Could not fetch from ${UPSTREAM_REMOTE} before syncing. Check network/auth first." >&2
   exit 1
 fi
@@ -233,7 +277,7 @@ while [ "$attempt" -lt "$max_attempts" ]; do
     retry_delay=16
   fi
 
-  if ! git fetch --prune "$UPSTREAM_REMOTE"; then
+  if ! fetch_with_retry "$UPSTREAM_REMOTE"; then
     echo "Network/fetch failure after push attempt ${attempt}; retrying." >&2
     continue
   fi
