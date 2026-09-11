@@ -972,7 +972,7 @@ private fun PrimaryNavigationBar(
                             label = destinationLabel(destination),
                             compact = true,
                             isSelected = isSelected,
-                            isPressed = isPressed,
+                            isPressed = isActivePress,
                         )
                     },
                     alwaysShowLabel = true,
@@ -1798,7 +1798,7 @@ private fun PrimaryNavigationRail(
                             destinationLabel(destination),
                             compact = false,
                             isSelected = isSelected,
-                            isPressed = isPressed,
+                            isPressed = isActivePress,
                         )
                     },
                     alwaysShowLabel = true,
