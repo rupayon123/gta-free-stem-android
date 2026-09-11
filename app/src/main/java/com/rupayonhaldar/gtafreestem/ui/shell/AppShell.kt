@@ -616,7 +616,7 @@ private fun PrimaryNavigationBar(
                         val iconColorAnimationSpec = if (isSelected) {
                             if (isActivePress) navPressColorAnimationSpec else navSelectedSettleColorAnimationSpec
                         } else {
-                            navUnselectedSettleColorAnimationSpec
+                            if (isPressed) navPressColorAnimationSpec else navUnselectedSettleColorAnimationSpec
                         }
                         val iconGlyphAlpha by animateFloatAsState(
                             targetValue = if (isActivePress) {
@@ -823,13 +823,7 @@ private fun PrimaryNavigationBar(
                             } else {
                                 Color.Transparent
                             },
-                            animationSpec = if (isActivePress) {
-                                navPressColorAnimationSpec
-                                } else if (isSelected) {
-                                navSelectedSettleColorAnimationSpec
-                                } else {
-                                navSelectionColorAnimationSpec
-                                },
+                            animationSpec = iconColorAnimationSpec,
                             label = "bottom-nav-icon-shadow-${destination.name}",
                         )
                         val iconAmbientGlow by animateColorAsState(
@@ -1494,7 +1488,7 @@ private fun PrimaryNavigationRail(
                         val iconColorAnimationSpec = if (isSelected) {
                             if (isActivePress) navPressColorAnimationSpec else navSelectedSettleColorAnimationSpec
                         } else {
-                            navSelectionColorAnimationSpec
+                            if (isPressed) navPressColorAnimationSpec else navUnselectedSettleColorAnimationSpec
                         }
                         val iconBackground by animateColorAsState(
                             targetValue = if (isSelected) {
@@ -1504,10 +1498,8 @@ private fun PrimaryNavigationRail(
                             },
                             animationSpec = if (isActivePress) {
                                 navPressColorAnimationSpec
-                            } else if (isSelected) {
-                                navSelectedSettleColorAnimationSpec
                             } else {
-                                navSelectionColorAnimationSpec
+                                iconColorAnimationSpec,
                             },
                             label = "rail-icon-background-${destination.name}",
                         )
@@ -1524,7 +1516,7 @@ private fun PrimaryNavigationRail(
                                 } else if (isSelected) {
                                 navSelectedSettleColorAnimationSpec
                                 } else {
-                                navSelectionColorAnimationSpec
+                                iconColorAnimationSpec
                                 },
                             label = "rail-icon-face-glow-${destination.name}",
                         )
@@ -1541,7 +1533,7 @@ private fun PrimaryNavigationRail(
                                 } else if (isSelected) {
                                 navSelectedSettleColorAnimationSpec
                                 } else {
-                                navSelectionColorAnimationSpec
+                                iconColorAnimationSpec
                                 },
                             label = "rail-icon-tint-${destination.name}",
                         )
@@ -1558,7 +1550,7 @@ private fun PrimaryNavigationRail(
                                 } else if (isSelected) {
                                 navSelectedSettleColorAnimationSpec
                                 } else {
-                                navSelectionColorAnimationSpec
+                                iconColorAnimationSpec
                                 },
                             label = "rail-icon-halo-${destination.name}",
                         )
@@ -1600,7 +1592,7 @@ private fun PrimaryNavigationRail(
                                 } else if (isSelected) {
                                 navSelectedSettleColorAnimationSpec
                                 } else {
-                                navSelectionColorAnimationSpec
+                                iconColorAnimationSpec
                                 },
                             label = "rail-icon-halo-highlight-${destination.name}",
                         )
@@ -1666,7 +1658,7 @@ private fun PrimaryNavigationRail(
                                 } else if (isSelected) {
                                 navSelectedSettleColorAnimationSpec
                                 } else {
-                                navSelectionColorAnimationSpec
+                                iconColorAnimationSpec
                                 },
                             label = "rail-icon-shadow-${destination.name}",
                         )
@@ -1889,7 +1881,13 @@ private fun DestinationLabel(
             else -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = NAV_LABEL_UNSELECTED_ALPHA)
         },
         animationSpec = if (isSelected) {
-            navLabelColorAnimationSpec
+            if (isActivePress) {
+                navPressColorAnimationSpec
+            } else {
+                navLabelColorAnimationSpec
+            }
+        } else if (isPressed) {
+            navPressColorAnimationSpec
         } else {
             navLabelUnselectedColorAnimationSpec
         },
@@ -1898,10 +1896,16 @@ private fun DestinationLabel(
     val labelAlpha by animateFloatAsState(
         targetValue = if (isSelected) {
             1f
+        } else if (isPressed) {
+            NAV_LABEL_UNSELECTED_PRESSED_ALPHA
         } else {
             NAV_LABEL_UNSELECTED_VISIBILITY_ALPHA
         },
-        animationSpec = navLabelAlphaAnimationSpec,
+        animationSpec = if (isPressed && !isSelected) {
+            navPressFloatAnimationSpec
+        } else {
+            navLabelAlphaAnimationSpec
+        },
         label = "destination-label-alpha",
     )
     val labelOffset by animateDpAsState(
@@ -1914,6 +1918,8 @@ private fun DestinationLabel(
         },
         animationSpec = if (isSelected) {
             navSelectedSettleDpAnimationSpec
+        } else if (isPressed) {
+            navPressDpAnimationSpec
         } else {
             navUnselectedSettleDpAnimationSpec
         },
@@ -1927,7 +1933,13 @@ private fun DestinationLabel(
         } else {
             NAV_LABEL_UNSELECTED_SCALE
         },
-        animationSpec = navLabelScaleAnimationSpec,
+        animationSpec = if (isSelected) {
+            navLabelScaleAnimationSpec
+        } else if (isPressed) {
+            navPressFloatAnimationSpec
+        } else {
+            navLabelScaleAnimationSpec
+        },
         label = "destination-label-scale",
     )
     Column(
