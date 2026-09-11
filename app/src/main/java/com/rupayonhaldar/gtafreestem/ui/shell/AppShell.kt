@@ -196,11 +196,11 @@ private fun PrimaryNavigationBar(
             modifier = Modifier
                 .matchParentSize()
                 .clip(barShape)
-        .shadow(
-            elevation = if (isDark) NAV_SHELL_BAR_SHADOW_SURFACE_DARK.dp else NAV_SHELL_BAR_SHADOW_SURFACE_LIGHT.dp,
-            shape = barShape,
-            ambientColor = barBottomGlow,
-            spotColor = barBottomGlow,
+                .shadow(
+                    elevation = if (isDark) NAV_SHELL_BAR_SHADOW_SURFACE_DARK.dp else NAV_SHELL_BAR_SHADOW_SURFACE_LIGHT.dp,
+                    shape = barShape,
+                    ambientColor = barBottomGlow,
+                    spotColor = barBottomGlow,
                 )
                 .background(
                     Brush.verticalGradient(
@@ -212,6 +212,27 @@ private fun PrimaryNavigationBar(
                                 Color.Black.copy(alpha = NAV_SHELL_SURFACE_TOP_GLOW_LIGHT_ALPHA)
                             },
                             MaterialTheme.colorScheme.onSurface.copy(alpha = if (isDark) NAV_SHELL_SURFACE_EDGE_DARK_ALPHA else NAV_SHELL_SURFACE_EDGE_LIGHT_ALPHA),
+                        ),
+                    ),
+                ),
+        )
+        Box(
+            modifier = Modifier
+                .matchParentSize()
+                .padding(
+                    horizontal = NAV_SHELL_BAR_CENTER_GLOW_HORIZONTAL_PADDING.dp,
+                    vertical = NAV_SHELL_BAR_CENTER_GLOW_VERTICAL_PADDING.dp,
+                )
+                .clip(barShape)
+                .background(
+                    Brush.radialGradient(
+                        colors = listOf(
+                            if (isDark) {
+                                Color.White.copy(alpha = NAV_SHELL_BAR_CENTER_GLOW_DARK_ALPHA)
+                            } else {
+                                Color.Black.copy(alpha = NAV_SHELL_BAR_CENTER_GLOW_LIGHT_ALPHA)
+                            },
+                            Color.Transparent,
                         ),
                     ),
                 ),
@@ -829,7 +850,7 @@ private fun PrimaryNavigationRail(
             modifier = Modifier
                 .matchParentSize()
                 .clip(railShape)
-        .shadow(
+                .shadow(
                     elevation = if (isDark) NAV_SHELL_RAIL_SHADOW_SURFACE_DARK.dp else NAV_SHELL_RAIL_SHADOW_SURFACE_LIGHT.dp,
                     shape = railShape,
                     ambientColor = railBottomGlow,
@@ -844,6 +865,27 @@ private fun PrimaryNavigationRail(
                                 Color.Black.copy(alpha = NAV_SHELL_SURFACE_TOP_GLOW_LIGHT_ALPHA)
                             },
                             MaterialTheme.colorScheme.onSurface.copy(alpha = if (isDark) NAV_SHELL_SURFACE_EDGE_DARK_ALPHA else NAV_SHELL_SURFACE_EDGE_LIGHT_ALPHA),
+                            Color.Transparent,
+                        ),
+                    ),
+                ),
+        )
+        Box(
+            modifier = Modifier
+                .matchParentSize()
+                .padding(
+                    horizontal = NAV_SHELL_RAIL_CENTER_GLOW_HORIZONTAL_PADDING.dp,
+                    vertical = NAV_SHELL_RAIL_CENTER_GLOW_VERTICAL_PADDING.dp,
+                )
+                .clip(railShape)
+                .background(
+                    Brush.radialGradient(
+                        colors = listOf(
+                            if (isDark) {
+                                Color.White.copy(alpha = NAV_SHELL_RAIL_CENTER_GLOW_DARK_ALPHA)
+                            } else {
+                                Color.Black.copy(alpha = NAV_SHELL_RAIL_CENTER_GLOW_LIGHT_ALPHA)
+                            },
                             Color.Transparent,
                         ),
                     ),
@@ -1586,10 +1628,10 @@ private val PrimaryDestination.testTag: String
     get() = "primary-navigation-${name.lowercase()}"
 
 private val navSelectionFloatAnimationSpec = tween<Float>(240, easing = FastOutSlowInEasing)
-private val navPressFloatAnimationSpec = tween<Float>(96, easing = FastOutSlowInEasing)
+private val navPressFloatAnimationSpec = tween<Float>(86, easing = FastOutSlowInEasing)
 private val navSelectionDpAnimationSpec = tween<Dp>(240, easing = FastOutSlowInEasing)
-private val navPressDpAnimationSpec = tween<Dp>(100, easing = FastOutSlowInEasing)
-private val navPressColorAnimationSpec = tween<Color>(108, easing = FastOutSlowInEasing)
+private val navPressDpAnimationSpec = tween<Dp>(92, easing = FastOutSlowInEasing)
+private val navPressColorAnimationSpec = tween<Color>(90, easing = FastOutSlowInEasing)
 private val navSelectionColorAnimationSpec = tween<Color>(244, easing = FastOutSlowInEasing)
 private val navSelectedSettleColorAnimationSpec = tween<Color>(292, easing = FastOutSlowInEasing)
 private val navSelectedSettleFloatAnimationSpec = tween<Float>(301, easing = FastOutSlowInEasing)
@@ -1784,10 +1826,18 @@ private const val NAV_SHELL_CONTAINER_DARK_ALPHA = 0.863f
 private const val NAV_SHELL_CONTAINER_LIGHT_ALPHA = 0.957f
 private const val NAV_SHELL_SURFACE_TOP_GLOW_DARK_ALPHA = 0.0310f
 private const val NAV_SHELL_SURFACE_TOP_GLOW_LIGHT_ALPHA = 0.0284f
+private const val NAV_SHELL_BAR_CENTER_GLOW_DARK_ALPHA = 0.024f
+private const val NAV_SHELL_BAR_CENTER_GLOW_LIGHT_ALPHA = 0.018f
+private const val NAV_SHELL_BAR_CENTER_GLOW_HORIZONTAL_PADDING = 5.6f
+private const val NAV_SHELL_BAR_CENTER_GLOW_VERTICAL_PADDING = 3.4f
 private const val NAV_SHELL_SURFACE_EDGE_DARK_ALPHA = 0.0352f
 private const val NAV_SHELL_SURFACE_EDGE_LIGHT_ALPHA = 0.0172f
     private const val NAV_SHELL_TOP_RIM_HEIGHT = 1.64f
     private const val NAV_SHELL_TOP_RIM_DARK_ALPHA = 0.214f
     private const val NAV_SHELL_TOP_RIM_LIGHT_ALPHA = 0.168f
+private const val NAV_SHELL_RAIL_CENTER_GLOW_DARK_ALPHA = 0.020f
+private const val NAV_SHELL_RAIL_CENTER_GLOW_LIGHT_ALPHA = 0.013f
+private const val NAV_SHELL_RAIL_CENTER_GLOW_HORIZONTAL_PADDING = 4.9f
+private const val NAV_SHELL_RAIL_CENTER_GLOW_VERTICAL_PADDING = 4.1f
 	private const val NAV_SHELL_BAR_CORNER = 31.0f
 	private const val NAV_SHELL_RAIL_CORNER = 30.0f
