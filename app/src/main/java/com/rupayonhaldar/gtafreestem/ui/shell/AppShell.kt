@@ -30,6 +30,7 @@ import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -810,6 +811,57 @@ private fun PrimaryNavigationBar(
                                 },
                             label = "bottom-nav-icon-shadow-${destination.name}",
                         )
+                        val iconAmbientGlow by animateColorAsState(
+                            targetValue = if (isSelected && isPressed) {
+                                MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_AMBIENT_GLOW_SELECTED_PRESSED_ALPHA)
+                            } else if (isSelected) {
+                                MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_AMBIENT_GLOW_SELECTED_ALPHA)
+                            } else if (isPressed) {
+                                MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_AMBIENT_GLOW_PRESSED_ALPHA)
+                            } else {
+                                Color.Transparent
+                            },
+                            animationSpec = iconColorAnimationSpec,
+                            label = "bottom-nav-icon-ambient-glow-${destination.name}",
+                        )
+                        val iconAmbientGlowSize by animateDpAsState(
+                            targetValue = if (isSelected && isPressed) {
+                                NAV_ICON_AMBIENT_GLOW_SIZE_SELECTED_PRESSED.dp
+                            } else if (isSelected) {
+                                NAV_ICON_AMBIENT_GLOW_SIZE_SELECTED.dp
+                            } else if (isPressed) {
+                                NAV_ICON_AMBIENT_GLOW_SIZE_PRESSED.dp
+                            } else {
+                                NAV_ICON_AMBIENT_GLOW_SIZE_UNSELECTED.dp
+                            },
+                            animationSpec = if (isPressed) {
+                                navPressDpAnimationSpec
+                                } else if (isSelected) {
+                                navSelectedSettleDpAnimationSpec
+                                } else {
+                                navUnselectedSettleDpAnimationSpec
+                            },
+                            label = "bottom-nav-icon-ambient-glow-size-${destination.name}",
+                        )
+                        val iconAmbientGlowScale by animateFloatAsState(
+                            targetValue = if (isSelected && isPressed) {
+                                NAV_ICON_AMBIENT_GLOW_SELECTED_PRESSED_SCALE
+                            } else if (isSelected) {
+                                NAV_ICON_AMBIENT_GLOW_SELECTED_SCALE
+                            } else if (isPressed) {
+                                NAV_ICON_AMBIENT_GLOW_PRESSED_SCALE
+                            } else {
+                                1f
+                            },
+                            animationSpec = if (isPressed) {
+                                navPressFloatAnimationSpec
+                                } else if (isSelected) {
+                                navSelectedSettleFloatAnimationSpec
+                                } else {
+                                navUnselectedSettleFloatAnimationSpec
+                                },
+                            label = "bottom-nav-icon-ambient-glow-scale-${destination.name}",
+                        )
 
                         Box(
                             modifier = Modifier
@@ -847,6 +899,24 @@ private fun PrimaryNavigationBar(
                                 .scale(iconContainerScale * iconHaloScale),
                             contentAlignment = Alignment.Center,
                         ) {
+                            if (isSelected || isPressed) {
+                                Box(
+                                    modifier = Modifier
+                                        .size(iconAmbientGlowSize)
+                                        .scale(iconAmbientGlowScale)
+                                        .offset(y = iconLift)
+                                        .alpha(iconContainerAlpha)
+                                        .background(
+                                            brush = Brush.radialGradient(
+                                                colors = listOf(
+                                                    iconAmbientGlow,
+                                                    Color.Transparent,
+                                                ),
+                                            ),
+                                            shape = CircleShape,
+                                        ),
+                                )
+                            }
                             if (isSelected || isPressed) {
                                 val innerRimSize = (iconHaloSize - NAV_ICON_INNER_RIM_INNER_PADDING.dp).coerceAtLeast(1.dp)
                                 Box(
@@ -1560,6 +1630,57 @@ private fun PrimaryNavigationRail(
                                 },
                             label = "rail-icon-shadow-${destination.name}",
                         )
+                        val iconAmbientGlow by animateColorAsState(
+                            targetValue = if (isSelected && isPressed) {
+                                MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_AMBIENT_GLOW_SELECTED_PRESSED_ALPHA)
+                            } else if (isSelected) {
+                                MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_AMBIENT_GLOW_SELECTED_ALPHA)
+                            } else if (isPressed) {
+                                MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_AMBIENT_GLOW_PRESSED_ALPHA)
+                            } else {
+                                Color.Transparent
+                            },
+                            animationSpec = iconColorAnimationSpec,
+                            label = "rail-icon-ambient-glow-${destination.name}",
+                        )
+                        val iconAmbientGlowSize by animateDpAsState(
+                            targetValue = if (isSelected && isPressed) {
+                                NAV_ICON_AMBIENT_GLOW_SIZE_SELECTED_PRESSED.dp
+                            } else if (isSelected) {
+                                NAV_ICON_AMBIENT_GLOW_SIZE_SELECTED.dp
+                            } else if (isPressed) {
+                                NAV_ICON_AMBIENT_GLOW_SIZE_PRESSED.dp
+                            } else {
+                                NAV_ICON_AMBIENT_GLOW_SIZE_UNSELECTED.dp
+                            },
+                            animationSpec = if (isPressed) {
+                                navPressDpAnimationSpec
+                                } else if (isSelected) {
+                                navSelectedSettleDpAnimationSpec
+                                } else {
+                                navSelectionDpAnimationSpec
+                                },
+                            label = "rail-icon-ambient-glow-size-${destination.name}",
+                        )
+                        val iconAmbientGlowScale by animateFloatAsState(
+                            targetValue = if (isSelected && isPressed) {
+                                NAV_ICON_AMBIENT_GLOW_SELECTED_PRESSED_SCALE
+                            } else if (isSelected) {
+                                NAV_ICON_AMBIENT_GLOW_SELECTED_SCALE
+                            } else if (isPressed) {
+                                NAV_ICON_AMBIENT_GLOW_PRESSED_SCALE
+                            } else {
+                                1f
+                            },
+                            animationSpec = if (isPressed) {
+                                navPressFloatAnimationSpec
+                                } else if (isSelected) {
+                                navSelectedSettleFloatAnimationSpec
+                                } else {
+                                navSelectionFloatAnimationSpec
+                                },
+                            label = "rail-icon-ambient-glow-scale-${destination.name}",
+                        )
                         Box(
                             modifier = Modifier
                                 .size(iconHaloSize)
@@ -1593,9 +1714,27 @@ private fun PrimaryNavigationRail(
                                 )
                                 .alpha(iconContainerAlpha)
                                 .offset(y = iconLift)
-                                .scale(iconContainerScale * iconHaloScale),
+                            .scale(iconContainerScale * iconHaloScale),
                             contentAlignment = Alignment.Center,
                         ) {
+                            if (isSelected || isPressed) {
+                                Box(
+                                    modifier = Modifier
+                                        .size(iconAmbientGlowSize)
+                                        .scale(iconAmbientGlowScale)
+                                        .offset(y = iconLift)
+                                        .alpha(iconContainerAlpha)
+                                        .background(
+                                            brush = Brush.radialGradient(
+                                                colors = listOf(
+                                                    iconAmbientGlow,
+                                                    Color.Transparent,
+                                                ),
+                                            ),
+                                            shape = CircleShape,
+                                        ),
+                                )
+                            }
                             if (isSelected || isPressed) {
                                 val innerRimSize = (iconHaloSize - NAV_ICON_INNER_RIM_INNER_PADDING.dp).coerceAtLeast(1.dp)
                                 Box(
@@ -2105,6 +2244,9 @@ private const val NAV_ICON_HALO_SELECTED_ALPHA = 0.0754f
 private const val NAV_ICON_HALO_PRESSED_ALPHA = 0.0099f
 private const val NAV_ICON_HALO_HIGHLIGHT_SELECTED_ALPHA = 0.0246f
 private const val NAV_ICON_HALO_HIGHLIGHT_PRESSED_ONLY_ALPHA = 0.0126f
+private const val NAV_ICON_AMBIENT_GLOW_SELECTED_ALPHA = 0.0388f
+private const val NAV_ICON_AMBIENT_GLOW_SELECTED_PRESSED_ALPHA = 0.0612f
+private const val NAV_ICON_AMBIENT_GLOW_PRESSED_ALPHA = 0.0112f
 private const val NAV_ICON_HALO_BORDER_SELECTED_ALPHA = 0.063f
 private const val NAV_ICON_HALO_BORDER_PRESSED_ALPHA = 0.0221f
 private const val NAV_ICON_INNER_RIM_SELECTED_ALPHA = 0.044f
@@ -2112,6 +2254,13 @@ private const val NAV_ICON_INNER_RIM_SELECTED_PRESSED_ALPHA = 0.036f
 private const val NAV_ICON_INNER_RIM_PRESSED_ALPHA = 0.014f
 private const val NAV_ICON_INNER_RIM_BORDER_WIDTH = 0.35f
 private const val NAV_ICON_INNER_RIM_PRESSED_BORDER_WIDTH = 0.16f
+private const val NAV_ICON_AMBIENT_GLOW_SIZE_SELECTED = 37.3f
+private const val NAV_ICON_AMBIENT_GLOW_SIZE_SELECTED_PRESSED = 35.9f
+private const val NAV_ICON_AMBIENT_GLOW_SIZE_PRESSED = 31.6f
+private const val NAV_ICON_AMBIENT_GLOW_SIZE_UNSELECTED = 27.2f
+private const val NAV_ICON_AMBIENT_GLOW_SELECTED_SCALE = 1.029f
+private const val NAV_ICON_AMBIENT_GLOW_SELECTED_PRESSED_SCALE = 1.032f
+private const val NAV_ICON_AMBIENT_GLOW_PRESSED_SCALE = 1.014f
 private const val NAV_ICON_INNER_RIM_INNER_PADDING = 1.05f
 private const val NAV_ICON_HALO_BORDER_SELECTED = NAV_NAV_ITEM_ACTIVE_BORDER
 private const val NAV_ICON_HALO_BORDER_PRESSED = 0.13f
