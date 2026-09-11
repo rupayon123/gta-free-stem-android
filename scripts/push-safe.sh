@@ -82,16 +82,14 @@ fi
 
 UPSTREAM_REMOTE=${UPSTREAM_REF%%/*}
 UPSTREAM_BRANCH=${UPSTREAM_REF#*/}
-UPSTREAM_PUSH_REF="${UPSTREAM_REF}"
-
 TARGET_PUSH_BRANCH="$CURRENT_BRANCH"
 
-if [ "$UPSTREAM_REMOTE/$UPSTREAM_BRANCH" != "$UPSTREAM_REMOTE/$TARGET_PUSH_BRANCH" ]; then
-  if git ls-remote --heads "$UPSTREAM_REMOTE" "$TARGET_PUSH_BRANCH" | grep -q "$TARGET_PUSH_BRANCH$"; then
-    echo "Remote already has branch ${UPSTREAM_REMOTE}/${TARGET_PUSH_BRANCH}; pushing with same-named branch to avoid retargeting main." 
+if [ "$CURRENT_BRANCH" != "$UPSTREAM_BRANCH" ]; then
+  echo "Notice: ${CURRENT_BRANCH} is configured to track ${UPSTREAM_REF}."
+  if git ls-remote --heads "$UPSTREAM_REMOTE" "$CURRENT_BRANCH" | grep -q "refs/heads/$CURRENT_BRANCH$"; then
+    echo "Pushing will target existing remote branch ${UPSTREAM_REMOTE}/${CURRENT_BRANCH}."
   else
-    echo "Current branch ${CURRENT_BRANCH} does not match configured upstream ${UPSTREAM_REF}; defaulting push target to ${UPSTREAM_BRANCH} to preserve current workflow."
-    TARGET_PUSH_BRANCH="$UPSTREAM_BRANCH"
+    echo "Remote branch ${UPSTREAM_REMOTE}/${CURRENT_BRANCH} does not exist; it will be created on push."
   fi
 fi
 
@@ -165,7 +163,7 @@ while [ "$attempt" -lt "$max_attempts" ]; do
     fi
 
     LOCAL_AFTER=$(git rev-parse "$CURRENT_BRANCH")
-    if git merge-base --is-ancestor "$LOCAL_AFTER" "$UPSTREAM_PUSH_REF"; then
+    if git merge-base --is-ancestor "$LOCAL_AFTER" "${UPSTREAM_REMOTE}/${TARGET_PUSH_BRANCH}"; then
       echo "Verified remote includes local HEAD $(git rev-parse --short "$CURRENT_BRANCH")"
       exit 0
     fi
