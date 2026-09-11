@@ -16,38 +16,42 @@ print_usage() {
 }
 
 COMMIT_MESSAGE=""
-INCLUDE_UNTRACKED=${2:-}
+COMMIT_MESSAGE_ARGS=()
+INCLUDE_UNTRACKED="false"
 
 while [ "$#" -gt 0 ]; do
   case "$1" in
     --with-untracked)
-      INCLUDE_UNTRACKED="--with-untracked"
+      INCLUDE_UNTRACKED="true"
       shift
       ;;
     -h|--help)
       print_usage
       exit 0
       ;;
+    --*)
+      print_usage
+      echo "Unsupported option: $1" >&2
+      exit 2
+      ;;
     *)
-      if [ -n "$COMMIT_MESSAGE" ]; then
-        print_usage
-        echo "Too many arguments provided." >&2
-        exit 2
-      fi
-      COMMIT_MESSAGE="$1"
+      COMMIT_MESSAGE_ARGS+=("$1")
       shift
+      while [ "$#" -gt 0 ]; do
+        COMMIT_MESSAGE_ARGS+=("$1")
+        shift
+      done
+      COMMIT_MESSAGE="${COMMIT_MESSAGE_ARGS[*]}"
       ;;
   esac
 done
 
-if [ -z "$COMMIT_MESSAGE" ]; then
-  COMMIT_MESSAGE="chore: checkpoint $(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+if [ "${#COMMIT_MESSAGE_ARGS[@]}" -eq 0 ]; then
+  COMMIT_MESSAGE=""
 fi
 
-if [ -n "$INCLUDE_UNTRACKED" ] && [ "$INCLUDE_UNTRACKED" != "--with-untracked" ]; then
-  echo "Unsupported option: $INCLUDE_UNTRACKED" >&2
-  print_usage
-  exit 2
+if [ -z "$COMMIT_MESSAGE" ]; then
+  COMMIT_MESSAGE="chore: checkpoint $(date -u +'%Y-%m-%dT%H:%M:%SZ')"
 fi
 
 has_changes() {

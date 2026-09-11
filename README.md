@@ -154,6 +154,12 @@ Use this command when you finish an edit so your branch stays aligned before pus
 ./scripts/push-safe.sh "Describe this change"
 ```
 
+You can include spaces without extra quoting because `push-safe.sh` now captures all trailing words as the commit message:
+
+```bash
+./scripts/push-safe.sh Describe this change
+```
+
 `push-safe.sh` now:
 
 - pulls and rebases against `origin/main` before committing/pushing,
