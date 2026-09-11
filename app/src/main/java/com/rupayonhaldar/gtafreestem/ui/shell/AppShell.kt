@@ -1585,18 +1585,18 @@ private fun DestinationLabel(
 private val PrimaryDestination.testTag: String
     get() = "primary-navigation-${name.lowercase()}"
 
-private val navSelectionFloatAnimationSpec = tween<Float>(248, easing = FastOutSlowInEasing)
-private val navPressFloatAnimationSpec = tween<Float>(138, easing = FastOutSlowInEasing)
-private val navSelectionDpAnimationSpec = tween<Dp>(244, easing = FastOutSlowInEasing)
-private val navPressDpAnimationSpec = tween<Dp>(138, easing = FastOutSlowInEasing)
-private val navPressColorAnimationSpec = tween<Color>(146, easing = FastOutSlowInEasing)
-private val navSelectionColorAnimationSpec = tween<Color>(248, easing = FastOutSlowInEasing)
-private val navSelectedSettleColorAnimationSpec = tween<Color>(300, easing = FastOutSlowInEasing)
-private val navSelectedSettleFloatAnimationSpec = tween<Float>(296, easing = FastOutSlowInEasing)
-private val navSelectedSettleDpAnimationSpec = tween<Dp>(296, easing = FastOutSlowInEasing)
-private val navUnselectedSettleColorAnimationSpec = tween<Color>(282, easing = FastOutSlowInEasing)
-private val navUnselectedSettleFloatAnimationSpec = tween<Float>(282, easing = FastOutSlowInEasing)
-private val navUnselectedSettleDpAnimationSpec = tween<Dp>(282, easing = FastOutSlowInEasing)
+private val navSelectionFloatAnimationSpec = tween<Float>(252, easing = FastOutSlowInEasing)
+private val navPressFloatAnimationSpec = tween<Float>(136, easing = FastOutSlowInEasing)
+private val navSelectionDpAnimationSpec = tween<Dp>(246, easing = FastOutSlowInEasing)
+private val navPressDpAnimationSpec = tween<Dp>(136, easing = FastOutSlowInEasing)
+private val navPressColorAnimationSpec = tween<Color>(144, easing = FastOutSlowInEasing)
+private val navSelectionColorAnimationSpec = tween<Color>(252, easing = FastOutSlowInEasing)
+private val navSelectedSettleColorAnimationSpec = tween<Color>(304, easing = FastOutSlowInEasing)
+private val navSelectedSettleFloatAnimationSpec = tween<Float>(300, easing = FastOutSlowInEasing)
+private val navSelectedSettleDpAnimationSpec = tween<Dp>(300, easing = FastOutSlowInEasing)
+private val navUnselectedSettleColorAnimationSpec = tween<Color>(286, easing = FastOutSlowInEasing)
+private val navUnselectedSettleFloatAnimationSpec = tween<Float>(286, easing = FastOutSlowInEasing)
+private val navUnselectedSettleDpAnimationSpec = tween<Dp>(286, easing = FastOutSlowInEasing)
 
 private const val NAV_UNSELECTED_LABEL_ALPHA = 0.792f
 private const val NAV_LABEL_UNSELECTED_ALPHA = 0.835f
@@ -1729,16 +1729,16 @@ private const val NAV_NAV_ITEM_ACTIVE_BORDER_PRESSED = NAV_NAV_ITEM_ACTIVE_BORDE
 private const val NAV_NAV_ITEM_ACTIVE_BORDER_UNSELECTED = 0f
 private const val NAV_NAV_ITEM_ACTIVE_SHADOW_DARK_ALPHA = 0.154f
 private const val NAV_NAV_ITEM_ACTIVE_SHADOW_LIGHT_ALPHA = 0.082f
-private const val NAV_ICON_FACE_GLOW_SELECTED_PRESSED_ALPHA = 0.055f
-private const val NAV_ICON_FACE_GLOW_SELECTED_ALPHA = 0.059f
+private const val NAV_ICON_FACE_GLOW_SELECTED_PRESSED_ALPHA = 0.056f
+private const val NAV_ICON_FACE_GLOW_SELECTED_ALPHA = 0.060f
 private const val NAV_ICON_FACE_GLOW_PRESSED_ALPHA = 0.016f
 private const val NAV_ICON_HALO_SELECTED_PRESSED_ALPHA = 0.032f
-private const val NAV_ICON_HALO_SELECTED_ALPHA = 0.059f
-private const val NAV_ICON_HALO_PRESSED_ALPHA = 0.0105f
+private const val NAV_ICON_HALO_SELECTED_ALPHA = 0.060f
+private const val NAV_ICON_HALO_PRESSED_ALPHA = 0.0108f
 private const val NAV_ICON_HALO_HIGHLIGHT_SELECTED_ALPHA = 0.028f
 private const val NAV_ICON_HALO_HIGHLIGHT_PRESSED_ONLY_ALPHA = 0.0108f
-private const val NAV_ICON_HALO_BORDER_SELECTED_ALPHA = 0.064f
-private const val NAV_ICON_HALO_BORDER_PRESSED_ALPHA = 0.024f
+private const val NAV_ICON_HALO_BORDER_SELECTED_ALPHA = 0.065f
+private const val NAV_ICON_HALO_BORDER_PRESSED_ALPHA = 0.025f
 private const val NAV_ICON_HALO_BORDER_SELECTED = NAV_NAV_ITEM_ACTIVE_BORDER
 private const val NAV_ICON_HALO_BORDER_PRESSED = 0.15f
 private const val NAV_ICON_HALO_BORDER_UNSELECTED = 0f
@@ -1746,13 +1746,13 @@ private const val NAV_ICON_SHADOW_SELECTED_PRESSED_ALPHA = 0.018f
 private const val NAV_ICON_SHADOW_SELECTED_ALPHA = 0.0228f
 private const val NAV_ICON_BACKGROUND_SELECTED_ALPHA = 0.201f
 private const val NAV_ICON_BACKGROUND_PRESSED_ALPHA = 0.055f
-private const val NAV_NAV_ITEM_PILL_SELECTED_PRESSED_ALPHA = 0.184f
-private const val NAV_NAV_ITEM_PILL_SELECTED_ALPHA = 0.159f
-private const val NAV_NAV_ITEM_PILL_TOP_SELECTED_PRESSED_ALPHA = 0.131f
-private const val NAV_NAV_ITEM_PILL_TOP_SELECTED_ALPHA = 0.119f
-private const val NAV_NAV_ITEM_PILL_BORDER_SELECTED_PRESSED_ALPHA = 0.101f
-private const val NAV_NAV_ITEM_PILL_BORDER_SELECTED_ALPHA = 0.134f
-private const val NAV_NAV_ITEM_PILL_BORDER_PRESSED_ALPHA = 0.036f
+private const val NAV_NAV_ITEM_PILL_SELECTED_PRESSED_ALPHA = 0.185f
+private const val NAV_NAV_ITEM_PILL_SELECTED_ALPHA = 0.160f
+private const val NAV_NAV_ITEM_PILL_TOP_SELECTED_PRESSED_ALPHA = 0.132f
+private const val NAV_NAV_ITEM_PILL_TOP_SELECTED_ALPHA = 0.120f
+private const val NAV_NAV_ITEM_PILL_BORDER_SELECTED_PRESSED_ALPHA = 0.102f
+private const val NAV_NAV_ITEM_PILL_BORDER_SELECTED_ALPHA = 0.135f
+private const val NAV_NAV_ITEM_PILL_BORDER_PRESSED_ALPHA = 0.037f
 private const val NAV_ICON_FACE_BORDER = 0.34f
 private const val NAV_NAV_ITEM_PRESSED_ALPHA = 0.035f
 private const val NAV_ICON_HALO_HIGHLIGHT_PRESSED_ALPHA = 0.018f
