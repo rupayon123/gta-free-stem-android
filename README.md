@@ -140,6 +140,14 @@ Debug builds use the Android debug key and are not Play upload artifacts.
 
 ## Reliable push flow for every change
 
+Before pushing, confirm you are inside the GTA Android repo root:
+
+```bash
+git rev-parse --show-toplevel
+```
+
+If that command fails with "not a git repository", you are in the wrong directory.
+
 Use this command when you finish an edit so your branch stays aligned before pushing:
 
 ```bash
