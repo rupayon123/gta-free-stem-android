@@ -1837,6 +1837,11 @@ private fun DestinationLabel(
     isSelected: Boolean = false,
     isActivePress: Boolean = false,
 ) {
+    val selectedPressedOffsetDp = if (compact) {
+        NAV_LABEL_COMPACT_SELECTED_PRESSED_OFFSET_DP
+    } else {
+        NAV_LABEL_SELECTED_PRESSED_OFFSET_DP
+    }
     val selectedOffsetDp = if (compact) {
         NAV_LABEL_COMPACT_OFFSET_SELECTED_DP
     } else {
@@ -1846,6 +1851,16 @@ private fun DestinationLabel(
         NAV_LABEL_COMPACT_SELECTED_SCALE
     } else {
         NAV_LABEL_SELECTED_SCALE
+    }
+    val destinationSelectedScale = if (isActivePress) {
+        NAV_LABEL_SELECTED_PRESSED_SCALE
+    } else {
+        selectedScale
+    }
+    val destinationSelectedOffsetDp = if (isActivePress) {
+        selectedPressedOffsetDp
+    } else {
+        selectedOffsetDp
     }
     val selectedFontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal
     val unselectedLetterSpacing = if (compact) {
@@ -1910,7 +1925,7 @@ private fun DestinationLabel(
     )
     val labelOffset by animateDpAsState(
         targetValue = if (isSelected) {
-            selectedOffsetDp.dp
+            destinationSelectedOffsetDp.dp
         } else if (isPressed) {
             NAV_LABEL_UNSELECTED_PRESSED_OFFSET_DP.dp
         } else {
@@ -1927,7 +1942,7 @@ private fun DestinationLabel(
     )
     val labelScale by animateFloatAsState(
         targetValue = if (isSelected) {
-            selectedScale
+            destinationSelectedScale
         } else if (isPressed) {
             NAV_LABEL_UNSELECTED_PRESSED_SCALE
         } else {
@@ -1993,6 +2008,7 @@ private const val NAV_LABEL_UNSELECTED_VISIBILITY_ALPHA = 0.72f
 private const val NAV_LABEL_UNSELECTED_PRESSED_OFFSET_DP = -0.15f
 private const val NAV_LABEL_UNSELECTED_SCALE = 1f
 private const val NAV_LABEL_SELECTED_SCALE = 1.03f
+private const val NAV_LABEL_SELECTED_PRESSED_SCALE = 1.014f
 private const val NAV_LABEL_COMPACT_FONT_SELECTED = 12.05f
 private const val NAV_LABEL_COMPACT_FONT_UNSELECTED = 11.1f
 private const val NAV_LABEL_COMPACT_LINE_HEIGHT_SELECTED = 13.90f
@@ -2007,6 +2023,8 @@ private const val NAV_LABEL_COMPACT_SELECTED_LETTER_SPACING = 0.0f
 private const val NAV_LABEL_COMPACT_UNSELECTED_LETTER_SPACING = 0.011f
 private const val NAV_LABEL_OFFSET_SELECTED_DP = -0.075f
 private const val NAV_LABEL_COMPACT_OFFSET_SELECTED_DP = -0.085f
+private const val NAV_LABEL_SELECTED_PRESSED_OFFSET_DP = -0.060f
+private const val NAV_LABEL_COMPACT_SELECTED_PRESSED_OFFSET_DP = -0.070f
 private const val NAV_LABEL_COMPACT_SELECTED_SCALE = 1.027f
 private const val NAV_LABEL_UNSELECTED_PRESSED_SCALE = 1.008f
 private const val NAV_BOTTOM_NAV_BAR_OUTER_HORIZONTAL_PADDING = 12.5f
