@@ -1862,6 +1862,7 @@ private fun DestinationLabel(
         targetValue = when {
             isSelected && isActivePress -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_LABEL_SELECTED_ALPHA * 0.96f)
             isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_LABEL_SELECTED_ALPHA)
+            isPressed -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = NAV_LABEL_UNSELECTED_PRESSED_ALPHA)
             else -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = NAV_LABEL_UNSELECTED_ALPHA)
         },
         animationSpec = if (isSelected) {
@@ -1951,6 +1952,7 @@ private val navUnselectedSettleDpAnimationSpec = tween<Dp>(210, easing = FastOut
 
 private const val NAV_UNSELECTED_LABEL_ALPHA = 0.64f
 private const val NAV_LABEL_UNSELECTED_ALPHA = 0.7f
+private const val NAV_LABEL_UNSELECTED_PRESSED_ALPHA = 0.76f
 private const val NAV_LABEL_SELECTED_ALPHA = 1f
 private const val NAV_LABEL_UNSELECTED_VISIBILITY_ALPHA = 0.72f
 private const val NAV_LABEL_UNSELECTED_SCALE = 1f
