@@ -1549,18 +1549,32 @@ private fun DestinationLabel(
         },
         label = "destination-label-scale",
     )
-    val labelShadow = if (isSelected) {
-        Shadow(
-            color = MaterialTheme.colorScheme.primary.copy(alpha = NAV_LABEL_SELECTED_SHADOW_ALPHA),
-            offset = Offset(0f, NAV_LABEL_SELECTED_SHADOW_Y_OFFSET),
-            blurRadius = NAV_LABEL_SELECTED_SHADOW_BLUR,
-        )
+    val labelShadowProgress by animateFloatAsState(
+        targetValue = when {
+            isSelected && !isPressed -> 1f
+            isSelected && isPressed -> 0.92f
+            isPressed && !isSelected -> 0.26f
+            else -> 0f
+        },
+        animationSpec = if (isPressed) {
+            navPressFloatAnimationSpec
+        } else if (isSelected) {
+            navSelectedSettleFloatAnimationSpec
+        } else {
+            navUnselectedSettleFloatAnimationSpec
+        },
+        label = "destination-label-shadow",
+    )
+    val labelShadow = Shadow(
+        color = MaterialTheme.colorScheme.primary.copy(alpha = NAV_LABEL_SELECTED_SHADOW_ALPHA * labelShadowProgress),
+        offset = Offset(0f, NAV_LABEL_SELECTED_SHADOW_Y_OFFSET * labelShadowProgress),
+        blurRadius = NAV_LABEL_SELECTED_SHADOW_BLUR * labelShadowProgress,
+    )
+    val selectedLabelStyle = resolvedStyle.copy(shadow = labelShadow)
+    val textStyle = if (labelShadowProgress > 0.001f) {
+        selectedLabelStyle
     } else {
-        Shadow(
-            color = Color.Transparent,
-            offset = Offset.Zero,
-            blurRadius = 0f,
-        )
+        resolvedStyle
     }
     Text(
         text = label,
@@ -1568,7 +1582,7 @@ private fun DestinationLabel(
             .offset(y = labelOffset)
                     .scale(labelScale),
         color = labelColor.copy(alpha = labelAlpha),
-        style = resolvedStyle.copy(shadow = labelShadow),
+        style = textStyle,
         maxLines = 1,
         textAlign = TextAlign.Center,
         overflow = TextOverflow.Ellipsis,
