@@ -61,7 +61,7 @@ fi
 
 UPSTREAM_REMOTE=${UPSTREAM_REF%%/*}
 UPSTREAM_BRANCH=${UPSTREAM_REF#*/}
-PUSH_REF="${UPSTREAM_REMOTE}/${CURRENT_BRANCH}"
+UPSTREAM_PUSH_REF="${UPSTREAM_REF}"
 
 if ! git remote get-url "$UPSTREAM_REMOTE" >/dev/null 2>&1; then
   echo "Configured remote '$UPSTREAM_REMOTE' is required for push-safe" >&2
@@ -120,7 +120,7 @@ while [ "$attempt" -lt "$max_attempts" ]; do
   attempt=$((attempt + 1))
   echo "Push attempt ${attempt}/${max_attempts}"
 
-  if git push "$UPSTREAM_REMOTE" "$CURRENT_BRANCH"; then
+  if git push "$UPSTREAM_REMOTE" "${CURRENT_BRANCH}:${UPSTREAM_BRANCH}"; then
     echo "Push succeeded."
 
     if ! git fetch --prune --quiet "$UPSTREAM_REMOTE"; then
@@ -129,7 +129,7 @@ while [ "$attempt" -lt "$max_attempts" ]; do
     fi
 
     LOCAL_AFTER=$(git rev-parse "$CURRENT_BRANCH")
-    REMOTE_AFTER=$(git rev-parse "$PUSH_REF")
+    REMOTE_AFTER=$(git rev-parse "$UPSTREAM_PUSH_REF")
     if [ "$LOCAL_AFTER" = "$REMOTE_AFTER" ]; then
       echo "Verified remote includes local HEAD $(git rev-parse --short HEAD)"
       exit 0
