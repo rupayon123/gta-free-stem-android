@@ -1724,8 +1724,17 @@ private fun DestinationLabel(
         animationSpec = if (isPressed) navPressFloatAnimationSpec else navSelectedSettleFloatAnimationSpec,
         label = "destination-label-shadow",
     )
+    val labelShadowAlpha = if (isSelected) {
+        if (isPressed) {
+            NAV_LABEL_SELECTED_SHADOW_ALPHA * 0.86f
+        } else {
+            NAV_LABEL_SELECTED_SHADOW_ALPHA
+        }
+    } else {
+        NAV_LABEL_UNSELECTED_SHADOW_ALPHA
+    }
     val labelShadow = Shadow(
-        color = MaterialTheme.colorScheme.primary.copy(alpha = NAV_LABEL_SELECTED_SHADOW_ALPHA * labelShadowProgress),
+        color = MaterialTheme.colorScheme.primary.copy(alpha = labelShadowAlpha * labelShadowProgress),
         offset = Offset(0f, NAV_LABEL_SELECTED_SHADOW_Y_OFFSET * labelShadowProgress),
         blurRadius = NAV_LABEL_SELECTED_SHADOW_BLUR * labelShadowProgress,
     )
@@ -1791,6 +1800,7 @@ private const val NAV_LABEL_SELECTED_PRESS_ALPHA_VISIBILITY = 0.9930f
 private const val NAV_LABEL_SELECTED_SHADOW_ALPHA = 0.0342f
 private const val NAV_LABEL_SELECTED_SHADOW_BLUR = 0.548f
 private const val NAV_LABEL_SELECTED_SHADOW_Y_OFFSET = 0.0418f
+private const val NAV_LABEL_UNSELECTED_SHADOW_ALPHA = 0.0102f
 private const val NAV_NAV_ITEM_PRESSED_SCALE = 0.9984f
 private const val NAV_LABEL_OFFSET_PRESSED_DP = -0.038f
 private const val NAV_LABEL_OFFSET_UNSELECTED_PRESSED_DP = -0.029f
