@@ -816,8 +816,6 @@ private fun PrimaryNavigationBar(
                                 MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_AMBIENT_GLOW_SELECTED_PRESSED_ALPHA)
                             } else if (isSelected) {
                                 MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_AMBIENT_GLOW_SELECTED_ALPHA)
-                            } else if (isPressed) {
-                                MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_AMBIENT_GLOW_PRESSED_ALPHA)
                             } else {
                                 Color.Transparent
                             },
@@ -829,10 +827,8 @@ private fun PrimaryNavigationBar(
                                 NAV_ICON_AMBIENT_GLOW_SIZE_SELECTED_PRESSED.dp
                             } else if (isSelected) {
                                 NAV_ICON_AMBIENT_GLOW_SIZE_SELECTED.dp
-                            } else if (isPressed) {
-                                NAV_ICON_AMBIENT_GLOW_SIZE_PRESSED.dp
                             } else {
-                                NAV_ICON_AMBIENT_GLOW_SIZE_UNSELECTED.dp
+                                0.dp
                             },
                             animationSpec = if (isPressed) {
                                 navPressDpAnimationSpec
@@ -848,8 +844,6 @@ private fun PrimaryNavigationBar(
                                 NAV_ICON_AMBIENT_GLOW_SELECTED_PRESSED_SCALE
                             } else if (isSelected) {
                                 NAV_ICON_AMBIENT_GLOW_SELECTED_SCALE
-                            } else if (isPressed) {
-                                NAV_ICON_AMBIENT_GLOW_PRESSED_SCALE
                             } else {
                                 1f
                             },
@@ -899,10 +893,10 @@ private fun PrimaryNavigationBar(
                                 .scale(iconContainerScale * iconHaloScale),
                             contentAlignment = Alignment.Center,
                         ) {
-                                if (isSelected || isPressed) {
-                                    Box(
-                                        modifier = Modifier
-                                            .size(iconAmbientGlowSize)
+                            if (isSelected) {
+                                Box(
+                                    modifier = Modifier
+                                        .size(iconAmbientGlowSize)
                                             .scale(iconAmbientGlowScale)
                                             .alpha(iconContainerAlpha)
                                             .background(
@@ -1634,8 +1628,6 @@ private fun PrimaryNavigationRail(
                                 MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_AMBIENT_GLOW_SELECTED_PRESSED_ALPHA)
                             } else if (isSelected) {
                                 MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_AMBIENT_GLOW_SELECTED_ALPHA)
-                            } else if (isPressed) {
-                                MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_AMBIENT_GLOW_PRESSED_ALPHA)
                             } else {
                                 Color.Transparent
                             },
@@ -1647,10 +1639,8 @@ private fun PrimaryNavigationRail(
                                 NAV_ICON_AMBIENT_GLOW_SIZE_SELECTED_PRESSED.dp
                             } else if (isSelected) {
                                 NAV_ICON_AMBIENT_GLOW_SIZE_SELECTED.dp
-                            } else if (isPressed) {
-                                NAV_ICON_AMBIENT_GLOW_SIZE_PRESSED.dp
                             } else {
-                                NAV_ICON_AMBIENT_GLOW_SIZE_UNSELECTED.dp
+                                0.dp
                             },
                             animationSpec = if (isPressed) {
                                 navPressDpAnimationSpec
@@ -1666,8 +1656,6 @@ private fun PrimaryNavigationRail(
                                 NAV_ICON_AMBIENT_GLOW_SELECTED_PRESSED_SCALE
                             } else if (isSelected) {
                                 NAV_ICON_AMBIENT_GLOW_SELECTED_SCALE
-                            } else if (isPressed) {
-                                NAV_ICON_AMBIENT_GLOW_PRESSED_SCALE
                             } else {
                                 1f
                             },
@@ -1716,10 +1704,10 @@ private fun PrimaryNavigationRail(
                             .scale(iconContainerScale * iconHaloScale),
                             contentAlignment = Alignment.Center,
                         ) {
-                                if (isSelected || isPressed) {
-                                    Box(
-                                        modifier = Modifier
-                                            .size(iconAmbientGlowSize)
+                            if (isSelected) {
+                                Box(
+                                    modifier = Modifier
+                                        .size(iconAmbientGlowSize)
                                             .scale(iconAmbientGlowScale)
                                             .alpha(iconContainerAlpha)
                                             .background(
