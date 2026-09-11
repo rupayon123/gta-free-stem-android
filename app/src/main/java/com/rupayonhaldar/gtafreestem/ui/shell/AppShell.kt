@@ -79,10 +79,10 @@ enum class PrimaryDestination(
     @param:DrawableRes val iconResource: Int,
 ) {
     HOME("home", "Home", R.drawable.ic_home),
-    OPPORTUNITIES("navOpportunities", "Opportunities", R.drawable.ic_search),
-    HIGH_SCHOOL("highSchool", "High School", R.drawable.ic_school),
-    SUPPORT("support", "Support", R.drawable.ic_support),
-    ACCOUNT("account", "Account", R.drawable.ic_account),
+    OPPORTUNITIES("navOpportunities", "Discover", R.drawable.ic_search),
+    HIGH_SCHOOL("highSchool", "School", R.drawable.ic_school),
+    SUPPORT("support", "Help", R.drawable.ic_support),
+    ACCOUNT("account", "Profile", R.drawable.ic_account),
 }
 
 @Composable
