@@ -1513,8 +1513,8 @@ private val navUnselectedSettleColorAnimationSpec = tween<Color>(230, easing = F
 private val navUnselectedSettleFloatAnimationSpec = tween<Float>(230, easing = FastOutSlowInEasing)
 private val navUnselectedSettleDpAnimationSpec = tween<Dp>(230, easing = FastOutSlowInEasing)
 
-private const val NAV_UNSELECTED_LABEL_ALPHA = 0.68f
-private const val NAV_LABEL_UNSELECTED_ALPHA = 0.75f
+private const val NAV_UNSELECTED_LABEL_ALPHA = 0.71f
+private const val NAV_LABEL_UNSELECTED_ALPHA = 0.78f
 private const val NAV_LABEL_SELECTED_ALPHA = 1f
 private const val NAV_LABEL_UNSELECTED_VISIBILITY_ALPHA = 0.97f
 private const val NAV_LABEL_UNSELECTED_SCALE = 1f
@@ -1530,10 +1530,10 @@ private const val NAV_LABEL_RAIL_FONT_UNSELECTED = 11.70f
 private const val NAV_LABEL_RAIL_LINE_HEIGHT_SELECTED = 13.95f
 private const val NAV_LABEL_RAIL_LINE_HEIGHT_UNSELECTED = 12.94f
 private const val NAV_LABEL_LETTER_SPACING = 0.01f
-private const val NAV_LABEL_PRESS_ALPHA = 0.93f
-private const val NAV_LABEL_PRESSED_ALPHA = 0.92f
+private const val NAV_LABEL_PRESS_ALPHA = 0.94f
+private const val NAV_LABEL_PRESSED_ALPHA = 0.93f
 private const val NAV_LABEL_SELECTED_PRESS_ALPHA = 0.996f
-private const val NAV_LABEL_SELECTED_PRESS_ALPHA_VISIBILITY = 0.999f
+private const val NAV_LABEL_SELECTED_PRESS_ALPHA_VISIBILITY = 0.998f
 private const val NAV_NAV_ITEM_PRESSED_SCALE = 0.9972f
 private const val NAV_LABEL_OFFSET_PRESSED_DP = -0.08f
 private const val NAV_LABEL_OFFSET_UNSELECTED_PRESSED_DP = 0f
