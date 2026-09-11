@@ -1538,10 +1538,10 @@ private val PrimaryDestination.testTag: String
     get() = "primary-navigation-${name.lowercase()}"
 
 private val navSelectionFloatAnimationSpec = tween<Float>(244, easing = FastOutSlowInEasing)
-private val navPressFloatAnimationSpec = tween<Float>(84, easing = FastOutSlowInEasing)
+private val navPressFloatAnimationSpec = tween<Float>(78, easing = FastOutSlowInEasing)
 private val navSelectionDpAnimationSpec = tween<Dp>(244, easing = FastOutSlowInEasing)
-private val navPressDpAnimationSpec = tween<Dp>(84, easing = FastOutSlowInEasing)
-private val navPressColorAnimationSpec = tween<Color>(84, easing = FastOutSlowInEasing)
+private val navPressDpAnimationSpec = tween<Dp>(78, easing = FastOutSlowInEasing)
+private val navPressColorAnimationSpec = tween<Color>(78, easing = FastOutSlowInEasing)
 private val navSelectionColorAnimationSpec = tween<Color>(244, easing = FastOutSlowInEasing)
 private val navSelectedSettleColorAnimationSpec = tween<Color>(294, easing = FastOutSlowInEasing)
 private val navSelectedSettleFloatAnimationSpec = tween<Float>(290, easing = FastOutSlowInEasing)
