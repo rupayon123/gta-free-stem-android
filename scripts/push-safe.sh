@@ -198,6 +198,10 @@ is_auth_failure() {
   echo "$1" | grep -qiE "authentication|Authentication failed|Permission denied|could not read Username|403|access denied|remote: Permission to .*denied"
 }
 
+is_protection_or_permission_block() {
+  echo "$1" | grep -qiE "GH00[0-9]|protected branch|not allowed to update refs|Update was rejected|pre-receive hook declined|remote: error: GH"
+}
+
 fetch_with_retry() {
   local remote="$1"
   local attempt=0
@@ -318,14 +322,14 @@ while [ "$attempt" -lt "$max_attempts" ]; do
         echo "Verified remote includes local HEAD $(git rev-parse --short "$CURRENT_BRANCH")"
         exit 0
       fi
-      echo "Push succeeded, but remote verification was inconclusive; continuing as success."
-      echo "Run 'git fetch' and inspect origin/${CURRENT_BRANCH} manually if you want strict confirmation."
-      exit 0
+      echo "Push output reported success, but remote verification could not confirm local HEAD."
+      echo "Please verify manually: git fetch && git log origin/${CURRENT_BRANCH} --oneline -n 3"
+      exit 1
     fi
 
-    echo "Push succeeded, but fetch failed during verification; continuing as success."
-    echo "Run 'git fetch' and inspect origin/${CURRENT_BRANCH} manually."
-    exit 0
+    echo "Push reported success, but fetch for verification failed."
+    echo "Please retry once network is back: ./scripts/push-safe.sh \"$COMMIT_MESSAGE\""
+    exit 1
   fi
 
   echo "Push attempt ${attempt}/${max_attempts} failed with exit code ${push_exit_code}."
@@ -335,6 +339,9 @@ while [ "$attempt" -lt "$max_attempts" ]; do
     echo "Detected push rejection. Re-syncing before retry."
   elif is_auth_failure "$push_output"; then
     echo "Detected authentication/permission failure. This requires manual fix before retry."
+    exit 1
+  elif is_protection_or_permission_block "$push_output"; then
+    echo "Detected repository protection or server-side permission block. Resolve branch protections/hooks first."
     exit 1
   elif is_network_or_repo_busy_failure "$push_output"; then
     echo "Detected transient network/repository access issue. Retrying after sync and backoff."
