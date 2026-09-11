@@ -332,6 +332,7 @@ private fun PrimaryNavigationBar(
                     }
                     val isSelected = selectedDestination == destination
                     val isPressed by destinationInteractionSource.collectIsPressedAsState()
+                    val isActivePress = isPressed && isSelected
                     val selectedPillColor by animateColorAsState(
                         targetValue = if (isSelected && isPressed) {
                             MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PILL_SELECTED_PRESSED_ALPHA)
@@ -340,7 +341,7 @@ private fun PrimaryNavigationBar(
                         } else {
                             Color.Transparent
                         },
-                        animationSpec = if (isPressed) {
+                        animationSpec = if (isActivePress) {
                             navPressColorAnimationSpec
                         } else {
                             navSelectedSettleColorAnimationSpec
@@ -355,7 +356,7 @@ private fun PrimaryNavigationBar(
                         } else {
                             Color.Transparent
                         },
-                        animationSpec = if (isPressed) {
+                        animationSpec = if (isActivePress) {
                             navPressColorAnimationSpec
                         } else {
                             navSelectedSettleColorAnimationSpec
@@ -370,7 +371,7 @@ private fun PrimaryNavigationBar(
                         } else {
                             Color.Transparent
                         },
-                        animationSpec = if (isPressed) {
+                        animationSpec = if (isActivePress) {
                             navPressColorAnimationSpec
                         } else {
                             navSelectedSettleColorAnimationSpec
@@ -385,7 +386,7 @@ private fun PrimaryNavigationBar(
                         } else {
                             NAV_BOTTOM_NAV_ITEM_UNSELECTED_ELEVATION.dp
                         },
-                        animationSpec = if (isPressed) {
+                        animationSpec = if (isActivePress) {
                             navPressDpAnimationSpec
                         } else {
                             navSelectedSettleDpAnimationSpec
@@ -398,7 +399,7 @@ private fun PrimaryNavigationBar(
                         } else {
                             NAV_BOTTOM_NAV_ITEM_UNSELECTED_WIDTH.dp
                         },
-                        animationSpec = if (isPressed) {
+                        animationSpec = if (isActivePress) {
                             navPressDpAnimationSpec
                         } else {
                             navSelectedSettleDpAnimationSpec
@@ -413,7 +414,7 @@ private fun PrimaryNavigationBar(
                         } else {
                             NAV_BOTTOM_NAV_ITEM_UNPRESSED_CORNER.dp
                         },
-                        animationSpec = if (isPressed) {
+                        animationSpec = if (isActivePress) {
                             navPressDpAnimationSpec
                         } else {
                             navSelectedSettleDpAnimationSpec
@@ -429,7 +430,7 @@ private fun PrimaryNavigationBar(
                         } else {
                             0.dp
                         },
-                        animationSpec = if (isPressed) {
+                        animationSpec = if (isActivePress) {
                             navPressDpAnimationSpec
                             } else if (isSelected) {
                             navSelectedSettleDpAnimationSpec
@@ -446,7 +447,7 @@ private fun PrimaryNavigationBar(
                         } else {
                             NAV_BOTTOM_NAV_ITEM_UNSELECTED_HEIGHT.dp
                         },
-                        animationSpec = if (isPressed) {
+                        animationSpec = if (isActivePress) {
                             navPressDpAnimationSpec
                             } else if (isSelected) {
                             navSelectedSettleDpAnimationSpec
@@ -463,7 +464,7 @@ private fun PrimaryNavigationBar(
                         } else {
                             1f
                         },
-                        animationSpec = if (isPressed) {
+                        animationSpec = if (isActivePress) {
                             navPressFloatAnimationSpec
                         } else {
                             navSelectedSettleFloatAnimationSpec
@@ -476,7 +477,7 @@ private fun PrimaryNavigationBar(
                         } else {
                             0.dp
                         },
-                        animationSpec = if (isPressed) {
+                        animationSpec = if (isActivePress) {
                             navPressDpAnimationSpec
                             } else if (isSelected) {
                             navSelectedSettleDpAnimationSpec
@@ -537,7 +538,6 @@ private fun PrimaryNavigationBar(
                             .offset(y = activeItemOffset)
                             .scale(activeItemScale),
                     icon = {
-                    val isActivePress = isPressed && isSelected
                     val iconLift by animateDpAsState(
                         targetValue = if (isActivePress) {
                             NAV_ICON_LIFT_SELECTED_PRESSED_DP.dp
@@ -1133,6 +1133,7 @@ private fun PrimaryNavigationRail(
                     }
                     val isSelected = selectedDestination == destination
                     val isPressed by destinationInteractionSource.collectIsPressedAsState()
+                    val isActivePress = isPressed && isSelected
                     val selectedPillColor by animateColorAsState(
                         targetValue = if (isSelected && isPressed) {
                             MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PILL_SELECTED_PRESSED_ALPHA)
@@ -1141,7 +1142,7 @@ private fun PrimaryNavigationRail(
                         } else {
                             Color.Transparent
                         },
-                        animationSpec = if (isPressed) {
+                        animationSpec = if (isActivePress) {
                             navPressColorAnimationSpec
                         } else {
                             navSelectedSettleColorAnimationSpec
@@ -1156,7 +1157,7 @@ private fun PrimaryNavigationRail(
                         } else {
                             Color.Transparent
                         },
-                        animationSpec = if (isPressed) {
+                        animationSpec = if (isActivePress) {
                             navPressColorAnimationSpec
                         } else {
                             navSelectedSettleColorAnimationSpec
@@ -1171,7 +1172,7 @@ private fun PrimaryNavigationRail(
                         } else {
                             Color.Transparent
                         },
-                        animationSpec = if (isPressed) {
+                        animationSpec = if (isActivePress) {
                             navPressColorAnimationSpec
                         } else {
                             navSelectedSettleColorAnimationSpec
@@ -1186,7 +1187,7 @@ private fun PrimaryNavigationRail(
                         } else {
                             NAV_RAIL_ITEM_UNSELECTED_ELEVATION.dp
                         },
-                        animationSpec = if (isPressed) {
+                        animationSpec = if (isActivePress) {
                             navPressDpAnimationSpec
                         } else {
                             navSelectedSettleDpAnimationSpec
@@ -1199,7 +1200,7 @@ private fun PrimaryNavigationRail(
                         } else {
                             NAV_RAIL_ITEM_UNSELECTED_WIDTH.dp
                         },
-                        animationSpec = if (isPressed) {
+                        animationSpec = if (isActivePress) {
                             navPressDpAnimationSpec
                         } else {
                             navSelectedSettleDpAnimationSpec
@@ -1214,7 +1215,7 @@ private fun PrimaryNavigationRail(
                         } else {
                             NAV_RAIL_ITEM_UNPRESSED_CORNER.dp
                         },
-                        animationSpec = if (isPressed) {
+                        animationSpec = if (isActivePress) {
                             navPressDpAnimationSpec
                         } else {
                             navSelectedSettleDpAnimationSpec
@@ -1230,7 +1231,7 @@ private fun PrimaryNavigationRail(
                         } else {
                             0.dp
                         },
-                        animationSpec = if (isPressed) {
+                        animationSpec = if (isActivePress) {
                             navPressDpAnimationSpec
                         } else {
                             navSelectedSettleDpAnimationSpec
@@ -1245,7 +1246,7 @@ private fun PrimaryNavigationRail(
                         } else {
                             NAV_RAIL_ITEM_UNSELECTED_HEIGHT.dp
                         },
-                        animationSpec = if (isPressed) {
+                        animationSpec = if (isActivePress) {
                             navPressDpAnimationSpec
                         } else {
                             navSelectedSettleDpAnimationSpec
@@ -1260,7 +1261,7 @@ private fun PrimaryNavigationRail(
                         } else {
                             1f
                         },
-                        animationSpec = if (isPressed) {
+                        animationSpec = if (isActivePress) {
                             navPressFloatAnimationSpec
                         } else {
                             navSelectedSettleFloatAnimationSpec
@@ -1273,7 +1274,7 @@ private fun PrimaryNavigationRail(
                         } else {
                             0.dp
                         },
-                        animationSpec = if (isPressed) {
+                        animationSpec = if (isActivePress) {
                             navPressDpAnimationSpec
                             } else if (isSelected) {
                             navSelectedSettleDpAnimationSpec
@@ -1334,7 +1335,6 @@ private fun PrimaryNavigationRail(
                     .offset(y = activeItemOffset)
                     .scale(activeItemScale),
                     icon = {
-                    val isActivePress = isPressed && isSelected
                     val iconLift by animateDpAsState(
                         targetValue = if (isActivePress) {
                             NAV_ICON_RAIL_LIFT_SELECTED_PRESSED_DP.dp
@@ -1823,6 +1823,7 @@ private fun DestinationLabel(
     isSelected: Boolean = false,
     isPressed: Boolean = false,
 ) {
+    val isActivePress = isPressed
     val selectedOffsetDp = if (compact) {
         NAV_LABEL_COMPACT_OFFSET_SELECTED_DP
     } else {
@@ -1932,7 +1933,7 @@ private fun DestinationLabel(
             isSelected -> 1f
             else -> 0f
         },
-        animationSpec = if (isPressed) {
+        animationSpec = if (isActivePress) {
             navPressFloatAnimationSpec
         } else if (isSelected) {
             navSelectedSettleFloatAnimationSpec
@@ -1947,7 +1948,7 @@ private fun DestinationLabel(
             isSelected && isPressed -> 0.96f
             else -> 0f
         },
-        animationSpec = if (isPressed) navPressFloatAnimationSpec else navSelectedSettleFloatAnimationSpec,
+        animationSpec = if (isActivePress) navPressFloatAnimationSpec else navSelectedSettleFloatAnimationSpec,
         label = "destination-label-shadow",
     )
     val labelShadowAlpha = if (isSelected) {
