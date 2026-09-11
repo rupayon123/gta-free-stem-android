@@ -576,6 +576,8 @@ private fun PrimaryNavigationBar(
                                 NAV_ICON_BOTTOM_CONTAINER_SELECTED_PRESS_SCALE
                             } else if (isSelected) {
                                 NAV_ICON_BOTTOM_CONTAINER_SELECTED_SCALE
+                            } else if (isPressed) {
+                                NAV_ICON_CONTAINER_UNSELECTED_PRESSED_SCALE
                             } else {
                                 1f
                             },
@@ -593,6 +595,8 @@ private fun PrimaryNavigationBar(
                                 NAV_ICON_BOTTOM_ICON_SCALE_SELECTED_PRESS
                             } else if (isSelected) {
                                 NAV_ICON_BOTTOM_ICON_SCALE_SELECTED
+                            } else if (isPressed) {
+                                NAV_ICON_SCALE_UNSELECTED_PRESSED
                             } else {
                                 1f
                             },
@@ -615,6 +619,8 @@ private fun PrimaryNavigationBar(
                                 NAV_ICON_GLYPH_SELECTED_PRESSED_ALPHA
                             } else if (isSelected) {
                                 NAV_ICON_GLYPH_SELECTED_ALPHA
+                            } else if (isPressed) {
+                                NAV_ICON_GLYPH_UNSELECTED_PRESSED_ALPHA
                             } else {
                                 NAV_ICON_GLYPH_UNSELECTED_ALPHA
                             },
@@ -1373,6 +1379,8 @@ private fun PrimaryNavigationRail(
                             NAV_ICON_RAIL_CONTAINER_SELECTED_PRESS_SCALE
                         } else if (isSelected) {
                             NAV_ICON_CONTAINER_SELECTED_SCALE
+                        } else if (isPressed) {
+                            NAV_ICON_CONTAINER_UNSELECTED_PRESSED_SCALE
                         } else {
                             1f
                         },
@@ -1390,6 +1398,8 @@ private fun PrimaryNavigationRail(
                                 NAV_ICON_SCALE_SELECTED_PRESS_SCALE
                             } else if (isSelected) {
                                 NAV_ICON_SCALE_SELECTED
+                            } else if (isPressed) {
+                                NAV_ICON_SCALE_UNSELECTED_PRESSED
                             } else {
                                 1f
                             },
@@ -1407,6 +1417,8 @@ private fun PrimaryNavigationRail(
                                 NAV_ICON_GLYPH_SELECTED_PRESSED_ALPHA
                             } else if (isSelected) {
                                 NAV_ICON_GLYPH_SELECTED_ALPHA
+                            } else if (isPressed) {
+                                NAV_ICON_GLYPH_UNSELECTED_PRESSED_ALPHA
                             } else {
                                 NAV_ICON_GLYPH_UNSELECTED_ALPHA
                             },
@@ -2030,10 +2042,12 @@ private const val NAV_ICON_SELECTED_ELEVATION = 0.9785f
 private const val NAV_ICON_TINT_SELECTED_PRESSED_ALPHA = 0.985f
 private const val NAV_ICON_RAIL_CONTAINER_SELECTED_PRESS_SCALE = 1.004f
 private const val NAV_ICON_CONTAINER_SELECTED_SCALE = 1.004f
+private const val NAV_ICON_CONTAINER_UNSELECTED_PRESSED_SCALE = 0.9995f
 private const val NAV_ICON_BOTTOM_CONTAINER_SELECTED_PRESS_SCALE = 0.998f
 private const val NAV_ICON_BOTTOM_CONTAINER_SELECTED_SCALE = 1.008f
 private const val NAV_ICON_SCALE_SELECTED_PRESS_SCALE = 0.996f
 private const val NAV_ICON_SCALE_SELECTED = 1.011f
+private const val NAV_ICON_SCALE_UNSELECTED_PRESSED = 0.9988f
 private const val NAV_ICON_BOTTOM_ICON_SCALE_SELECTED_PRESS = 0.999f
 private const val NAV_ICON_BOTTOM_ICON_SCALE_SELECTED = 1.007f
 private const val NAV_ICON_GLYPH_SIZE_BASE = 19.85f
@@ -2047,8 +2061,9 @@ private const val NAV_ICON_FACE_SELECTED_PRESSED_SIZE = 34.6f
 private const val NAV_ICON_FACE_PRESSED_SIZE = NAV_ICON_FACE_SIZE_PRESSED
     private const val NAV_ICON_FACE_SELECTED_SIZE = 35.2f
 private const val NAV_ICON_FACE_UNSELECTED_SIZE = NAV_ICON_FACE_SIZE_BASE
-    private const val NAV_ICON_CONTAINER_UNSELECTED_ALPHA = 0.34f
+private const val NAV_ICON_CONTAINER_UNSELECTED_ALPHA = 0.34f
 private const val NAV_ICON_GLYPH_SELECTED_PRESSED_ALPHA = 0.9885f
+private const val NAV_ICON_GLYPH_UNSELECTED_PRESSED_ALPHA = 0.87f
 private const val NAV_NAV_ITEM_ACTIVE_BORDER = 0.4f
 private const val NAV_NAV_ITEM_ACTIVE_BORDER_SELECTED = NAV_NAV_ITEM_ACTIVE_BORDER
 private const val NAV_NAV_ITEM_ACTIVE_SHADOW_DARK_ALPHA = 0.082f
