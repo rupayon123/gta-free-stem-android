@@ -62,6 +62,41 @@ has_staged_changes() {
   [ -n "$(git diff --cached --name-only)" ]
 }
 
+ensure_git_identity() {
+  local git_name
+  local git_email
+
+  git_name="$(git config --get user.name || true)"
+  git_email="$(git config --get user.email || true)"
+
+  if [ -z "$git_name" ] || [ -z "$git_email" ]; then
+    echo "Cannot create commits without git user identity." >&2
+    echo "Set it once with:
+      git config user.name "Your Name"
+      git config user.email "you@example.com"" >&2
+    exit 1
+  fi
+}
+
+ensure_no_in_progress_git_op() {
+  if [ -d "$PROJECT_ROOT/.git/rebase-apply" ] || [ -d "$PROJECT_ROOT/.git/rebase-merge" ] ||
+     [ -f "$PROJECT_ROOT/.git/MERGE_HEAD" ] ||
+     [ -f "$PROJECT_ROOT/.git/CHERRY_PICK_HEAD" ] || [ -f "$PROJECT_ROOT/.git/BISECT_LOG" ]; then
+    echo "Repository is mid-operation (rebase/merge/cherry-pick/revert/bisect)." >&2
+    echo "Finish or abort that operation before running push-safe." >&2
+    exit 1
+  fi
+}
+
+cleanup_stale_rebase_marker() {
+  if [ -f "$PROJECT_ROOT/.git/REBASE_HEAD" ] &&
+     ! [ -d "$PROJECT_ROOT/.git/rebase-apply" ] &&
+     ! [ -d "$PROJECT_ROOT/.git/rebase-merge" ]; then
+    echo "Removing stale .git/REBASE_HEAD marker before push." 
+    rm -f "$PROJECT_ROOT/.git/REBASE_HEAD"
+  fi
+}
+
 has_upstream_config() {
   [ -n "$(git config --get "branch.${CURRENT_BRANCH}.remote")" ] && \
     [ -n "$(git config --get "branch.${CURRENT_BRANCH}.merge")" ]
@@ -200,6 +235,9 @@ fetch_with_retry() {
 }
 
 echo "Syncing branch ${CURRENT_BRANCH} with ${UPSTREAM_REF}"
+cleanup_stale_rebase_marker
+ensure_git_identity
+ensure_no_in_progress_git_op
   if ! fetch_with_retry "$UPSTREAM_REMOTE"; then
   echo "Could not fetch from ${UPSTREAM_REMOTE} before syncing. Check network/auth first." >&2
   exit 1
