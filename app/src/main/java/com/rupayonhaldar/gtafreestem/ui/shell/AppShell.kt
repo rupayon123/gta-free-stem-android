@@ -44,9 +44,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.clip
@@ -1544,13 +1546,26 @@ private fun DestinationLabel(
         },
         label = "destination-label-scale",
     )
+    val labelShadow = if (isSelected) {
+        Shadow(
+            color = MaterialTheme.colorScheme.primary.copy(alpha = NAV_LABEL_SELECTED_SHADOW_ALPHA),
+            offset = Offset(0f, NAV_LABEL_SELECTED_SHADOW_Y_OFFSET),
+            blurRadius = NAV_LABEL_SELECTED_SHADOW_BLUR,
+        )
+    } else {
+        Shadow(
+            color = Color.Transparent,
+            offset = Offset.Zero,
+            blurRadius = 0f,
+        )
+    }
     Text(
         text = label,
         modifier = Modifier
             .offset(y = labelOffset)
                     .scale(labelScale),
         color = labelColor.copy(alpha = labelAlpha),
-        style = resolvedStyle,
+        style = resolvedStyle.copy(shadow = labelShadow),
         maxLines = 1,
         textAlign = TextAlign.Center,
         overflow = TextOverflow.Ellipsis,
@@ -1594,6 +1609,9 @@ private const val NAV_LABEL_PRESS_ALPHA = 0.963f
 private const val NAV_LABEL_PRESSED_ALPHA = 0.946f
 private const val NAV_LABEL_SELECTED_PRESS_ALPHA = 0.994f
 private const val NAV_LABEL_SELECTED_PRESS_ALPHA_VISIBILITY = 0.992f
+private const val NAV_LABEL_SELECTED_SHADOW_ALPHA = 0.16f
+private const val NAV_LABEL_SELECTED_SHADOW_BLUR = 1.12f
+private const val NAV_LABEL_SELECTED_SHADOW_Y_OFFSET = 0.28f
 private const val NAV_NAV_ITEM_PRESSED_SCALE = 0.9972f
 private const val NAV_LABEL_OFFSET_PRESSED_DP = -0.08f
 private const val NAV_LABEL_OFFSET_UNSELECTED_PRESSED_DP = 0f
