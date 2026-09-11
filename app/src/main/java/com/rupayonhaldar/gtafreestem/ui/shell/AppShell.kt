@@ -735,8 +735,27 @@ private fun PrimaryNavigationBar(
                                 navSelectedSettleDpAnimationSpec
                                 } else {
                                 navUnselectedSettleDpAnimationSpec
-                                },
+                            },
                             label = "bottom-nav-icon-halo-size-${destination.name}",
+                        )
+                        val iconHaloScale by animateFloatAsState(
+                            targetValue = if (isSelected && isPressed) {
+                                NAV_ICON_HALO_SELECTED_PRESSED_SCALE
+                            } else if (isSelected) {
+                                NAV_ICON_HALO_SELECTED_SCALE
+                            } else if (isPressed) {
+                                NAV_ICON_HALO_PRESSED_SCALE
+                            } else {
+                                1f
+                            },
+                            animationSpec = if (isPressed) {
+                                navPressFloatAnimationSpec
+                                } else if (isSelected) {
+                                navSelectedSettleFloatAnimationSpec
+                                } else {
+                                navUnselectedSettleFloatAnimationSpec
+                                },
+                            label = "bottom-nav-icon-halo-scale-${destination.name}",
                         )
                         val iconHaloBorderWidth by animateDpAsState(
                             targetValue = if (isSelected) NAV_ICON_HALO_BORDER_SELECTED.dp else if (isPressed) NAV_ICON_HALO_BORDER_PRESSED.dp else NAV_ICON_HALO_BORDER_UNSELECTED.dp,
@@ -799,7 +818,7 @@ private fun PrimaryNavigationBar(
                                 )
                                 .alpha(iconContainerAlpha)
                                 .offset(y = iconLift)
-                                .scale(iconContainerScale),
+                                .scale(iconContainerScale * iconHaloScale),
                             contentAlignment = Alignment.Center,
                         ) {
                             Box(
@@ -1818,6 +1837,9 @@ private const val NAV_RAIL_ITEM_UNPRESSED_CORNER = 14.56f
 private const val NAV_ICON_LIFT_SELECTED_DP = -0.0638f
 private const val NAV_ICON_LIFT_PRESSED_DP = -0.0674f
 private const val NAV_ICON_LIFT_SELECTED_PRESSED_DP = -0.083f
+private const val NAV_ICON_HALO_SELECTED_SCALE = 1.012f
+private const val NAV_ICON_HALO_PRESSED_SCALE = 1.004f
+private const val NAV_ICON_HALO_SELECTED_PRESSED_SCALE = 1.018f
 private const val NAV_ICON_LIFT_BOTTOM_PRESSED_DP = -0.064f
 private const val NAV_ICON_RAIL_LIFT_SELECTED_DP = -0.0682f
 private const val NAV_ICON_RAIL_LIFT_PRESSED_DP = -0.0622f
