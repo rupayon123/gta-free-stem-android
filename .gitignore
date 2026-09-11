@@ -25,3 +25,4 @@ private*.pem
 app/release/
 /artifacts/
 local.properties
+/graphify-out/
