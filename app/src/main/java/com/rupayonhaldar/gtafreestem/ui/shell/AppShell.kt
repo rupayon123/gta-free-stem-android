@@ -334,7 +334,7 @@ private fun PrimaryNavigationBar(
                     val isPressed by destinationInteractionSource.collectIsPressedAsState()
                     val isActivePress = isPressed && isSelected
                     val selectedPillColor by animateColorAsState(
-                        targetValue = if (isSelected && isPressed) {
+                        targetValue = if (isActivePress) {
                             MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PILL_SELECTED_PRESSED_ALPHA)
                         } else if (isSelected) {
                             MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PILL_SELECTED_ALPHA)
@@ -349,7 +349,7 @@ private fun PrimaryNavigationBar(
                         label = "bottom-nav-pill-color-${destination.name}",
                     )
                     val selectedPillTopColor by animateColorAsState(
-                        targetValue = if (isSelected && isPressed) {
+                        targetValue = if (isActivePress) {
                             MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PILL_TOP_SELECTED_PRESSED_ALPHA)
                         } else if (isSelected) {
                             MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PILL_TOP_SELECTED_ALPHA)
@@ -364,7 +364,7 @@ private fun PrimaryNavigationBar(
                         label = "bottom-nav-pill-top-color-${destination.name}",
                     )
                     val selectedPillBorderColor by animateColorAsState(
-                        targetValue = if (isSelected && isPressed) {
+                        targetValue = if (isActivePress) {
                             MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PILL_BORDER_SELECTED_PRESSED_ALPHA)
                         } else if (isSelected) {
                             MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PILL_BORDER_SELECTED_ALPHA)
@@ -379,7 +379,7 @@ private fun PrimaryNavigationBar(
                         label = "bottom-nav-pill-border-color-${destination.name}",
                     )
                     val selectedPillElevation by animateDpAsState(
-                        targetValue = if (isSelected && isPressed) {
+                        targetValue = if (isActivePress) {
                             NAV_BOTTOM_NAV_ITEM_PRESSED_SELECTED_ELEVATION.dp
                         } else if (isSelected) {
                             NAV_BOTTOM_NAV_ITEM_SELECTED_ELEVATION.dp
@@ -407,7 +407,7 @@ private fun PrimaryNavigationBar(
                         label = "bottom-nav-item-width-${destination.name}",
                     )
                     val activeItemCorner by animateDpAsState(
-                        targetValue = if (isSelected && isPressed) {
+                        targetValue = if (isActivePress) {
                             NAV_BOTTOM_NAV_ITEM_PRESSED_SELECTED_CORNER.dp
                         } else if (isSelected) {
                             NAV_BOTTOM_NAV_ITEM_SELECTED_CORNER.dp
@@ -423,7 +423,7 @@ private fun PrimaryNavigationBar(
                     )
                     val activeItemShape = RoundedCornerShape(activeItemCorner)
                     val activeItemOffset by animateDpAsState(
-                        targetValue = if (isSelected && isPressed) {
+                        targetValue = if (isActivePress) {
                             NAV_BOTTOM_NAV_ITEM_SELECTED_OFFSET_PRESSED_DP.dp
                         } else if (isSelected) {
                             NAV_BOTTOM_NAV_ITEM_SELECTED_OFFSET_DP.dp
@@ -440,7 +440,7 @@ private fun PrimaryNavigationBar(
                         label = "bottom-nav-item-offset-${destination.name}",
                     )
                     val activeItemHeight by animateDpAsState(
-                        targetValue = if (isSelected && isPressed) {
+                        targetValue = if (isActivePress) {
                             NAV_BOTTOM_NAV_ITEM_PRESSED_SELECTED_HEIGHT.dp
                         } else if (isSelected) {
                             NAV_BOTTOM_NAV_ITEM_SELECTED_HEIGHT.dp
@@ -457,7 +457,7 @@ private fun PrimaryNavigationBar(
                         label = "bottom-nav-item-height-${destination.name}",
                     )
                     val activeItemScale by animateFloatAsState(
-                        targetValue = if (isSelected && isPressed) {
+                        targetValue = if (isActivePress) {
                             NAV_BOTTOM_NAV_ITEM_SELECTED_PRESS_SCALE
                         } else if (isSelected) {
                             NAV_BOTTOM_NAV_ITEM_SELECTED_SCALE
@@ -1135,7 +1135,7 @@ private fun PrimaryNavigationRail(
                     val isPressed by destinationInteractionSource.collectIsPressedAsState()
                     val isActivePress = isPressed && isSelected
                     val selectedPillColor by animateColorAsState(
-                        targetValue = if (isSelected && isPressed) {
+                        targetValue = if (isActivePress) {
                             MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PILL_SELECTED_PRESSED_ALPHA)
                         } else if (isSelected) {
                             MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PILL_SELECTED_ALPHA)
@@ -1150,7 +1150,7 @@ private fun PrimaryNavigationRail(
                         label = "rail-pill-color-${destination.name}",
                     )
                     val selectedPillTopColor by animateColorAsState(
-                        targetValue = if (isSelected && isPressed) {
+                        targetValue = if (isActivePress) {
                             MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PILL_TOP_SELECTED_PRESSED_ALPHA)
                         } else if (isSelected) {
                             MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PILL_TOP_SELECTED_ALPHA)
@@ -1165,7 +1165,7 @@ private fun PrimaryNavigationRail(
                         label = "rail-pill-top-color-${destination.name}",
                     )
                     val selectedPillBorderColor by animateColorAsState(
-                        targetValue = if (isSelected && isPressed) {
+                        targetValue = if (isActivePress) {
                             MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PILL_BORDER_SELECTED_PRESSED_ALPHA)
                         } else if (isSelected) {
                             MaterialTheme.colorScheme.primary.copy(alpha = NAV_NAV_ITEM_PILL_BORDER_SELECTED_ALPHA)
@@ -1180,7 +1180,7 @@ private fun PrimaryNavigationRail(
                         label = "rail-pill-border-color-${destination.name}",
                     )
                     val selectedPillElevation by animateDpAsState(
-                        targetValue = if (isSelected && isPressed) {
+                        targetValue = if (isActivePress) {
                             NAV_RAIL_ITEM_PRESSED_SELECTED_ELEVATION.dp
                         } else if (isSelected) {
                             NAV_RAIL_ITEM_SELECTED_ELEVATION.dp
@@ -1208,7 +1208,7 @@ private fun PrimaryNavigationRail(
                         label = "rail-item-width-${destination.name}",
                     )
                     val activeItemCorner by animateDpAsState(
-                        targetValue = if (isSelected && isPressed) {
+                        targetValue = if (isActivePress) {
                             NAV_RAIL_ITEM_PRESSED_SELECTED_CORNER.dp
                         } else if (isSelected) {
                             NAV_RAIL_ITEM_SELECTED_CORNER.dp
@@ -1224,7 +1224,7 @@ private fun PrimaryNavigationRail(
                     )
                     val activeItemShape = RoundedCornerShape(activeItemCorner)
                     val activeItemOffset by animateDpAsState(
-                        targetValue = if (isSelected && isPressed) {
+                        targetValue = if (isActivePress) {
                             NAV_RAIL_ITEM_SELECTED_OFFSET_PRESSED_DP.dp
                         } else if (isSelected) {
                             NAV_RAIL_ITEM_SELECTED_OFFSET_DP.dp
@@ -1239,7 +1239,7 @@ private fun PrimaryNavigationRail(
                         label = "rail-item-offset-${destination.name}",
                     )
                     val activeItemHeight by animateDpAsState(
-                        targetValue = if (isSelected && isPressed) {
+                        targetValue = if (isActivePress) {
                             NAV_RAIL_ITEM_PRESSED_SELECTED_HEIGHT.dp
                         } else if (isSelected) {
                             NAV_RAIL_ITEM_SELECTED_HEIGHT.dp
@@ -1254,7 +1254,7 @@ private fun PrimaryNavigationRail(
                         label = "rail-item-height-${destination.name}",
                     )
                     val activeItemScale by animateFloatAsState(
-                        targetValue = if (isSelected && isPressed) {
+                        targetValue = if (isActivePress) {
                             NAV_RAIL_ITEM_SELECTED_PRESS_SCALE
                         } else if (isSelected) {
                             NAV_RAIL_ITEM_SELECTED_SCALE
@@ -1929,7 +1929,7 @@ private fun DestinationLabel(
     )
     val labelGlow by animateFloatAsState(
         targetValue = when {
-            isSelected && isPressed -> 0.82f
+            isActivePress -> 0.82f
             isSelected -> 1f
             else -> 0f
         },
@@ -1945,7 +1945,7 @@ private fun DestinationLabel(
     val labelShadowProgress by animateFloatAsState(
         targetValue = when {
             isSelected && !isPressed -> 1f
-            isSelected && isPressed -> 0.96f
+            isActivePress -> 0.96f
             else -> 0f
         },
         animationSpec = if (isActivePress) navPressFloatAnimationSpec else navSelectedSettleFloatAnimationSpec,
