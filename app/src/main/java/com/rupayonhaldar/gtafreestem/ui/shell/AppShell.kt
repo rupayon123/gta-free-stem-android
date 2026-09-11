@@ -529,14 +529,16 @@ private fun PrimaryNavigationBar(
                             .offset(y = activeItemOffset)
                             .scale(activeItemScale),
                     icon = {
+                    val isActivePress = isPressed && isSelected
                     val iconLift by animateDpAsState(
-                        targetValue = when {
-                            isPressed && isSelected -> NAV_ICON_LIFT_SELECTED_PRESSED_DP.dp
-                            isPressed -> NAV_ICON_LIFT_BOTTOM_PRESSED_DP.dp
-                            isSelected -> NAV_ICON_LIFT_SELECTED_DP.dp
-                            else -> 0.dp
+                        targetValue = if (isActivePress) {
+                            NAV_ICON_LIFT_SELECTED_PRESSED_DP.dp
+                        } else if (isSelected) {
+                            NAV_ICON_LIFT_SELECTED_DP.dp
+                        } else {
+                            0.dp
                         },
-                        animationSpec = if (isPressed) {
+                        animationSpec = if (isActivePress) {
                             navPressDpAnimationSpec
                             } else if (isSelected) {
                                 navSelectedSettleDpAnimationSpec
@@ -544,15 +546,16 @@ private fun PrimaryNavigationBar(
                                 navSelectionDpAnimationSpec
                                 },
                             label = "bottom-nav-icon-lift-${destination.name}",
-                        )
+                    )
                         val iconElevation by animateFloatAsState(
-                        targetValue = when {
-                            isPressed && isSelected -> NAV_ICON_SELECTED_PRESSED_ELEVATION
-                            isPressed -> NAV_ICON_ELEVATION_PRESSED
-                            isSelected -> NAV_ICON_SELECTED_ELEVATION
-                            else -> 0f
+                        targetValue = if (isActivePress) {
+                            NAV_ICON_SELECTED_PRESSED_ELEVATION
+                        } else if (isSelected) {
+                            NAV_ICON_SELECTED_ELEVATION
+                        } else {
+                            0f
                         },
-                            animationSpec = if (isPressed) {
+                            animationSpec = if (isActivePress) {
                                 navPressFloatAnimationSpec
                                 } else if (isSelected) {
                                 navSelectedSettleFloatAnimationSpec
@@ -562,13 +565,14 @@ private fun PrimaryNavigationBar(
                             label = "bottom-nav-icon-elevation-${destination.name}",
                         )
                         val iconContainerScale by animateFloatAsState(
-                            targetValue = when {
-                                isSelected && isPressed -> NAV_ICON_BOTTOM_CONTAINER_SELECTED_PRESS_SCALE
-                                isPressed -> NAV_ICON_BOTTOM_CONTAINER_PRESSED_SCALE
-                                isSelected -> NAV_ICON_BOTTOM_CONTAINER_SELECTED_SCALE
-                                else -> 1f
+                            targetValue = if (isActivePress) {
+                                NAV_ICON_BOTTOM_CONTAINER_SELECTED_PRESS_SCALE
+                            } else if (isSelected) {
+                                NAV_ICON_BOTTOM_CONTAINER_SELECTED_SCALE
+                            } else {
+                                1f
                             },
-                            animationSpec = if (isPressed) {
+                            animationSpec = if (isActivePress) {
                                 navPressFloatAnimationSpec
                                 } else if (isSelected) {
                                 navSelectedSettleFloatAnimationSpec
@@ -578,13 +582,14 @@ private fun PrimaryNavigationBar(
                             label = "bottom-nav-icon-container-scale-${destination.name}",
                         )
                         val iconScale by animateFloatAsState(
-                            targetValue = when {
-                                isSelected && isPressed -> NAV_ICON_BOTTOM_ICON_SCALE_SELECTED_PRESS
-                                isPressed -> NAV_ICON_BOTTOM_ICON_SCALE_PRESSED
-                                isSelected -> NAV_ICON_BOTTOM_ICON_SCALE_SELECTED
-                                else -> 1f
+                            targetValue = if (isActivePress) {
+                                NAV_ICON_BOTTOM_ICON_SCALE_SELECTED_PRESS
+                            } else if (isSelected) {
+                                NAV_ICON_BOTTOM_ICON_SCALE_SELECTED
+                            } else {
+                                1f
                             },
-                            animationSpec = if (isPressed) {
+                            animationSpec = if (isActivePress) {
                                 navPressFloatAnimationSpec
                                 } else if (isSelected) {
                                 navSelectedSettleFloatAnimationSpec
@@ -594,18 +599,21 @@ private fun PrimaryNavigationBar(
                             label = "bottom-nav-icon-scale-${destination.name}",
                         )
                         val iconColorAnimationSpec = if (isSelected) {
-                            if (isPressed) navPressColorAnimationSpec else navSelectedSettleColorAnimationSpec
+                            if (isActivePress) navPressColorAnimationSpec else navSelectedSettleColorAnimationSpec
+                        } else if (isActivePress) {
+                            navPressColorAnimationSpec
                         } else {
-                            if (isPressed) navPressColorAnimationSpec else navUnselectedSettleColorAnimationSpec
+                            navUnselectedSettleColorAnimationSpec
                         }
                         val iconGlyphAlpha by animateFloatAsState(
-                            targetValue = when {
-                            isSelected && isPressed -> NAV_ICON_GLYPH_SELECTED_PRESSED_ALPHA
-                            isSelected -> NAV_ICON_GLYPH_SELECTED_ALPHA
-                            isPressed -> NAV_ICON_GLYPH_PRESSED_ALPHA
-                            else -> NAV_ICON_GLYPH_UNSELECTED_ALPHA
+                            targetValue = if (isActivePress) {
+                                NAV_ICON_GLYPH_SELECTED_PRESSED_ALPHA
+                            } else if (isSelected) {
+                                NAV_ICON_GLYPH_SELECTED_ALPHA
+                            } else {
+                                NAV_ICON_GLYPH_UNSELECTED_ALPHA
                             },
-                            animationSpec = if (isPressed) {
+                            animationSpec = if (isActivePress) {
                                 navPressFloatAnimationSpec
                                 } else if (isSelected) {
                                 navSelectedSettleFloatAnimationSpec
@@ -615,13 +623,14 @@ private fun PrimaryNavigationBar(
                             label = "bottom-nav-icon-glyph-alpha-${destination.name}",
                         )
                         val iconContainerAlpha by animateFloatAsState(
-                            targetValue = when {
-                            isSelected && isPressed -> NAV_ICON_CONTAINER_PRESSED_SELECTED_ALPHA
-                            isSelected -> NAV_ICON_CONTAINER_SELECTED_ALPHA
-                            isPressed -> NAV_ICON_CONTAINER_PRESSED_ALPHA
-                            else -> NAV_ICON_CONTAINER_UNSELECTED_ALPHA
+                            targetValue = if (isActivePress) {
+                                NAV_ICON_CONTAINER_PRESSED_SELECTED_ALPHA
+                            } else if (isSelected) {
+                                NAV_ICON_CONTAINER_SELECTED_ALPHA
+                            } else {
+                                NAV_ICON_CONTAINER_UNSELECTED_ALPHA
                             },
-                            animationSpec = if (isPressed) {
+                            animationSpec = if (isActivePress) {
                                 navPressFloatAnimationSpec
                                 } else if (isSelected) {
                                 navSelectedSettleFloatAnimationSpec
@@ -631,13 +640,14 @@ private fun PrimaryNavigationBar(
                             label = "bottom-nav-icon-container-alpha-${destination.name}",
                         )
                         val iconGlyphSize by animateDpAsState(
-                            targetValue = when {
-                            isSelected && isPressed -> NAV_ICON_GLYPH_SELECTED_PRESSED_SIZE.dp
-                            isPressed -> NAV_ICON_GLYPH_PRESSED_SIZE.dp
-                            isSelected -> NAV_ICON_GLYPH_SELECTED_SIZE.dp
-                            else -> NAV_ICON_GLYPH_UNSELECTED_SIZE.dp
+                            targetValue = if (isActivePress) {
+                                NAV_ICON_GLYPH_SELECTED_PRESSED_SIZE.dp
+                            } else if (isSelected) {
+                                NAV_ICON_GLYPH_SELECTED_SIZE.dp
+                            } else {
+                                NAV_ICON_GLYPH_UNSELECTED_SIZE.dp
                             },
-                            animationSpec = if (isPressed) {
+                            animationSpec = if (isActivePress) {
                                 navPressDpAnimationSpec
                                 } else if (isSelected) {
                                 navSelectedSettleDpAnimationSpec
@@ -647,13 +657,14 @@ private fun PrimaryNavigationBar(
                             label = "bottom-nav-icon-glyph-size-${destination.name}",
                         )
                         val iconFaceSize by animateDpAsState(
-                            targetValue = when {
-                            isSelected && isPressed -> NAV_ICON_FACE_SELECTED_PRESSED_SIZE.dp
-                            isPressed -> NAV_ICON_FACE_PRESSED_SIZE.dp
-                            isSelected -> NAV_ICON_FACE_SELECTED_SIZE.dp
-                            else -> NAV_ICON_FACE_UNSELECTED_SIZE.dp
+                            targetValue = if (isActivePress) {
+                                NAV_ICON_FACE_SELECTED_PRESSED_SIZE.dp
+                            } else if (isSelected) {
+                                NAV_ICON_FACE_SELECTED_SIZE.dp
+                            } else {
+                                NAV_ICON_FACE_UNSELECTED_SIZE.dp
                             },
-                            animationSpec = if (isPressed) {
+                            animationSpec = if (isActivePress) {
                                 navPressDpAnimationSpec
                                 } else if (isSelected) {
                                 navSelectedSettleDpAnimationSpec
@@ -665,8 +676,6 @@ private fun PrimaryNavigationBar(
                         val iconBackground by animateColorAsState(
                             targetValue = if (isSelected) {
                                 MaterialTheme.colorScheme.secondaryContainer.copy(alpha = NAV_ICON_BACKGROUND_SELECTED_ALPHA)
-                            } else if (isPressed) {
-                                MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_BACKGROUND_PRESSED_ALPHA)
                             } else {
                                 Color.Transparent
                             },
@@ -674,27 +683,29 @@ private fun PrimaryNavigationBar(
                             label = "bottom-nav-icon-background-${destination.name}",
                         )
                         val iconFaceGlow by animateColorAsState(
-                            targetValue = when {
-                                isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_FACE_GLOW_SELECTED_PRESSED_ALPHA)
-                                isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_FACE_GLOW_SELECTED_ALPHA)
-                                isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_FACE_GLOW_PRESSED_ALPHA)
-                                else -> Color.Transparent
+                            targetValue = if (isActivePress) {
+                                MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_FACE_GLOW_SELECTED_PRESSED_ALPHA)
+                            } else if (isSelected) {
+                                MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_FACE_GLOW_SELECTED_ALPHA)
+                            } else {
+                                Color.Transparent
                             },
                             animationSpec = iconColorAnimationSpec,
                             label = "bottom-nav-icon-face-glow-${destination.name}",
                         )
                         val iconTint by animateColorAsState(
-                            targetValue = when {
-                                isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_TINT_SELECTED_PRESSED_ALPHA)
-                                isSelected -> MaterialTheme.colorScheme.primary
-                                isPressed -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = NAV_ICON_TINT_PRESSED_ALPHA)
-                                else -> MaterialTheme.colorScheme.onSurfaceVariant
+                            targetValue = if (isActivePress) {
+                                MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_TINT_SELECTED_PRESSED_ALPHA)
+                            } else if (isSelected) {
+                                MaterialTheme.colorScheme.primary
+                            } else {
+                                MaterialTheme.colorScheme.onSurfaceVariant
                             },
                             animationSpec = iconColorAnimationSpec,
                             label = "bottom-nav-icon-tint-${destination.name}",
                         )
                         val iconHalo by animateColorAsState(
-                            targetValue = if (isSelected && isPressed) {
+                            targetValue = if (isActivePress) {
                                 MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_HALO_SELECTED_PRESSED_ALPHA)
                             } else if (isSelected) {
                                 MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_HALO_SELECTED_ALPHA)
@@ -705,10 +716,12 @@ private fun PrimaryNavigationBar(
                             label = "bottom-nav-icon-halo-${destination.name}",
                         )
                         val iconInnerRim by animateColorAsState(
-                            targetValue = when {
-                                isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_INNER_RIM_SELECTED_PRESSED_ALPHA)
-                                isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_INNER_RIM_SELECTED_ALPHA)
-                                else -> Color.Transparent
+                            targetValue = if (isActivePress) {
+                                MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_INNER_RIM_SELECTED_PRESSED_ALPHA)
+                            } else if (isSelected) {
+                                MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_INNER_RIM_SELECTED_ALPHA)
+                            } else {
+                                Color.Transparent
                             },
                             animationSpec = iconColorAnimationSpec,
                             label = "bottom-nav-icon-inner-rim-${destination.name}",
@@ -718,7 +731,7 @@ private fun PrimaryNavigationBar(
                                 isSelected -> NAV_ICON_INNER_RIM_BORDER_WIDTH.dp
                                 else -> 0.dp
                             },
-                            animationSpec = if (isPressed) {
+                            animationSpec = if (isActivePress) {
                                 navPressDpAnimationSpec
                             } else if (isSelected) {
                                 navSelectedSettleDpAnimationSpec
@@ -728,7 +741,7 @@ private fun PrimaryNavigationBar(
                             label = "bottom-nav-icon-inner-rim-border-width-${destination.name}",
                         )
                         val iconHaloHighlight by animateColorAsState(
-                            targetValue = if (isSelected && isPressed) {
+                            targetValue = if (isActivePress) {
                                 MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_HALO_HIGHLIGHT_PRESSED_ALPHA)
                             } else if (isSelected) {
                                 MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_HALO_HIGHLIGHT_SELECTED_ALPHA)
@@ -739,14 +752,14 @@ private fun PrimaryNavigationBar(
                             label = "bottom-nav-icon-halo-highlight-${destination.name}",
                         )
                         val iconHaloSize by animateDpAsState(
-                            targetValue = if (isSelected && isPressed) {
+                            targetValue = if (isActivePress) {
                                 NAV_ICON_HALO_SIZE_SELECTED_PRESSED.dp
                             } else if (isSelected) {
                                 NAV_ICON_HALO_SIZE_SELECTED.dp
                             } else {
                                 NAV_ICON_HALO_SIZE_UNSELECTED.dp
                             },
-                            animationSpec = if (isPressed) {
+                            animationSpec = if (isActivePress) {
                                 navPressDpAnimationSpec
                                 } else if (isSelected) {
                                 navSelectedSettleDpAnimationSpec
@@ -756,14 +769,14 @@ private fun PrimaryNavigationBar(
                             label = "bottom-nav-icon-halo-size-${destination.name}",
                         )
                         val iconHaloScale by animateFloatAsState(
-                            targetValue = if (isSelected && isPressed) {
+                            targetValue = if (isActivePress) {
                                 NAV_ICON_HALO_SELECTED_PRESSED_SCALE
                             } else if (isSelected) {
                                 NAV_ICON_HALO_SELECTED_SCALE
                             } else {
                                 1f
                             },
-                            animationSpec = if (isPressed) {
+                            animationSpec = if (isActivePress) {
                                 navPressFloatAnimationSpec
                                 } else if (isSelected) {
                                 navSelectedSettleFloatAnimationSpec
@@ -778,7 +791,7 @@ private fun PrimaryNavigationBar(
                             } else {
                                 0.dp
                             },
-                            animationSpec = if (isPressed) {
+                            animationSpec = if (isActivePress) {
                                 navPressDpAnimationSpec
                                 } else if (isSelected) {
                                 navSelectedSettleDpAnimationSpec
@@ -788,12 +801,14 @@ private fun PrimaryNavigationBar(
                             label = "bottom-nav-icon-halo-border-width-${destination.name}",
                         )
                         val iconShadowColor by animateColorAsState(
-                            targetValue = when {
-                                isSelected && isPressed -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_SHADOW_SELECTED_PRESSED_ALPHA)
-                                isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_SHADOW_SELECTED_ALPHA)
-                                else -> Color.Transparent
+                            targetValue = if (isActivePress) {
+                                MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_SHADOW_SELECTED_PRESSED_ALPHA)
+                            } else if (isSelected) {
+                                MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_SHADOW_SELECTED_ALPHA)
+                            } else {
+                                Color.Transparent
                             },
-                            animationSpec = if (isPressed) {
+                            animationSpec = if (isActivePress) {
                                 navPressColorAnimationSpec
                                 } else if (isSelected) {
                                 navSelectedSettleColorAnimationSpec
@@ -803,7 +818,7 @@ private fun PrimaryNavigationBar(
                             label = "bottom-nav-icon-shadow-${destination.name}",
                         )
                         val iconAmbientGlow by animateColorAsState(
-                            targetValue = if (isSelected && isPressed) {
+                            targetValue = if (isActivePress) {
                                 MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_AMBIENT_GLOW_SELECTED_PRESSED_ALPHA)
                             } else if (isSelected) {
                                 MaterialTheme.colorScheme.primary.copy(alpha = NAV_ICON_AMBIENT_GLOW_SELECTED_ALPHA)
@@ -814,14 +829,14 @@ private fun PrimaryNavigationBar(
                             label = "bottom-nav-icon-ambient-glow-${destination.name}",
                         )
                         val iconAmbientGlowSize by animateDpAsState(
-                            targetValue = if (isSelected && isPressed) {
+                            targetValue = if (isActivePress) {
                                 NAV_ICON_AMBIENT_GLOW_SIZE_SELECTED_PRESSED.dp
                             } else if (isSelected) {
                                 NAV_ICON_AMBIENT_GLOW_SIZE_SELECTED.dp
                             } else {
                                 0.dp
                             },
-                            animationSpec = if (isPressed) {
+                            animationSpec = if (isActivePress) {
                                 navPressDpAnimationSpec
                                 } else if (isSelected) {
                                 navSelectedSettleDpAnimationSpec
@@ -831,14 +846,14 @@ private fun PrimaryNavigationBar(
                             label = "bottom-nav-icon-ambient-glow-size-${destination.name}",
                         )
                         val iconAmbientGlowScale by animateFloatAsState(
-                            targetValue = if (isSelected && isPressed) {
+                            targetValue = if (isActivePress) {
                                 NAV_ICON_AMBIENT_GLOW_SELECTED_PRESSED_SCALE
                             } else if (isSelected) {
                                 NAV_ICON_AMBIENT_GLOW_SELECTED_SCALE
                             } else {
                                 1f
                             },
-                            animationSpec = if (isPressed) {
+                            animationSpec = if (isActivePress) {
                                 navPressFloatAnimationSpec
                                 } else if (isSelected) {
                                 navSelectedSettleFloatAnimationSpec
