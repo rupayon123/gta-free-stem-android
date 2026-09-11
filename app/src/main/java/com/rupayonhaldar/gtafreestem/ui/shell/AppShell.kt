@@ -1911,19 +1911,6 @@ private fun DestinationLabel(
         },
         label = "destination-label-scale",
     )
-    val labelUnderlineVisibility by animateFloatAsState(
-        targetValue = if (isSelected) {
-            1f
-        } else {
-            0f
-        },
-        animationSpec = if (isSelected) {
-            navSelectedSettleFloatAnimationSpec
-        } else {
-            navUnselectedSettleFloatAnimationSpec
-        },
-        label = "destination-label-underline-visibility",
-    )
     val labelGlow by animateFloatAsState(
         targetValue = when {
             isActivePress -> 0.9f
@@ -2025,20 +2012,6 @@ private fun DestinationLabel(
                 overflow = TextOverflow.Ellipsis,
             )
         }
-        if (isSelected && labelUnderlineVisibility > 0.001f) {
-            Box(
-                modifier = Modifier
-                    .padding(top = 1.dp)
-                    .height(NAV_LABEL_SELECTED_UNDERLINE_HEIGHT.dp)
-                    .fillMaxWidth(NAV_LABEL_SELECTED_UNDERLINE_WIDTH_FRACTION * labelUnderlineVisibility)
-                    .clip(RoundedCornerShape(NAV_LABEL_SELECTED_UNDERLINE_HEIGHT.dp))
-                    .background(
-                        color = MaterialTheme.colorScheme.primary.copy(
-                            alpha = labelAlpha * NAV_LABEL_SELECTED_UNDERLINE_ALPHA * labelUnderlineVisibility,
-                        ),
-                    ),
-            )
-        }
     }
 }
 
@@ -2080,14 +2053,11 @@ private const val NAV_LABEL_SELECTED_SHADOW_ALPHA = 0.0342f
 private const val NAV_LABEL_SELECTED_SHADOW_BLUR = 0.548f
 private const val NAV_LABEL_SELECTED_SHADOW_Y_OFFSET = 0.0418f
 private const val NAV_LABEL_UNSELECTED_SHADOW_ALPHA = 0.0102f
-private const val NAV_LABEL_SELECTED_UNDERLINE_ALPHA = 0.42f
 private const val NAV_LABEL_SELECTED_GLOW_ALPHA = 0.072f
 private const val NAV_LABEL_SELECTED_GLOW_WIDTH_FRACTION = 0.86f
 private const val NAV_LABEL_SELECTED_GLOW_HEIGHT = 1.6f
 private const val NAV_LABEL_SELECTED_GLOW_WIDTH_COMPACT_FRACTION = 0.74f
 private const val NAV_LABEL_SELECTED_GLOW_HEIGHT_COMPACT = 1.25f
-private const val NAV_LABEL_SELECTED_UNDERLINE_HEIGHT = 1.0f
-private const val NAV_LABEL_SELECTED_UNDERLINE_WIDTH_FRACTION = 0.58f
 private const val NAV_LABEL_OFFSET_SELECTED_DP = -0.086f
 private const val NAV_LABEL_COMPACT_OFFSET_SELECTED_DP = -0.036f
 private const val NAV_LABEL_COMPACT_SELECTED_SCALE = 1.0062f
