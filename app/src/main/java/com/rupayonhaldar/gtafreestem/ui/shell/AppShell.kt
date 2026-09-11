@@ -972,7 +972,7 @@ private fun PrimaryNavigationBar(
                             label = destinationLabel(destination),
                             compact = true,
                             isSelected = isSelected,
-                            isPressed = isActivePress,
+                            isActivePress = isActivePress,
                         )
                     },
                     alwaysShowLabel = true,
@@ -1798,7 +1798,7 @@ private fun PrimaryNavigationRail(
                             destinationLabel(destination),
                             compact = false,
                             isSelected = isSelected,
-                            isPressed = isActivePress,
+                            isActivePress = isActivePress,
                         )
                     },
                     alwaysShowLabel = true,
@@ -1821,9 +1821,8 @@ private fun DestinationLabel(
     label: String,
     compact: Boolean,
     isSelected: Boolean = false,
-    isPressed: Boolean = false,
+    isActivePress: Boolean = false,
 ) {
-    val isActivePress = isPressed
     val selectedOffsetDp = if (compact) {
         NAV_LABEL_COMPACT_OFFSET_SELECTED_DP
     } else {
@@ -1944,7 +1943,7 @@ private fun DestinationLabel(
     )
     val labelShadowProgress by animateFloatAsState(
         targetValue = when {
-            isSelected && !isPressed -> 1f
+            isSelected && !isActivePress -> 1f
             isActivePress -> 0.96f
             else -> 0f
         },
@@ -1952,7 +1951,7 @@ private fun DestinationLabel(
         label = "destination-label-shadow",
     )
     val labelShadowAlpha = if (isSelected) {
-        if (isPressed) {
+        if (isActivePress) {
             NAV_LABEL_SELECTED_SHADOW_ALPHA * 0.86f
         } else {
             NAV_LABEL_SELECTED_SHADOW_ALPHA
