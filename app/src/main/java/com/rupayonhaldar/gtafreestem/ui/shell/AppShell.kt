@@ -1552,17 +1552,10 @@ private fun DestinationLabel(
     val labelShadowProgress by animateFloatAsState(
         targetValue = when {
             isSelected && !isPressed -> 1f
-            isSelected && isPressed -> 0.92f
-            isPressed && !isSelected -> 0.26f
+            isSelected && isPressed -> 0.9f
             else -> 0f
         },
-        animationSpec = if (isPressed) {
-            navPressFloatAnimationSpec
-        } else if (isSelected) {
-            navSelectedSettleFloatAnimationSpec
-        } else {
-            navUnselectedSettleFloatAnimationSpec
-        },
+        animationSpec = if (isPressed) navPressFloatAnimationSpec else navSelectedSettleFloatAnimationSpec,
         label = "destination-label-shadow",
     )
     val labelShadow = Shadow(
