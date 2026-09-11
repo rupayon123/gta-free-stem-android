@@ -1585,18 +1585,18 @@ private fun DestinationLabel(
 private val PrimaryDestination.testTag: String
     get() = "primary-navigation-${name.lowercase()}"
 
-private val navSelectionFloatAnimationSpec = tween<Float>(256, easing = FastOutSlowInEasing)
-private val navPressFloatAnimationSpec = tween<Float>(118, easing = FastOutSlowInEasing)
-private val navSelectionDpAnimationSpec = tween<Dp>(250, easing = FastOutSlowInEasing)
-private val navPressDpAnimationSpec = tween<Dp>(118, easing = FastOutSlowInEasing)
+private val navSelectionFloatAnimationSpec = tween<Float>(236, easing = FastOutSlowInEasing)
+private val navPressFloatAnimationSpec = tween<Float>(108, easing = FastOutSlowInEasing)
+private val navSelectionDpAnimationSpec = tween<Dp>(238, easing = FastOutSlowInEasing)
+private val navPressDpAnimationSpec = tween<Dp>(108, easing = FastOutSlowInEasing)
 private val navPressColorAnimationSpec = tween<Color>(132, easing = FastOutSlowInEasing)
-private val navSelectionColorAnimationSpec = tween<Color>(255, easing = FastOutSlowInEasing)
-private val navSelectedSettleColorAnimationSpec = tween<Color>(304, easing = FastOutSlowInEasing)
+private val navSelectionColorAnimationSpec = tween<Color>(246, easing = FastOutSlowInEasing)
+private val navSelectedSettleColorAnimationSpec = tween<Color>(292, easing = FastOutSlowInEasing)
 private val navSelectedSettleFloatAnimationSpec = tween<Float>(300, easing = FastOutSlowInEasing)
 private val navSelectedSettleDpAnimationSpec = tween<Dp>(300, easing = FastOutSlowInEasing)
-private val navUnselectedSettleColorAnimationSpec = tween<Color>(286, easing = FastOutSlowInEasing)
-private val navUnselectedSettleFloatAnimationSpec = tween<Float>(286, easing = FastOutSlowInEasing)
-private val navUnselectedSettleDpAnimationSpec = tween<Dp>(286, easing = FastOutSlowInEasing)
+private val navUnselectedSettleColorAnimationSpec = tween<Color>(276, easing = FastOutSlowInEasing)
+private val navUnselectedSettleFloatAnimationSpec = tween<Float>(276, easing = FastOutSlowInEasing)
+private val navUnselectedSettleDpAnimationSpec = tween<Dp>(276, easing = FastOutSlowInEasing)
 
 private const val NAV_UNSELECTED_LABEL_ALPHA = 0.700f
 private const val NAV_LABEL_UNSELECTED_ALPHA = 0.760f
@@ -1622,7 +1622,7 @@ private const val NAV_LABEL_SELECTED_PRESS_ALPHA_VISIBILITY = 0.9935f
 private const val NAV_LABEL_SELECTED_SHADOW_ALPHA = 0.032f
 private const val NAV_LABEL_SELECTED_SHADOW_BLUR = 0.58f
 private const val NAV_LABEL_SELECTED_SHADOW_Y_OFFSET = 0.06f
-private const val NAV_NAV_ITEM_PRESSED_SCALE = 0.9978f
+private const val NAV_NAV_ITEM_PRESSED_SCALE = 0.9985f
 private const val NAV_LABEL_OFFSET_PRESSED_DP = -0.048f
 private const val NAV_LABEL_OFFSET_UNSELECTED_PRESSED_DP = -0.042f
 private const val NAV_LABEL_OFFSET_SELECTED_DP = -0.110f
@@ -1698,18 +1698,18 @@ private const val NAV_ICON_SELECTED_ELEVATION = 1.62f
 private const val NAV_ICON_ELEVATION_PRESSED = 0.66f
 private const val NAV_ICON_SCALE_PRESSED = 0.9976f
 private const val NAV_ICON_TINT_SELECTED_PRESSED_ALPHA = 0.960f
-private const val NAV_ICON_CONTAINER_SELECTED_PRESS_SCALE = 0.9979f
+private const val NAV_ICON_CONTAINER_SELECTED_PRESS_SCALE = 0.9983f
 private const val NAV_ICON_RAIL_CONTAINER_SELECTED_PRESS_SCALE = 0.9979f
 private const val NAV_ICON_RAIL_CONTAINER_PRESSED_SCALE = 0.9990f
 private const val NAV_ICON_CONTAINER_SELECTED_SCALE = 1.0062f
-private const val NAV_ICON_BOTTOM_CONTAINER_SELECTED_PRESS_SCALE = 0.9972f
+private const val NAV_ICON_BOTTOM_CONTAINER_SELECTED_PRESS_SCALE = 0.9978f
 private const val NAV_ICON_BOTTOM_CONTAINER_PRESSED_SCALE = 0.9990f
-private const val NAV_ICON_BOTTOM_CONTAINER_SELECTED_SCALE = 1.0059f
-private const val NAV_ICON_SCALE_SELECTED_PRESS_SCALE = 0.9987f
-private const val NAV_ICON_SCALE_SELECTED = 1.0054f
-private const val NAV_ICON_BOTTOM_ICON_SCALE_SELECTED_PRESS = 0.9982f
-private const val NAV_ICON_BOTTOM_ICON_SCALE_PRESSED = 0.9988f
-private const val NAV_ICON_BOTTOM_ICON_SCALE_SELECTED = 1.0050f
+private const val NAV_ICON_BOTTOM_CONTAINER_SELECTED_SCALE = 1.0048f
+private const val NAV_ICON_SCALE_SELECTED_PRESS_SCALE = 0.9993f
+private const val NAV_ICON_SCALE_SELECTED = 1.0046f
+private const val NAV_ICON_BOTTOM_ICON_SCALE_SELECTED_PRESS = 0.9991f
+private const val NAV_ICON_BOTTOM_ICON_SCALE_PRESSED = 0.9993f
+private const val NAV_ICON_BOTTOM_ICON_SCALE_SELECTED = 1.0044f
 private const val NAV_ICON_GLYPH_SIZE_BASE = 19.3f
 private const val NAV_ICON_GLYPH_SELECTED_PRESSED_SIZE = 20.1f
 private const val NAV_ICON_GLYPH_SELECTED_SIZE = 20.3f
