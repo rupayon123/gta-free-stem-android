@@ -976,6 +976,7 @@ private fun PrimaryNavigationBar(
                         DestinationLabel(
                             label = destinationLabel(destination),
                             compact = true,
+                            isPressed = isPressed,
                             isSelected = isSelected,
                             isActivePress = isActivePress,
                         )
@@ -1808,6 +1809,7 @@ private fun PrimaryNavigationRail(
                         DestinationLabel(
                             destinationLabel(destination),
                             compact = false,
+                            isPressed = isPressed,
                             isSelected = isSelected,
                             isActivePress = isActivePress,
                         )
@@ -1831,6 +1833,7 @@ private fun PrimaryNavigationRail(
 private fun DestinationLabel(
     label: String,
     compact: Boolean,
+    isPressed: Boolean = false,
     isSelected: Boolean = false,
     isActivePress: Boolean = false,
 ) {
@@ -1900,6 +1903,8 @@ private fun DestinationLabel(
     val labelOffset by animateDpAsState(
         targetValue = if (isSelected) {
             selectedOffsetDp.dp
+        } else if (isPressed) {
+            NAV_LABEL_UNSELECTED_PRESSED_OFFSET_DP.dp
         } else {
             0.dp
         },
@@ -1913,6 +1918,8 @@ private fun DestinationLabel(
     val labelScale by animateFloatAsState(
         targetValue = if (isSelected) {
             selectedScale
+        } else if (isPressed) {
+            NAV_LABEL_UNSELECTED_PRESSED_SCALE
         } else {
             NAV_LABEL_UNSELECTED_SCALE
         },
@@ -1967,6 +1974,7 @@ private const val NAV_LABEL_UNSELECTED_ALPHA = 0.7f
 private const val NAV_LABEL_UNSELECTED_PRESSED_ALPHA = 0.76f
 private const val NAV_LABEL_SELECTED_ALPHA = 1f
 private const val NAV_LABEL_UNSELECTED_VISIBILITY_ALPHA = 0.72f
+private const val NAV_LABEL_UNSELECTED_PRESSED_OFFSET_DP = -0.15f
 private const val NAV_LABEL_UNSELECTED_SCALE = 1f
 private const val NAV_LABEL_SELECTED_SCALE = 1.02f
 private const val NAV_LABEL_COMPACT_FONT_SELECTED = 12.05f
@@ -1984,6 +1992,7 @@ private const val NAV_LABEL_COMPACT_UNSELECTED_LETTER_SPACING = 0.011f
 private const val NAV_LABEL_OFFSET_SELECTED_DP = 0f
 private const val NAV_LABEL_COMPACT_OFFSET_SELECTED_DP = 0f
 private const val NAV_LABEL_COMPACT_SELECTED_SCALE = 1.02f
+private const val NAV_LABEL_UNSELECTED_PRESSED_SCALE = 1.008f
 private const val NAV_BOTTOM_NAV_BAR_OUTER_HORIZONTAL_PADDING = 12.5f
 private const val NAV_BOTTOM_NAV_BAR_OUTER_VERTICAL_PADDING = 4.2f
 private const val NAV_BOTTOM_NAV_BAR_INNER_PADDING = 9.8f
