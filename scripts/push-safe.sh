@@ -58,10 +58,25 @@ has_staged_changes() {
   [ -n "$(git diff --cached --name-only)" ]
 }
 
+has_upstream_config() {
+  [ -n "$(git config --get "branch.${CURRENT_BRANCH}.remote")" ] && \
+    [ -n "$(git config --get "branch.${CURRENT_BRANCH}.merge")" ]
+}
+
+cleanup_stale_index_lock() {
+  local lock_file="$PROJECT_ROOT/.git/index.lock"
+  if [ -f "$lock_file" ]; then
+    echo "Removing stale index lock at $lock_file"
+    rm -f "$lock_file"
+  fi
+}
+
 if [ ! -d .git ]; then
   echo "Not a git repository: $PROJECT_ROOT" >&2
   exit 1
 fi
+
+cleanup_stale_index_lock
 
 CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 if [ -z "$CURRENT_BRANCH" ] || [ "$CURRENT_BRANCH" = "HEAD" ]; then
@@ -145,12 +160,18 @@ fi
 
 attempt=0
 max_attempts=5
+retry_delay=1
 
 while [ "$attempt" -lt "$max_attempts" ]; do
   attempt=$((attempt + 1))
   echo "Push attempt ${attempt}/${max_attempts}"
 
-  push_output="$(git push "$UPSTREAM_REMOTE" "${CURRENT_BRANCH}:${TARGET_PUSH_BRANCH}" 2>&1 || true)"
+  if has_upstream_config; then
+    push_output="$(git push "$UPSTREAM_REMOTE" "${CURRENT_BRANCH}:${TARGET_PUSH_BRANCH}" 2>&1 || true)"
+  else
+    echo "No upstream branch configured for ${CURRENT_BRANCH}; creating tracked upstream on push."
+    push_output="$(git push -u "$UPSTREAM_REMOTE" "$CURRENT_BRANCH" 2>&1 || true)"
+  fi
   push_exit_code=$?
 
   if [ "$push_exit_code" -eq 0 ]; then
@@ -182,6 +203,17 @@ while [ "$attempt" -lt "$max_attempts" ]; do
     exit 1
   else
     echo "Unknown push failure; retrying after sync."
+  fi
+
+  if [ "$attempt" -ge "$max_attempts" ]; then
+    break
+  fi
+
+  echo "Waiting ${retry_delay}s before retry."
+  sleep "$retry_delay"
+  retry_delay=$((retry_delay * 2))
+  if [ "$retry_delay" -gt 16 ]; then
+    retry_delay=16
   fi
 
   if ! git fetch --prune "$UPSTREAM_REMOTE"; then
