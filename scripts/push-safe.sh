@@ -7,21 +7,42 @@ PROJECT_ROOT=$(CDPATH= cd -- "$SCRIPT_DIR/.." && pwd -P)
 cd "$PROJECT_ROOT"
 
 print_usage() {
-  printf 'Usage: %s <commit-message> [--with-untracked]\n' "$(basename "$0")"
-  printf 'Example: %s "Refine nav tint contrast"\n' "$(basename "$0")"
+  printf 'Usage: %s [--with-untracked] [commit-message]\n' "$(basename "$0")"
+  printf 'Usage: %s --with-untracked "Refine nav tint contrast"\n' "$(basename "$0")"
   printf '\n'
   printf 'Tracked and untracked file changes are included by default.\n'
-  printf 'If --with-untracked is passed, behavior is explicit for legacy callers.\n'
+  printf 'If you do not pass a commit message, one is auto-generated from UTC time.\n'
+  printf 'Use --with-untracked only for legacy callers; it is currently a no-op.\n'
 }
 
-if [ "$#" -lt 1 ]; then
-  print_usage
-  echo "Missing commit message" >&2
-  exit 2
-fi
-
-COMMIT_MESSAGE=$1
+COMMIT_MESSAGE=""
 INCLUDE_UNTRACKED=${2:-}
+
+while [ "$#" -gt 0 ]; do
+  case "$1" in
+    --with-untracked)
+      INCLUDE_UNTRACKED="--with-untracked"
+      shift
+      ;;
+    -h|--help)
+      print_usage
+      exit 0
+      ;;
+    *)
+      if [ -n "$COMMIT_MESSAGE" ]; then
+        print_usage
+        echo "Too many arguments provided." >&2
+        exit 2
+      fi
+      COMMIT_MESSAGE="$1"
+      shift
+      ;;
+  esac
+done
+
+if [ -z "$COMMIT_MESSAGE" ]; then
+  COMMIT_MESSAGE="chore: checkpoint $(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+fi
 
 if [ -n "$INCLUDE_UNTRACKED" ] && [ "$INCLUDE_UNTRACKED" != "--with-untracked" ]; then
   echo "Unsupported option: $INCLUDE_UNTRACKED" >&2

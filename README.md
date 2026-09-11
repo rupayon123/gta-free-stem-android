@@ -138,6 +138,27 @@ No global Gradle installation is needed; use the checked-in wrapper.
 
 Debug builds use the Android debug key and are not Play upload artifacts.
 
+## Reliable push flow for every change
+
+Use this command when you finish an edit so your branch stays aligned before pushing:
+
+```bash
+./scripts/push-safe.sh "Describe this change"
+```
+
+`push-safe.sh` now:
+
+- pulls and rebases against `origin/main` before committing/pushing,
+- stages and commits all local edits automatically,
+- retries the push after transient failures, and
+- verifies the remote head matches your local `HEAD`.
+
+If a push still fails, it is usually one of:
+
+- branch mismatch (not on `main`), or
+- local auth/fetch issue (network or token) preventing sync from `origin`.
+In both cases, run the same command from the GTA Free STEM Android root.
+
 ## Release preparation
 
 Start with these documents:
