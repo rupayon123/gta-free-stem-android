@@ -1113,13 +1113,13 @@ private fun PrimaryNavigationRail(
                                 },
                             label = "rail-icon-elevation-${destination.name}",
                         )
-                        val iconContainerScale by animateFloatAsState(
-                            targetValue = when {
-                                isSelected && isPressed -> NAV_ICON_RAIL_CONTAINER_SELECTED_PRESS_SCALE
-                                isPressed -> 1f
-                                isSelected -> NAV_ICON_CONTAINER_SELECTED_SCALE
-                                else -> 1f
-                            },
+                    val iconContainerScale by animateFloatAsState(
+                        targetValue = when {
+                            isSelected && isPressed -> NAV_ICON_RAIL_CONTAINER_SELECTED_PRESS_SCALE
+                            isPressed -> NAV_ICON_RAIL_CONTAINER_PRESSED_SCALE
+                            isSelected -> NAV_ICON_CONTAINER_SELECTED_SCALE
+                            else -> 1f
+                        },
                             animationSpec = if (isPressed) {
                                 navPressFloatAnimationSpec
                                 } else if (isSelected) {
@@ -1700,6 +1700,7 @@ private const val NAV_ICON_SCALE_PRESSED = 0.9982f
 private const val NAV_ICON_TINT_SELECTED_PRESSED_ALPHA = 0.960f
 private const val NAV_ICON_CONTAINER_SELECTED_PRESS_SCALE = 0.9979f
 private const val NAV_ICON_RAIL_CONTAINER_SELECTED_PRESS_SCALE = 0.9979f
+private const val NAV_ICON_RAIL_CONTAINER_PRESSED_SCALE = 0.9990f
 private const val NAV_ICON_CONTAINER_SELECTED_SCALE = 1.0062f
 private const val NAV_ICON_BOTTOM_CONTAINER_SELECTED_PRESS_SCALE = 0.9972f
 private const val NAV_ICON_BOTTOM_CONTAINER_PRESSED_SCALE = 0.9990f
