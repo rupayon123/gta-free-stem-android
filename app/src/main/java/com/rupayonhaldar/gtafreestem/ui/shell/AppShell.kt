@@ -59,6 +59,7 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.selected
@@ -415,6 +416,7 @@ private fun PrimaryNavigationBar(
                             .semantics(mergeDescendants = true) {
                                 contentDescription = destinationLabel(destination)
                                 selected = isSelected
+                                role = Role.Tab
                             }
                             .padding(
                                 horizontal = NAV_BOTTOM_NAV_ITEM_PADDING_HORIZONTAL.dp,
@@ -1041,6 +1043,7 @@ private fun PrimaryNavigationRail(
                             .semantics(mergeDescendants = true) {
                                 contentDescription = destinationLabel(destination)
                                 selected = isSelected
+                                role = Role.Tab
                             }
                             .padding(
                                 horizontal = NAV_RAIL_ITEM_PADDING_HORIZONTAL.dp,
