@@ -50,7 +50,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.clip
@@ -1911,49 +1910,6 @@ private fun DestinationLabel(
         },
         label = "destination-label-scale",
     )
-    val labelGlow by animateFloatAsState(
-        targetValue = when {
-            isActivePress -> 0.9f
-            isSelected -> 1f
-            else -> 0f
-        },
-        animationSpec = if (isActivePress) {
-            navPressFloatAnimationSpec
-        } else if (isSelected) {
-            navSelectedSettleFloatAnimationSpec
-        } else {
-            navUnselectedSettleFloatAnimationSpec
-        },
-        label = "destination-label-glow",
-    )
-    val labelShadowProgress by animateFloatAsState(
-        targetValue = when {
-            isSelected -> 1f
-            else -> 0f
-        },
-        animationSpec = if (isActivePress) navPressFloatAnimationSpec else navSelectedSettleFloatAnimationSpec,
-        label = "destination-label-shadow",
-    )
-    val labelShadowAlpha = if (isSelected) {
-        if (isActivePress) {
-            NAV_LABEL_SELECTED_SHADOW_ALPHA * 0.86f
-        } else {
-            NAV_LABEL_SELECTED_SHADOW_ALPHA
-        }
-    } else {
-        NAV_LABEL_UNSELECTED_SHADOW_ALPHA
-    }
-    val labelShadow = Shadow(
-        color = MaterialTheme.colorScheme.primary.copy(alpha = labelShadowAlpha * labelShadowProgress),
-        offset = Offset(0f, NAV_LABEL_SELECTED_SHADOW_Y_OFFSET * labelShadowProgress),
-        blurRadius = NAV_LABEL_SELECTED_SHADOW_BLUR * labelShadowProgress,
-    )
-    val selectedLabelStyle = resolvedStyle.copy(shadow = labelShadow)
-    val textStyle = if (labelShadowProgress > 0.001f) {
-        selectedLabelStyle
-    } else {
-        resolvedStyle
-    }
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -1965,48 +1921,10 @@ private fun DestinationLabel(
                 .fillMaxWidth(),
             contentAlignment = Alignment.Center,
         ) {
-            if (labelGlow > 0.001f) {
-                val labelGlowHeight = if (compact) {
-                    NAV_LABEL_SELECTED_GLOW_HEIGHT_COMPACT
-                } else {
-                    NAV_LABEL_SELECTED_GLOW_HEIGHT
-                }
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth(
-                            if (isSelected) {
-                                if (compact) {
-                                    NAV_LABEL_SELECTED_GLOW_WIDTH_COMPACT_FRACTION * labelGlow
-                                } else {
-                                    NAV_LABEL_SELECTED_GLOW_WIDTH_FRACTION * labelGlow
-                                }
-                            } else {
-                                ((if (compact) {
-                                    NAV_LABEL_SELECTED_GLOW_WIDTH_COMPACT_FRACTION * 0.64f
-                                } else {
-                                    NAV_LABEL_SELECTED_GLOW_WIDTH_FRACTION
-                                } * 0.64f)) * labelGlow
-                            },
-                        )
-                        .height(labelGlowHeight.dp)
-                        .offset(y = (-2).dp)
-                        .clip(RoundedCornerShape(labelGlowHeight.dp))
-                        .background(
-                            brush = Brush.radialGradient(
-                                colors = listOf(
-                                    MaterialTheme.colorScheme.primary.copy(
-                                        alpha = NAV_LABEL_SELECTED_GLOW_ALPHA * labelAlpha,
-                                    ),
-                                    Color.Transparent,
-                                ),
-                            ),
-                        ),
-                )
-            }
             Text(
                 text = label,
                 color = labelColor.copy(alpha = labelAlpha),
-                style = textStyle,
+                style = resolvedStyle,
                 maxLines = 1,
                 textAlign = TextAlign.Center,
                 overflow = TextOverflow.Ellipsis,
@@ -2049,15 +1967,6 @@ private const val NAV_LABEL_SELECTED_LETTER_SPACING = 0.0010f
 private const val NAV_LABEL_UNSELECTED_LETTER_SPACING = 0.011f
 private const val NAV_LABEL_COMPACT_SELECTED_LETTER_SPACING = 0.0016f
 private const val NAV_LABEL_COMPACT_UNSELECTED_LETTER_SPACING = 0.013f
-private const val NAV_LABEL_SELECTED_SHADOW_ALPHA = 0.0342f
-private const val NAV_LABEL_SELECTED_SHADOW_BLUR = 0.548f
-private const val NAV_LABEL_SELECTED_SHADOW_Y_OFFSET = 0.0418f
-private const val NAV_LABEL_UNSELECTED_SHADOW_ALPHA = 0.0102f
-private const val NAV_LABEL_SELECTED_GLOW_ALPHA = 0.072f
-private const val NAV_LABEL_SELECTED_GLOW_WIDTH_FRACTION = 0.86f
-private const val NAV_LABEL_SELECTED_GLOW_HEIGHT = 1.6f
-private const val NAV_LABEL_SELECTED_GLOW_WIDTH_COMPACT_FRACTION = 0.74f
-private const val NAV_LABEL_SELECTED_GLOW_HEIGHT_COMPACT = 1.25f
 private const val NAV_LABEL_OFFSET_SELECTED_DP = -0.086f
 private const val NAV_LABEL_COMPACT_OFFSET_SELECTED_DP = -0.036f
 private const val NAV_LABEL_COMPACT_SELECTED_SCALE = 1.0062f
