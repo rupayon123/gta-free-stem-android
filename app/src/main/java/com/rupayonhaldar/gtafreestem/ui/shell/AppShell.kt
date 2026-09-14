@@ -4,6 +4,7 @@ import androidx.annotation.DrawableRes
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
@@ -22,6 +23,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.offset
@@ -61,8 +63,6 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
-import androidx.compose.ui.semantics.role
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.selected
@@ -503,7 +503,6 @@ private fun PrimaryNavigationBar(
                             .semantics(mergeDescendants = true) {
                                 contentDescription = destinationLabel(destination)
                                 selected = isSelected
-                                role = Role.Tab
                             }
                             .padding(
                                 horizontal = NAV_BOTTOM_NAV_ITEM_PADDING_HORIZONTAL.dp,
@@ -615,11 +614,11 @@ private fun PrimaryNavigationBar(
                                 },
                             label = "bottom-nav-icon-scale-${destination.name}",
                         )
-                        val iconColorAnimationSpec = if (isSelected) {
-                            if (isActivePress) navPressColorAnimationSpec else navSelectedSettleColorAnimationSpec
-                        } else {
-                            if (isPressed) navPressColorAnimationSpec else navUnselectedSettleColorAnimationSpec
-                        }
+                                val iconColorAnimationSpec: AnimationSpec<Color> = if (isSelected) {
+                                    if (isActivePress) navPressColorAnimationSpec else navSelectedSettleColorAnimationSpec
+                                } else {
+                                    if (isPressed) navPressColorAnimationSpec else navUnselectedSettleColorAnimationSpec
+                                }
                         val iconGlyphAlpha by animateFloatAsState(
                             targetValue = if (isActivePress) {
                                 NAV_ICON_GLYPH_SELECTED_PRESSED_ALPHA
@@ -962,7 +961,7 @@ private fun PrimaryNavigationBar(
                                 contentAlignment = Alignment.Center,
                             ) {
                                 Icon(
-                                    painter = painterResource(destination.iconResource),
+                                    painterResource(destination.iconResource),
                                     contentDescription = null,
                                     modifier = Modifier
                                         .size(iconGlyphSize)
@@ -1306,7 +1305,6 @@ private fun PrimaryNavigationRail(
                             .semantics(mergeDescendants = true) {
                                 contentDescription = destinationLabel(destination)
                                 selected = isSelected
-                                role = Role.Tab
                             }
                             .padding(
                                 horizontal = NAV_RAIL_ITEM_PADDING_HORIZONTAL.dp,
@@ -1488,7 +1486,7 @@ private fun PrimaryNavigationRail(
                             },
                             label = "rail-icon-face-size-${destination.name}",
                         )
-                        val iconColorAnimationSpec = if (isSelected) {
+                        val iconColorAnimationSpec: AnimationSpec<Color> = if (isSelected) {
                             if (isActivePress) navPressColorAnimationSpec else navSelectedSettleColorAnimationSpec
                         } else {
                             if (isPressed) navPressColorAnimationSpec else navUnselectedSettleColorAnimationSpec
@@ -1798,7 +1796,7 @@ private fun PrimaryNavigationRail(
                                 contentAlignment = Alignment.Center,
                             ) {
                                 Icon(
-                                    painter = painterResource(destination.iconResource),
+                                    painterResource(destination.iconResource),
                                     contentDescription = null,
                                     modifier = Modifier
                                         .size(iconGlyphSize)
