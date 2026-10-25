@@ -2,6 +2,8 @@ package com.rupayonhaldar.gtafreestem.data.io
 
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
+import java.nio.ByteBuffer
+import java.nio.charset.CodingErrorAction
 
 internal const val MAX_FEED_BYTES: Int = 10_000_000
 
@@ -16,7 +18,11 @@ internal fun InputStream.readUtf8Bounded(maxBytes: Int = MAX_FEED_BYTES): String
         if (total > maxBytes) throw FeedSizeLimitException(maxBytes)
         output.write(buffer, 0, count)
     }
-    return output.toString(Charsets.UTF_8.name())
+    return Charsets.UTF_8.newDecoder()
+        .onMalformedInput(CodingErrorAction.REPORT)
+        .onUnmappableCharacter(CodingErrorAction.REPORT)
+        .decode(ByteBuffer.wrap(output.toByteArray()))
+        .toString()
 }
 
 internal class FeedSizeLimitException(maxBytes: Int) :

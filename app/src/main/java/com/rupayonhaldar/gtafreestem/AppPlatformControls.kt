@@ -142,7 +142,7 @@ internal fun NearbyAndAlertsControls(
 
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
-            val stacked = maxWidth < 350.dp || LocalDensity.current.fontScale >= 1.8f
+            val stacked = maxWidth < 280.dp || LocalDensity.current.fontScale >= 1.8f
             val nearbyButton: @Composable (Modifier) -> Unit = { modifier ->
                 StoryButton(
                     onClick = if (nearbyEnabled) onClearNearby else onUseNearby,

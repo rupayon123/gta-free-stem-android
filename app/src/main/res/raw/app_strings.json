@@ -139,7 +139,7 @@
     "view": "View",
     "opportunities": "Opportunities",
     "brand": "GTA FREE STEM Opportunities",
-    "mission": "Find real free STEM programs, library events, volunteer hours, co-op, SHSM, and youth opportunities across the GTA.",
+    "mission": "Find free library events, creative workshops and STEM activities across the GTA for children, families and adults.",
     "search": "Search",
     "searchPlaceholder": "Search STEM opportunities...",
     "filters": "Filters",
@@ -340,7 +340,13 @@
     "savedLocalOnlyExplanation": "Saved opportunities and their full details stay on this device for offline access. Nothing here is synced to a cloud account.",
     "savedOn": "Saved",
     "savedRemovedFromFeed": "This listing is no longer in the current verified feed. These are the full details saved on this device for offline reference.",
-    "virtual": "Virtual"
+    "virtual": "Virtual",
+    "exploreMore": "Explore more",
+    "browseOnline": "Browse online",
+    "opensWebsite": "Opens website",
+    "websiteUnavailable": "The website could not be opened on this device.",
+    "openProgramPage": "Open program page",
+    "addToCalendar": "Add to calendar"
   },
   "fr": {
     "browse": "Parcourir",
@@ -390,7 +396,7 @@
     "view": "Vue",
     "opportunities": "Occasions",
     "brand": "Occasions GTA FREE STEM",
-    "mission": "Trouvez des occasions gratuites d'apprendre, de STEM, de benevolat, de coop et de leadership.",
+    "mission": "Découvrez des événements gratuits en bibliothèque, des ateliers créatifs et des activités STIM dans le Grand Toronto, pour les enfants, les familles et les adultes.",
     "search": "Rechercher",
     "searchPlaceholder": "Rechercher des occasions STEM...",
     "filters": "Filtres",
@@ -591,7 +597,13 @@
     "savedLocalOnlyExplanation": "Les occasions sauvegardées et tous leurs détails restent sur cet appareil pour un accès hors ligne. Rien n’est synchronisé avec un compte infonuagique.",
     "savedOn": "Sauvegardé",
     "savedRemovedFromFeed": "Cette fiche ne figure plus dans le flux vérifié actuel. Ses détails complets restent sur cet appareil pour consultation hors ligne.",
-    "virtual": "En ligne"
+    "virtual": "En ligne",
+    "exploreMore": "À découvrir",
+    "browseOnline": "Parcourir en ligne",
+    "opensWebsite": "Ouvre le site Web",
+    "websiteUnavailable": "Impossible d’ouvrir le site Web sur cet appareil.",
+    "openProgramPage": "Ouvrir la page du programme",
+    "addToCalendar": "Ajouter au calendrier"
   },
   "zh": {
     "browse": "浏览",
@@ -641,7 +653,7 @@
     "view": "视图",
     "opportunities": "机会",
     "brand": "GTA 免费 STEM 机会",
-    "mission": "寻找GTA免费的学习、STEM、义工、合作教育和青年机会。",
+    "mission": "探索大多伦多地区的免费图书馆活动、创意工作坊和 STEM 活动，适合儿童、家庭和成人。",
     "search": "搜索",
     "searchPlaceholder": "搜索 STEM 机会...",
     "filters": "筛选",
@@ -842,7 +854,13 @@
     "savedLocalOnlyExplanation": "收藏的机会及其完整详情保留在此设备上供离线查看，不会同步到云端账号。",
     "savedOn": "收藏于",
     "savedRemovedFromFeed": "此机会已不在当前验证数据源中。完整详情仍保存在此设备上供离线参考。",
-    "virtual": "线上"
+    "virtual": "线上",
+    "exploreMore": "探索更多",
+    "browseOnline": "在线浏览",
+    "opensWebsite": "打开网站",
+    "websiteUnavailable": "无法在此设备上打开网站。",
+    "openProgramPage": "打开活动页面",
+    "addToCalendar": "添加到日历"
   },
   "yue": {
     "browse": "瀏覽",
@@ -892,7 +910,7 @@
     "view": "視圖",
     "opportunities": "機會",
     "brand": "GTA 免費 STEM 機會",
-    "mission": "搵GTA免費學習、STEM、義工、coop同青年機會。",
+    "mission": "喺大多倫多地區搵免費圖書館活動、創意工作坊同 STEM 活動，畀小朋友、家庭同成人探索學習。",
     "search": "搜尋",
     "searchPlaceholder": "搜尋 STEM 機會...",
     "filters": "篩選",
@@ -1093,7 +1111,13 @@
     "savedLocalOnlyExplanation": "收藏機會同完整詳情會留喺呢部裝置供離線查看，唔會同步去雲端帳戶。",
     "savedOn": "收藏於",
     "savedRemovedFromFeed": "呢個機會已經唔喺目前核實資料源。完整詳情仍留喺呢部裝置供離線參考。",
-    "virtual": "網上"
+    "virtual": "網上",
+    "exploreMore": "探索更多",
+    "browseOnline": "網上瀏覽",
+    "opensWebsite": "開啟網站",
+    "websiteUnavailable": "無法喺呢部裝置開啟網站。",
+    "openProgramPage": "開啟活動頁面",
+    "addToCalendar": "加入行事曆"
   },
   "pa": {
     "browse": "ਬ੍ਰਾਊਜ਼",
@@ -1143,7 +1167,7 @@
     "view": "ਵੇਖੋ",
     "opportunities": "ਮੌਕੇ",
     "brand": "GTA FREE STEM ਮੌਕੇ",
-    "mission": "GTA ਵਿੱਚ ਮੁਫ਼ਤ ਲਰਨਿੰਗ, STEM, ਵਲੰਟੀਅਰ, co-op ਅਤੇ ਯੂਥ ਮੌਕੇ ਲੱਭੋ।",
+    "mission": "GTA ਵਿੱਚ ਬੱਚਿਆਂ, ਪਰਿਵਾਰਾਂ ਅਤੇ ਬਾਲਗਾਂ ਲਈ ਮੁਫ਼ਤ ਲਾਇਬ੍ਰੇਰੀ ਸਮਾਗਮ, ਰਚਨਾਤਮਕ ਵਰਕਸ਼ਾਪਾਂ ਅਤੇ STEM ਗਤੀਵਿਧੀਆਂ ਲੱਭੋ।",
     "search": "ਖੋਜ",
     "searchPlaceholder": "STEM ਮੌਕੇ ਲੱਭੋ...",
     "filters": "ਫਿਲਟਰ",
@@ -1344,7 +1368,13 @@
     "savedLocalOnlyExplanation": "ਸੰਭਾਲੇ ਮੌਕੇ ਅਤੇ ਉਨ੍ਹਾਂ ਦੇ ਪੂਰੇ ਵੇਰਵੇ ਆਫ਼ਲਾਈਨ ਵਰਤੋਂ ਲਈ ਇਸ ਡਿਵਾਈਸ ’ਤੇ ਰਹਿੰਦੇ ਹਨ। ਕੁਝ ਵੀ ਕਲਾਉਡ ਖਾਤੇ ਨਾਲ ਸਿੰਕ ਨਹੀਂ ਹੁੰਦਾ।",
     "savedOn": "ਸੰਭਾਲਿਆ",
     "savedRemovedFromFeed": "ਇਹ ਸੂਚੀ ਹੁਣ ਮੌਜੂਦਾ ਤਸਦੀਕਸ਼ੁਦਾ ਫੀਡ ਵਿੱਚ ਨਹੀਂ ਹੈ। ਪੂਰੇ ਵੇਰਵੇ ਆਫ਼ਲਾਈਨ ਹਵਾਲੇ ਲਈ ਇਸ ਡਿਵਾਈਸ ’ਤੇ ਹਨ।",
-    "virtual": "ਆਨਲਾਈਨ"
+    "virtual": "ਆਨਲਾਈਨ",
+    "exploreMore": "ਹੋਰ ਖੋਜੋ",
+    "browseOnline": "ਆਨਲਾਈਨ ਵੇਖੋ",
+    "opensWebsite": "ਵੈੱਬਸਾਈਟ ਖੁੱਲ੍ਹੇਗੀ",
+    "websiteUnavailable": "ਇਸ ਡਿਵਾਈਸ ਉੱਤੇ ਵੈੱਬਸਾਈਟ ਨਹੀਂ ਖੁੱਲ੍ਹ ਸਕੀ।",
+    "openProgramPage": "ਪ੍ਰੋਗਰਾਮ ਪੰਨਾ ਖੋਲ੍ਹੋ",
+    "addToCalendar": "ਕੈਲੰਡਰ ਵਿੱਚ ਸ਼ਾਮਲ ਕਰੋ"
   },
   "ur": {
     "browse": "دیکھیں",
@@ -1394,7 +1424,7 @@
     "view": "منظر",
     "opportunities": "مواقع",
     "brand": "GTA FREE STEM مواقع",
-    "mission": "GTA میں مفت تعلیم، STEM، رضاکاری، co-op اور نوجوانوں کے مواقع تلاش کریں۔",
+    "mission": "GTA میں بچوں، خاندانوں اور بالغوں کے لیے مفت لائبریری تقریبات، تخلیقی ورکشاپس اور STEM سرگرمیاں تلاش کریں۔",
     "search": "تلاش",
     "searchPlaceholder": "STEM مواقع تلاش کریں...",
     "filters": "فلٹرز",
@@ -1595,7 +1625,13 @@
     "savedLocalOnlyExplanation": "محفوظ مواقع اور ان کی مکمل تفصیلات آف لائن رسائی کے لیے اس ڈیوائس پر رہتی ہیں۔ کچھ بھی کلاؤڈ اکاؤنٹ سے ہم وقت نہیں ہوتا۔",
     "savedOn": "محفوظ کیا",
     "savedRemovedFromFeed": "یہ فہرست اب موجودہ تصدیق شدہ فیڈ میں نہیں ہے۔ مکمل تفصیلات آف لائن حوالہ کے لیے اس ڈیوائس پر محفوظ ہیں۔",
-    "virtual": "آن لائن"
+    "virtual": "آن لائن",
+    "exploreMore": "مزید دیکھیں",
+    "browseOnline": "آن لائن دیکھیں",
+    "opensWebsite": "ویب سائٹ کھلے گی",
+    "websiteUnavailable": "اس آلے پر ویب سائٹ نہیں کھل سکی۔",
+    "openProgramPage": "پروگرام کا صفحہ کھولیں",
+    "addToCalendar": "کیلنڈر میں شامل کریں"
   },
   "ta": {
     "browse": "உலாவு",
@@ -1645,7 +1681,7 @@
     "view": "பார்வை",
     "opportunities": "வாய்ப்புகள்",
     "brand": "GTA FREE STEM வாய்ப்புகள்",
-    "mission": "GTA முழுவதும் இலவச கற்றல், STEM, தன்னார்வம், co-op மற்றும் இளைஞர் வாய்ப்புகள்.",
+    "mission": "GTA முழுவதும் குழந்தைகள், குடும்பங்கள் மற்றும் பெரியவர்களுக்கான இலவச நூலக நிகழ்வுகள், படைப்புப் பயிற்சிகள் மற்றும் STEM செயல்பாடுகளைக் கண்டறியுங்கள்.",
     "search": "தேடல்",
     "searchPlaceholder": "STEM வாய்ப்புகளை தேடுங்கள்...",
     "filters": "வடிகள்",
@@ -1846,7 +1882,13 @@
     "savedLocalOnlyExplanation": "சேமித்த வாய்ப்புகளும் அவற்றின் முழு விவரங்களும் இணையமில்லா அணுகலுக்காக இந்தச் சாதனத்தில் இருக்கும். எதுவும் மேகக் கணக்குடன் ஒத்திசைக்கப்படாது.",
     "savedOn": "சேமித்தது",
     "savedRemovedFromFeed": "இந்தப் பட்டியல் தற்போதைய சரிபார்த்த தரவில் இல்லை. முழு விவரங்கள் இணையமில்லா குறிப்புக்காக இந்தச் சாதனத்தில் உள்ளன.",
-    "virtual": "இணையவழி"
+    "virtual": "இணையவழி",
+    "exploreMore": "மேலும் பார்க்க",
+    "browseOnline": "இணையத்தில் உலாவவும்",
+    "opensWebsite": "இணையதளத்தைத் திறக்கும்",
+    "websiteUnavailable": "இந்தச் சாதனத்தில் இணையதளத்தைத் திறக்க முடியவில்லை.",
+    "openProgramPage": "நிகழ்ச்சிப் பக்கத்தைத் திறக்கவும்",
+    "addToCalendar": "நாள்காட்டியில் சேர்க்கவும்"
   },
   "tl": {
     "browse": "Mag-browse",
@@ -1896,7 +1938,7 @@
     "view": "Tingnan",
     "opportunities": "Mga oportunidad",
     "brand": "Mga oportunidad sa GTA FREE STEM",
-    "mission": "Maghanap ng libreng learning, STEM, volunteer, co-op, at youth opportunities sa GTA.",
+    "mission": "Tuklasin ang mga libreng aktibidad sa aklatan, malikhaing workshop, at STEM sa GTA para sa mga bata, pamilya, at mga nasa hustong gulang.",
     "search": "Hanap",
     "searchPlaceholder": "Maghanap ng STEM opportunities...",
     "filters": "Mga filter",
@@ -2097,7 +2139,13 @@
     "savedLocalOnlyExplanation": "Nananatili sa device ang mga naka-save na oportunidad at buong detalye para sa offline na access. Walang sini-sync sa cloud account.",
     "savedOn": "Na-save",
     "savedRemovedFromFeed": "Wala na ang listing na ito sa kasalukuyang beripikadong feed. Nasa device ang buong detalye para sa offline na sanggunian.",
-    "virtual": "Online"
+    "virtual": "Online",
+    "exploreMore": "Tuklasin pa",
+    "browseOnline": "Mag-browse online",
+    "opensWebsite": "Bubuksan ang website",
+    "websiteUnavailable": "Hindi mabuksan ang website sa device na ito.",
+    "openProgramPage": "Buksan ang pahina ng programa",
+    "addToCalendar": "Idagdag sa kalendaryo"
   },
   "es": {
     "browse": "Explorar",
@@ -2147,7 +2195,7 @@
     "view": "Vista",
     "opportunities": "Oportunidades",
     "brand": "Oportunidades GTA FREE STEM",
-    "mission": "Encuentra aprendizaje, STEM, voluntariado, co-op y oportunidades juveniles gratis en el GTA.",
+    "mission": "Encuentra actividades gratuitas en bibliotecas, talleres creativos y actividades STEM en el GTA para niños, familias y adultos.",
     "search": "Buscar",
     "searchPlaceholder": "Busca oportunidades STEM...",
     "filters": "Filtros",
@@ -2348,7 +2396,13 @@
     "savedLocalOnlyExplanation": "Las oportunidades guardadas y sus detalles completos permanecen en este dispositivo para acceso sin conexión. Nada se sincroniza con una cuenta en la nube.",
     "savedOn": "Guardado",
     "savedRemovedFromFeed": "Esta oportunidad ya no está en la fuente verificada actual. Los detalles completos permanecen en el dispositivo para consulta sin conexión.",
-    "virtual": "Virtual"
+    "virtual": "Virtual",
+    "exploreMore": "Explora más",
+    "browseOnline": "Explorar en línea",
+    "opensWebsite": "Abre el sitio web",
+    "websiteUnavailable": "No se pudo abrir el sitio web en este dispositivo.",
+    "openProgramPage": "Abrir la página del programa",
+    "addToCalendar": "Añadir al calendario"
   },
   "ar": {
     "browse": "تصفح",
@@ -2398,7 +2452,7 @@
     "view": "العرض",
     "opportunities": "فرص",
     "brand": "فرص GTA FREE STEM",
-    "mission": "ابحث عن فرص تعلم وSTEM وتطوع وتعاون للشباب مجانا في GTA.",
+    "mission": "اكتشف فعاليات المكتبات وورش الإبداع وأنشطة STEM المجانية في منطقة تورونتو الكبرى للأطفال والعائلات والكبار.",
     "search": "بحث",
     "searchPlaceholder": "ابحث عن فرص STEM...",
     "filters": "فلاتر",
@@ -2599,7 +2653,13 @@
     "savedLocalOnlyExplanation": "تبقى الفرص المحفوظة وتفاصيلها الكاملة على هذا الجهاز للوصول دون اتصال. لا تتم مزامنة أي شيء مع حساب سحابي.",
     "savedOn": "تم الحفظ",
     "savedRemovedFromFeed": "لم تعد هذه الفرصة موجودة في المصدر الموثق الحالي. تبقى التفاصيل الكاملة على هذا الجهاز للرجوع إليها دون اتصال.",
-    "virtual": "عبر الإنترنت"
+    "virtual": "عبر الإنترنت",
+    "exploreMore": "اكتشف المزيد",
+    "browseOnline": "تصفّح عبر الإنترنت",
+    "opensWebsite": "يفتح الموقع الإلكتروني",
+    "websiteUnavailable": "تعذّر فتح الموقع الإلكتروني على هذا الجهاز.",
+    "openProgramPage": "افتح صفحة البرنامج",
+    "addToCalendar": "أضف إلى التقويم"
   },
   "fa": {
     "browse": "مرور",
@@ -2649,7 +2709,7 @@
     "view": "نما",
     "opportunities": "فرصت ها",
     "brand": "فرصت‌های GTA FREE STEM",
-    "mission": "فرصت های رایگان یادگیری، STEM، داوطلبی، co-op و جوانان در GTA را پیدا کنید.",
+    "mission": "رویدادهای رایگان کتابخانه، کارگاه‌های خلاقانه و فعالیت‌های STEM را در تورنتوی بزرگ برای کودکان، خانواده‌ها و بزرگسالان پیدا کنید.",
     "search": "جستجو",
     "searchPlaceholder": "جستجوی فرصت های STEM...",
     "filters": "فیلترها",
@@ -2850,7 +2910,13 @@
     "savedLocalOnlyExplanation": "فرصت‌های ذخیره‌شده و جزئیات کامل آن‌ها برای دسترسی آفلاین در این دستگاه می‌مانند. هیچ چیز با حساب ابری همگام نمی‌شود.",
     "savedOn": "ذخیره‌شده",
     "savedRemovedFromFeed": "این فرصت دیگر در فید تأییدشده فعلی نیست. جزئیات کامل برای مراجعه آفلاین در این دستگاه می‌ماند.",
-    "virtual": "آنلاین"
+    "virtual": "آنلاین",
+    "exploreMore": "بیشتر ببینید",
+    "browseOnline": "مرور آنلاین",
+    "opensWebsite": "وب‌سایت باز می‌شود",
+    "websiteUnavailable": "وب‌سایت در این دستگاه باز نشد.",
+    "openProgramPage": "باز کردن صفحه برنامه",
+    "addToCalendar": "افزودن به تقویم"
   },
   "hi": {
     "browse": "ब्राउज़",
@@ -2900,7 +2966,7 @@
     "view": "दृश्य",
     "opportunities": "अवसर",
     "brand": "GTA FREE STEM अवसर",
-    "mission": "GTA में मुफ्त learning, STEM, volunteering, co-op और youth opportunities खोजें।",
+    "mission": "GTA में बच्चों, परिवारों और वयस्कों के लिए मुफ़्त लाइब्रेरी कार्यक्रम, रचनात्मक कार्यशालाएँ और STEM गतिविधियाँ खोजें।",
     "search": "खोज",
     "searchPlaceholder": "STEM opportunities खोजें...",
     "filters": "फिल्टर",
@@ -3101,7 +3167,13 @@
     "savedLocalOnlyExplanation": "सहेजे गए अवसर और उनके पूरे विवरण ऑफ़लाइन पहुंच के लिए इस डिवाइस पर रहते हैं। क्लाउड खाते से कुछ भी सिंक नहीं होता।",
     "savedOn": "सहेजा गया",
     "savedRemovedFromFeed": "यह अवसर अब मौजूदा सत्यापित फीड में नहीं है। पूरे विवरण ऑफ़लाइन संदर्भ के लिए इस डिवाइस पर हैं।",
-    "virtual": "ऑनलाइन"
+    "virtual": "ऑनलाइन",
+    "exploreMore": "और देखें",
+    "browseOnline": "ऑनलाइन देखें",
+    "opensWebsite": "वेबसाइट खुलेगी",
+    "websiteUnavailable": "इस डिवाइस पर वेबसाइट नहीं खुल सकी।",
+    "openProgramPage": "कार्यक्रम का पेज खोलें",
+    "addToCalendar": "कैलेंडर में जोड़ें"
   },
   "pt": {
     "browse": "Explorar",
@@ -3151,7 +3223,7 @@
     "view": "Vista",
     "opportunities": "Oportunidades",
     "brand": "Oportunidades GTA FREE STEM",
-    "mission": "Encontre oportunidades gratuitas de aprendizagem, STEM, voluntariado, co-op e juventude em toda a GTA.",
+    "mission": "Encontre eventos gratuitos em bibliotecas, oficinas criativas e atividades STEM no GTA para crianças, famílias e adultos.",
     "search": "Pesquisar",
     "searchPlaceholder": "Pesquisar oportunidades STEM...",
     "filters": "Filtros",
@@ -3352,7 +3424,13 @@
     "savedLocalOnlyExplanation": "As oportunidades salvas e seus detalhes completos ficam neste dispositivo para acesso offline. Nada é sincronizado com uma conta na nuvem.",
     "savedOn": "Salvo",
     "savedRemovedFromFeed": "Esta oportunidade não está mais no feed verificado atual. Os detalhes completos ficam no dispositivo para consulta offline.",
-    "virtual": "Virtual"
+    "virtual": "Virtual",
+    "exploreMore": "Explore mais",
+    "browseOnline": "Explorar online",
+    "opensWebsite": "Abre o site",
+    "websiteUnavailable": "Não foi possível abrir o site neste dispositivo.",
+    "openProgramPage": "Abrir a página do programa",
+    "addToCalendar": "Adicionar ao calendário"
   },
   "gu": {
     "browse": "બ્રાઉઝ",
@@ -3402,7 +3480,7 @@
     "view": "જુઓ",
     "opportunities": "તકો",
     "brand": "GTA FREE STEM તકો",
-    "mission": "GTA માં મફત learning, STEM, volunteer, co-op અને youth opportunities શોધો.",
+    "mission": "GTAમાં બાળકો, પરિવારો અને પુખ્ત વયના લોકો માટે મફત લાઇબ્રેરી કાર્યક્રમો, સર્જનાત્મક વર્કશોપ અને STEM પ્રવૃત્તિઓ શોધો.",
     "search": "શોધ",
     "searchPlaceholder": "STEM તકો શોધો...",
     "filters": "ફિલ્ટર્સ",
@@ -3603,7 +3681,13 @@
     "savedLocalOnlyExplanation": "સાચવેલી તકો અને તેમની સંપૂર્ણ વિગતો ઑફલાઇન ઉપયોગ માટે આ ઉપકરણ પર રહે છે. કંઈપણ ક્લાઉડ ખાતા સાથે સમન્વયિત થતું નથી.",
     "savedOn": "સાચવ્યું",
     "savedRemovedFromFeed": "આ તક હવે હાલની ચકાસેલી ફીડમાં નથી. સંપૂર્ણ વિગતો ઑફલાઇન સંદર્ભ માટે આ ઉપકરણ પર છે.",
-    "virtual": "ઑનલાઇન"
+    "virtual": "ઑનલાઇન",
+    "exploreMore": "વધુ શોધો",
+    "browseOnline": "ઑનલાઇન જુઓ",
+    "opensWebsite": "વેબસાઇટ ખોલે છે",
+    "websiteUnavailable": "આ ઉપકરણ પર વેબસાઇટ ખોલી શકાઈ નથી.",
+    "openProgramPage": "કાર્યક્રમનું પૃષ્ઠ ખોલો",
+    "addToCalendar": "કૅલેન્ડરમાં ઉમેરો"
   },
   "bn": {
     "browse": "ব্রাউজ",
@@ -3653,7 +3737,7 @@
     "view": "দেখুন",
     "opportunities": "সুযোগ",
     "brand": "GTA FREE STEM সুযোগ",
-    "mission": "GTA-তে ফ্রি learning, STEM, volunteer, co-op এবং youth opportunity খুঁজুন।",
+    "mission": "GTA জুড়ে শিশু, পরিবার ও প্রাপ্তবয়স্কদের জন্য বিনামূল্যের লাইব্রেরি অনুষ্ঠান, সৃজনশীল কর্মশালা ও STEM কার্যক্রম খুঁজুন।",
     "search": "খুঁজুন",
     "searchPlaceholder": "robotics, Python, volunteer hours, co-op খুঁজুন...",
     "filters": "ফিল্টার",
@@ -3854,7 +3938,13 @@
     "savedLocalOnlyExplanation": "সংরক্ষিত সুযোগ ও সম্পূর্ণ বিবরণ অফলাইন ব্যবহারের জন্য এই ডিভাইসে থাকে। কোনো কিছু ক্লাউড অ্যাকাউন্টে সিঙ্ক হয় না।",
     "savedOn": "সংরক্ষিত",
     "savedRemovedFromFeed": "এই সুযোগটি আর বর্তমান যাচাইকৃত ফিডে নেই। সম্পূর্ণ বিবরণ অফলাইন তথ্যের জন্য এই ডিভাইসে আছে।",
-    "virtual": "অনলাইন"
+    "virtual": "অনলাইন",
+    "exploreMore": "আরও দেখুন",
+    "browseOnline": "অনলাইনে দেখুন",
+    "opensWebsite": "ওয়েবসাইট খুলবে",
+    "websiteUnavailable": "এই ডিভাইসে ওয়েবসাইট খোলা যায়নি।",
+    "openProgramPage": "কর্মসূচির পৃষ্ঠা খুলুন",
+    "addToCalendar": "ক্যালেন্ডারে যোগ করুন"
   },
   "ja": {
     "browse": "探す",
@@ -3904,7 +3994,7 @@
     "view": "表示",
     "opportunities": "機会",
     "brand": "GTA FREE STEM の機会",
-    "mission": "GTAの無料学習、STEM、ボランティア、co-op、若者向け機会を探せます。",
+    "mission": "子ども、家族、大人向けの無料の図書館イベントや創作ワークショップ、STEMの活動をGTAで探せます。",
     "search": "検索",
     "searchPlaceholder": "ロボット、Python、ボランティア時間、co-opを検索...",
     "filters": "フィルター",
@@ -4105,7 +4195,13 @@
     "savedLocalOnlyExplanation": "保存した機会と完全な詳細はオフライン利用のためこの端末に残ります。クラウドアカウントには同期されません。",
     "savedOn": "保存日",
     "savedRemovedFromFeed": "この機会は現在の確認済みフィードにありません。完全な詳細はオフライン参照用にこの端末に残ります。",
-    "virtual": "オンライン"
+    "virtual": "オンライン",
+    "exploreMore": "もっと探す",
+    "browseOnline": "オンラインで探す",
+    "opensWebsite": "ウェブサイトを開きます",
+    "websiteUnavailable": "このデバイスではウェブサイトを開けませんでした。",
+    "openProgramPage": "プログラムのページを開く",
+    "addToCalendar": "カレンダーに追加"
   },
   "ko": {
     "browse": "둘러보기",
@@ -4155,7 +4251,7 @@
     "view": "보기",
     "opportunities": "기회",
     "brand": "GTA FREE STEM 기회",
-    "mission": "GTA 전역의 무료 STEM 프로그램, 도서관 행사, 봉사 시간, co-op, SHSM, 청소년 기회를 찾을 수 있습니다.",
+    "mission": "GTA에서 어린이, 가족, 성인을 위한 무료 도서관 행사, 창작 워크숍, STEM 활동을 찾아보세요.",
     "search": "검색",
     "searchPlaceholder": "로봇, Python, 봉사 시간, co-op 검색...",
     "filters": "필터",
@@ -4356,7 +4452,13 @@
     "savedLocalOnlyExplanation": "저장한 기회와 전체 세부정보는 오프라인 이용을 위해 이 기기에 남습니다. 클라우드 계정과 동기화되지 않습니다.",
     "savedOn": "저장일",
     "savedRemovedFromFeed": "이 기회는 더 이상 현재 확인된 피드에 없습니다. 전체 세부정보는 오프라인 참고용으로 이 기기에 남습니다.",
-    "virtual": "온라인"
+    "virtual": "온라인",
+    "exploreMore": "더 둘러보기",
+    "browseOnline": "온라인으로 둘러보기",
+    "opensWebsite": "웹사이트 열기",
+    "websiteUnavailable": "이 기기에서 웹사이트를 열 수 없습니다.",
+    "openProgramPage": "프로그램 페이지 열기",
+    "addToCalendar": "캘린더에 추가"
   },
   "hu": {
     "browse": "Bongeszés",
@@ -4406,7 +4508,7 @@
     "view": "Nézet",
     "opportunities": "Lehetőségek",
     "brand": "GTA FREE STEM lehetőségek",
-    "mission": "Keress valódi, ellenőrzött, ingyenes STEM programokat, könyvtári eseményeket, önkéntes órákat, co-op, SHSM és ifjúsági lehetőségeket a GTA területén.",
+    "mission": "Keress ingyenes könyvtári programokat, kreatív műhelyeket és STEM-foglalkozásokat a GTA területén gyerekeknek, családoknak és felnőtteknek.",
     "search": "Keresés",
     "searchPlaceholder": "Keress STEM lehetőségeket...",
     "filters": "Szűrők",
@@ -4607,6 +4709,12 @@
     "savedLocalOnlyExplanation": "A mentett lehetőségek és teljes részleteik az eszközön maradnak offline hozzáféréshez. Semmi sem szinkronizálódik felhőfiókkal.",
     "savedOn": "Mentve",
     "savedRemovedFromFeed": "Ez a lehetőség már nincs az aktuális ellenőrzött adatfolyamban. A teljes részletek offline hivatkozáshoz az eszközön maradnak.",
-    "virtual": "Online"
+    "virtual": "Online",
+    "exploreMore": "Fedezz fel többet",
+    "browseOnline": "Böngészés online",
+    "opensWebsite": "Megnyitja a weboldalt",
+    "websiteUnavailable": "A weboldal nem nyitható meg ezen az eszközön.",
+    "openProgramPage": "Programoldal megnyitása",
+    "addToCalendar": "Hozzáadás a naptárhoz"
   }
 }

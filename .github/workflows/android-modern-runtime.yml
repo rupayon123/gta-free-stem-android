@@ -1,0 +1,125 @@
+name: Android modern runtime tests
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      expected_source_sha:
+        description: Exact reviewed source commit
+        required: true
+        type: string
+      api_level:
+        description: One modern API per run
+        required: true
+        default: '36'
+        type: choice
+        options: ['36', '35']
+permissions:
+  contents: read
+concurrency:
+  group: android-modern-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  modern-runtime:
+    if: github.event.repository.visibility == 'public' && (github.event_name == 'workflow_dispatch' || github.event.pull_request.head.repo.full_name == github.repository)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    env:
+      API_LEVEL: ${{ inputs.api_level || '36' }}
+      GRADLE_USER_HOME: ${{ runner.temp }}/gradle-modern-runtime
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+          fetch-depth: 1
+      - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5.7.0
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Verify reviewed source
+        env:
+          EXPECTED_SOURCE_SHA: ${{ inputs.expected_source_sha || github.event.pull_request.head.sha }}
+          CANDIDATE_SOURCE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          [[ "$EXPECTED_SOURCE_SHA" =~ ^[0-9a-f]{40}$ ]]
+          test "$(git rev-parse HEAD)" = "$EXPECTED_SOURCE_SHA"
+          test "$CANDIDATE_SOURCE_SHA" = "$EXPECTED_SOURCE_SHA"
+          sha256sum -c .github/native-ci-source.sha256
+          case "$API_LEVEL" in 35|36) ;; *) exit 1 ;; esac
+          test -z "$(git status --porcelain)"
+          test -x ./gradlew
+          test -n "$ANDROID_HOME"
+          printf 'Source: %s; API: %s\n' "$CANDIDATE_SOURCE_SHA" "$API_LEVEL" >> "$GITHUB_STEP_SUMMARY"
+      - name: Prepare official SDK and build test packages
+        timeout-minutes: 15
+        run: |
+          set -euo pipefail
+          export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator:$PATH"
+          sdkmanager --install emulator "system-images;android-${API_LEVEL};google_apis;x86_64"
+          # Use the runner's existing accepted SDK licences; do not auto-accept new terms.
+          emulator -version
+          ./gradlew --no-daemon --max-workers=2 :app:assembleDebug :app:assembleDebugAndroidTest
+      - name: Run focused tests on a real modern emulator
+        timeout-minutes: 22
+        run: |
+          set -euo pipefail
+          export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator:$PATH"
+          test -c /dev/kvm
+          # Only this disposable CI VM is modified; no user machine changes.
+          sudo chmod a+rw /dev/kvm
+          emulator -accel-check
+          printf 'no\n' | avdmanager create avd --name gta_modern --device pixel_6 --package "system-images;android-${API_LEVEL};google_apis;x86_64" --force
+          emulator @gta_modern -no-window -no-audio -no-boot-anim -no-snapshot -gpu swiftshader_indirect -accel on -memory 2048 -cores 2 > "$RUNNER_TEMP/emulator.log" 2>&1 &
+          EMULATOR_PID=$!
+          trap 'adb -s emulator-5554 emu kill >/dev/null 2>&1 || true; kill "$EMULATOR_PID" 2>/dev/null || true' EXIT
+          timeout 300 adb -s emulator-5554 wait-for-device
+          deadline=$((SECONDS + 300))
+          until [ "$(adb -s emulator-5554 shell getprop sys.boot_completed | tr -d '\r')" = 1 ]; do
+            kill -0 "$EMULATOR_PID"
+            test "$SECONDS" -lt "$deadline"
+            sleep 2
+          done
+          test "$(adb -s emulator-5554 shell getprop ro.build.version.sdk | tr -d '\r')" = "$API_LEVEL"
+          adb -s emulator-5554 shell input keyevent 82
+          adb -s emulator-5554 shell settings put global window_animation_scale 1
+          adb -s emulator-5554 shell settings put global transition_animation_scale 1
+          adb -s emulator-5554 shell settings put global animator_duration_scale 1
+          export ANDROID_SERIAL=emulator-5554
+          classes='com.rupayonhaldar.gtafreestem.MainActivityTest,com.rupayonhaldar.gtafreestem.ScreenTransitionTest,com.rupayonhaldar.gtafreestem.DiscoveryFlowTest,com.rupayonhaldar.gtafreestem.ui.browse.OpportunityMapTest,com.rupayonhaldar.gtafreestem.ui.shell.AppShellLargeTextTest,com.rupayonhaldar.gtafreestem.data.local.AndroidOpportunityFeedCacheRuntimeTest,com.rupayonhaldar.gtafreestem.ui.preferences.AccountPreferencesScreenTest,com.rupayonhaldar.gtafreestem.ui.design.StorybookDarkThemeTest,com.rupayonhaldar.gtafreestem.ui.design.StorybookLargeTextTest'
+          ./gradlew --no-daemon --max-workers=2 :app:connectedDebugAndroidTest "-Pandroid.testInstrumentationRunnerArguments.class=$classes"
+          adb -s emulator-5554 shell settings put global window_animation_scale 0
+          adb -s emulator-5554 shell settings put global transition_animation_scale 0
+          adb -s emulator-5554 shell settings put global animator_duration_scale 0
+          classes='com.rupayonhaldar.gtafreestem.DiscoveryFlowTest#filteredMapOpensSameDetailsAndRetainsSelectionAndSaveOnReturn,com.rupayonhaldar.gtafreestem.DiscoveryFlowTest#largeTextLandscapeKeepsMapControlsAndCalendarFallbackReachable'
+          timeout 180 adb -s emulator-5554 shell am instrument -w -r -e class "$classes" com.rupayonhaldar.gtafreestem.test/androidx.test.runner.AndroidJUnitRunner | tee "$RUNNER_TEMP/reduced-motion-tests.log"
+          grep -Fx 'OK (2 tests)' "$RUNNER_TEMP/reduced-motion-tests.log"
+          ! grep -E 'FAILURES|INSTRUMENTATION_FAILED|shortMsg=' "$RUNNER_TEMP/reduced-motion-tests.log"
+          printf 'Reduced motion: 2 map/calendar/large-text runtime cases passed.\n' >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Check actual JUnit coverage
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import os, xml.etree.ElementTree as ET
+          files = list(Path('app/build/outputs/androidTest-results/connected').rglob('TEST-*.xml'))
+          if not files: raise SystemExit('No runtime results found')
+          cases = [case for path in files for case in ET.parse(path).getroot().iter('testcase')]
+          if not cases or any(case.find(tag) is not None for case in cases for tag in ['failure', 'error', 'skipped']):
+              raise SystemExit('Runtime failure/error/skip or empty test selection')
+          required = {'MainActivityTest', 'ScreenTransitionTest', 'DiscoveryFlowTest', 'OpportunityMapTest', 'AppShellLargeTextTest', 'AndroidOpportunityFeedCacheRuntimeTest', 'AccountPreferencesScreenTest', 'StorybookDarkThemeTest', 'StorybookLargeTextTest'}
+          observed = {case.get('classname', '').split('.')[-1] for case in cases}
+          if not required <= observed: raise SystemExit('Missing required test classes: ' + str(required - observed))
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as out:
+              out.write(f"API{os.environ['API_LEVEL']}: {len(cases)} selected runtime tests passed; zero failures/errors/skips.\n")
+              out.write('Real MainActivity/system bars plus fixture map/calendar/large-text and cache cases; no physical-device/store signoff.\n')
+          print('Passed runtime cases:', len(cases), sorted(observed))
+          PY
+      - name: Show bounded failure diagnostics
+        if: failure()
+        run: |
+          tail -n 100 "$RUNNER_TEMP/emulator.log" || true
+          find app/build/outputs/androidTest-results/connected -maxdepth 5 -name 'TEST-*.xml' -print || true
+# No cache/artifact uploads, secrets, larger runners, release signing or store actions.

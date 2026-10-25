@@ -16,11 +16,13 @@ import com.rupayonhaldar.gtafreestem.domain.search.OpportunitySearchLimits
 import com.rupayonhaldar.gtafreestem.domain.search.OpportunitySearchSort
 import com.rupayonhaldar.gtafreestem.localization.AppLanguage
 import java.time.Instant
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.Assert.assertEquals
@@ -310,6 +312,73 @@ class BrowseViewModelTest {
         } finally {
             Dispatchers.resetMain()
         }
+    }
+
+    @Test
+    fun `expired empty bootstrap stays updating while live data arrives without resetting choices`() = runTest {
+        Dispatchers.setMain(StandardTestDispatcher(testScheduler))
+        try {
+            val result = CompletableDeferred<OpportunityFeedSnapshot>()
+            val retained = opportunity("saved", "STEM", "Toronto", "Toronto", listOf("en"), 18)
+            val favorites = RecordingFavorites(current = mutableListOf(savedEntry(retained)))
+            val repository = SuspendedRefreshRepository(snapshot(emptyList()).copy(isStale = true), result)
+            val viewModel = BrowseViewModel(repository = repository, favorites = favorites)
+            runCurrent()
+            assertFalse(viewModel.uiState.value.isLoading)
+            assertTrue(viewModel.uiState.value.isRefreshing)
+            assertTrue(viewModel.uiState.value.opportunities.isEmpty())
+
+            viewModel.setQuery("robotics")
+            viewModel.setFilters(OpportunitySearchFilters(city = "Toronto"))
+            val fresh = opportunity("robotics", "STEM", "Toronto", "Toronto", listOf("en"), null)
+            result.complete(snapshot(listOf(fresh)).copy(source = OpportunityFeedSource.PRIMARY_NETWORK))
+            advanceUntilIdle()
+
+            val state = viewModel.uiState.value
+            assertFalse(state.isRefreshing)
+            assertEquals(listOf("robotics"), state.opportunities.map(Opportunity::id))
+            assertEquals("robotics", state.query)
+            assertEquals("Toronto", state.filters.city)
+            assertTrue("saved" in state.favoriteIds)
+            assertEquals(null, state.errorMessage)
+        } finally {
+            Dispatchers.resetMain()
+        }
+    }
+
+    @Test
+    fun `failed initial update ends progress and keeps the retry explanation across navigation`() = runTest {
+        Dispatchers.setMain(StandardTestDispatcher(testScheduler))
+        try {
+            val result = CompletableDeferred<OpportunityFeedSnapshot>()
+            val viewModel = BrowseViewModel(
+                repository = SuspendedRefreshRepository(snapshot(emptyList()).copy(isStale = true), result),
+                favorites = EmptyFavorites(),
+            )
+            runCurrent()
+            assertTrue(viewModel.uiState.value.isRefreshing)
+            result.completeExceptionally(java.io.IOException("offline"))
+            advanceUntilIdle()
+            assertFalse(viewModel.uiState.value.isRefreshing)
+            val explanation = viewModel.uiState.value.errorMessage
+            assertFalse(explanation.isNullOrBlank())
+            viewModel.setDestination(AppDestination.SAVED)
+            assertEquals(explanation, viewModel.uiState.value.errorMessage)
+        } finally {
+            Dispatchers.resetMain()
+        }
+    }
+
+    private class SuspendedRefreshRepository(
+        private var snapshot: OpportunityFeedSnapshot,
+        private val result: CompletableDeferred<OpportunityFeedSnapshot>,
+    ) : OpportunityRepository {
+        override suspend fun bootstrap() = snapshot
+        override suspend fun refresh(): OpportunityFeedSnapshot = result.await().also { snapshot = it }
+        override fun current() = snapshot
+        override fun findById(id: String) = snapshot.opportunities.firstOrNull { it.id == id }
+        override fun search(query: String, filters: OpportunitySearchFilters, language: AppLanguage) =
+            OpportunitySearch.search(snapshot.opportunities, query, filters, now = Instant.parse("2026-08-16T16:00:00Z"))
     }
 
     private data class RecordingBrowseSearchStateStore(

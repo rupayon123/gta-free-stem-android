@@ -1,0 +1,11 @@
+# Native frontend review
+
+The frontend uses solid cream/navy/teal/yellow surfaces, compact wrapping navigation, stationary touch targets and native spring feedback. The original Hairline-informed query loupe is decorative, bounded and duration-scale aware; no web dependency, timer or tracking is added. Its attribution is in FRONTEND_MOTION_PROVENANCE.md.
+
+The browse viewport prioritizes the first real result. Native map mode uses the exact filtered set and existing offline map, retains selected IDs on detail return and keeps online/no-coordinate listings reachable in list mode. Calendar opens a user-reviewed system event form; no calendar database permissions or writes are added. Published timestamp ranges use America/Toronto with the event day's DST offset; date-only/unknown schedules remain date-only/unknown, and start-mirroring deadlines are hidden in presentation. Provider-page links do not claim a registration form when they share the source URL.
+
+Native feed/repository/cache work remains Backend-owned and frozen by hash. No eligibility, transport-size, record cap or publisher-rights rule is relaxed. Home introduces library/creative/STEM programs for every age; specialized pathways appear under Explore more. Error-only Browse online links to the first-party Cloudflare directory without clearing native query or saved data. Privacy, terms and support use distinct direct first-party Cloudflare pages.
+
+Local evidence includes 204 unit tests, native API26 navigation/RTL/two-times text/map/calendar/error/cache cases, real current-feed source/calendar handoffs and a two-process save/relaunch/removal review. App-owned fixture tests are distinct from current-feed review. The manual production review driver is retained outside the default instrumentation suite so it cannot introduce an unordered network/two-phase job into public CI. API36 coverage runs in a standard public Ubuntu/KVM job with exact reviewed source and source hashes, official SDK images, no new artifact/cache upload and no store actions. Its result must be inspected separately; compilation is not a runtime pass.
+
+No physical-device, store or release signoff is established by these debug checks. Native core-feed limits remain 5000 records/10 MB; expanded website catalogs are separate.

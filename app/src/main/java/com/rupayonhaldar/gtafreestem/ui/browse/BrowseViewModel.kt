@@ -98,8 +98,8 @@ class BrowseViewModel(
                     if (error is CancellationException) throw error
                 }
 
-            _uiState.update { it.copy(isLoading = false) }
-            refresh(showProgress = false)
+            _uiState.update { it.copy(isLoading = false, isRefreshing = true) }
+            refresh()
         }
     }
 
@@ -142,7 +142,6 @@ class BrowseViewModel(
             it.copy(
                 destination = destination,
                 selectedOpportunity = null,
-                errorMessage = null,
             )
         }
         recomputeResults()

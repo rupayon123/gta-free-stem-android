@@ -71,7 +71,7 @@ class AccountPreferencesScreenTest {
     }
 
     @Test
-    fun displayNameEditorIsModalAndSavesThroughExistingCallback() {
+    fun displayNameEditorSavesThroughExistingCallback() {
         var savedName: String? = null
         composeRule.setContent {
             MaterialTheme {
@@ -94,11 +94,9 @@ class AccountPreferencesScreenTest {
             }
         }
 
-        composeRule.onNodeWithTag(AccountPreferencesTestTags.EDIT_PROFILE)
-            .performClick()
-        composeRule.onNodeWithTag(AccountPreferencesTestTags.PROFILE_DIALOG)
-            .assertIsDisplayed()
         composeRule.onNodeWithTag(AccountPreferencesTestTags.DISPLAY_NAME)
+            .performScrollTo()
+            .assertIsDisplayed()
             .performTextReplacement("Grace Hopper")
         composeRule.onNodeWithTag(AccountPreferencesTestTags.SAVE_PROFILE)
             .performClick()
@@ -157,6 +155,7 @@ class AccountPreferencesScreenTest {
                     onThemeSelected = { true },
                     onOpportunityAlertsPreferredChanged = { preferred ->
                         requestedPreference = preferred
+                        true
                     },
                     onOpenSavedLibrary = {},
                     onDeleteAllLocalData = ::successfulDeletion,

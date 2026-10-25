@@ -449,12 +449,12 @@ private data class LibraryHealthPayload(
         val minimumAccepted = minimumAcceptedListings ?: return false
         return status.equals("healthy", ignoreCase = true) &&
             attempted > 0 &&
-            successful in 0..attempted &&
+            successful in 1..attempted &&
             ratio.isFinite() && minimumRatio.isFinite() &&
-            ratio in 0.0..1.0 && minimumRatio in 0.0..1.0 &&
+            ratio > 0.0 && ratio <= 1.0 && minimumRatio > 0.0 && minimumRatio <= 1.0 &&
             ratio >= minimumRatio &&
             successful.toDouble() / attempted.toDouble() >= minimumRatio &&
-            accepted >= 0 && minimumAccepted >= 0 &&
+            minimumAccepted > 0 &&
             accepted >= minimumAccepted &&
             publishedCount >= minimumAccepted
     }
@@ -475,9 +475,9 @@ private data class DiscoveryHealthPayload(
         val minimumRatio = minimumSourceSuccessRatio ?: return false
         return status.equals("healthy", ignoreCase = true) &&
             checked > 0 &&
-            successful in 0..checked &&
+            successful in 1..checked &&
             ratio.isFinite() && minimumRatio.isFinite() &&
-            ratio in 0.0..1.0 && minimumRatio in 0.0..1.0 &&
+            ratio > 0.0 && ratio <= 1.0 && minimumRatio > 0.0 && minimumRatio <= 1.0 &&
             ratio >= minimumRatio &&
             successful.toDouble() / checked.toDouble() >= minimumRatio
     }
