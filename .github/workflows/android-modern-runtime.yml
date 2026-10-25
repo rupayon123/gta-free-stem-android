@@ -51,6 +51,7 @@ jobs:
           test -x ./gradlew
           test -n "$ANDROID_HOME"
           printf 'GRADLE_USER_HOME=%s/gradle-modern-runtime\n' "$RUNNER_TEMP" >> "$GITHUB_ENV"
+          printf 'ANDROID_USER_HOME=%s/android-user\nANDROID_AVD_HOME=%s/android-user/avd\n' "$RUNNER_TEMP" "$RUNNER_TEMP" >> "$GITHUB_ENV"
           printf 'Source: %s; API: %s\n' "$CANDIDATE_SOURCE_SHA" "$API_LEVEL" >> "$GITHUB_STEP_SUMMARY"
       - name: Prepare official SDK and build test packages
         timeout-minutes: 15
@@ -74,11 +75,21 @@ jobs:
           # Only this disposable CI VM is modified; no user machine changes.
           sudo chmod a+rw /dev/kvm
           emulator -accel-check
-          printf 'no\n' | avdmanager create avd --name gta_modern --device pixel_6 --package "system-images;android-${API_LEVEL};google_apis;x86_64" --force
+          mkdir -p "$ANDROID_AVD_HOME"
+          printf 'no\n' | avdmanager create avd --name gta_modern --device pixel_6 --package "system-images;android-${API_LEVEL};google_apis;x86_64" --path "$ANDROID_AVD_HOME/gta_modern.avd" --force
+          test -f "$ANDROID_AVD_HOME/gta_modern.ini"
+          emulator -list-avds | tee "$RUNNER_TEMP/available-avds.txt"
+          grep -Fx 'gta_modern' "$RUNNER_TEMP/available-avds.txt"
           emulator @gta_modern -no-window -no-audio -no-boot-anim -no-snapshot -gpu swiftshader_indirect -accel on -memory 2048 -cores 2 > "$RUNNER_TEMP/emulator.log" 2>&1 &
           EMULATOR_PID=$!
           trap 'adb -s emulator-5554 emu kill >/dev/null 2>&1 || true; kill "$EMULATOR_PID" 2>/dev/null || true' EXIT
-          timeout 300 adb -s emulator-5554 wait-for-device
+          adb start-server
+          deadline=$((SECONDS + 300))
+          until [ "$(timeout 5 adb -s emulator-5554 get-state 2>/dev/null || true)" = device ]; do
+            kill -0 "$EMULATOR_PID" || { tail -n 100 "$RUNNER_TEMP/emulator.log"; exit 1; }
+            test "$SECONDS" -lt "$deadline"
+            sleep 2
+          done
           deadline=$((SECONDS + 300))
           until [ "$(adb -s emulator-5554 shell getprop sys.boot_completed | tr -d '\r')" = 1 ]; do
             kill -0 "$EMULATOR_PID"
