@@ -57,6 +57,10 @@ jobs:
         run: |
           set -euo pipefail
           export PATH="$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator:$PATH"
+          # The official emulator binary links PulseAudio even in no-audio mode.
+          # Install its client library on this disposable Ubuntu VM, with no daemon.
+          sudo apt-get update -qq
+          sudo apt-get install --yes --no-install-recommends libpulse0
           sdkmanager --install emulator "system-images;android-${API_LEVEL};google_apis;x86_64"
           # Use the runner's existing accepted SDK licences; do not auto-accept new terms.
           emulator -version
