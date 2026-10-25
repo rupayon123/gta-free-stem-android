@@ -26,7 +26,6 @@ jobs:
     timeout-minutes: 40
     env:
       API_LEVEL: ${{ inputs.api_level || '36' }}
-      GRADLE_USER_HOME: ${{ runner.temp }}/gradle-modern-runtime
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -51,6 +50,7 @@ jobs:
           test -z "$(git status --porcelain)"
           test -x ./gradlew
           test -n "$ANDROID_HOME"
+          printf 'GRADLE_USER_HOME=%s/gradle-modern-runtime\n' "$RUNNER_TEMP" >> "$GITHUB_ENV"
           printf 'Source: %s; API: %s\n' "$CANDIDATE_SOURCE_SHA" "$API_LEVEL" >> "$GITHUB_STEP_SUMMARY"
       - name: Prepare official SDK and build test packages
         timeout-minutes: 15
