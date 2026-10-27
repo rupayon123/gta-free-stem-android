@@ -11,13 +11,13 @@ import java.time.ZoneOffset
 
 /** A user-reviewed platform form, never a direct calendar database write. */
 internal object OpportunityCalendar {
-    fun intent(opportunity: Opportunity, title: String, location: String): Intent =
+    fun intent(opportunity: Opportunity, title: String, location: String, description: String = opportunity.description): Intent =
         Intent(Intent.ACTION_INSERT, CalendarContract.Events.CONTENT_URI).apply {
             putExtra(CalendarContract.Events.TITLE, title)
             putExtra(CalendarContract.Events.EVENT_LOCATION, location)
             putExtra(
                 CalendarContract.Events.DESCRIPTION,
-                listOf(opportunity.description, opportunity.sourceUrl).joinToString("\n\n"),
+                listOf(description, opportunity.sourceUrl).joinToString("\n\n"),
             )
             val startDay = opportunity.startDate?.let { runCatching { LocalDate.parse(it) }.getOrNull() }
             val startTime = opportunity.startDate?.let { runCatching { OffsetDateTime.parse(it) }.getOrNull() }
@@ -43,8 +43,8 @@ internal object OpportunityCalendar {
             }
         }
 
-    fun open(context: Context, opportunity: Opportunity, title: String, location: String): Boolean = try {
-        context.startActivity(intent(opportunity, title, location))
+    fun open(context: Context, opportunity: Opportunity, title: String, location: String, description: String = opportunity.description): Boolean = try {
+        context.startActivity(intent(opportunity, title, location, description))
         true
     } catch (_: ActivityNotFoundException) {
         false

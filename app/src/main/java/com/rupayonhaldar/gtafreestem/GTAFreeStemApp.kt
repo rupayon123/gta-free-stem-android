@@ -1428,7 +1428,7 @@ private fun OpportunityCard(
                 color = MaterialTheme.colorScheme.primary,
             )
             Text(
-                text = localized.summary,
+                text = localized.description,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 maxLines = 3,
@@ -1816,6 +1816,7 @@ internal fun OpportunityDetailScreen(
                             calendarUnavailable = !OpportunityCalendar.open(
                                 context, opportunity, localized.title,
                                 localized.address?.takeIf(String::isNotBlank) ?: locationLabel(opportunity, localized),
+                                description = localized.description,
                             )
                         },
                         modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp).testTag("opportunity-calendar"),
