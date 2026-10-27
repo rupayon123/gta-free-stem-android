@@ -4,6 +4,30 @@ This runbook prepares a GTA FREE STEM Android release candidate. It does not aut
 
 Policy notes were reviewed on August 18, 2026. Google Play requirements can change; confirm the live Play Console tasks and linked Google documentation before acting.
 
+## October 27, 2026 candidate evidence snapshot
+
+- Reviewed source at preparation: `f8a6f94` (`1.1.0`, version code 3).
+- Local JVM report: 232 tests, zero failures or errors. This does not prove a
+  signed release or device behavior.
+- Runtime owner reports API 26: 45 instrumentation checks plus 3 focused checks
+  passed. API 36 verification remains pending at this snapshot; no full
+  two-platform completion is claimed.
+- Exact-candidate debug/release lint, CI, signed AAB/APK, merged signed
+  permissions, native/R8/16 KB inspection, and upload require their own receipts.
+- Fresh Play Console review on October 27 still shows `1.0.1` (version code 2)
+  available to internal testers. Version code 3 has not been newly built as a
+  signed release or uploaded. No new account or payment was used.
+- Older 186-JVM/36-on-each-API checklist entries describe a superseded source
+  snapshot; their date/source was not recorded in those entries. They are kept
+  as history below, not as evidence for `f8a6f94`.
+
+- Frozen native feed: 1,878 records, including 45 explicitly virtual records;
+  source `7ca94cff12c9667f93bd9d4febb774ee6e6f0e37`,
+  SHA-256 `c61ed81737815ad1543df966f382c8e2672fe2cb28b7d8f6f68cfc3ef39fd391`.
+  This is a dated release cut, not a promise that the live feed always has this count.
+- Full descriptions are not fully translated: 18-language interface support is
+  distinct from accepted full provider-description translations.
+
 ## Release invariants
 
 - Intended application ID: `com.rupayonhaldar.gtafreestem`
@@ -16,11 +40,13 @@ Policy notes were reviewed on August 18, 2026. Google Play requirements can chan
 - Data posture: local app data; no accounts, ads, analytics, attribution, or push
   service; one-shot foreground approximate location for opt-in Nearby; opt-in
   local notifications scheduled by WorkManager; public feed fetched over HTTPS
-  from GitHub/jsDelivr
+  from GitHub/jsDelivr; interactive MapLibre/OpenFreeMap maps separately request
+  styles, tiles, fonts, and sprites, exposing IP/requested-map-area metadata;
+  map resource caches are separate from the ephemeral raw Nearby fix
 - Public pages:
-  - Privacy: <https://gta-free-stem.vercel.app/privacy>
-  - Support: <https://gta-free-stem.vercel.app/support>
-  - Terms: <https://gta-free-stem.vercel.app/terms>
+  - Privacy: <https://gta-free-stem.pages.dev/privacy>
+  - Support: <https://gta-free-stem.pages.dev/support>
+  - Terms: <https://gta-free-stem.pages.dev/terms>
 
 Changing the application ID after the first Play upload creates a different app. Stop and reconcile any mismatch before creating a release artifact.
 
@@ -67,12 +93,25 @@ Record the source commit identifier in the release notes once this project is in
 
 1. Review `docs/PRIVACY_AND_DATA_SAFETY_DRAFT.md` against the exact release source and merged manifest.
 2. Inventory every dependency and permission; do not infer Data safety answers only from the visible UI. For this candidate, reconcile the source declarations for `INTERNET`, `ACCESS_COARSE_LOCATION`, and `POST_NOTIFICATIONS` and the normal permissions/components merged by WorkManager, including `ACCESS_NETWORK_STATE`, `WAKE_LOCK`, `RECEIVE_BOOT_COMPLETED`, and `FOREGROUND_SERVICE`.
-3. Confirm there are no account, ad, analytics, crash-reporting, attribution, paid-map, or push SDKs.
-4. Confirm Nearby is started only by an explicit user action, requests approximate rather than precise/background location, uses a single foreground fix, keeps it only in memory, and does not transmit it.
+3. Inventory MapLibre 13.7.1 and its OpenFreeMap resource requests explicitly.
+   Confirm no account, ad, analytics, crash-reporting, attribution, paid-map, or
+   push service is added. Inspect the signed merged manifest to verify removal
+   of the unused SDK precise-location permission; source removal/debug evidence
+   alone is not signed-artifact evidence.
+4. Confirm Nearby is user-initiated and approximate, uses one foreground fix in
+   memory, and strips latitude/longitude/distance before saving browse filters.
+   Verify requests do not attach the raw fix. Independently review map requests:
+   camera centering on public opportunities and map navigation still exposes
+   viewed map areas and IP metadata. Do not describe this as no location-related
+   transmission or no map cache.
 5. Confirm alerts are opt-in, request notification permission only when needed, schedule unique network-constrained periodic work, compare the downloaded feed with saved filters locally, throttle notifications, and cancel work when disabled. WorkManager timing is inexact; do not promise an exact delivery time.
 6. Confirm every app-managed endpoint uses HTTPS and that foreground and background feed refreshes have bounded failure behavior.
 7. Confirm the merged release manifest still disables Android backup and that the backup/data-extraction rules exclude app data. If a future release enables backup, update the public privacy wording and Data safety analysis before shipping.
-8. Open the privacy, support, and terms URLs from a logged-out browser and confirm they are public, current, mobile-readable, and use a monitored support contact.
+8. Open the Cloudflare privacy/support/terms URLs from a logged-out browser;
+   confirm Android/map flows match the current combined policy and pages are
+   public and mobile-readable. Verify any displayed support email is monitored;
+   if none is displayed, use only a non-sensitive request for a private channel.
+   Do not invent a contact address or infer a new internal-track submission gate.
 9. Decide the target audience truthfully and complete any Families-policy review required for users under the applicable age of a child.
 
 ## Gate 4: Verify the debug-quality baseline
@@ -88,7 +127,7 @@ On representative API 26 and API 36 devices or emulators, manually verify:
 - cold launch and relaunch
 - opportunity loading, cached/bundled fallback, retry, empty, and offline states
 - search, filters, New Finds, list/map switching, saved state, and navigation
-- an explicit Nearby flow for granted, denied, disabled, timeout, clear, and relaunch states; confirm no location persists after process death
+- an explicit Nearby flow for granted, denied, disabled, timeout, clear, and relaunch states; confirm the raw Nearby fix does not persist after process death; separately inspect map-resource cache behavior
 - alert opt-in/opt-out, Android 13+ notification-permission denial, first baseline, new-match notification, throttle, reboot/reschedule, and notification deep link
 - cold- and warm-start deep links plus Opportunities/High School app shortcuts
 - external links and back navigation

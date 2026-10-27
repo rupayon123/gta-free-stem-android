@@ -1,6 +1,6 @@
 # Google Play release status
 
-Last public-safe status review: August 20, 2026. This file records only facts
+Last public-safe status review: October 27, 2026. This file records only facts
 that are appropriate for a public source repository.
 
 > **Current-tree evidence reset:** the source has materially changed since the
@@ -10,6 +10,30 @@ that are appropriate for a public source repository.
 > clean rebuild, fresh verification, newly signed artifacts, screenshot
 > recapture, and regenerated provenance. This record authorizes no upload,
 > rollout, or publication.
+
+## October 27, 2026 candidate evidence snapshot
+
+- Reviewed runtime source: `13c6085` (descendant of the 232-test `f8a6f94` source) (`1.1.0`, version code 3).
+- Local JVM report: 232 tests, zero failures or errors. This does not prove a
+  signed release or device behavior.
+- Reviewed runtime logs for `13c6085`: 45/45 instrumentation cases and 3/3
+  reduced-motion cases passed on each of API 26 and API 36 emulators. These
+  development-APK results do not establish signed-release or physical-device acceptance.
+- Exact-candidate debug/release lint, CI, signed AAB/APK, merged signed
+  permissions, native/R8/16 KB inspection, and upload require their own receipts.
+- Fresh Play Console review on October 27 still shows `1.0.1` (version code 2)
+  available to internal testers. Version code 3 has not been newly built as a
+  signed release or uploaded. No new account or payment was used.
+- Older 186-JVM/36-on-each-API checklist entries describe a superseded source
+  snapshot; their date/source was not recorded in those entries. They are kept
+  as history below, not as evidence for `f8a6f94`.
+
+- Frozen native feed: 1,878 records, including 45 explicitly virtual records;
+  source `7ca94cff12c9667f93bd9d4febb774ee6e6f0e37`,
+  SHA-256 `c61ed81737815ad1543df966f382c8e2672fe2cb28b7d8f6f68cfc3ef39fd391`.
+  This is a dated release cut, not a promise that the live feed always has this count.
+- Full descriptions are not fully translated: 18-language interface support is
+  distinct from accepted full provider-description translations.
 
 ## Current v1.1.0 local candidate
 
@@ -21,14 +45,23 @@ that are appropriate for a public source repository.
   confirm the live task state again before any v1.1.0 upload.
 - Current behavior includes the storybook visual system and launch experience;
   adaptive Home/Opportunities/High School/Support/Profile navigation; compact
-  list and zero-cost offline schematic-map browsing; New Finds; local
-  Current/Archive saves; full details and map previews; strict live/offline
-  handling for the current 104-record feed; and a shared 18-language catalog
-  with RTL support.
+  list browsing, live 2D/3D MapLibre/OpenFreeMap maps with an offline schematic
+  fallback; New Finds; local Current/Archive saves; full details and map previews;
+  strict live/offline feed validation; and an 18-language interface with RTL support.
+  The August 20 description of a 104-record feed and schematic-only map is
+  historical, not current behavior.
 - Nearby is explicit and optional: it requests approximate location for one
   foreground fix, keeps the fix only in memory, and uses it locally for distance
-  sorting. No paid map service, live tiles, precise/background location, saved
-  location, or location transmission is involved.
+  sorting. The app does not attach that raw fix to feed or map requests. When an
+  interactive map is shown, MapLibre requests OpenFreeMap styles, tiles, fonts,
+  and sprites over HTTPS; delivery services receive IP/request metadata and
+  requested map areas. The camera focuses public opportunity locations and user
+  map navigation, rather than uploading a raw Nearby fix. Viewed areas can still
+  reveal an area of interest. Map-resource caching differs from GPS-fix storage.
+  The source removes the map SDK's unused precise-location permission; confirm
+  the final signed manifest independently. No paid map service or background
+  location is used. The old blanket “no live tiles/no location transmission”
+  description must not be reused for this candidate.
 - New-match alerts are explicit and optional: they request notification
   permission when Android requires it, use local WorkManager checks and on-device
   matching/history, and use no push provider. App-owned deep links and dynamic
@@ -69,8 +102,8 @@ Play-generated install, upload approval, production readiness, or publication.
   protected upload key, and the public-safe AAB checksum is recorded in
   `verification/VERIFICATION.md`.
 
-Google Play accepted version 1.0.1 into restricted internal testing and reports
-it available to internal testers. The tester opt-in page provides a Download
+Google Play accepted version 1.0.1 into restricted internal testing. A fresh
+October 27, 2026 Console check still reports it available to internal testers. The tester opt-in page provides a Download
 test app link. This does not establish a Play-generated installation, physical-
 device validation, closed testing, production, or public availability.
 
@@ -117,8 +150,11 @@ The following are intentionally kept out of source control:
 5. Complete whatever testing and production-access gates the live Play Console
    requires for the developer account at submission time.
 6. Describe map/Nearby, local alerts, deep links/shortcuts, and localization
-   precisely: no live map tiles, precise/background location, guaranteed alert
-   timing, push service, or online account exists.
+   precisely: interactive maps request live resources and expose IP/requested
+   map areas; raw Nearby fixes remain ephemeral on device. Do not promise
+   guaranteed alert timing, a push service, an online account, or fully translated
+   provider descriptions. Verify precise/background permission absence in the
+   exact signed artifact.
 7. Do not claim public availability until the intended production release is
    independently visible to a normal Play Store user.
 
