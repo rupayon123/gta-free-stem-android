@@ -84,6 +84,8 @@ import com.rupayonhaldar.gtafreestem.ui.preferences.OpportunityAlertFeedback
 import com.rupayonhaldar.gtafreestem.ui.browse.AppDestination
 import com.rupayonhaldar.gtafreestem.ui.browse.BrowseUiState
 import com.rupayonhaldar.gtafreestem.ui.browse.BrowseViewModel
+import com.rupayonhaldar.gtafreestem.ui.browse.OpportunityMap3D
+import com.rupayonhaldar.gtafreestem.ui.browse.toMapOpportunityPin
 import com.rupayonhaldar.gtafreestem.ui.browse.OpportunityFilterPanel
 import com.rupayonhaldar.gtafreestem.ui.browse.OpportunityFilterPanelLabels
 import com.rupayonhaldar.gtafreestem.ui.browse.opportunityFilterPanelActiveCount
@@ -763,6 +765,19 @@ private fun BrowseScreen(
         }
         else -> state.opportunities
     }
+    var showMap by rememberSaveable { mutableStateOf(false) }
+    var selectedMapPinId by rememberSaveable { mutableStateOf<String?>(null) }
+    val mapPins = remember(visibleOpportunities, language, catalog) {
+        visibleOpportunities.mapNotNull { opportunity ->
+            val localized = OpportunityLocalization.resolve(opportunity, language, catalog)
+            opportunity.toMapOpportunityPin(
+                displayTitle = localized.title,
+                displayOrganization = localized.organization,
+                displayLocation = listOf(localized.city, localized.region)
+                    .filter(String::isNotBlank).joinToString(", "),
+            )
+        }
+    }
     val activeFilterCount = opportunityFilterPanelActiveCount(state.filters)
     val hasFilters = state.query.isNotBlank() ||
         state.filters.hasActiveFilters ||
@@ -963,19 +978,51 @@ private fun BrowseScreen(
                 )
             }
         } else {
-            items(
-                items = visibleOpportunities,
-                key = Opportunity::id,
-            ) { opportunity ->
-                OpportunityCard(
-                    opportunity = opportunity,
-                    isFavorite = opportunity.id in state.favoriteIds,
-                    onDetails = { onSelectOpportunity(opportunity) },
-                    onToggleFavorite = { onToggleFavorite(opportunity.id) },
-                    language = language,
-                    catalog = catalog,
-                    text = shellText,
-                )
+            item {
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    FilterChip(
+                        selected = !showMap,
+                        onClick = { showMap = false },
+                        label = { Text(shellText("list", "List")) },
+                        modifier = Modifier.heightIn(min = 48.dp).testTag("browse-list-view"),
+                    )
+                    FilterChip(
+                        selected = showMap,
+                        onClick = { showMap = true },
+                        label = { Text(shellText("map", "Map")) },
+                        modifier = Modifier.heightIn(min = 48.dp).testTag("browse-map-view"),
+                    )
+                }
+            }
+            if (showMap) {
+                item {
+                    OpportunityMap3D(
+                        pins = mapPins,
+                        selectedPinId = selectedMapPinId,
+                        onPinSelected = { selectedMapPinId = it.id },
+                        onShowDetails = { pin ->
+                            visibleOpportunities.firstOrNull { it.id == pin.id }
+                                ?.let(onSelectOpportunity)
+                        },
+                        strings = localizedMapStrings(catalog = catalog, language = language, text = shellText),
+                        offlineLabel = shellText("offlinePreview", "Offline preview"),
+                    )
+                }
+            } else {
+                items(
+                    items = visibleOpportunities,
+                    key = Opportunity::id,
+                ) { opportunity ->
+                    OpportunityCard(
+                        opportunity = opportunity,
+                        isFavorite = opportunity.id in state.favoriteIds,
+                        onDetails = { onSelectOpportunity(opportunity) },
+                        onToggleFavorite = { onToggleFavorite(opportunity.id) },
+                        language = language,
+                        catalog = catalog,
+                        text = shellText,
+                    )
+                }
             }
         }
         }

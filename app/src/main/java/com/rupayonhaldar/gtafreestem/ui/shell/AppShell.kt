@@ -260,42 +260,6 @@ private fun PrimaryNavigationBar(
         )
         Box(
             modifier = Modifier
-                .fillMaxHeight()
-                .width(NAV_SHELL_BAR_SIDE_RIM_WIDTH.dp)
-                .align(Alignment.TopStart)
-                .background(
-                    Brush.horizontalGradient(
-                        colors = listOf(
-                            if (isDark) {
-                                Color.White.copy(alpha = NAV_SHELL_BAR_SIDE_RIM_DARK_ALPHA)
-                            } else {
-                                Color.Black.copy(alpha = NAV_SHELL_BAR_SIDE_RIM_LIGHT_ALPHA)
-                            },
-                            Color.Transparent,
-                        ),
-                    ),
-                ),
-        )
-        Box(
-            modifier = Modifier
-                .fillMaxHeight()
-                .width(NAV_SHELL_BAR_SIDE_RIM_WIDTH.dp)
-                .align(Alignment.TopEnd)
-                .background(
-                    Brush.horizontalGradient(
-                        colors = listOf(
-                            Color.Transparent,
-                            if (isDark) {
-                                Color.White.copy(alpha = NAV_SHELL_BAR_SIDE_RIM_DARK_ALPHA)
-                            } else {
-                                Color.Black.copy(alpha = NAV_SHELL_BAR_SIDE_RIM_LIGHT_ALPHA)
-                            },
-                        ),
-                    ),
-                ),
-        )
-        Box(
-            modifier = Modifier
                 .fillMaxWidth()
                 .height(NAV_SHELL_BOTTOM_RIM_HEIGHT.dp)
                 .align(Alignment.BottomCenter)

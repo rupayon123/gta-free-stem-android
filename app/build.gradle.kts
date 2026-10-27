@@ -113,6 +113,7 @@ dependencies {
   implementation(libs.androidx.work.runtime)
   implementation(libs.kotlinx.coroutines.android)
   implementation(libs.kotlinx.serialization.json)
+  implementation(libs.maplibre.android.opengl)
 
   // Arch Components
   implementation(libs.androidx.lifecycle.runtime.compose)
