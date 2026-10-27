@@ -72,7 +72,7 @@ class MainActivityTest {
                 .assertTextContains(label)
         }
 
-        composeRule.onNodeWithText("Everything here is free for everyone.").assertIsDisplayed()
+        composeRule.onNodeWithText("Find real free STEM programs", substring = true).assertIsDisplayed()
 
         composeRule.onNodeWithTag("primary-navigation-opportunities").performClick()
         composeRule.onNode(hasSetTextAction()).performTextReplacement("")
@@ -81,18 +81,18 @@ class MainActivityTest {
             .assertIsDisplayed()
         composeRule.onNodeWithText("Filters").performClick()
         composeRule.onNodeWithTag("opportunity-filter-panel").assertIsDisplayed()
-        composeRule.onNodeWithText("Done").performClick()
+        composeRule.onNodeWithText("Back").performClick()
         composeRule.onNodeWithTag("browse-screen-title")
             .assertTextContains("Opportunities")
             .assertIsDisplayed()
 
         composeRule.onNodeWithTag("primary-navigation-high_school").performClick()
-        composeRule.onNodeWithText("High school hunt engine").assertIsDisplayed()
+        composeRule.onNodeWithTag("browse-screen-title")
+            .assertTextContains("High School")
+            .assertIsDisplayed()
 
         composeRule.onNodeWithTag("primary-navigation-support").performClick()
-        composeRule.onNodeWithText(
-            "Built to be easier for students, parents, educators, and community groups.",
-        ).assertIsDisplayed()
+        composeRule.onNodeWithTag("support-screen").assertIsDisplayed()
         composeRule.onNodeWithTag("support-screen").performScrollToIndex(2)
         composeRule.onNodeWithText("Send feedback").assertIsDisplayed()
         composeRule.onNodeWithText("Privacy policy").assertIsDisplayed()

@@ -45,7 +45,6 @@ data class BrowseUiState(
     val isRefreshing: Boolean = false,
     val snapshot: OpportunityFeedSnapshot? = null,
     val opportunities: List<Opportunity> = emptyList(),
-    val featuredOpportunities: List<Opportunity> = emptyList(),
     val categories: List<String> = emptyList(),
     val query: String = "",
     val filters: OpportunitySearchFilters = OpportunitySearchFilters(),
@@ -331,9 +330,8 @@ class BrowseViewModel(
     }
 
     private suspend fun applySnapshot(snapshot: OpportunityFeedSnapshot) {
-        val (filterOptions, featuredOpportunities) = withContext(searchDispatcher) {
-            OpportunitySearch.options(snapshot.opportunities) to
-                OpportunitySearch.search(snapshot.opportunities).take(3)
+        val filterOptions = withContext(searchDispatcher) {
+            OpportunitySearch.options(snapshot.opportunities)
         }
         favorites.reconcile(snapshot)
         val savedLibraryState = readSavedLibraryState()
@@ -342,7 +340,6 @@ class BrowseViewModel(
                 snapshot = snapshot,
                 categories = filterOptions.categories,
                 filterOptions = filterOptions,
-                featuredOpportunities = featuredOpportunities,
                 favoriteIds = savedLibraryState.ids,
                 savedSections = savedLibraryState.sections,
                 unresolvedSavedCount = savedLibraryState.unresolvedCount,

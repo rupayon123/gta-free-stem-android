@@ -32,6 +32,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.HorizontalDivider
@@ -54,7 +56,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -259,8 +265,17 @@ fun GTAFreeStemApp(
                 PrimaryDestination.HOME -> HomeScreen(
                     state = state,
                     onSelectOpportunity = viewModel::selectOpportunity,
-                    onToggleFavorite = viewModel::toggleFavorite,
                     onSearch = { openPrimaryDestination(PrimaryDestination.OPPORTUNITIES) },
+                    onQueryChanged = viewModel::setQuery,
+                    onCityChanged = viewModel::setCity,
+                    onAgeChanged = viewModel::setAge,
+                    onCategoryChanged = { category ->
+                        viewModel.setFilters(state.filters.copy(category = category))
+                    },
+                    onCategoryShortcut = { category ->
+                        viewModel.setFilters(state.filters.copy(category = category))
+                        openPrimaryDestination(PrimaryDestination.OPPORTUNITIES)
+                    },
                     onHighSchool = { openPrimaryDestination(PrimaryDestination.HIGH_SCHOOL) },
                     onQuickAction = { focus ->
                         openPrimaryDestination(PrimaryDestination.HIGH_SCHOOL, focus)
@@ -397,8 +412,12 @@ private enum class HighSchoolFocus(
 private fun HomeScreen(
     state: BrowseUiState,
     onSelectOpportunity: (Opportunity) -> Unit,
-    onToggleFavorite: (String) -> Unit,
     onSearch: () -> Unit,
+    onQueryChanged: (String) -> Unit,
+    onCityChanged: (String?) -> Unit,
+    onAgeChanged: (Int?, Boolean) -> Unit,
+    onCategoryChanged: (String) -> Unit,
+    onCategoryShortcut: (String) -> Unit,
     onHighSchool: () -> Unit,
     onQuickAction: (HighSchoolFocus) -> Unit,
     onFeedback: () -> Unit,
@@ -406,7 +425,9 @@ private fun HomeScreen(
     catalog: AppStringCatalog,
     text: (String, String) -> String,
 ) {
-    val featuredOpportunities = state.featuredOpportunities
+    val focusManager = LocalFocusManager.current
+    LaunchedEffect(Unit) { focusManager.clearFocus() }
+    val featuredOpportunities = state.opportunities.take(2)
     Box(
         modifier = Modifier.fillMaxHeight(),
         contentAlignment = Alignment.TopCenter,
@@ -423,80 +444,165 @@ private fun HomeScreen(
             verticalArrangement = Arrangement.spacedBy(AppScreenSectionSpacing),
         ) {
             item {
-                Surface(
-                    color = MaterialTheme.colorScheme.primaryContainer,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 4.dp),
-                    shape = MaterialTheme.shapes.medium,
-                    tonalElevation = 2.dp,
-                    shadowElevation = 1.dp,
+                Column(
+                    modifier = Modifier.fillMaxWidth().padding(top = 4.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
-                    Column(
-                        modifier = Modifier.padding(horizontal = 20.dp, vertical = 22.dp),
-                        verticalArrangement = Arrangement.spacedBy(14.dp),
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(14.dp),
                     ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(14.dp),
-                        ) {
-                            Image(
-                                painter = painterResource(R.drawable.app_logo),
-                                contentDescription = null,
-                                contentScale = ContentScale.Fit,
-                                modifier = Modifier
-                                    .size(72.dp)
-                                    .clip(RoundedCornerShape(18.dp)),
-                            )
-                            Column(verticalArrangement = Arrangement.spacedBy(5.dp)) {
-                                Text(
-                                    text = "GTA FREE STEM",
-                                    style = MaterialTheme.typography.headlineSmall,
-                                    color = MaterialTheme.colorScheme.onPrimaryContainer,
-                                    modifier = Modifier.semantics { heading() },
-                                )
-                                Surface(
-                                    color = MaterialTheme.colorScheme.tertiary,
-                                    contentColor = MaterialTheme.colorScheme.onTertiary,
-                                    shape = CircleShape,
-                                ) {
-                                    Text(
-                                        text = text(
-                                            "freeOnly",
-                                            "Everything here is free for everyone.",
-                                        ),
-                                        style = MaterialTheme.typography.labelMedium,
-                                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
-                                    )
-                                }
-                            }
-                        }
-                        Text(
-                            text = text(
-                                "mission",
-                                "Find real free STEM programs, library events, volunteer hours, co-op, SHSM, and youth opportunities across the GTA.",
-                            ),
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        Image(
+                            painter = painterResource(R.drawable.app_logo),
+                            contentDescription = null,
+                            contentScale = ContentScale.Fit,
+                            modifier = Modifier.size(56.dp).clip(RoundedCornerShape(16.dp)),
                         )
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(10.dp),
-                        ) {
-                            Button(
-                                onClick = onSearch,
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .heightIn(min = 52.dp),
-                            ) { Text(text("search", "Search")) }
-                            OutlinedButton(
-                                onClick = onHighSchool,
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .heightIn(min = 52.dp),
-                            ) { Text(text("highSchool", "High School")) }
+                        Text(
+                            text = "GTA FREE STEM",
+                            style = MaterialTheme.typography.headlineSmall,
+                            color = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.semantics { heading() },
+                        )
+                    }
+                    Text(
+                        text = text(
+                            "mission",
+                            "Find real free STEM programs, library events, volunteer hours, co-op, SHSM, and youth opportunities across the GTA.",
+                        ),
+                        style = MaterialTheme.typography.bodyMedium,
+                    )
+                }
+            }
+
+            item {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(10.dp),
+                ) {
+                    Text(
+                        text = text("search", "Search"),
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = Modifier.semantics { heading() },
+                    )
+                    OutlinedTextField(
+                        value = state.query,
+                        onValueChange = onQueryChanged,
+                        label = { Text(text("search", "Search")) },
+                        singleLine = true,
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+                        keyboardActions = KeyboardActions(onSearch = { onSearch() }),
+                        modifier = Modifier.fillMaxWidth().testTag("home-search-field"),
+                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    ) {
+                        HomeFilterMenu(
+                            label = text("city", "City"),
+                            selected = state.filters.city ?: text("all", "All"),
+                            modifier = Modifier.weight(1f),
+                            options = listOf(text("all", "All") to { onCityChanged(null) }) +
+                                state.filterOptions.cities.map { city -> city to { onCityChanged(city) } },
+                        )
+                        HomeFilterMenu(
+                            label = text("age", "Age"),
+                            selected = when {
+                                state.filters.adultsOnly -> "18+"
+                                state.filters.age != null -> state.filters.age.toString()
+                                else -> text("all", "All")
+                            },
+                            modifier = Modifier.weight(1f),
+                            options = listOf(text("all", "All") to { onAgeChanged(null, false) }) +
+                                (0..17).map { age -> age.toString() to { onAgeChanged(age, false) } } +
+                                listOf("18+" to { onAgeChanged(null, true) }),
+                        )
+                    }
+                    HomeFilterMenu(
+                        label = text("category", "Category"),
+                        selected = state.filters.category?.let { category ->
+                            OpportunityLocalization.categoryName(category, language, catalog)
+                        } ?: text("all", "All"),
+                        modifier = Modifier.fillMaxWidth(),
+                        options = listOf(text("all", "All") to {
+                            onCategoryChanged("")
+                        }) + state.filterOptions.categories.map { category ->
+                            OpportunityLocalization.categoryName(category, language, catalog) to {
+                                onCategoryChanged(category)
+                            }
+                        },
+                    )
+                    Button(
+                        onClick = onSearch,
+                        modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp),
+                    ) { Text(text("browse", "Browse")) }
+                    TextButton(
+                        onClick = onHighSchool,
+                        modifier = Modifier.heightIn(min = 48.dp),
+                    ) { Text(text("highSchool", "High School")) }
+                }
+            }
+
+            item {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Row(
+                        modifier = Modifier.horizontalScroll(rememberScrollState()),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    ) {
+                        listOf(
+                            "Science & Engineering",
+                            "Coding & Robotics",
+                            "Makerspace & Fabrication",
+                        ).filter(state.filterOptions.categories::contains).forEach { category ->
+                            FilterChip(
+                                selected = state.filters.category == category,
+                                onClick = { onCategoryShortcut(category) },
+                                label = {
+                                    Text(OpportunityLocalization.categoryName(category, language, catalog))
+                                },
+                                modifier = Modifier.heightIn(min = 48.dp),
+                            )
                         }
                     }
+                }
+            }
+
+            item {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    Text(
+                        text = text("opportunities", "Featured opportunities"),
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = Modifier.semantics { heading() },
+                    )
+                }
+            }
+
+            when {
+                state.isLoading && state.snapshot == null -> item { LoadingPanel(text) }
+                featuredOpportunities.isEmpty() -> item {
+                    Text(
+                        text = text(
+                            "noOpportunities",
+                            "No matching opportunities. Try another search or filter.",
+                        ),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+                else -> items(
+                    items = featuredOpportunities,
+                    key = Opportunity::id,
+                ) { opportunity ->
+                    HomeActivityRow(
+                        opportunity = opportunity,
+                        onClick = { onSelectOpportunity(opportunity) },
+                        language = language,
+                        catalog = catalog,
+                    )
                 }
             }
 
@@ -539,54 +645,82 @@ private fun HomeScreen(
                     }
                 }
             }
+        }
+    }
+}
 
-            item {
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
-                ) {
-                    Text(
-                        text = text("opportunities", "Featured opportunities"),
-                        style = MaterialTheme.typography.titleLarge,
-                        modifier = Modifier.semantics { heading() },
-                    )
-                    Text(
-                        text = text(
-                            "sourceDetails",
-                            "A few source-backed programs to get you started.",
-                        ),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                }
+@Composable
+private fun HomeFilterMenu(
+    label: String,
+    selected: String,
+    options: List<Pair<String, () -> Unit>>,
+    modifier: Modifier = Modifier,
+) {
+    var expanded by rememberSaveable { mutableStateOf(false) }
+    Box(modifier) {
+        OutlinedButton(
+            onClick = { expanded = true },
+            modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp),
+            contentPadding = PaddingValues(horizontal = 6.dp, vertical = 6.dp),
+        ) {
+            Column {
+                Text(label, style = MaterialTheme.typography.labelSmall)
+                Text(selected, maxLines = 1, overflow = TextOverflow.Ellipsis)
             }
+        }
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            modifier = Modifier.heightIn(max = 360.dp),
+        ) {
+            options.forEach { (optionLabel, onSelect) ->
+                DropdownMenuItem(
+                    text = { Text(optionLabel) },
+                    onClick = {
+                        expanded = false
+                        onSelect()
+                    },
+                )
+            }
+        }
+    }
+}
 
-            when {
-                state.isLoading && state.snapshot == null -> item { LoadingPanel(text) }
-                featuredOpportunities.isEmpty() -> item {
-                    Text(
-                        text = text(
-                            "noOpportunities",
-                            "Open Opportunities to search all verified listings.",
-                        ),
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                }
-                else -> items(
-                    items = featuredOpportunities,
-                    key = Opportunity::id,
-                ) { opportunity ->
-                    OpportunityCard(
-                        opportunity = opportunity,
-                        isFavorite = opportunity.id in state.favoriteIds,
-                        onDetails = { onSelectOpportunity(opportunity) },
-                        onToggleFavorite = { onToggleFavorite(opportunity.id) },
-                        language = language,
-                        catalog = catalog,
-                        text = text,
-                    )
-                }
-            }
+@Composable
+private fun HomeActivityRow(
+    opportunity: Opportunity,
+    onClick: () -> Unit,
+    language: AppLanguage,
+    catalog: AppStringCatalog,
+) {
+    val localized = remember(opportunity, language, catalog) {
+        OpportunityLocalization.resolve(opportunity, language, catalog)
+    }
+    Surface(
+        modifier = Modifier.fillMaxWidth().clickable(onClick = onClick),
+        color = MaterialTheme.colorScheme.surface,
+        shape = MaterialTheme.shapes.medium,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+    ) {
+        Column(
+            modifier = Modifier.padding(14.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp),
+        ) {
+            Text(localized.category, style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.primary)
+            Text(localized.title, style = MaterialTheme.typography.titleMedium,
+                maxLines = 2, overflow = TextOverflow.Ellipsis)
+            Text(
+                listOfNotNull(
+                    localized.organization,
+                    localized.city.takeIf(String::isNotBlank),
+                    opportunity.startDate?.let { formatDate(it, language) },
+                ).joinToString(" · "),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+            )
         }
     }
 }

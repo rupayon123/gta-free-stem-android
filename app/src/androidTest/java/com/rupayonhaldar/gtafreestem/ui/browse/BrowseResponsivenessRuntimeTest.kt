@@ -16,7 +16,9 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.rupayonhaldar.gtafreestem.MainActivity
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
+import java.util.concurrent.atomic.AtomicReference
 import kotlin.concurrent.thread
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
@@ -29,6 +31,13 @@ class BrowseResponsivenessRuntimeTest {
     @Test
     fun typingAndFilterEditsKeepMainLooperResponsiveWithLiveFeed() {
         composeRule.onNodeWithTag("primary-navigation-opportunities").performClick()
+        composeRule.onNodeWithText("Filters", substring = true).performClick()
+        val reset = composeRule.onNodeWithTag(OpportunityFilterPanelTestTags.RESET)
+        if (!reset.fetchSemanticsNode().config.contains(SemanticsProperties.Disabled)) {
+            reset.performClick()
+        }
+        composeRule.onNodeWithText("Back").performClick()
+        composeRule.onNode(hasSetTextAction()).performTextReplacement("")
         var feedCount = 0
         composeRule.waitUntil(timeoutMillis = 60_000) {
             feedCount = composeRule.onAllNodesWithText("available", substring = true)
@@ -43,16 +52,21 @@ class BrowseResponsivenessRuntimeTest {
 
         val handler = Handler(Looper.getMainLooper())
         val delays = mutableListOf<Long>()
+        val heartbeatFailure = AtomicReference<Throwable?>(null)
         val heartbeat = thread(name = "browse-main-looper-heartbeat") {
-            repeat(40) {
-                val postedAt = SystemClock.uptimeMillis()
-                val completed = CountDownLatch(1)
-                handler.post {
-                    synchronized(delays) { delays += SystemClock.uptimeMillis() - postedAt }
-                    completed.countDown()
+            try {
+                repeat(40) {
+                    val postedAt = SystemClock.uptimeMillis()
+                    val completed = CountDownLatch(1)
+                    handler.post {
+                        synchronized(delays) { delays += SystemClock.uptimeMillis() - postedAt }
+                        completed.countDown()
+                    }
+                    check(completed.await(2, TimeUnit.SECONDS)) { "Main Looper heartbeat timed out" }
+                    Thread.sleep(25)
                 }
-                assertTrue("Main Looper heartbeat timed out", completed.await(2, TimeUnit.SECONDS))
-                Thread.sleep(25)
+            } catch (error: Throwable) {
+                heartbeatFailure.set(error)
             }
         }
 
@@ -63,7 +77,11 @@ class BrowseResponsivenessRuntimeTest {
         composeRule.onNodeWithText("AI & Digital Media").performClick()
         heartbeat.join(15_000)
         assertTrue("Heartbeat thread did not finish", !heartbeat.isAlive)
-        val maxDelay = synchronized(delays) { delays.maxOrNull() ?: Long.MAX_VALUE }
+        heartbeatFailure.get()?.let { throw AssertionError("Main Looper heartbeat failed", it) }
+        val maxDelay = synchronized(delays) {
+            assertEquals(40, delays.size)
+            delays.maxOrNull() ?: Long.MAX_VALUE
+        }
         Log.i("BrowseResponsiveness", "feed=$feedCount samples=${delays.size} maxMainLooperDelayMs=$maxDelay")
         assertTrue("Main Looper delayed $maxDelay ms", maxDelay < 1_000)
     }
