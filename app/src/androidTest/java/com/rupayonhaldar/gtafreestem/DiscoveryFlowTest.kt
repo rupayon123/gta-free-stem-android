@@ -93,8 +93,8 @@ class DiscoveryFlowTest {
         rule.waitUntil(10_000) { !vm.uiState.value.isLoading && !vm.uiState.value.isRefreshing }
         rule.onNodeWithTag("science-launch-experience").assertDoesNotExist()
         rule.onNodeWithTag("primary-navigation-opportunities").assertIsDisplayed().performClick()
-        rule.onNodeWithTag("browse-results").performScrollToNode(hasText(text("retry", "Retry")))
-        rule.onNodeWithText(text("retry", "Retry")).assertIsDisplayed().performClick()
+        rule.onNodeWithTag("browse-results").performScrollToNode(hasTestTag("feed-error-retry"))
+        rule.onNodeWithTag("feed-error-retry").assertIsDisplayed().performClick()
         rule.waitUntil(10_000) { !vm.uiState.value.isRefreshing }
         rule.onNodeWithTag("science-launch-experience").assertDoesNotExist()
         rule.onNodeWithTag("primary-navigation-home").assertIsDisplayed()
@@ -243,6 +243,8 @@ class DiscoveryFlowTest {
         assertTrue(listBounds.right <= mapBounds.left)
         assertTrue((listBounds.bottom - listBounds.top) >= 48.dp && (mapBounds.bottom - mapBounds.top) >= 48.dp)
         rule.onNodeWithTag("browse-map-view").performClick()
+        rule.onNodeWithTag("browse-results").performScrollToNode(hasTestTag("map-offline-control"))
+        rule.onNodeWithTag("map-offline-control").performClick()
         rule.onNodeWithTag("browse-results").performScrollToNode(hasTestTag(OpportunityMapTestTags.marker("toronto")))
         rule.onNodeWithTag(OpportunityMapTestTags.marker("toronto")).performClick()
         rule.onNodeWithTag(OpportunityMapTestTags.DETAILS_ACTION).performScrollTo().performClick()

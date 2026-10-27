@@ -1625,6 +1625,7 @@ private fun ErrorBanner(
                 TextButton(
                     onClick = onRetry,
                     shape = MaterialTheme.shapes.small,
+                    modifier = Modifier.testTag("feed-error-retry"),
                 ) {
                     Text(text("refreshResearch", "Try again"))
                 }

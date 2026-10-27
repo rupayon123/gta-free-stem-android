@@ -34,6 +34,11 @@ class BrowseResponsivenessRuntimeTest {
         composeRule.runOnIdle {
             assertTrue(composeRule.activity.preferencesViewModel.setLanguage(AppLanguage.ENGLISH))
         }
+        composeRule.waitUntil(timeoutMillis = 60_000) {
+            composeRule.onAllNodesWithTag("primary-navigation-opportunities")
+                .fetchSemanticsNodes()
+                .isNotEmpty()
+        }
         composeRule.onNodeWithTag("primary-navigation-opportunities").performClick()
         composeRule.onNodeWithText("Filters", substring = true).performClick()
         val reset = composeRule.onNodeWithTag(OpportunityFilterPanelTestTags.RESET)
