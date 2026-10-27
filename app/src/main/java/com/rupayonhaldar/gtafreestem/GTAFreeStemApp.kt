@@ -63,6 +63,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.input.ImeAction
@@ -545,6 +546,13 @@ private fun HomeScreen(
                         value = state.query,
                         onValueChange = onQueryChanged,
                         label = { Text(text("search", "Search")) },
+                        leadingIcon = {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_search),
+                                contentDescription = null,
+                                modifier = Modifier.size(20.dp),
+                            )
+                        },
                         singleLine = true,
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
                         keyboardActions = KeyboardActions(onSearch = { onSearch() }),
@@ -595,7 +603,15 @@ private fun HomeScreen(
                     TextButton(
                         onClick = onHighSchool,
                         modifier = Modifier.heightIn(min = 48.dp),
-                    ) { Text(text("highSchool", "High School")) }
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_school),
+                            contentDescription = null,
+                            modifier = Modifier.size(18.dp),
+                        )
+                        Spacer(Modifier.width(8.dp))
+                        Text(text("highSchool", "High School"))
+                    }
                 }
             }
 
@@ -611,13 +627,39 @@ private fun HomeScreen(
                             "Science & Engineering",
                             "Coding & Robotics",
                             "Makerspace & Fabrication",
-                        ).filter(state.filterOptions.categories::contains).forEach { category ->
+                        ).forEachIndexed { index, category ->
+                            val chipColor = when (index) {
+                                0 -> MaterialTheme.colorScheme.primaryContainer
+                                1 -> MaterialTheme.colorScheme.tertiary.copy(alpha = 0.25f)
+                                else -> MaterialTheme.colorScheme.error.copy(alpha = 0.18f)
+                            }
                             FilterChip(
                                 selected = state.filters.category == category,
                                 onClick = { onCategoryShortcut(category) },
+                                leadingIcon = {
+                                    Icon(
+                                        painter = painterResource(
+                                            when (index) {
+                                                0 -> R.drawable.ic_science
+                                                1 -> R.drawable.ic_code
+                                                else -> R.drawable.ic_maker
+                                            },
+                                        ),
+                                        contentDescription = null,
+                                        modifier = Modifier.size(18.dp),
+                                    )
+                                },
                                 label = {
                                     Text(OpportunityLocalization.categoryName(category, language, catalog))
                                 },
+                                colors = FilterChipDefaults.filterChipColors(
+                                    containerColor = chipColor,
+                                    labelColor = MaterialTheme.colorScheme.onSurface,
+                                    iconColor = MaterialTheme.colorScheme.onSurface,
+                                    selectedContainerColor = chipColor,
+                                    selectedLabelColor = MaterialTheme.colorScheme.onSurface,
+                                    selectedLeadingIconColor = MaterialTheme.colorScheme.onSurface,
+                                ),
                                 modifier = Modifier.heightIn(min = 48.dp),
                             )
                         }
@@ -733,9 +775,16 @@ private fun HomeFilterMenu(
             modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp),
             contentPadding = PaddingValues(horizontal = 6.dp, vertical = 6.dp),
         ) {
-            Column {
-                Text(label, style = MaterialTheme.typography.labelSmall)
-                Text(selected, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(label, style = MaterialTheme.typography.labelSmall)
+                    Text(selected, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                }
+                Icon(
+                    painter = painterResource(R.drawable.ic_chevron_right),
+                    contentDescription = null,
+                    modifier = Modifier.size(18.dp).rotate(90f),
+                )
             }
         }
         DropdownMenu(
@@ -1118,6 +1167,7 @@ private fun BrowseScreen(
                                 FilterChip(
                                     selected = state.selectedCategory == category,
                                     onClick = { onCategoryChanged(category) },
+                                    modifier = Modifier.testTag("browse-category-$category"),
                                     shape = MaterialTheme.shapes.small,
                                     colors = browseFilterChipColors(
                                         selected = state.selectedCategory == category,

@@ -73,8 +73,8 @@ class BrowseResponsivenessRuntimeTest {
         listOf("r", "ro", "rob", "robot", "robotics", "science", "math").forEach { query ->
             composeRule.onNode(hasSetTextAction()).performTextReplacement(query)
         }
-        composeRule.onNodeWithText("AI & Digital Media").performClick()
-        composeRule.onNodeWithText("AI & Digital Media").performClick()
+        composeRule.onNodeWithTag("browse-category-AI & Digital Media").performClick()
+        composeRule.onNodeWithTag("browse-category-AI & Digital Media").performClick()
         heartbeat.join(15_000)
         assertTrue("Heartbeat thread did not finish", !heartbeat.isAlive)
         heartbeatFailure.get()?.let { throw AssertionError("Main Looper heartbeat failed", it) }
