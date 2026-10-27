@@ -112,11 +112,11 @@ jobs:
           adb -s emulator-5554 shell settings put global window_animation_scale 0
           adb -s emulator-5554 shell settings put global transition_animation_scale 0
           adb -s emulator-5554 shell settings put global animator_duration_scale 0
-          classes='com.rupayonhaldar.gtafreestem.DiscoveryFlowTest#filteredMapOpensSameDetailsAndRetainsSelectionAndSaveOnReturn,com.rupayonhaldar.gtafreestem.DiscoveryFlowTest#largeTextLandscapeKeepsMapControlsAndCalendarFallbackReachable'
+          classes='com.rupayonhaldar.gtafreestem.DiscoveryFlowTest#filteredMapOpensSameDetailsAndRetainsSelectionAndSaveOnReturn,com.rupayonhaldar.gtafreestem.DiscoveryFlowTest#largeTextLandscapeKeepsMapControlsAndCalendarFallbackReachable,com.rupayonhaldar.gtafreestem.DiscoveryFlowTest#brandedLoadingHandsOffOnlyWhenTheRealBootstrapCompletes'
           timeout 180 adb -s emulator-5554 shell am instrument -w -r -e class "$classes" com.rupayonhaldar.gtafreestem.test/androidx.test.runner.AndroidJUnitRunner | tee "$RUNNER_TEMP/reduced-motion-tests.log"
-          grep -Fx 'OK (2 tests)' "$RUNNER_TEMP/reduced-motion-tests.log"
+          grep -Fx 'OK (3 tests)' "$RUNNER_TEMP/reduced-motion-tests.log"
           ! grep -E 'FAILURES|INSTRUMENTATION_FAILED|shortMsg=' "$RUNNER_TEMP/reduced-motion-tests.log"
-          printf 'Reduced motion: 2 map/calendar/large-text runtime cases passed.\n' >> "$GITHUB_STEP_SUMMARY"
+          printf 'Reduced motion: 3 map/calendar/large-text/loading runtime cases passed.\n' >> "$GITHUB_STEP_SUMMARY"
 
       - name: Check actual JUnit coverage
         run: |

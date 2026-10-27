@@ -9,6 +9,11 @@ import android.provider.CalendarContract
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
+import androidx.compose.ui.semantics.ProgressBarRangeInfo
+import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.graphics.asAndroidBitmap
+import kotlinx.coroutines.CompletableDeferred
+import java.io.File
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Density
@@ -46,6 +51,66 @@ class DiscoveryFlowTest {
         ageMin = 0, ageMax = null, cost = "Free", sourceUrl = "https://example.org/fixture",
         startDate = "2099-10-26", endDate = "2099-10-26",
     )
+
+    @Test fun brandedLoadingHandsOffOnlyWhenTheRealBootstrapCompletes() {
+        val initial = CompletableDeferred<OpportunityFeedSnapshot>()
+        val repository = PendingBootstrapRepository(initial)
+        lateinit var vm: BrowseViewModel
+        rule.setContent {
+            vm = remember { BrowseViewModel(repository, PersistentFavoriteOpportunityStore(MemoryFavorites())) }
+            GTAFreeStemTheme { GTAFreeStemApp(preferences = preferences(), viewModel = vm) }
+        }
+        rule.onNodeWithTag("science-launch-experience").assertIsDisplayed()
+            .assert(SemanticsMatcher.expectValue(SemanticsProperties.ProgressBarRangeInfo, ProgressBarRangeInfo.Indeterminate))
+        rule.onNodeWithTag("science-launch-status", useUnmergedTree = true)
+            .assertTextEquals(text("preparingOpportunities", "Preparing opportunities"))
+        rule.onNodeWithTag("primary-navigation-home").assertDoesNotExist()
+        // Optional real rendered fixture export for visual review, never source data.
+        if (InstrumentationRegistry.getArguments().getString("gtaCaptureFixtures") == "true") {
+            File(context.cacheDir, "gta-science-loader-fixture.png").outputStream().use { stream ->
+                check(rule.onNodeWithTag("science-launch-experience").captureToImage().asAndroidBitmap()
+                    .compress(android.graphics.Bitmap.CompressFormat.PNG, 100, stream))
+            }
+        }
+        rule.runOnIdle {
+            initial.complete(OpportunityFeedSnapshot(listOf(program()), Instant.parse("2099-10-25T00:00:00Z"), OpportunityFeedSource.BUNDLED, 1, false))
+        }
+        rule.waitUntil(10_000) { !vm.uiState.value.isLoading && vm.uiState.value.snapshot != null }
+        rule.onNodeWithTag("science-launch-experience").assertDoesNotExist()
+        rule.onNodeWithTag("primary-navigation-home").assertIsDisplayed()
+    }
+
+    @Test fun failedBootstrapLeavesTheLoaderAndKeepsNavigationAndRetryUsable() {
+        val initial = CompletableDeferred<OpportunityFeedSnapshot>()
+        val repository = PendingBootstrapRepository(initial)
+        lateinit var vm: BrowseViewModel
+        rule.setContent {
+            vm = remember { BrowseViewModel(repository, PersistentFavoriteOpportunityStore(MemoryFavorites())) }
+            GTAFreeStemTheme { GTAFreeStemApp(preferences = preferences(), viewModel = vm) }
+        }
+        rule.onNodeWithTag("science-launch-experience").assertIsDisplayed()
+        rule.runOnIdle { initial.completeExceptionally(java.io.IOException("Fixture bootstrap unavailable")) }
+        rule.waitUntil(10_000) { !vm.uiState.value.isLoading && !vm.uiState.value.isRefreshing }
+        rule.onNodeWithTag("science-launch-experience").assertDoesNotExist()
+        rule.onNodeWithTag("primary-navigation-opportunities").assertIsDisplayed().performClick()
+        rule.onNodeWithTag("browse-results").performScrollToNode(hasText(text("retry", "Retry")))
+        rule.onNodeWithText(text("retry", "Retry")).assertIsDisplayed().performClick()
+        rule.waitUntil(10_000) { !vm.uiState.value.isRefreshing }
+        rule.onNodeWithTag("science-launch-experience").assertDoesNotExist()
+        rule.onNodeWithTag("primary-navigation-home").assertIsDisplayed()
+    }
+
+    private class PendingBootstrapRepository(
+        private val initial: CompletableDeferred<OpportunityFeedSnapshot>,
+    ) : OpportunityRepository {
+        @Volatile private var loaded: OpportunityFeedSnapshot? = null
+        override suspend fun bootstrap() = initial.await().also { loaded = it }
+        override suspend fun refresh() = loaded ?: throw java.io.IOException("Fixture refresh unavailable")
+        override fun current() = loaded
+        override fun findById(id: String) = loaded?.opportunities?.firstOrNull { it.id == id }
+        override fun search(query: String, filters: OpportunitySearchFilters, language: AppLanguage) =
+            OpportunitySearch.search(loaded?.opportunities.orEmpty(), query, filters)
+    }
 
     @Test fun filteredMapOpensSameDetailsAndRetainsSelectionAndSaveOnReturn() {
         val programs = listOf(program(), program("online").copy(title = "Online science", virtual = true))
