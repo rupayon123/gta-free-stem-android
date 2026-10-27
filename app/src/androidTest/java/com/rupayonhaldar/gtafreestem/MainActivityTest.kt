@@ -74,7 +74,7 @@ class MainActivityTest {
                 .assertTextContains(label)
         }
 
-        composeRule.onNodeWithText("Everything here is free for everyone.").assertIsDisplayed()
+        composeRule.onNodeWithText("Find real free STEM programs", substring = true).assertIsDisplayed()
 
         composeRule.onNodeWithTag("primary-navigation-opportunities").performClick()
         composeRule.onNode(hasSetTextAction()).performTextReplacement("")

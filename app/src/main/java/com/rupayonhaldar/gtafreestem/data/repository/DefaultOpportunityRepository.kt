@@ -17,6 +17,7 @@ import com.rupayonhaldar.gtafreestem.domain.repository.OpportunityRepositoryExce
 import com.rupayonhaldar.gtafreestem.domain.search.OpportunitySearch
 import com.rupayonhaldar.gtafreestem.domain.search.OpportunitySearchFilters
 import com.rupayonhaldar.gtafreestem.domain.validation.FeedFreshnessPolicy
+import com.rupayonhaldar.gtafreestem.domain.validation.PublicationRevisionPolicy
 import com.rupayonhaldar.gtafreestem.localization.AndroidAppStringCatalogLoader
 import com.rupayonhaldar.gtafreestem.localization.AppLanguage
 import com.rupayonhaldar.gtafreestem.localization.AppStringCatalog
@@ -83,10 +84,14 @@ internal class DefaultOpportunityRepository(
         publicationMutex.withLock {
             // Disk decoding may overlap a successful network refresh. Compare
             // again at publication so a late local result cannot roll it back.
-            listOfNotNull(
-                retained.get(),
-                candidates.maxByOrNull(OpportunityFeedSnapshot::lastUpdated),
-            ).maxByOrNull(OpportunityFeedSnapshot::lastUpdated)
+            candidates.fold(retained.get()) { selected, candidate ->
+                if (selected == null || PublicationRevisionPolicy.shouldReplace(
+                        candidate.lastUpdated, candidate.publicationRevision,
+                        selected.lastUpdated, selected.publicationRevision,
+                        allowLegacyEqualDate = false,
+                    )
+                ) candidate else selected
+            }
                 ?.let { selected ->
                     selected.copy(isStale = !FeedFreshnessPolicy.isFresh(selected.lastUpdated, now()))
                 }
@@ -105,10 +110,18 @@ internal class DefaultOpportunityRepository(
                     now(),
                     requireFreshness = true,
                     requireSourceHealth = true,
+                    requireContentRights = true,
                 )
                 val accepted = publicationMutex.withLock {
                     val current = retained.get()
-                    if (current != null && feed.lastUpdated.isBefore(current.lastUpdated)) {
+                    val verifiedIdentical = current != null && feed.publicationRevision != null &&
+                        feed.publicationRevision == current.publicationRevision &&
+                        feed.lastUpdated == current.lastUpdated && feed.opportunities == current.opportunities
+                    if (current != null && !verifiedIdentical && !PublicationRevisionPolicy.shouldReplace(
+                            feed.lastUpdated, feed.publicationRevision,
+                            current.lastUpdated, current.publicationRevision,
+                        )
+                    ) {
                         null
                     } else {
                         // Keep the freshness decision, disk write and memory
@@ -184,4 +197,5 @@ private fun com.rupayonhaldar.gtafreestem.data.feed.ValidatedOpportunityFeed.toS
     source = source,
     declaredRecordCount = declaredRecordCount,
     isStale = isStale,
+    publicationRevision = publicationRevision,
 )

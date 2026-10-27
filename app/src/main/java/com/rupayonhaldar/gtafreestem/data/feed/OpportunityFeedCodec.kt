@@ -9,10 +9,18 @@ import com.rupayonhaldar.gtafreestem.domain.validation.OpportunityAvailability
 import java.net.URI
 import java.time.Instant
 import java.util.Locale
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.descriptors.PrimitiveKind
+import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.Serializable
+import com.rupayonhaldar.gtafreestem.domain.validation.PublicationRevisionPolicy
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonDecoder
 import kotlinx.serialization.json.JsonPrimitive
 
 enum class InvalidOpportunityFeedReason {
@@ -28,6 +36,9 @@ enum class InvalidOpportunityFeedReason {
     STALE_OR_FUTURE_FEED,
     MISSING_SOURCE_HEALTH,
     UNHEALTHY_SOURCE_METRICS,
+    INVALID_PUBLICATION_REVISION,
+    MISSING_CONTENT_RIGHTS,
+    INVALID_CONTENT_RIGHTS,
 }
 
 class InvalidOpportunityFeedException(
@@ -40,6 +51,7 @@ internal data class ValidatedOpportunityFeed(
     val lastUpdated: Instant,
     val declaredRecordCount: Int,
     val isStale: Boolean,
+    val publicationRevision: Instant? = null,
 )
 
 /** Serialization and validation boundary for the untrusted public JSON feed. */
@@ -60,6 +72,7 @@ internal class OpportunityFeedCodec(
         now: Instant,
         requireFreshness: Boolean,
         requireSourceHealth: Boolean = false,
+        requireContentRights: Boolean = requireSourceHealth,
     ): ValidatedOpportunityFeed {
         val envelope = try {
             json.decodeFromString<PublicOpportunityFeed>(jsonText)
@@ -106,6 +119,11 @@ internal class OpportunityFeedCodec(
             throw InvalidOpportunityFeedException(InvalidOpportunityFeedReason.STALE_OR_FUTURE_FEED)
         }
 
+        val publicationRevision = envelope.publicationRevision.raw?.let { rawRevision ->
+            PublicationRevisionPolicy.parse(rawRevision, now)
+                ?: throw InvalidOpportunityFeedException(InvalidOpportunityFeedReason.INVALID_PUBLICATION_REVISION)
+        }
+
         val safePayloads = raw.filter(OpportunityPayload::isSafeForMapping)
         if (safePayloads.isEmpty()) {
             throw InvalidOpportunityFeedException(InvalidOpportunityFeedReason.NO_VALID_OPPORTUNITIES)
@@ -116,6 +134,25 @@ internal class OpportunityFeedCodec(
             if (!seen.add(payload.id.trim())) {
                 throw InvalidOpportunityFeedException(InvalidOpportunityFeedReason.DUPLICATE_ID)
             }
+        }
+
+        val rights = envelope.contentRights
+        // Only unversioned app-private/cache or bundled legacy snapshots can
+        // migrate without an authority manifest. Live reads require one.
+        if (rights == null && (requireContentRights || publicationRevision != null)) {
+            throw InvalidOpportunityFeedException(InvalidOpportunityFeedReason.MISSING_CONTENT_RIGHTS)
+        }
+        if (rights != null && !OpportunityContentRightsPolicy.isApproved(
+                rights,
+                raw.map { row -> PublishedRightsExtract(
+                    row.id, row.organization ?: row.provider, row.sourceUrl,
+                    row.registrationUrl, row.sources.map { it.url },
+                ) },
+                lastUpdated, now,
+                requireCurrentEvidence = requireContentRights || requireFreshness,
+            )
+        ) {
+            throw InvalidOpportunityFeedException(InvalidOpportunityFeedReason.INVALID_CONTENT_RIGHTS)
         }
 
         val opportunities = safePayloads
@@ -132,6 +169,7 @@ internal class OpportunityFeedCodec(
             lastUpdated = lastUpdated,
             declaredRecordCount = raw.size,
             isStale = !isFresh,
+            publicationRevision = publicationRevision,
         )
     }
 }
@@ -142,9 +180,33 @@ private data class PublicOpportunityFeed(
     val lastDataChange: String? = null,
     val meta: FeedMetadata? = null,
     val sourceHealth: SourceHealthPayload? = null,
+    val publicationRevision: PublicationRevisionPayload = PublicationRevisionPayload(),
+    val contentRights: ContentRightsPayload? = null,
     val opportunities: List<OpportunityPayload>? = null,
     val data: List<OpportunityPayload>? = null,
 )
+
+// The non-null wrapper distinguishes an absent legacy key from an explicitly
+// null or wrong-type revision without parsing the entire feed a second time.
+@Serializable(with = PublicationRevisionPayloadSerializer::class)
+private data class PublicationRevisionPayload(val raw: String? = null)
+
+private object PublicationRevisionPayloadSerializer : KSerializer<PublicationRevisionPayload> {
+    override val descriptor: SerialDescriptor =
+        PrimitiveSerialDescriptor("PublicationRevision", PrimitiveKind.STRING)
+
+    override fun deserialize(decoder: Decoder): PublicationRevisionPayload {
+        val value = (decoder as JsonDecoder).decodeJsonElement()
+        if (value !is JsonPrimitive || !value.isString) {
+            throw SerializationException("Publication revision must be a UTC timestamp string")
+        }
+        return PublicationRevisionPayload(value.content)
+    }
+
+    override fun serialize(encoder: Encoder, value: PublicationRevisionPayload) {
+        encoder.encodeString(requireNotNull(value.raw))
+    }
+}
 
 @Serializable
 private data class FeedMetadata(

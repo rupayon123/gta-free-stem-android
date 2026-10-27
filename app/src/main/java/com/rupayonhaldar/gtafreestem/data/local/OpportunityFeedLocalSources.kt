@@ -3,6 +3,7 @@ package com.rupayonhaldar.gtafreestem.data.local
 import android.content.Context
 import android.util.AtomicFile
 import com.rupayonhaldar.gtafreestem.data.feed.OpportunityFeedCodec
+import com.rupayonhaldar.gtafreestem.domain.validation.PublicationRevisionPolicy
 import com.rupayonhaldar.gtafreestem.data.io.MAX_FEED_BYTES
 import com.rupayonhaldar.gtafreestem.data.io.readUtf8Bounded
 import java.io.File
@@ -54,7 +55,11 @@ internal class AndroidOpportunityFeedCache(
             val previous = previousBytes?.let { stored ->
                 runCatching { codec.decodeAndValidate(stored, now, requireFreshness = false) }.getOrNull()
             }
-            if (previousBytes != null && previous != null && previous.lastUpdated.isAfter(incoming.lastUpdated)) {
+            if (previousBytes != null && previous != null && !PublicationRevisionPolicy.shouldReplace(
+                    incoming.lastUpdated, incoming.publicationRevision,
+                    previous.lastUpdated, previous.publicationRevision,
+                )
+            ) {
                 previousBytes
             } else {
                 writeLocked(bytes)

@@ -16,4 +16,5 @@ data class OpportunityFeedSnapshot(
     val declaredRecordCount: Int,
     /** Local fallbacks remain useful offline even after the remote freshness window. */
     val isStale: Boolean,
+    val publicationRevision: Instant? = null,
 )

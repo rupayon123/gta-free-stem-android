@@ -33,6 +33,42 @@ import org.junit.Test
 @OptIn(ExperimentalCoroutinesApi::class)
 class BrowseViewModelTest {
     @Test
+    fun `rapid query edits publish only the latest search`() = runTest {
+        Dispatchers.setMain(StandardTestDispatcher(testScheduler))
+        try {
+            val repository = RecordingRepository(snapshot(listOf(
+                opportunity(
+                    id = "robotics",
+                    category = "Coding & Robotics",
+                    region = "Toronto",
+                    city = "Toronto",
+                    languages = listOf("en"),
+                    ageMax = 18,
+                ),
+            )))
+            val viewModel = BrowseViewModel(
+                repository = repository,
+                favorites = EmptyFavorites(),
+                searchDispatcher = StandardTestDispatcher(testScheduler),
+            )
+            advanceUntilIdle()
+            repository.searches.clear()
+
+            viewModel.setQuery("rob")
+            viewModel.setQuery("robot")
+            viewModel.setQuery("robotics")
+            advanceUntilIdle()
+
+            assertEquals(listOf("robotics"), repository.searches.map { it.first })
+            assertEquals("robotics", viewModel.uiState.value.query)
+            assertEquals(listOf("robotics"), viewModel.uiState.value.opportunities.map { it.id })
+        } finally {
+            advanceUntilIdle()
+            Dispatchers.resetMain()
+        }
+    }
+
+    @Test
     fun `restores persists applies options and atomically clears complete browse state`() = runTest {
         Dispatchers.setMain(StandardTestDispatcher(testScheduler))
         try {
@@ -76,6 +112,7 @@ class BrowseViewModelTest {
                 repository = repository,
                 favorites = EmptyFavorites(),
                 browseStateStore = stateStore,
+                searchDispatcher = StandardTestDispatcher(testScheduler),
             )
 
             advanceUntilIdle()
@@ -106,6 +143,7 @@ class BrowseViewModelTest {
                     sort = OpportunitySearchSort.RELEVANCE,
                 ),
             )
+            advanceUntilIdle()
             assertTrue(viewModel.uiState.value.filters.scholarshipsOnly)
             assertTrue(repository.searches.last().second.leadershipOnly)
             assertEquals(viewModel.uiState.value.filters, stateStore.writes.last().filters)
@@ -117,6 +155,7 @@ class BrowseViewModelTest {
             )
 
         viewModel.clearSearchAndFilters()
+        advanceUntilIdle()
         val cleared = viewModel.uiState.value
         assertEquals("", cleared.query)
             assertEquals(OpportunitySearchFilters(), cleared.filters)
@@ -126,8 +165,10 @@ class BrowseViewModelTest {
 
             repository.searches.clear()
             viewModel.setSearchLanguage(AppLanguage.SPANISH)
+            advanceUntilIdle()
             assertEquals(AppLanguage.SPANISH, repository.searches.last().third)
         } finally {
+            advanceUntilIdle()
             Dispatchers.resetMain()
         }
     }
@@ -151,6 +192,7 @@ class BrowseViewModelTest {
                 repository = RecordingRepository(snapshot(emptyList())),
                 favorites = EmptyFavorites(),
                 browseStateStore = stateStore,
+                searchDispatcher = StandardTestDispatcher(testScheduler),
             )
 
             advanceUntilIdle()
@@ -178,6 +220,7 @@ class BrowseViewModelTest {
             assertEquals(null, persistedFilters.distanceKm)
             assertEquals(OpportunitySearchSort.SOONEST, persistedFilters.sort)
         } finally {
+            advanceUntilIdle()
             Dispatchers.resetMain()
         }
     }
@@ -217,6 +260,7 @@ class BrowseViewModelTest {
             val viewModel = BrowseViewModel(
                 repository = RecordingRepository(snapshot(listOf(existing, hydrated, fresh))),
                 favorites = favorites,
+                searchDispatcher = StandardTestDispatcher(testScheduler),
             )
 
             assertEquals(setOf("existing", "legacy"), viewModel.uiState.value.favoriteIds)
@@ -271,6 +315,7 @@ class BrowseViewModelTest {
             assertTrue(viewModel.uiState.value.savedSections.archive.isEmpty())
             assertEquals(0, viewModel.uiState.value.unresolvedSavedCount)
         } finally {
+            advanceUntilIdle()
             Dispatchers.resetMain()
         }
     }
@@ -295,6 +340,7 @@ class BrowseViewModelTest {
                 repository = RecordingRepository(snapshot(emptyList())),
                 favorites = EmptyFavorites(),
                 browseStateStore = stateStore,
+                searchDispatcher = StandardTestDispatcher(testScheduler),
             )
             advanceUntilIdle()
 
@@ -310,6 +356,7 @@ class BrowseViewModelTest {
             assertEquals(writeCountBeforeDeletion, stateStore.writes.size)
             assertEquals(2, stateStore.clearCalls)
         } finally {
+            advanceUntilIdle()
             Dispatchers.resetMain()
         }
     }

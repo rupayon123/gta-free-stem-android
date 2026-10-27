@@ -38,6 +38,12 @@ fun Opportunity.toMapOpportunityPin(
     displayOrganization: String = organization,
     displayLocation: String = listOf(city, region).filter(String::isNotBlank).joinToString(", "),
 ): MapOpportunityPin? {
+    // The public native export can omit `virtual` while retaining municipal-centre
+    // fallback coordinates for online events. Neither is a physical venue pin.
+    val normalizedAddress = address?.trim()?.lowercase().orEmpty()
+    if (virtual || normalizedAddress.startsWith("online event") ||
+        normalizedAddress == "online" || normalizedAddress == "virtual"
+    ) return null
     val resolvedLatitude = latitude ?: return null
     val resolvedLongitude = longitude ?: return null
     val coordinate = MapCoordinate(resolvedLatitude, resolvedLongitude)
