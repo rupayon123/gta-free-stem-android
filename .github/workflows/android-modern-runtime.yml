@@ -102,6 +102,9 @@ jobs:
           adb -s emulator-5554 shell settings put global transition_animation_scale 1
           adb -s emulator-5554 shell settings put global animator_duration_scale 1
           export ANDROID_SERIAL=emulator-5554
+          # Confirm the three previously racy fixture flows before the full batch.
+          controls='com.rupayonhaldar.gtafreestem.DiscoveryFlowTest#largeTextLandscapeKeepsMapControlsAndCalendarFallbackReachable,com.rupayonhaldar.gtafreestem.DiscoveryFlowTest#successfulEmptyQueryDoesNotOfferFailureWebsiteShortcut,com.rupayonhaldar.gtafreestem.DiscoveryFlowTest#largeTextPhonePreservesListingCategoryAndFreePromise'
+          ./gradlew --no-daemon --max-workers=2 :app:connectedDebugAndroidTest "-Pandroid.testInstrumentationRunnerArguments.class=$controls"
           classes='com.rupayonhaldar.gtafreestem.MainActivityTest,com.rupayonhaldar.gtafreestem.ScreenTransitionTest,com.rupayonhaldar.gtafreestem.DiscoveryFlowTest,com.rupayonhaldar.gtafreestem.ui.browse.OpportunityMapTest,com.rupayonhaldar.gtafreestem.ui.shell.AppShellLargeTextTest,com.rupayonhaldar.gtafreestem.data.local.AndroidOpportunityFeedCacheRuntimeTest,com.rupayonhaldar.gtafreestem.ui.preferences.AccountPreferencesScreenTest,com.rupayonhaldar.gtafreestem.ui.design.StorybookDarkThemeTest,com.rupayonhaldar.gtafreestem.ui.design.StorybookLargeTextTest,com.rupayonhaldar.gtafreestem.ui.browse.BrowseResponsivenessRuntimeTest'
           ./gradlew --no-daemon --max-workers=2 :app:connectedDebugAndroidTest "-Pandroid.testInstrumentationRunnerArguments.class=$classes"
           # Direct instrumentation needs both APKs after the connected-test task.

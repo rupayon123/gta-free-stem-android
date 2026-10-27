@@ -122,6 +122,7 @@ class DiscoveryFlowTest {
                 GTAFreeStemApp(preferences = preferences(), viewModel = viewModel)
             }
         }
+        awaitFixtureNavigation()
         rule.onNodeWithTag("primary-navigation-opportunities").performClick()
         rule.onNode(hasSetTextAction()).performTextReplacement("Toronto Lab")
         rule.onNodeWithTag("browse-map-view").performScrollTo().performClick()
@@ -156,6 +157,7 @@ class DiscoveryFlowTest {
             val vm = remember { BrowseViewModel(FixtureRepository(listOf(program("online").copy(virtual = true))), PersistentFavoriteOpportunityStore(MemoryFavorites())) }
             GTAFreeStemTheme { GTAFreeStemApp(preferences = preferences(), viewModel = vm) }
         }
+        awaitFixtureNavigation()
         rule.onNodeWithTag("primary-navigation-opportunities").performClick()
         rule.onNodeWithTag("browse-map-view").performScrollTo().performClick()
         // Deterministic fallback-route coverage; live MapLibre gestures are
@@ -235,6 +237,7 @@ class DiscoveryFlowTest {
                 }
             }
         }
+        awaitFixtureNavigation("primary-navigation-rail-list")
         rule.onNodeWithTag("primary-navigation-rail-list").performScrollToIndex(1)
         rule.onNodeWithTag("primary-navigation-opportunities").performClick()
         rule.onNodeWithTag("browse-map-view").performScrollTo().assertIsDisplayed()
@@ -264,6 +267,7 @@ class DiscoveryFlowTest {
                 }
             }
         }
+        awaitFixtureNavigation()
         rule.onNodeWithTag("primary-navigation-opportunities").performClick()
         rule.onNode(hasSetTextAction()).assertIsDisplayed()
         rule.onNodeWithTag("browse-list-view").assertIsDisplayed()
@@ -281,6 +285,7 @@ class DiscoveryFlowTest {
                 }
             }
         }
+        awaitFixtureNavigation()
         rule.onNodeWithTag("primary-navigation-opportunities").performClick()
         rule.onNodeWithTag("browse-results").performScrollToNode(hasTestTag("opportunity-card-toronto"))
         val category = rule.onNode(hasText("Science & Engineering") and hasAnyAncestor(hasTestTag("opportunity-card-toronto")))
@@ -307,6 +312,7 @@ class DiscoveryFlowTest {
                 GTAFreeStemTheme { GTAFreeStemApp(preferences = preferences(), viewModel = vm) }
             }
         }
+        awaitFixtureNavigation()
         rule.onNodeWithTag("primary-navigation-opportunities").performClick()
         rule.onNodeWithTag("browse-results").performScrollToNode(hasTestTag("browse-online"))
         rule.onNodeWithTag("browse-online").assertIsDisplayed().performClick()
@@ -327,9 +333,19 @@ class DiscoveryFlowTest {
             val vm = remember { BrowseViewModel(FixtureRepository(listOf(program())), PersistentFavoriteOpportunityStore(MemoryFavorites())) }
             GTAFreeStemTheme { GTAFreeStemApp(preferences = preferences(), viewModel = vm) }
         }
+        awaitFixtureNavigation()
         rule.onNodeWithTag("primary-navigation-opportunities").performClick()
         rule.onNode(hasSetTextAction()).performTextReplacement("No matching listing")
         rule.onNodeWithTag("browse-online").assertDoesNotExist()
+    }
+
+    private fun awaitFixtureNavigation(tag: String = "primary-navigation-opportunities") {
+        // Fixture bootstrap still computes options on Dispatchers.Default; Compose
+        // idleness alone does not mean the real startup gate has opened.
+        rule.waitUntil(timeoutMillis = 10_000) {
+            rule.onAllNodesWithTag(tag).fetchSemanticsNodes().size == 1
+        }
+        rule.onNodeWithTag("science-launch-experience").assertDoesNotExist()
     }
 
     private fun preferences() = AppPreferencesUiState(AppLanguage.ENGLISH, AppLanguage.ENGLISH, emptyList(), TextDirection.LEFT_TO_RIGHT, null, AppThemePreference.SYSTEM, false, catalog)
