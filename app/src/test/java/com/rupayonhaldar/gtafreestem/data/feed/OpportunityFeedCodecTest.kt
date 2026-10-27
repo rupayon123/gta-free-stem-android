@@ -142,14 +142,15 @@ class OpportunityFeedCodecTest {
         val raw = requireNotNull(bundledFeed).readText()
         val feed = codec.decodeAndValidate(
             raw,
-            Instant.parse("2026-10-27T12:18:29.362Z"),
+            Instant.parse("2026-10-27T13:16:54.451Z"),
             requireFreshness = true,
             requireSourceHealth = true,
         )
         assertEquals(1878, feed.declaredRecordCount)
         assertEquals(1878, feed.opportunities.size)
+        assertEquals(45, feed.opportunities.count { it.virtual })
         assertEquals(Instant.parse("2026-10-27T00:00:00Z"), feed.lastUpdated)
-        assertEquals(Instant.parse("2026-10-27T12:17:29.362Z"), feed.publicationRevision)
+        assertEquals(Instant.parse("2026-10-27T13:15:54.451Z"), feed.publicationRevision)
         assertTrue(feed.opportunities.none { it.isNewFind == true })
         assertTrue(feed.opportunities.all { it.translations.isEmpty() })
         val exact = feed.opportunities.single { it.id == "tpl-rss-6ac92852295b3b0033cb1160" }
@@ -163,7 +164,7 @@ class OpportunityFeedCodecTest {
             feed.opportunities.map { java.net.URI(it.sourceUrl).host }.toSet(),
         )
         assertEquals(
-            "cc1363b02347700bb6be7de4407a0bc8e8baf9d8fbcfa578750658d2f5e3a9ba",
+            "c61ed81737815ad1543df966f382c8e2672fe2cb28b7d8f6f68cfc3ef39fd391",
             requireNotNull(bundledFeed).sha256(),
         )
     }
