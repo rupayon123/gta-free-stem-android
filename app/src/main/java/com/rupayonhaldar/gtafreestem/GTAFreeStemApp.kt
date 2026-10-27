@@ -114,6 +114,7 @@ import com.rupayonhaldar.gtafreestem.ui.saved.SavedOpportunityLibraryScreen
 import com.rupayonhaldar.gtafreestem.ui.design.StoryButton
 import com.rupayonhaldar.gtafreestem.ui.design.StoryButtonKind
 import com.rupayonhaldar.gtafreestem.ui.design.DiscoveryLoupeScene
+import com.rupayonhaldar.gtafreestem.ui.design.ScienceLaunchExperience
 import com.rupayonhaldar.gtafreestem.ui.shell.AdaptiveAppShell
 import com.rupayonhaldar.gtafreestem.ui.shell.PrimaryDestination
 import java.time.LocalDate
@@ -239,6 +240,19 @@ fun GTAFreeStemApp(
             }
             else -> openPrimaryDestination(PrimaryDestination.HOME)
         }
+    }
+
+    if (state.isLoading && state.snapshot == null) {
+        Box(
+            modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background),
+            contentAlignment = Alignment.Center,
+        ) {
+            ScienceLaunchExperience(
+                status = preferences.shellText("preparingOpportunities", "Preparing opportunities"),
+                modifier = Modifier.fillMaxWidth().verticalScroll(rememberScrollState()),
+            )
+        }
+        return
     }
 
     Box(Modifier.fillMaxSize()) {
