@@ -43,6 +43,8 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.Hyphens
+import androidx.compose.ui.text.style.LineBreak
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.rupayonhaldar.gtafreestem.R
@@ -129,7 +131,10 @@ private fun PrimaryNavigationBar(
                             Text(
                                 text = destinationLabel(destination),
                                 modifier = Modifier.fillMaxWidth(),
-                                style = MaterialTheme.typography.labelSmall,
+                                style = MaterialTheme.typography.labelSmall.copy(
+                                    lineBreak = LineBreak.Heading,
+                                    hyphens = Hyphens.Auto,
+                                ),
                                 fontWeight = if (selected) FontWeight.Bold else FontWeight.Medium,
                                 textAlign = TextAlign.Center,
                             )

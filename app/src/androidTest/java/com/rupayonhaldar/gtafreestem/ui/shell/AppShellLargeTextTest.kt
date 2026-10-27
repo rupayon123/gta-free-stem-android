@@ -28,6 +28,33 @@ class AppShellLargeTextTest {
     val composeRule = createComposeRule()
 
     @Test
+    fun phoneNavigationDoesNotLeaveAnOrphanLetterInOpportunities() {
+        composeRule.setContent {
+            DeviceConfigurationOverride(
+                DeviceConfigurationOverride.ForcedSize(DpSize(393.dp, 852.dp)),
+            ) {
+                GTAFreeStemTheme {
+                    AdaptiveAppShell(
+                        selectedDestination = PrimaryDestination.HOME,
+                        onDestinationSelected = {},
+                        showNavigation = true,
+                        destinationLabel = { destination ->
+                            if (destination == PrimaryDestination.OPPORTUNITIES) "Opportunities"
+                            else destination.fallbackLabel
+                        },
+                    ) {}
+                }
+            }
+        }
+
+        val destinationNode = composeRule.onNodeWithTag("primary-navigation-opportunities")
+        val labelNode = assertCompleteLabel("Opportunities", destinationNode)
+        val layout = labelNode.textLayoutResult("Opportunities")
+        val lastLineStart = layout.getLineStart(layout.lineCount - 1)
+        assertTrue("Opportunities must not leave a lone final letter", "Opportunities".length - lastLineStart >= 3)
+    }
+
+    @Test
     fun compactHeightDrawerPreservesTagalogLabelsAndDestinationsAtLargeText() {
         var selectedDestination = PrimaryDestination.HOME
 
