@@ -1,9 +1,5 @@
-# Screenshots
+# Screenshot provenance
 
-Captured on September 11, 2026 from the installed Android 1.1.0 development build on an API 36 emulator. These are original screen captures, without mockups or retouching. Home and Search use the light theme; High School Search and Profile use the dark theme.
+`android-home-api26-2026-10-25.png`, `android-opportunities-api26-2026-10-25.png`, and `android-detail-api26-2026-10-25.png` are unretouched captures of an installed development APK on an API 26 Android emulator from October 25, 2026. The capture receipt marks each as an actual screenshot with fixture mode false. APK SHA-256: `8ad453b6df577ccce747509aaab599387c569d4e9e83a1dc5e2496dbb2e27a1b`; recorded app source revision: `a6c7b33e9f6f5442803576ff4cf3723dd90071a7`. A public live feed was visible in the Home and Opportunities frames. This is emulator evidence, not a physical-device or Google Play release check.
 
-The High School search had no current matches when captured. The profile is a local guest profile.
-
-The installed APK predates these documentation changes. Its source revision hasn't been established, so these images aren't evidence that the latest source builds or is ready for release.
-
-Installed APK SHA-256: `1b3cd8345d2ca05efac72ed7d104149b409a2041c23202379529f9f1a8dd25d7`.
+The older `home.png`, `search.png`, `hs-search.png`, and `profile.png` remain as September 11, 2026 archive images from an installed Android 1.1.0 development build on an API 36 emulator. The High School search had no current matches and Profile was local guest state. Source revision for that older APK was not established. Its SHA-256 was `1b3cd8345d2ca05efac72ed7d104149b409a2041c23202379529f9f1a8dd25d7`.
