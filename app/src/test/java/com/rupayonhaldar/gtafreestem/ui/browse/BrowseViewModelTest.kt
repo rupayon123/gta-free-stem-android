@@ -369,7 +369,11 @@ class BrowseViewModelTest {
             val retained = opportunity("saved", "STEM", "Toronto", "Toronto", listOf("en"), 18)
             val favorites = RecordingFavorites(current = mutableListOf(savedEntry(retained)))
             val repository = SuspendedRefreshRepository(snapshot(emptyList()).copy(isStale = true), result)
-            val viewModel = BrowseViewModel(repository = repository, favorites = favorites)
+            val viewModel = BrowseViewModel(
+                repository = repository,
+                favorites = favorites,
+                searchDispatcher = StandardTestDispatcher(testScheduler),
+            )
             runCurrent()
             assertFalse(viewModel.uiState.value.isLoading)
             assertTrue(viewModel.uiState.value.isRefreshing)
@@ -389,6 +393,7 @@ class BrowseViewModelTest {
             assertTrue("saved" in state.favoriteIds)
             assertEquals(null, state.errorMessage)
         } finally {
+            advanceUntilIdle()
             Dispatchers.resetMain()
         }
     }
@@ -401,6 +406,7 @@ class BrowseViewModelTest {
             val viewModel = BrowseViewModel(
                 repository = SuspendedRefreshRepository(snapshot(emptyList()).copy(isStale = true), result),
                 favorites = EmptyFavorites(),
+                searchDispatcher = StandardTestDispatcher(testScheduler),
             )
             runCurrent()
             assertTrue(viewModel.uiState.value.isRefreshing)
@@ -412,6 +418,7 @@ class BrowseViewModelTest {
             viewModel.setDestination(AppDestination.SAVED)
             assertEquals(explanation, viewModel.uiState.value.errorMessage)
         } finally {
+            advanceUntilIdle()
             Dispatchers.resetMain()
         }
     }
