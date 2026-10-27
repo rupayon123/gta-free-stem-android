@@ -13,6 +13,35 @@ This directory prepares listing material for `com.rupayonhaldar.gtafreestem`
 version `1.1.0` (`versionCode` 3). It does not authorize an upload or claim that
 Google Play has reviewed or published the candidate.
 
+## October 27, 2026 candidate evidence snapshot
+
+- Reviewed source at preparation: `f8a6f94` (`1.1.0`, version code 3).
+- Local JVM report: 232 tests, zero failures or errors. This does not prove a
+  signed release or device behavior.
+- Runtime owner reports API 26: 45 instrumentation checks plus 3 focused checks
+  passed. API 36 verification remains pending at this snapshot; no full
+  two-platform completion is claimed.
+- Exact-candidate debug/release lint, CI, signed AAB/APK, merged signed
+  permissions, native/R8/16 KB inspection, and upload require their own receipts.
+- Fresh Play Console review on October 27 still shows `1.0.1` (version code 2)
+  available to internal testers. Version code 3 has not been newly built as a
+  signed release or uploaded. No new account or payment was used.
+- Older 186-JVM/36-on-each-API checklist entries describe a superseded source
+  snapshot; their date/source was not recorded in those entries. They are kept
+  as history below, not as evidence for `f8a6f94`.
+
+- Frozen native feed: 1,878 records, including 45 explicitly virtual records;
+  source `7ca94cff12c9667f93bd9d4febb774ee6e6f0e37`,
+  SHA-256 `c61ed81737815ad1543df966f382c8e2672fe2cb28b7d8f6f68cfc3ef39fd391`.
+  This is a dated release cut, not a promise that the live feed always has this count.
+- Full descriptions are not fully translated: 18-language interface support is
+  distinct from accepted full provider-description translations.
+
+The live map is now MapLibre/OpenFreeMap with an offline schematic fallback.
+Recheck current listing descriptions against that behavior. Eighteen interface
+languages do not prove fully translated provider descriptions. The live Android
+privacy disclosure is at the Cloudflare URL below (October 27 policy update).
+
 ## Suggested listing fields
 
 | Field | Candidate value |
@@ -21,9 +50,9 @@ Google Play has reviewed or published the candidate.
 | Default language | English (Canada) |
 | App category | Education |
 | Contains ads | No |
-| Privacy policy | https://gta-free-stem.vercel.app/privacy |
-| Support | https://gta-free-stem.vercel.app/support |
-| Terms | https://gta-free-stem.vercel.app/terms |
+| Privacy policy | https://gta-free-stem.pages.dev/privacy |
+| Support | https://gta-free-stem.pages.dev/support |
+| Terms | https://gta-free-stem.pages.dev/terms |
 
 The English title, short description, full description, and version-3 release
 notes are in `en-US/`. Review them in the live Console because character limits,
@@ -43,7 +72,7 @@ field names, declarations, and policy prompts can change.
   evidence for the current working tree, a current signed AAB, or a
   Play-generated install.
 
-## Candidate accessibility text
+## Historical August 19 accessibility text — match only the retained screenshots
 
 Play Console accepts alt text for preview assets. Keep each description with
 the matching file and recheck it against the final visible frame before upload.
