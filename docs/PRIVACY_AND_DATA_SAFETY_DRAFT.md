@@ -1,9 +1,10 @@
 # Privacy Policy and Play Data Safety Draft
 
-> Current internal-update candidate: version 1.1.0, **version code 4**. Code 3
+> Current internal-update candidate: version 1.1.0, **version code 5**. Code 3
 > was uploaded only to an unpublished draft and is retained below as evidence
-> for that tested candidate. Code 4 adds the navigation-label wrapping fix;
-> its signed package and final navigation smoke require fresh receipts.
+> for that tested candidate. Code 4 added the tested navigation-label fix;
+> code 5 also restores the original GTA logo in Browse. Its signed package
+> and focused branding smoke require fresh receipts.
 
 
 > Working draft only. This document is neither legal advice nor a completed Play Console declaration. It assumes the intended behavior described below. Reconcile it with the exact release artifact, merged manifest, dependencies, runtime network traffic, Android backup behavior, and current Google Play definitions before publishing or submitting any answer.

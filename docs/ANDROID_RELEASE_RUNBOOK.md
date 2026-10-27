@@ -1,9 +1,10 @@
 # Android Release Runbook
 
-> Current internal-update candidate: version 1.1.0, **version code 4**. Code 3
+> Current internal-update candidate: version 1.1.0, **version code 5**. Code 3
 > was uploaded only to an unpublished draft and is retained below as evidence
-> for that tested candidate. Code 4 adds the navigation-label wrapping fix;
-> its signed package and final navigation smoke require fresh receipts.
+> for that tested candidate. Code 4 added the tested navigation-label fix;
+> code 5 also restores the original GTA logo in Browse. Its signed package
+> and focused branding smoke require fresh receipts.
 
 
 This runbook prepares a GTA FREE STEM Android release candidate. It does not authorize an upload, staged rollout, production rollout, or publication.
@@ -78,7 +79,7 @@ Official references:
 From the project root, run:
 
 ```bash
-EXPECTED_VERSION_CODE=4 EXPECTED_VERSION_NAME=1.1.0 \
+EXPECTED_VERSION_CODE=5 EXPECTED_VERSION_NAME=1.1.0 \
   ./scripts/verify-release-config.sh
 ```
 

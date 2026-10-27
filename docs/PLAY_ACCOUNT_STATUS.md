@@ -1,9 +1,10 @@
 # Google Play release status
 
-> Current internal-update candidate: version 1.1.0, **version code 4**. Code 3
+> Current internal-update candidate: version 1.1.0, **version code 5**. Code 3
 > was uploaded only to an unpublished draft and is retained below as evidence
-> for that tested candidate. Code 4 adds the navigation-label wrapping fix;
-> its signed package and final navigation smoke require fresh receipts.
+> for that tested candidate. Code 4 added the tested navigation-label fix;
+> code 5 also restores the original GTA logo in Browse. Its signed package
+> and focused branding smoke require fresh receipts.
 
 
 Last public-safe status review: October 27, 2026. This file records only facts

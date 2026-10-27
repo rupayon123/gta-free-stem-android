@@ -116,7 +116,6 @@ import com.rupayonhaldar.gtafreestem.ui.preferences.AppPreferencesUiState
 import com.rupayonhaldar.gtafreestem.ui.saved.SavedOpportunityLibraryScreen
 import com.rupayonhaldar.gtafreestem.ui.design.StoryButton
 import com.rupayonhaldar.gtafreestem.ui.design.StoryButtonKind
-import com.rupayonhaldar.gtafreestem.ui.design.DiscoveryLoupeScene
 import com.rupayonhaldar.gtafreestem.ui.design.ScienceLaunchExperience
 import com.rupayonhaldar.gtafreestem.ui.shell.AdaptiveAppShell
 import com.rupayonhaldar.gtafreestem.ui.shell.PrimaryDestination
@@ -1347,7 +1346,12 @@ private fun BrandHeader(
             modifier = Modifier.weight(1f).testTag("browse-screen-title").semantics { heading() },
         )
         if (LocalDensity.current.fontScale < 1.6f) {
-            DiscoveryLoupeScene(query, modifier = Modifier.width(88.dp).heightIn(max = 56.dp))
+            Image(
+                painter = painterResource(R.drawable.app_logo),
+                contentDescription = null,
+                contentScale = ContentScale.Fit,
+                modifier = Modifier.width(88.dp).height(56.dp),
+            )
         }
     }
 }
