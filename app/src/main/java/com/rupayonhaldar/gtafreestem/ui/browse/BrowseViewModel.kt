@@ -248,7 +248,16 @@ class BrowseViewModel(
 
     fun setRegion(region: String?) = updateFilters { it.copy(region = region) }
 
-    fun setCity(city: String?) = updateFilters { it.copy(city = city) }
+    fun setCity(city: String?) = updateFilters {
+        it.copy(
+            city = city,
+            region = null,
+            latitude = null,
+            longitude = null,
+            distanceKm = null,
+            sort = if (it.sort == OpportunitySearchSort.NEAREST) OpportunitySearchSort.SOONEST else it.sort,
+        )
+    }
 
     fun setAge(age: Int?, adultsOnly: Boolean = false) = updateFilters {
         it.copy(age = age, adultsOnly = adultsOnly)

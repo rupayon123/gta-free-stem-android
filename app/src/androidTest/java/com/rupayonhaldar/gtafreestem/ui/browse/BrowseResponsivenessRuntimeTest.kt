@@ -6,7 +6,7 @@ import android.os.SystemClock
 import android.util.Log
 import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
-import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -14,6 +14,7 @@ import androidx.compose.ui.test.performTextReplacement
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.rupayonhaldar.gtafreestem.MainActivity
+import com.rupayonhaldar.gtafreestem.localization.AppLanguage
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicReference
@@ -30,6 +31,9 @@ class BrowseResponsivenessRuntimeTest {
 
     @Test
     fun typingAndFilterEditsKeepMainLooperResponsiveWithLiveFeed() {
+        composeRule.runOnIdle {
+            assertTrue(composeRule.activity.preferencesViewModel.setLanguage(AppLanguage.ENGLISH))
+        }
         composeRule.onNodeWithTag("primary-navigation-opportunities").performClick()
         composeRule.onNodeWithText("Filters", substring = true).performClick()
         val reset = composeRule.onNodeWithTag(OpportunityFilterPanelTestTags.RESET)
@@ -40,11 +44,11 @@ class BrowseResponsivenessRuntimeTest {
         composeRule.onNode(hasSetTextAction()).performTextReplacement("")
         var feedCount = 0
         composeRule.waitUntil(timeoutMillis = 60_000) {
-            feedCount = composeRule.onAllNodesWithText("available", substring = true)
+            feedCount = composeRule.onAllNodesWithTag("feed-result-count")
                 .fetchSemanticsNodes()
                 .flatMap { node -> node.config[SemanticsProperties.Text] }
                 .mapNotNull { text ->
-                    Regex("""(\d{4}) available""").find(text.text)?.groupValues?.get(1)?.toIntOrNull()
+                    Regex("""(\d{4})""").find(text.text)?.groupValues?.get(1)?.toIntOrNull()
                 }
                 .firstOrNull() ?: 0
             feedCount >= 1_000

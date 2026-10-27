@@ -102,7 +102,7 @@ jobs:
           adb -s emulator-5554 shell settings put global transition_animation_scale 1
           adb -s emulator-5554 shell settings put global animator_duration_scale 1
           export ANDROID_SERIAL=emulator-5554
-          classes='com.rupayonhaldar.gtafreestem.MainActivityTest,com.rupayonhaldar.gtafreestem.ScreenTransitionTest,com.rupayonhaldar.gtafreestem.DiscoveryFlowTest,com.rupayonhaldar.gtafreestem.ui.browse.OpportunityMapTest,com.rupayonhaldar.gtafreestem.ui.shell.AppShellLargeTextTest,com.rupayonhaldar.gtafreestem.data.local.AndroidOpportunityFeedCacheRuntimeTest,com.rupayonhaldar.gtafreestem.ui.preferences.AccountPreferencesScreenTest,com.rupayonhaldar.gtafreestem.ui.design.StorybookDarkThemeTest,com.rupayonhaldar.gtafreestem.ui.design.StorybookLargeTextTest'
+          classes='com.rupayonhaldar.gtafreestem.MainActivityTest,com.rupayonhaldar.gtafreestem.ScreenTransitionTest,com.rupayonhaldar.gtafreestem.DiscoveryFlowTest,com.rupayonhaldar.gtafreestem.ui.browse.OpportunityMapTest,com.rupayonhaldar.gtafreestem.ui.shell.AppShellLargeTextTest,com.rupayonhaldar.gtafreestem.data.local.AndroidOpportunityFeedCacheRuntimeTest,com.rupayonhaldar.gtafreestem.ui.preferences.AccountPreferencesScreenTest,com.rupayonhaldar.gtafreestem.ui.design.StorybookDarkThemeTest,com.rupayonhaldar.gtafreestem.ui.design.StorybookLargeTextTest,com.rupayonhaldar.gtafreestem.ui.browse.BrowseResponsivenessRuntimeTest'
           ./gradlew --no-daemon --max-workers=2 :app:connectedDebugAndroidTest "-Pandroid.testInstrumentationRunnerArguments.class=$classes"
           # The connected test task cleans up its installed packages after the normal batch.
           # Reinstall these exact locally built APKs for the separate reduced-motion review.
@@ -129,7 +129,7 @@ jobs:
           cases = [case for path in files for case in ET.parse(path).getroot().iter('testcase')]
           if not cases or any(case.find(tag) is not None for case in cases for tag in ['failure', 'error', 'skipped']):
               raise SystemExit('Runtime failure/error/skip or empty test selection')
-          required = {'MainActivityTest', 'ScreenTransitionTest', 'DiscoveryFlowTest', 'OpportunityMapTest', 'AppShellLargeTextTest', 'AndroidOpportunityFeedCacheRuntimeTest', 'AccountPreferencesScreenTest', 'StorybookDarkThemeTest', 'StorybookLargeTextTest'}
+          required = {'MainActivityTest', 'ScreenTransitionTest', 'DiscoveryFlowTest', 'OpportunityMapTest', 'AppShellLargeTextTest', 'AndroidOpportunityFeedCacheRuntimeTest', 'AccountPreferencesScreenTest', 'StorybookDarkThemeTest', 'StorybookLargeTextTest', 'BrowseResponsivenessRuntimeTest'}
           observed = {case.get('classname', '').split('.')[-1] for case in cases}
           if not required <= observed: raise SystemExit('Missing required test classes: ' + str(required - observed))
           with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as out:

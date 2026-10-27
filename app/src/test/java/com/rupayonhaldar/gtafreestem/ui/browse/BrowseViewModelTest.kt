@@ -226,6 +226,45 @@ class BrowseViewModelTest {
     }
 
     @Test
+    fun `choosing a Home city clears incompatible nearby constraints and preserves the search`() = runTest {
+        Dispatchers.setMain(StandardTestDispatcher(testScheduler))
+        try {
+            val toronto = opportunity("robotics-toronto", "Coding & Robotics", "Toronto", "Toronto", listOf("en"), 17)
+                .copy(latitude = 43.6532, longitude = -79.3832)
+            val markham = opportunity("robotics-markham", "Coding & Robotics", "York", "Markham", listOf("en"), 17)
+                .copy(latitude = 43.8561, longitude = -79.3370)
+            val vm = BrowseViewModel(
+                repository = RecordingRepository(snapshot(listOf(toronto, markham))),
+                favorites = EmptyFavorites(),
+                searchDispatcher = StandardTestDispatcher(testScheduler),
+            )
+            advanceUntilIdle()
+            vm.setQuery("robotics")
+            vm.setFilters(OpportunitySearchFilters(
+                region = "York", category = "Coding & Robotics", age = 13,
+                latitude = 43.8561, longitude = -79.3370, distanceKm = 1,
+                sort = OpportunitySearchSort.NEAREST,
+            ))
+            advanceUntilIdle()
+            assertEquals(listOf(markham.id), vm.uiState.value.opportunities.map(Opportunity::id))
+            vm.setCity("Toronto")
+            advanceUntilIdle()
+            assertEquals(listOf(toronto.id), vm.uiState.value.opportunities.map(Opportunity::id))
+            assertEquals("robotics", vm.uiState.value.query)
+            assertEquals(13, vm.uiState.value.filters.age)
+            assertEquals("Coding & Robotics", vm.uiState.value.filters.category)
+            assertEquals(null, vm.uiState.value.filters.region)
+            assertEquals(null, vm.uiState.value.filters.latitude)
+            assertEquals(null, vm.uiState.value.filters.longitude)
+            assertEquals(null, vm.uiState.value.filters.distanceKm)
+            assertEquals(OpportunitySearchSort.SOONEST, vm.uiState.value.filters.sort)
+        } finally {
+            advanceUntilIdle()
+            Dispatchers.resetMain()
+        }
+    }
+
+    @Test
     fun `saved library state refreshes after reconcile toggle remove and clear`() = runTest {
         Dispatchers.setMain(StandardTestDispatcher(testScheduler))
         try {

@@ -1367,7 +1367,8 @@ private fun FeedStatusRow(
     ) {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text("$resultCount ${text("visible", "available")}", style = MaterialTheme.typography.titleMedium)
+                Text("$resultCount ${text("visible", "available")}", style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.testTag("feed-result-count"))
                 snapshot?.let {
                     Text(
                         "${text("lastVerified", "Last checked")}: ${formatDate(it.lastUpdated.toString(), language)}",
