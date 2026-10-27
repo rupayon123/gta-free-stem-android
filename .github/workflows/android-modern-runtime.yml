@@ -104,6 +104,10 @@ jobs:
           export ANDROID_SERIAL=emulator-5554
           classes='com.rupayonhaldar.gtafreestem.MainActivityTest,com.rupayonhaldar.gtafreestem.ScreenTransitionTest,com.rupayonhaldar.gtafreestem.DiscoveryFlowTest,com.rupayonhaldar.gtafreestem.ui.browse.OpportunityMapTest,com.rupayonhaldar.gtafreestem.ui.shell.AppShellLargeTextTest,com.rupayonhaldar.gtafreestem.data.local.AndroidOpportunityFeedCacheRuntimeTest,com.rupayonhaldar.gtafreestem.ui.preferences.AccountPreferencesScreenTest,com.rupayonhaldar.gtafreestem.ui.design.StorybookDarkThemeTest,com.rupayonhaldar.gtafreestem.ui.design.StorybookLargeTextTest'
           ./gradlew --no-daemon --max-workers=2 :app:connectedDebugAndroidTest "-Pandroid.testInstrumentationRunnerArguments.class=$classes"
+          # Direct instrumentation needs both APKs after the connected-test task.
+          adb -s emulator-5554 install -r -t app/build/outputs/apk/debug/app-debug.apk
+          adb -s emulator-5554 install -r -t app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
+          adb -s emulator-5554 shell pm list instrumentation | tr -d '\r' | grep -Fx 'instrumentation:com.rupayonhaldar.gtafreestem.test/androidx.test.runner.AndroidJUnitRunner (target=com.rupayonhaldar.gtafreestem)'
           adb -s emulator-5554 shell settings put global window_animation_scale 0
           adb -s emulator-5554 shell settings put global transition_animation_scale 0
           adb -s emulator-5554 shell settings put global animator_duration_scale 0
