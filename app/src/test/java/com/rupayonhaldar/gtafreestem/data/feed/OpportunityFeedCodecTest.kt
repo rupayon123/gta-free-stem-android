@@ -3,6 +3,10 @@ package com.rupayonhaldar.gtafreestem.data.feed
 import java.io.File
 import java.security.MessageDigest
 import java.time.Instant
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonArray
+import kotlinx.serialization.json.jsonPrimitive
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertThrows
 import org.junit.Assert.assertTrue
@@ -135,43 +139,32 @@ class OpportunityFeedCodecTest {
         ).firstOrNull(File::isFile)
         assertTrue("Bundled feed fixture is missing", bundledFeed != null)
 
+        val raw = requireNotNull(bundledFeed).readText()
         val feed = codec.decodeAndValidate(
-            requireNotNull(bundledFeed).readText(),
-            Instant.parse("2026-08-18T14:36:00Z"),
+            raw,
+            Instant.parse("2026-10-27T13:16:54.451Z"),
             requireFreshness = true,
             requireSourceHealth = true,
         )
-
-        assertEquals(104, feed.declaredRecordCount)
-        assertEquals(104, feed.opportunities.size)
-        assertEquals(Instant.parse("2026-08-17T00:00:00Z"), feed.lastUpdated)
+        assertEquals(1878, feed.declaredRecordCount)
+        assertEquals(1878, feed.opportunities.size)
+        assertEquals(45, feed.opportunities.count { it.virtual })
+        assertEquals(Instant.parse("2026-10-27T00:00:00Z"), feed.lastUpdated)
+        assertEquals(Instant.parse("2026-10-27T13:15:54.451Z"), feed.publicationRevision)
+        assertTrue(feed.opportunities.none { it.isNewFind == true })
+        assertTrue(feed.opportunities.all { it.translations.isEmpty() })
+        val exact = feed.opportunities.single { it.id == "tpl-rss-6ac92852295b3b0033cb1160" }
+        val original = Json.parseToJsonElement(raw).jsonObject.getValue("opportunities").jsonArray
+            .single { it.jsonObject.getValue("id").jsonPrimitive.content == exact.id }
+            .jsonObject.getValue("description").jsonPrimitive.content
+        assertEquals(original, exact.description)
+        assertTrue(exact.description.contains("volunteer hours"))
         assertEquals(
-            setOf(
-                "discovered-tpl-events-volunteer-summer-camp-for-newcomer-youth-42d7f394f001",
-                "discovered-aurora-library-stem-steam-workshop-53c30bcddb04",
-            ),
-            feed.opportunities.filter { it.isNewFind == true }.map { it.id }.toSet(),
-        )
-        assertTrue(
-            feed.opportunities
-                .first { it.id == "tpl-rss-6a56abf2cca66c2f00a371a9" }
-                .description
-                .endsWith("self-driving cars, fraud…"),
-        )
-        assertTrue(
-            feed.opportunities
-                .first { it.id == "tpl-rss-6a590ec871ef13620052687d" }
-                .description
-                .endsWith("personal device and any…"),
-        )
-        assertTrue(
-            feed.opportunities
-                .first { it.id == "tpl-rss-6a39a3fb2ea730c17ab8c183" }
-                .description
-                .endsWith("Participants need…"),
+            setOf("tpl.bibliocommons.com", "markham.bibliocommons.com"),
+            feed.opportunities.map { java.net.URI(it.sourceUrl).host }.toSet(),
         )
         assertEquals(
-            "2da9c4dadbce14feb16b3306d366b48ef0535febd0d9cfee314266d3e3fd211f",
+            "c61ed81737815ad1543df966f382c8e2672fe2cb28b7d8f6f68cfc3ef39fd391",
             requireNotNull(bundledFeed).sha256(),
         )
     }
@@ -521,6 +514,33 @@ class OpportunityFeedCodecTest {
         assertTrue(codec.decodeAndValidate(stale, now, requireFreshness = false).isStale)
     }
 
+    @Test
+    fun `publication revision is retained while absent legacy metadata remains readable`() {
+        val legacy = feedWithSourceHealth("healthy", 1.0)
+        val revised = legacy.replaceFirst("{", "{\n \"publicationRevision\": \"2026-08-15T20:55:11.491Z\",")
+        assertEquals(null, codec.decodeAndValidate(legacy, now, true).publicationRevision)
+        assertEquals(Instant.parse("2026-08-15T20:55:11.491Z"), codec.decodeAndValidate(revised, now, true).publicationRevision)
+    }
+
+    @Test
+    fun `malformed null nonstring and future revisions cannot enter the cache`() {
+        val legacy = feedWithSourceHealth("healthy", 1.0)
+        for (revision in listOf("null", "17", "true", "{}", "[]", "\"\"", "\"2026-08-15\"", "\"2026-08-16T00:05:00.001Z\"")) {
+            val raw = legacy.replaceFirst("{", "{\n \"publicationRevision\": $revision,")
+            assertThrows("Revision $revision must be rejected", InvalidOpportunityFeedException::class.java) {
+                codec.decodeAndValidate(raw, now, true)
+            }
+        }
+    }
+
+    @Test
+    fun `recent publication never renews stale event data freshness`() {
+        val raw = feedWithSourceHealth("healthy", 1.0)
+            .replace("2026-08-15", "2026-07-01")
+            .replaceFirst("{", "{\n \"publicationRevision\": \"2026-08-16T00:00:00.000Z\",")
+        assertReason(InvalidOpportunityFeedReason.STALE_OR_FUTURE_FEED, raw)
+    }
+
     private fun assertReason(
         reason: InvalidOpportunityFeedReason,
         json: String,
@@ -560,9 +580,16 @@ class OpportunityFeedCodecTest {
           "count": 1,
           "lastDataChange": "2026-08-15",
           "sourceHealth": $healthJson,
-          "opportunities": [${opportunityJson("healthy", "Free")}]
+          "contentRights": {"termsVerifiedAt": "2026-08-15", "restrictedOpportunityIds": [], "sources": [{"organization": "Markham Public Library", "sourceHost": "markham.bibliocommons.com", "records": 1, "status": "terms-permitted", "basisUrl": "https://markham.bibliocommons.com/info/terms/", "conditions": ["Automated access uses the provider's RSS/XML event feed.", "Every displayed extract links to its original BiblioCommons event page.", "GTA FREE STEM is free and does not monetize provider content."], "termsVerifiedAt": "2026-08-15", "termsVersion": "2018-09-19", "termsDigestVersion": "bibliocommons-relevant-sections-v1", "termsSectionDigest": "sha256:451e63466c801166653f47336e236d05f9a50a3df45a917fa603e92bcd11c8a0"}]},
+          "opportunities": [${approvedOpportunityJson("healthy")}]
         }
     """.trimIndent()
+
+    private fun approvedOpportunityJson(id: String): String =
+        opportunityJson(id, "Free")
+            .replace("\"organization\":\"Provider\"", "\"organization\":\"Markham Public Library\"")
+            .replace("https://example.org/$id", "https://markham.bibliocommons.com/events/$id")
+            .replace("\"status\":\"active\"", "\"registrationUrl\":\"https://markham.bibliocommons.com/events/$id\",\"sources\":[{\"label\":\"Official event page\",\"url\":\"https://markham.bibliocommons.com/events/$id\",\"capturedAt\":\"2026-08-15T12:00:00Z\",\"confidence\":\"high\"}],\"status\":\"active\"")
 
     private fun healthyLibraryHealth(
         status: String = "healthy",

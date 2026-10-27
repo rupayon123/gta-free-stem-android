@@ -44,7 +44,7 @@ android {
         applicationId = "com.rupayonhaldar.gtafreestem"
         minSdk = 26
         targetSdk = 36
-        versionCode = 3
+        versionCode = 5
         versionName = "1.1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -113,6 +113,7 @@ dependencies {
   implementation(libs.androidx.work.runtime)
   implementation(libs.kotlinx.coroutines.android)
   implementation(libs.kotlinx.serialization.json)
+  implementation(libs.maplibre.android.opengl)
 
   // Arch Components
   implementation(libs.androidx.lifecycle.runtime.compose)

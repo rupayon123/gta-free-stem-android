@@ -16,6 +16,8 @@ import com.rupayonhaldar.gtafreestem.domain.repository.OpportunityRepository
 import com.rupayonhaldar.gtafreestem.domain.repository.OpportunityRepositoryException
 import com.rupayonhaldar.gtafreestem.domain.search.OpportunitySearch
 import com.rupayonhaldar.gtafreestem.domain.search.OpportunitySearchFilters
+import com.rupayonhaldar.gtafreestem.domain.validation.FeedFreshnessPolicy
+import com.rupayonhaldar.gtafreestem.domain.validation.PublicationRevisionPolicy
 import com.rupayonhaldar.gtafreestem.localization.AndroidAppStringCatalogLoader
 import com.rupayonhaldar.gtafreestem.localization.AppLanguage
 import com.rupayonhaldar.gtafreestem.localization.AppStringCatalog
@@ -23,6 +25,8 @@ import java.time.Instant
 import java.util.concurrent.atomic.AtomicReference
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 
 object OpportunityRepositories {
@@ -57,6 +61,7 @@ internal class DefaultOpportunityRepository(
     private val now: () -> Instant = Instant::now,
 ) : OpportunityRepository {
     private val retained = AtomicReference<OpportunityFeedSnapshot?>(null)
+    private val publicationMutex = Mutex()
 
     override suspend fun bootstrap(): OpportunityFeedSnapshot = withContext(Dispatchers.IO) {
         val candidates = buildList {
@@ -76,10 +81,23 @@ internal class DefaultOpportunityRepository(
             }
         }
 
-        val selected = candidates.maxByOrNull(OpportunityFeedSnapshot::lastUpdated)
-            ?: throw OpportunityRepositoryException("No validated local opportunity snapshot is available")
-        retained.set(selected)
-        selected
+        publicationMutex.withLock {
+            // Disk decoding may overlap a successful network refresh. Compare
+            // again at publication so a late local result cannot roll it back.
+            candidates.fold(retained.get()) { selected, candidate ->
+                if (selected == null || PublicationRevisionPolicy.shouldReplace(
+                        candidate.lastUpdated, candidate.publicationRevision,
+                        selected.lastUpdated, selected.publicationRevision,
+                        allowLegacyEqualDate = false,
+                    )
+                ) candidate else selected
+            }
+                ?.let { selected ->
+                    selected.copy(isStale = !FeedFreshnessPolicy.isFresh(selected.lastUpdated, now()))
+                }
+                ?.also(retained::set)
+                ?: throw OpportunityRepositoryException("No validated local opportunity snapshot is available")
+        }
     }
 
     override suspend fun refresh(): OpportunityFeedSnapshot = withContext(Dispatchers.IO) {
@@ -92,17 +110,43 @@ internal class DefaultOpportunityRepository(
                     now(),
                     requireFreshness = true,
                     requireSourceHealth = true,
+                    requireContentRights = true,
                 )
-                val current = retained.get()
-                if (current != null && feed.lastUpdated.isBefore(current.lastUpdated)) {
+                val accepted = publicationMutex.withLock {
+                    val current = retained.get()
+                    val verifiedIdentical = current != null && feed.publicationRevision != null &&
+                        feed.publicationRevision == current.publicationRevision &&
+                        feed.lastUpdated == current.lastUpdated && feed.opportunities == current.opportunities
+                    if (current != null && !verifiedIdentical && !PublicationRevisionPolicy.shouldReplace(
+                            feed.lastUpdated, feed.publicationRevision,
+                            current.lastUpdated, current.publicationRevision,
+                        )
+                    ) {
+                        null
+                    } else {
+                        // Keep the freshness decision, disk write and memory
+                        // publication together across overlapping refreshes.
+                        // A storage failure still permits a valid live result.
+                        val selected = runCatching { cache.writeAndSelectLatest(raw, now()) }
+                            .getOrDefault(raw)
+                        val latest = if (selected == raw) {
+                            feed.toSnapshot(endpoint.source)
+                        } else {
+                            // Another cache instance, such as the alert worker,
+                            // may have already committed a newer valid response.
+                            codec.decodeAndValidate(selected, now(), requireFreshness = false)
+                                .toSnapshot(OpportunityFeedSource.LAST_GOOD_CACHE)
+                        }
+                        latest.also(retained::set)
+                    }
+                }
+                if (accepted == null) {
                     lastError = OpportunityRepositoryException(
                         "Remote opportunity snapshot is older than the retained snapshot",
                     )
                     continue
                 }
-                // A storage failure must not hide an otherwise valid live response.
-                runCatching { cache.write(raw) }
-                return@withContext feed.toSnapshot(endpoint.source).also(retained::set)
+                return@withContext accepted
             } catch (error: CancellationException) {
                 throw error
             } catch (error: Throwable) {
@@ -110,20 +154,18 @@ internal class DefaultOpportunityRepository(
             }
         }
 
-        val previouslyRetained = retained.get()
-        return@withContext runCatching { bootstrap() }.fold(
-            onSuccess = { local ->
-                listOfNotNull(previouslyRetained, local)
-                    .maxBy(OpportunityFeedSnapshot::lastUpdated)
-                    .also(retained::set)
-            },
-            onFailure = {
-                previouslyRetained ?: throw OpportunityRepositoryException(
+        return@withContext try {
+            // bootstrap performs its own newest-snapshot check under the same
+            // publication lock; never assign an older fallback after it returns.
+            bootstrap()
+        } catch (error: CancellationException) {
+            throw error
+        } catch (error: Throwable) {
+            retained.get() ?: throw OpportunityRepositoryException(
                     "No validated network or local opportunity snapshot is available",
-                    lastError ?: it,
+                    lastError ?: error,
                 )
-            },
-        )
+        }
     }
 
     override fun current(): OpportunityFeedSnapshot? = retained.get()
@@ -155,4 +197,5 @@ private fun com.rupayonhaldar.gtafreestem.data.feed.ValidatedOpportunityFeed.toS
     source = source,
     declaredRecordCount = declaredRecordCount,
     isStale = isStale,
+    publicationRevision = publicationRevision,
 )

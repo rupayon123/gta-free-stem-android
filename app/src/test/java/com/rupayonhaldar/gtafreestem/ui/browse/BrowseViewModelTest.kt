@@ -16,11 +16,13 @@ import com.rupayonhaldar.gtafreestem.domain.search.OpportunitySearchLimits
 import com.rupayonhaldar.gtafreestem.domain.search.OpportunitySearchSort
 import com.rupayonhaldar.gtafreestem.localization.AppLanguage
 import java.time.Instant
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.Assert.assertEquals
@@ -30,6 +32,42 @@ import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class BrowseViewModelTest {
+    @Test
+    fun `rapid query edits publish only the latest search`() = runTest {
+        Dispatchers.setMain(StandardTestDispatcher(testScheduler))
+        try {
+            val repository = RecordingRepository(snapshot(listOf(
+                opportunity(
+                    id = "robotics",
+                    category = "Coding & Robotics",
+                    region = "Toronto",
+                    city = "Toronto",
+                    languages = listOf("en"),
+                    ageMax = 18,
+                ),
+            )))
+            val viewModel = BrowseViewModel(
+                repository = repository,
+                favorites = EmptyFavorites(),
+                searchDispatcher = StandardTestDispatcher(testScheduler),
+            )
+            advanceUntilIdle()
+            repository.searches.clear()
+
+            viewModel.setQuery("rob")
+            viewModel.setQuery("robot")
+            viewModel.setQuery("robotics")
+            advanceUntilIdle()
+
+            assertEquals(listOf("robotics"), repository.searches.map { it.first })
+            assertEquals("robotics", viewModel.uiState.value.query)
+            assertEquals(listOf("robotics"), viewModel.uiState.value.opportunities.map { it.id })
+        } finally {
+            advanceUntilIdle()
+            Dispatchers.resetMain()
+        }
+    }
+
     @Test
     fun `restores persists applies options and atomically clears complete browse state`() = runTest {
         Dispatchers.setMain(StandardTestDispatcher(testScheduler))
@@ -74,6 +112,7 @@ class BrowseViewModelTest {
                 repository = repository,
                 favorites = EmptyFavorites(),
                 browseStateStore = stateStore,
+                searchDispatcher = StandardTestDispatcher(testScheduler),
             )
 
             advanceUntilIdle()
@@ -104,6 +143,7 @@ class BrowseViewModelTest {
                     sort = OpportunitySearchSort.RELEVANCE,
                 ),
             )
+            advanceUntilIdle()
             assertTrue(viewModel.uiState.value.filters.scholarshipsOnly)
             assertTrue(repository.searches.last().second.leadershipOnly)
             assertEquals(viewModel.uiState.value.filters, stateStore.writes.last().filters)
@@ -115,6 +155,7 @@ class BrowseViewModelTest {
             )
 
         viewModel.clearSearchAndFilters()
+        advanceUntilIdle()
         val cleared = viewModel.uiState.value
         assertEquals("", cleared.query)
             assertEquals(OpportunitySearchFilters(), cleared.filters)
@@ -124,8 +165,10 @@ class BrowseViewModelTest {
 
             repository.searches.clear()
             viewModel.setSearchLanguage(AppLanguage.SPANISH)
+            advanceUntilIdle()
             assertEquals(AppLanguage.SPANISH, repository.searches.last().third)
         } finally {
+            advanceUntilIdle()
             Dispatchers.resetMain()
         }
     }
@@ -149,6 +192,7 @@ class BrowseViewModelTest {
                 repository = RecordingRepository(snapshot(emptyList())),
                 favorites = EmptyFavorites(),
                 browseStateStore = stateStore,
+                searchDispatcher = StandardTestDispatcher(testScheduler),
             )
 
             advanceUntilIdle()
@@ -176,6 +220,46 @@ class BrowseViewModelTest {
             assertEquals(null, persistedFilters.distanceKm)
             assertEquals(OpportunitySearchSort.SOONEST, persistedFilters.sort)
         } finally {
+            advanceUntilIdle()
+            Dispatchers.resetMain()
+        }
+    }
+
+    @Test
+    fun `choosing a Home city clears incompatible nearby constraints and preserves the search`() = runTest {
+        Dispatchers.setMain(StandardTestDispatcher(testScheduler))
+        try {
+            val toronto = opportunity("robotics-toronto", "Coding & Robotics", "Toronto", "Toronto", listOf("en"), 17)
+                .copy(latitude = 43.6532, longitude = -79.3832)
+            val markham = opportunity("robotics-markham", "Coding & Robotics", "York", "Markham", listOf("en"), 17)
+                .copy(latitude = 43.8561, longitude = -79.3370)
+            val vm = BrowseViewModel(
+                repository = RecordingRepository(snapshot(listOf(toronto, markham))),
+                favorites = EmptyFavorites(),
+                searchDispatcher = StandardTestDispatcher(testScheduler),
+            )
+            advanceUntilIdle()
+            vm.setQuery("robotics")
+            vm.setFilters(OpportunitySearchFilters(
+                region = "York", category = "Coding & Robotics", age = 13,
+                latitude = 43.8561, longitude = -79.3370, distanceKm = 1,
+                sort = OpportunitySearchSort.NEAREST,
+            ))
+            advanceUntilIdle()
+            assertEquals(listOf(markham.id), vm.uiState.value.opportunities.map(Opportunity::id))
+            vm.setCity("Toronto")
+            advanceUntilIdle()
+            assertEquals(listOf(toronto.id), vm.uiState.value.opportunities.map(Opportunity::id))
+            assertEquals("robotics", vm.uiState.value.query)
+            assertEquals(13, vm.uiState.value.filters.age)
+            assertEquals("Coding & Robotics", vm.uiState.value.filters.category)
+            assertEquals(null, vm.uiState.value.filters.region)
+            assertEquals(null, vm.uiState.value.filters.latitude)
+            assertEquals(null, vm.uiState.value.filters.longitude)
+            assertEquals(null, vm.uiState.value.filters.distanceKm)
+            assertEquals(OpportunitySearchSort.SOONEST, vm.uiState.value.filters.sort)
+        } finally {
+            advanceUntilIdle()
             Dispatchers.resetMain()
         }
     }
@@ -215,6 +299,7 @@ class BrowseViewModelTest {
             val viewModel = BrowseViewModel(
                 repository = RecordingRepository(snapshot(listOf(existing, hydrated, fresh))),
                 favorites = favorites,
+                searchDispatcher = StandardTestDispatcher(testScheduler),
             )
 
             assertEquals(setOf("existing", "legacy"), viewModel.uiState.value.favoriteIds)
@@ -269,6 +354,7 @@ class BrowseViewModelTest {
             assertTrue(viewModel.uiState.value.savedSections.archive.isEmpty())
             assertEquals(0, viewModel.uiState.value.unresolvedSavedCount)
         } finally {
+            advanceUntilIdle()
             Dispatchers.resetMain()
         }
     }
@@ -293,6 +379,7 @@ class BrowseViewModelTest {
                 repository = RecordingRepository(snapshot(emptyList())),
                 favorites = EmptyFavorites(),
                 browseStateStore = stateStore,
+                searchDispatcher = StandardTestDispatcher(testScheduler),
             )
             advanceUntilIdle()
 
@@ -308,8 +395,83 @@ class BrowseViewModelTest {
             assertEquals(writeCountBeforeDeletion, stateStore.writes.size)
             assertEquals(2, stateStore.clearCalls)
         } finally {
+            advanceUntilIdle()
             Dispatchers.resetMain()
         }
+    }
+
+    @Test
+    fun `expired empty bootstrap stays updating while live data arrives without resetting choices`() = runTest {
+        Dispatchers.setMain(StandardTestDispatcher(testScheduler))
+        try {
+            val result = CompletableDeferred<OpportunityFeedSnapshot>()
+            val retained = opportunity("saved", "STEM", "Toronto", "Toronto", listOf("en"), 18)
+            val favorites = RecordingFavorites(current = mutableListOf(savedEntry(retained)))
+            val repository = SuspendedRefreshRepository(snapshot(emptyList()).copy(isStale = true), result)
+            val viewModel = BrowseViewModel(
+                repository = repository,
+                favorites = favorites,
+                searchDispatcher = StandardTestDispatcher(testScheduler),
+            )
+            runCurrent()
+            assertFalse(viewModel.uiState.value.isLoading)
+            assertTrue(viewModel.uiState.value.isRefreshing)
+            assertTrue(viewModel.uiState.value.opportunities.isEmpty())
+
+            viewModel.setQuery("robotics")
+            viewModel.setFilters(OpportunitySearchFilters(city = "Toronto"))
+            val fresh = opportunity("robotics", "STEM", "Toronto", "Toronto", listOf("en"), null)
+            result.complete(snapshot(listOf(fresh)).copy(source = OpportunityFeedSource.PRIMARY_NETWORK))
+            advanceUntilIdle()
+
+            val state = viewModel.uiState.value
+            assertFalse(state.isRefreshing)
+            assertEquals(listOf("robotics"), state.opportunities.map(Opportunity::id))
+            assertEquals("robotics", state.query)
+            assertEquals("Toronto", state.filters.city)
+            assertTrue("saved" in state.favoriteIds)
+            assertEquals(null, state.errorMessage)
+        } finally {
+            advanceUntilIdle()
+            Dispatchers.resetMain()
+        }
+    }
+
+    @Test
+    fun `failed initial update ends progress and keeps the retry explanation across navigation`() = runTest {
+        Dispatchers.setMain(StandardTestDispatcher(testScheduler))
+        try {
+            val result = CompletableDeferred<OpportunityFeedSnapshot>()
+            val viewModel = BrowseViewModel(
+                repository = SuspendedRefreshRepository(snapshot(emptyList()).copy(isStale = true), result),
+                favorites = EmptyFavorites(),
+                searchDispatcher = StandardTestDispatcher(testScheduler),
+            )
+            runCurrent()
+            assertTrue(viewModel.uiState.value.isRefreshing)
+            result.completeExceptionally(java.io.IOException("offline"))
+            advanceUntilIdle()
+            assertFalse(viewModel.uiState.value.isRefreshing)
+            val explanation = viewModel.uiState.value.errorMessage
+            assertFalse(explanation.isNullOrBlank())
+            viewModel.setDestination(AppDestination.SAVED)
+            assertEquals(explanation, viewModel.uiState.value.errorMessage)
+        } finally {
+            advanceUntilIdle()
+            Dispatchers.resetMain()
+        }
+    }
+
+    private class SuspendedRefreshRepository(
+        private var snapshot: OpportunityFeedSnapshot,
+        private val result: CompletableDeferred<OpportunityFeedSnapshot>,
+    ) : OpportunityRepository {
+        override suspend fun bootstrap() = snapshot
+        override suspend fun refresh(): OpportunityFeedSnapshot = result.await().also { snapshot = it }
+        override fun current() = snapshot
+        override fun findById(id: String) = snapshot.opportunities.firstOrNull { it.id == id }
+        override fun search(query: String, filters: OpportunitySearchFilters, language: AppLanguage) =
+            OpportunitySearch.search(snapshot.opportunities, query, filters, now = Instant.parse("2026-08-16T16:00:00Z"))
     }
 
     private data class RecordingBrowseSearchStateStore(

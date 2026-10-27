@@ -4,6 +4,7 @@ import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.getUnclippedBoundsInRoot
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
@@ -12,6 +13,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
+import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.performScrollToIndex
 import androidx.compose.ui.test.performTextReplacement
 import androidx.compose.ui.unit.dp
@@ -72,7 +74,7 @@ class MainActivityTest {
                 .assertTextContains(label)
         }
 
-        composeRule.onNodeWithText("Everything here is free for everyone.").assertIsDisplayed()
+        composeRule.onNodeWithText("Find free library events", substring = true).assertIsDisplayed()
 
         composeRule.onNodeWithTag("primary-navigation-opportunities").performClick()
         composeRule.onNode(hasSetTextAction()).performTextReplacement("")
@@ -81,22 +83,23 @@ class MainActivityTest {
             .assertIsDisplayed()
         composeRule.onNodeWithText("Filters").performClick()
         composeRule.onNodeWithTag("opportunity-filter-panel").assertIsDisplayed()
-        composeRule.onNodeWithText("Done").performClick()
+        composeRule.onNodeWithText("Back").performClick()
         composeRule.onNodeWithTag("browse-screen-title")
             .assertTextContains("Opportunities")
             .assertIsDisplayed()
 
         composeRule.onNodeWithTag("primary-navigation-high_school").performClick()
-        composeRule.onNodeWithText("High school hunt engine").assertIsDisplayed()
+        composeRule.onNodeWithTag("browse-screen-title").assertTextContains("High School").assertIsDisplayed()
 
         composeRule.onNodeWithTag("primary-navigation-support").performClick()
-        composeRule.onNodeWithText(
+        composeRule.onNodeWithTag("support-screen").performScrollToNode(hasText(
             "Built to be easier for students, parents, educators, and community groups.",
-        ).assertIsDisplayed()
-        composeRule.onNodeWithTag("support-screen").performScrollToIndex(2)
-        composeRule.onNodeWithText("Send feedback").assertIsDisplayed()
-        composeRule.onNodeWithText("Privacy policy").assertIsDisplayed()
-        composeRule.onNodeWithText("Terms of Service and Privacy Notice").assertIsDisplayed()
+        ))
+        composeRule.onNodeWithText("Built to be easier for students, parents, educators, and community groups.").assertIsDisplayed()
+        listOf("Send feedback", "Privacy policy", "Terms of Service and Privacy Notice").forEach { label ->
+            composeRule.onNodeWithTag("support-screen").performScrollToNode(hasText(label))
+            composeRule.onNodeWithText(label).assertIsDisplayed()
+        }
 
         composeRule.onNodeWithTag("primary-navigation-account").performClick()
         composeRule.onNodeWithTag("account-preferences-screen").assertIsDisplayed()
@@ -195,6 +198,24 @@ class MainActivityTest {
             false,
             true,
         )
+    }
+
+    @Test
+    fun systemBarsFollowTheInAppTheme() {
+        for (dark in listOf(false, true, false)) {
+            composeRule.runOnIdle {
+                composeRule.activity.preferencesViewModel.setTheme(
+                    if (dark) AppThemePreference.DARK else AppThemePreference.LIGHT,
+                )
+            }
+            composeRule.waitForIdle()
+            composeRule.runOnIdle {
+                val activity = composeRule.activity
+                val controller = androidx.core.view.WindowCompat.getInsetsController(activity.window, activity.window.decorView)
+                org.junit.Assert.assertEquals("Status icons must follow the current app theme", !dark, controller.isAppearanceLightStatusBars)
+                org.junit.Assert.assertEquals("Navigation icons must follow the current app theme", !dark, controller.isAppearanceLightNavigationBars)
+            }
+        }
     }
 
     @Test

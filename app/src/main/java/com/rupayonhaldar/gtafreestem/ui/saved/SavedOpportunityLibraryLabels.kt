@@ -9,6 +9,7 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.OffsetDateTime
 import java.time.ZoneId
+import com.rupayonhaldar.gtafreestem.ui.format.OpportunitySchedule
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import java.util.Locale
@@ -121,19 +122,8 @@ internal class SavedOpportunityLibraryLabels(
         return "$savedOnLabel $formatted"
     }
 
-    fun opportunityDate(raw: String): String {
-        val locale = Locale.forLanguageTag(language.localeTag)
-        val date = runCatching { OffsetDateTime.parse(raw).toLocalDate() }.getOrNull()
-            ?: runCatching {
-                Instant.parse(raw).atZone(ZoneId.systemDefault()).toLocalDate()
-            }.getOrNull()
-            ?: runCatching { LocalDate.parse(raw) }.getOrNull()
-            ?: return raw
-        return DateTimeFormatter
-            .ofLocalizedDate(FormatStyle.MEDIUM)
-            .withLocale(locale)
-            .format(date)
-    }
+    fun opportunityDate(raw: String): String =
+        OpportunitySchedule.dateTime(raw, Locale.forLanguageTag(language.localeTag)) ?: raw
 
     fun languageName(rawTag: String): String {
         val knownLanguage = AppLanguage.matching(rawTag)
@@ -191,8 +181,10 @@ internal fun savedOpportunityCardText(
         opportunity.endDate?.nonBlank()?.let { date ->
             add(SavedOpportunityFact(labels.ends, labels.opportunityDate(date)))
         }
-        opportunity.deadline?.nonBlank()?.let { date ->
-            add(SavedOpportunityFact(labels.deadline, labels.opportunityDate(date)))
+        if (OpportunitySchedule.hasDistinctDeadline(opportunity.startDate, opportunity.deadline)) {
+            opportunity.deadline?.nonBlank()?.let { date ->
+                add(SavedOpportunityFact(labels.deadline, labels.opportunityDate(date)))
+            }
         }
         localized.cost.nonBlank()?.let { cost ->
             add(SavedOpportunityFact(labels.cost, cost))

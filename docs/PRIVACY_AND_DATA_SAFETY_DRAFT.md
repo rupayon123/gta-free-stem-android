@@ -1,8 +1,24 @@
 # Privacy Policy and Play Data Safety Draft
 
+> Current internal-update candidate: version 1.1.0, **version code 5**. Code 3
+> was uploaded only to an unpublished draft and is retained below as evidence
+> for that tested candidate. Code 4 added the tested navigation-label fix;
+> code 5 also restores the original GTA logo in Browse. Its signed package
+> and focused branding smoke require fresh receipts.
+
+
 > Working draft only. This document is neither legal advice nor a completed Play Console declaration. It assumes the intended behavior described below. Reconcile it with the exact release artifact, merged manifest, dependencies, runtime network traffic, Android backup behavior, and current Google Play definitions before publishing or submitting any answer.
 
-Last technical-draft review: August 19, 2026.
+Last factual source/disclosure review: October 27, 2026 (`f8a6f94`). This is a
+technical draft, not a submitted declaration. The public policy at
+<https://gta-free-stem.pages.dev/privacy/> now includes Android, with an October
+27 effective date (website source `93ee5a6`; subsequent QA-only change `f03b4eb`).
+Do not replace that combined platform policy with this Android-only draft.
+Google's [Data safety guidance](https://support.google.com/googleplay/android-developer/answer/10787469?hl=en)
+includes SDK data flows and exempts apps active exclusively on internal testing
+tracks from the Data safety section. Existing live declarations or broader-track
+submission prompts still need factual review; no new internal-track gate is
+asserted here.
 
 ## Assumed release behavior
 
@@ -25,6 +41,15 @@ Last technical-draft review: August 19, 2026.
   connected. Matching, known-ID comparison, and notification throttling happen
   on device; there is no FCM or other push-registration token.
 - Public opportunity data is downloaded over HTTPS from GitHub/jsDelivr.
+- MapLibre 13.7.1 requests OpenFreeMap styles, tiles, fonts, and sprites when an
+  interactive 2D/3D map is shown. Delivery services see IP/request metadata and
+  requested map areas. The camera uses public opportunity locations and map
+  navigation; the app does not attach the raw Nearby fix, profile, saves, or
+  search text to resource requests. Map areas may still reveal an area of
+  interest, and map resources can be cached separately from the raw fix.
+- The source explicitly removes MapLibre's unused `ACCESS_FINE_LOCATION`
+  permission. Verify the final signed merged manifest rather than relying only
+  on the source declaration or a debug build.
 - Opportunity and source links can open third-party websites in the user's browser.
 - GitHub/jsDelivr and linked sites may receive ordinary request metadata such as IP address, time, user agent, and requested URL under their own policies.
 - Android system backup and device-to-device transfer are disabled for app data in the current manifest/rules. This must be confirmed in the merged release manifest.
@@ -42,8 +67,8 @@ These are review prompts, not answers to submit automatically.
 
 | Play question | Candidate response | Required evidence before submission |
 | --- | --- | --- |
-| Does the app collect or share required user-data types? | Candidate: No developer collection or sharing. | Inspect the release dependency graph, merged manifest, SDK behavior, network traffic, and Google's current definitions. Resolve whether feed-host request metadata or Android backup changes any disclosure. |
-| Does the app collect or share location? | Candidate: No. The user-initiated approximate fix is used only ephemerally on device and is not transmitted or persisted. | Verify runtime traffic, process-death behavior, permission scope, the exact release implementation, and the definitions presented in the live form. |
+| Does the app collect or share required user-data types? | Unresolved form classification; do not copy the old blanket No. | Review off-device feed/map SDK request metadata, infrastructure roles, inferred IP location, retention, dependency inventory, and actual form definitions. No publisher account database does not establish no SDK collection. |
+| Does the app collect or share location? | Raw Nearby fix is local and ephemeral; overall form answer remains under review. | Separate the raw fix from IP-derived location and requested map areas; inspect actual provider use, runtime behavior, signed permissions, and Google definitions. Do not assume remote processing is ephemeral because the local fix is. |
 | Is all transmitted user data encrypted in transit? | Candidate: Yes for app-managed traffic. | Confirm all app endpoints are HTTPS, no cleartext exception is merged, and redirects remain HTTPS. |
 | Can users request deletion? | Candidate: no developer account/server data exists to delete. Local data can be removed through app controls, app storage settings, or uninstall. | Test the actual deletion path and confirm disabled backup/device transfer does not restore app data. |
 | Does the app contain ads? | Candidate: No. | Confirm no ad SDK, cross-promotion SDK, or ad rendering at runtime. |
@@ -54,11 +79,13 @@ On-device-only processing is generally treated differently from data sent off de
 
 ## Candidate public privacy policy
 
-The following copy can be adapted for <https://gta-free-stem.vercel.app/privacy> after technical and legal review.
+The following Android factual draft supports review of the combined live policy
+at <https://gta-free-stem.pages.dev/privacy/>. It is not a replacement policy or a
+new legal certification.
 
 ### GTA FREE STEM Privacy Policy
 
-**Effective date:** August 18, 2026
+**Draft factual update:** October 27, 2026. The live policy has its own effective date.
 
 GTA FREE STEM helps people discover free science, technology, engineering, and mathematics opportunities. You can use the app without creating an account.
 
@@ -84,6 +111,23 @@ your device to sort opportunities by distance. The fix is kept only in memory,
 is cleared when you turn Nearby off or the app process ends, and is not sent to
 the developer or the opportunity-feed providers. GTA FREE STEM does not ask for
 precise or background location.
+
+#### Interactive maps and resource requests
+
+When an interactive map is displayed, MapLibre downloads OpenFreeMap style,
+tile, font, and sprite resources over HTTPS. Services delivering those resources
+receive IP/request metadata and the requested map areas. Public opportunity pins
+are assembled locally. The camera focuses public opportunity locations and map
+navigation, not an uploaded raw Nearby fix; viewed areas can nevertheless reveal
+an area of interest. Map resources may be cached on the device, separately from
+the ephemeral location fix. The offline schematic fallback is distinct from a
+fully downloaded interactive basemap.
+
+[OpenFreeMap's October 8 notice](https://openfreemap.org/privacy/) says ordinary
+access logs omit IP addresses; error and security logging may include them.
+Provider retention and infrastructure handling follow their own notices. This
+review does not independently verify those logging practices or promise that
+provider records disappear when the app closes.
 
 #### New-match notifications
 
@@ -134,7 +178,10 @@ This policy may be updated if the app's features, service providers, or legal ob
 
 #### Contact
 
-For privacy or support questions, use the monitored contact method at <https://gta-free-stem.vercel.app/support>.
+For privacy or support questions, use <https://gta-free-stem.pages.dev/support/>.
+If a direct email is displayed, use it for private requests. Otherwise request a
+private contact channel without posting private details in the public issue
+tracker. No monitored email address is invented or asserted here.
 
 ## Final-review inventory
 
@@ -155,7 +202,7 @@ Before reusing the draft, record evidence for:
   Source/unit checks pass; physical uninstall/upgrade/restore validation remains.
 - [ ] Android permission prompts and denial/revocation behavior for approximate
   location and notifications, plus the complete merged WorkManager manifest.
-- [ ] GitHub and jsDelivr roles and current privacy terms.
+- [ ] GitHub/jsDelivr feed roles and OpenFreeMap/infrastructure request, retention, and SDK behavior; current provider notices and form classifications.
 - [x] Third-party browser/link transition wording reviewed in the app and prepared public-policy patch.
 - [ ] Target audience and Families-policy decision.
 - [ ] Public privacy/support/terms pages and monitored contact.

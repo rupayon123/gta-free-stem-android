@@ -24,6 +24,20 @@ class OpportunityMapProjectionTest {
     }
 
     @Test
+    fun unconfirmedAndVirtualEventsNeverBecomePhysicalPinsEvenWithMunicipalCoordinates() {
+        val municipalCoordinate = opportunity(latitude = 43.6532, longitude = -79.3832)
+        assertNull(municipalCoordinate.copy(virtual = true).toMapOpportunityPin())
+        assertNull(municipalCoordinate.copy(address = null).toMapOpportunityPin())
+        assertNull(municipalCoordinate.copy(address = "  ").toMapOpportunityPin())
+        assertNull(municipalCoordinate.copy(
+            address = "Online event hosted by Toronto Public Library",
+        ).toMapOpportunityPin())
+        assertNotNull(municipalCoordinate.copy(
+            address = "100 Queen Street West, Toronto",
+        ).toMapOpportunityPin())
+    }
+
+    @Test
     fun dynamicViewportContainsEveryValidCoordinateWithPadding() {
         val mississauga = MapCoordinate(latitude = 43.5890, longitude = -79.6441)
         val oshawa = MapCoordinate(latitude = 43.8971, longitude = -78.8658)
@@ -134,6 +148,7 @@ class OpportunityMapProjectionTest {
         category = "Coding & Robotics",
         city = "Toronto",
         region = "Toronto",
+        address = "1 Fixture Lane, Toronto",
         latitude = latitude,
         longitude = longitude,
         ageMin = 13,

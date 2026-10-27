@@ -14,7 +14,7 @@ class AppStringCatalogTest {
         assertEquals(18, AppLanguage.entries.size)
         assertEquals(AppLanguage.entries.toSet(), catalog.availableLanguages)
         assertEquals(AppLanguage.entries.toSet(), catalog.metadataLanguages)
-        assertEquals(249, catalog.sourceKeys.size)
+        assertEquals(257, catalog.sourceKeys.size)
 
         AppLanguage.entries.forEach { language ->
             val metadata = catalog.metadata(language)
@@ -31,6 +31,7 @@ class AppStringCatalogTest {
         val catalog = bundledCatalog()
         val placeholderRegex = Regex("\\{([^{}]+)}")
         val keysWithPlaceholders = setOf(
+            "mapUnavailable",
             "externalLinkUnavailable",
             "localDeleteIncomplete",
             "mapMarkerPosition",

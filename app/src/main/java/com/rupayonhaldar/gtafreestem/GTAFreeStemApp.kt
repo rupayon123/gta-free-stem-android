@@ -5,10 +5,19 @@ import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,6 +28,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -32,6 +42,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.HorizontalDivider
@@ -39,6 +51,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -53,13 +66,20 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.paneTitle
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -71,7 +91,6 @@ import com.rupayonhaldar.gtafreestem.data.local.LocalAccountDataDeletionCoordina
 import com.rupayonhaldar.gtafreestem.domain.model.Opportunity
 import com.rupayonhaldar.gtafreestem.domain.model.OpportunityFeedSnapshot
 import com.rupayonhaldar.gtafreestem.domain.model.OpportunityFeedSource
-import com.rupayonhaldar.gtafreestem.domain.search.OpportunitySearch
 import com.rupayonhaldar.gtafreestem.domain.search.OpportunitySearchFilters
 import com.rupayonhaldar.gtafreestem.localization.AppLanguage
 import com.rupayonhaldar.gtafreestem.localization.AppStringCatalog
@@ -82,14 +101,23 @@ import com.rupayonhaldar.gtafreestem.platform.location.NearbyLocationState
 import com.rupayonhaldar.gtafreestem.platform.alerts.OpportunityAlertPlatform
 import com.rupayonhaldar.gtafreestem.ui.preferences.OpportunityAlertFeedback
 import com.rupayonhaldar.gtafreestem.ui.browse.AppDestination
+import com.rupayonhaldar.gtafreestem.ui.browse.OpportunityMap
+import com.rupayonhaldar.gtafreestem.ui.browse.OpportunityMapStrings
+import com.rupayonhaldar.gtafreestem.ui.browse.toMapOpportunityPin
+import com.rupayonhaldar.gtafreestem.platform.calendar.OpportunityCalendar
 import com.rupayonhaldar.gtafreestem.ui.browse.BrowseUiState
 import com.rupayonhaldar.gtafreestem.ui.browse.BrowseViewModel
+import com.rupayonhaldar.gtafreestem.ui.browse.OpportunityMap3D
+import com.rupayonhaldar.gtafreestem.ui.browse.toMapOpportunityPin
 import com.rupayonhaldar.gtafreestem.ui.browse.OpportunityFilterPanel
 import com.rupayonhaldar.gtafreestem.ui.browse.OpportunityFilterPanelLabels
 import com.rupayonhaldar.gtafreestem.ui.browse.opportunityFilterPanelActiveCount
 import com.rupayonhaldar.gtafreestem.ui.preferences.AccountPreferencesScreen
 import com.rupayonhaldar.gtafreestem.ui.preferences.AppPreferencesUiState
 import com.rupayonhaldar.gtafreestem.ui.saved.SavedOpportunityLibraryScreen
+import com.rupayonhaldar.gtafreestem.ui.design.StoryButton
+import com.rupayonhaldar.gtafreestem.ui.design.StoryButtonKind
+import com.rupayonhaldar.gtafreestem.ui.design.ScienceLaunchExperience
 import com.rupayonhaldar.gtafreestem.ui.shell.AdaptiveAppShell
 import com.rupayonhaldar.gtafreestem.ui.shell.PrimaryDestination
 import java.time.LocalDate
@@ -98,6 +126,7 @@ import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
 import java.util.Locale
 import kotlinx.coroutines.flow.Flow
+import com.rupayonhaldar.gtafreestem.ui.format.OpportunitySchedule
 import kotlinx.coroutines.flow.emptyFlow
 
 private val AppScreenMaxWidth = 840.dp
@@ -105,7 +134,7 @@ private val AppScreenPadding = 16.dp
 private val AppScreenTopPadding = 12.dp
 private val AppScreenSectionSpacing = 14.dp
 private val AppCardRadius = 18.dp
-private val AppCardElevation = 1.5.dp
+private val AppCardElevation = 0.dp
 
 data class AppPreferenceActions(
     val saveDisplayName: (String) -> DisplayNameSaveResult,
@@ -157,6 +186,9 @@ fun GTAFreeStemApp(
     }
     var showingSavedOpportunities by rememberSaveable { mutableStateOf(false) }
     var showingFilters by rememberSaveable { mutableStateOf(false) }
+    var browseShowsMap by rememberSaveable { mutableStateOf(false) }
+    var mapDisplayMode by rememberSaveable { mutableStateOf("3D") }
+    var selectedMapPinId by rememberSaveable { mutableStateOf<String?>(null) }
     val selectedDestination = PrimaryDestination.valueOf(selectedDestinationName)
     val highSchoolFocus = HighSchoolFocus.valueOf(highSchoolFocusName)
     val privacyPolicyUrl = stringResource(R.string.privacy_policy_url)
@@ -214,6 +246,19 @@ fun GTAFreeStemApp(
         }
     }
 
+    if (state.isLoading && state.snapshot == null) {
+        Box(
+            modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background),
+            contentAlignment = Alignment.Center,
+        ) {
+            ScienceLaunchExperience(
+                status = preferences.shellText("preparingOpportunities", "Preparing opportunities"),
+                modifier = Modifier.fillMaxWidth().verticalScroll(rememberScrollState()),
+            )
+        }
+        return
+    }
+
     Box(Modifier.fillMaxSize()) {
     AdaptiveAppShell(
         selectedDestination = selectedDestination,
@@ -254,12 +299,32 @@ fun GTAFreeStemApp(
                 onClearAllSaved = viewModel::clearSavedOpportunities,
             )
 
-            else -> when (selectedDestination) {
+            else -> AnimatedContent(
+                targetState = selectedDestination,
+                transitionSpec = {
+                    // Fade through paper, so outgoing and incoming words never blend.
+                    fadeIn(tween(160, delayMillis = 160)) togetherWith fadeOut(tween(160))
+                },
+                modifier = Modifier.fillMaxSize(),
+                label = "primary-destination",
+            ) { destination ->
+                Box(Modifier.fillMaxSize().semantics { paneTitle = preferences.navigationLabel(destination) }) {
+                when (destination) {
                 PrimaryDestination.HOME -> HomeScreen(
                     state = state,
                     onSelectOpportunity = viewModel::selectOpportunity,
-                    onToggleFavorite = viewModel::toggleFavorite,
                     onSearch = { openPrimaryDestination(PrimaryDestination.OPPORTUNITIES) },
+                    onRefresh = { viewModel.refresh() },
+                    onQueryChanged = viewModel::setQuery,
+                    onCityChanged = viewModel::setCity,
+                    onAgeChanged = viewModel::setAge,
+                    onCategoryChanged = { category ->
+                        viewModel.setFilters(state.filters.copy(category = category))
+                    },
+                    onCategoryShortcut = { category ->
+                        viewModel.setFilters(state.filters.copy(category = category))
+                        openPrimaryDestination(PrimaryDestination.OPPORTUNITIES)
+                    },
                     onHighSchool = { openPrimaryDestination(PrimaryDestination.HIGH_SCHOOL) },
                     onQuickAction = { focus ->
                         openPrimaryDestination(PrimaryDestination.HIGH_SCHOOL, focus)
@@ -283,6 +348,12 @@ fun GTAFreeStemApp(
                     onQueryChanged = viewModel::setQuery,
                     onCategoryChanged = viewModel::setCategory,
                     onOpenFilters = { showingFilters = true },
+                    showMap = browseShowsMap,
+                    onMapViewChanged = { browseShowsMap = it },
+                    mapDisplayMode = mapDisplayMode,
+                    onMapDisplayModeChanged = { mapDisplayMode = it },
+                    selectedMapPinId = selectedMapPinId,
+                    onMapPinSelected = { selectedMapPinId = it },
                     onClear = viewModel::clearSearchAndFilters,
                     onRefresh = { viewModel.refresh() },
                     onRetry = viewModel::load,
@@ -306,6 +377,12 @@ fun GTAFreeStemApp(
                     onQueryChanged = viewModel::setQuery,
                     onCategoryChanged = viewModel::setCategory,
                     onOpenFilters = { showingFilters = true },
+                    showMap = browseShowsMap,
+                    onMapViewChanged = { browseShowsMap = it },
+                    mapDisplayMode = mapDisplayMode,
+                    onMapDisplayModeChanged = { mapDisplayMode = it },
+                    selectedMapPinId = selectedMapPinId,
+                    onMapPinSelected = { selectedMapPinId = it },
                     onClear = {
                         highSchoolFocusName = HighSchoolFocus.ALL.name
                         viewModel.clearSearchAndFilters()
@@ -357,6 +434,8 @@ fun GTAFreeStemApp(
                     },
                 )
             }
+                }
+            }
         }
     }
         OpportunityAlertFeedbackHost(
@@ -396,8 +475,13 @@ private enum class HighSchoolFocus(
 private fun HomeScreen(
     state: BrowseUiState,
     onSelectOpportunity: (Opportunity) -> Unit,
-    onToggleFavorite: (String) -> Unit,
     onSearch: () -> Unit,
+    onRefresh: () -> Unit,
+    onQueryChanged: (String) -> Unit,
+    onCityChanged: (String?) -> Unit,
+    onAgeChanged: (Int?, Boolean) -> Unit,
+    onCategoryChanged: (String) -> Unit,
+    onCategoryShortcut: (String) -> Unit,
     onHighSchool: () -> Unit,
     onQuickAction: (HighSchoolFocus) -> Unit,
     onFeedback: () -> Unit,
@@ -405,13 +489,9 @@ private fun HomeScreen(
     catalog: AppStringCatalog,
     text: (String, String) -> String,
 ) {
-    val featuredOpportunities = remember(state.snapshot) {
-        OpportunitySearch.search(
-            opportunities = state.snapshot?.opportunities.orEmpty(),
-            query = "",
-            filters = OpportunitySearchFilters(),
-        ).take(3)
-    }
+    val focusManager = LocalFocusManager.current
+    LaunchedEffect(Unit) { focusManager.clearFocus() }
+    val featuredOpportunities = state.opportunities.take(2)
     Box(
         modifier = Modifier.fillMaxHeight(),
         contentAlignment = Alignment.TopCenter,
@@ -428,80 +508,34 @@ private fun HomeScreen(
             verticalArrangement = Arrangement.spacedBy(AppScreenSectionSpacing),
         ) {
             item {
-                Surface(
-                    color = MaterialTheme.colorScheme.primaryContainer,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 4.dp),
-                    shape = MaterialTheme.shapes.medium,
-                    tonalElevation = 2.dp,
-                    shadowElevation = 1.dp,
+                Column(
+                    modifier = Modifier.fillMaxWidth().padding(top = 4.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
-                    Column(
-                        modifier = Modifier.padding(horizontal = 20.dp, vertical = 22.dp),
-                        verticalArrangement = Arrangement.spacedBy(14.dp),
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(14.dp),
                     ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(14.dp),
-                        ) {
-                            Image(
-                                painter = painterResource(R.drawable.app_logo),
-                                contentDescription = null,
-                                contentScale = ContentScale.Fit,
-                                modifier = Modifier
-                                    .size(72.dp)
-                                    .clip(RoundedCornerShape(18.dp)),
-                            )
-                            Column(verticalArrangement = Arrangement.spacedBy(5.dp)) {
-                                Text(
-                                    text = "GTA FREE STEM",
-                                    style = MaterialTheme.typography.headlineSmall,
-                                    color = MaterialTheme.colorScheme.onPrimaryContainer,
-                                    modifier = Modifier.semantics { heading() },
-                                )
-                                Surface(
-                                    color = MaterialTheme.colorScheme.tertiary,
-                                    contentColor = MaterialTheme.colorScheme.onTertiary,
-                                    shape = CircleShape,
-                                ) {
-                                    Text(
-                                        text = text(
-                                            "freeOnly",
-                                            "Everything here is free for everyone.",
-                                        ),
-                                        style = MaterialTheme.typography.labelMedium,
-                                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
-                                    )
-                                }
-                            }
-                        }
-                        Text(
-                            text = text(
-                                "mission",
-                                "Find real free STEM programs, library events, volunteer hours, co-op, SHSM, and youth opportunities across the GTA.",
-                            ),
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        Image(
+                            painter = painterResource(R.drawable.app_logo),
+                            contentDescription = null,
+                            contentScale = ContentScale.Fit,
+                            modifier = Modifier.size(56.dp).clip(RoundedCornerShape(16.dp)),
                         )
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(10.dp),
-                        ) {
-                            Button(
-                                onClick = onSearch,
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .heightIn(min = 52.dp),
-                            ) { Text(text("search", "Search")) }
-                            OutlinedButton(
-                                onClick = onHighSchool,
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .heightIn(min = 52.dp),
-                            ) { Text(text("highSchool", "High School")) }
-                        }
+                        Text(
+                            text = "GTA FREE STEM",
+                            style = MaterialTheme.typography.headlineSmall,
+                            color = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.semantics { heading() },
+                        )
                     }
+                    Text(
+                        text = text(
+                            "mission",
+                            "Find real free STEM programs, library events, volunteer hours, co-op, SHSM, and youth opportunities across the GTA.",
+                        ),
+                        style = MaterialTheme.typography.bodyMedium,
+                    )
                 }
             }
 
@@ -511,7 +545,193 @@ private fun HomeScreen(
                     verticalArrangement = Arrangement.spacedBy(10.dp),
                 ) {
                     Text(
-                        text = text("pathway", "Choose your path"),
+                        text = text("search", "Search"),
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = Modifier.semantics { heading() },
+                    )
+                    OutlinedTextField(
+                        value = state.query,
+                        onValueChange = onQueryChanged,
+                        label = { Text(text("search", "Search")) },
+                        leadingIcon = {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_search),
+                                contentDescription = null,
+                                modifier = Modifier.size(20.dp),
+                            )
+                        },
+                        singleLine = true,
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+                        keyboardActions = KeyboardActions(onSearch = { onSearch() }),
+                        modifier = Modifier.fillMaxWidth().testTag("home-search-field"),
+                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    ) {
+                        HomeFilterMenu(
+                            label = text("city", "City"),
+                            selected = state.filters.city ?: text("all", "All"),
+                            modifier = Modifier.weight(1f),
+                            options = listOf(text("all", "All") to { onCityChanged(null) }) +
+                                state.filterOptions.cities.map { city -> city to { onCityChanged(city) } },
+                        )
+                        HomeFilterMenu(
+                            label = text("age", "Age"),
+                            selected = when {
+                                state.filters.adultsOnly -> "18+"
+                                state.filters.age != null -> state.filters.age.toString()
+                                else -> text("all", "All")
+                            },
+                            modifier = Modifier.weight(1f),
+                            options = listOf(text("all", "All") to { onAgeChanged(null, false) }) +
+                                (0..17).map { age -> age.toString() to { onAgeChanged(age, false) } } +
+                                listOf("18+" to { onAgeChanged(null, true) }),
+                        )
+                    }
+                    HomeFilterMenu(
+                        label = text("category", "Category"),
+                        selected = state.filters.category?.let { category ->
+                            OpportunityLocalization.categoryName(category, language, catalog)
+                        } ?: text("all", "All"),
+                        modifier = Modifier.fillMaxWidth(),
+                        options = listOf(text("all", "All") to {
+                            onCategoryChanged("")
+                        }) + state.filterOptions.categories.map { category ->
+                            OpportunityLocalization.categoryName(category, language, catalog) to {
+                                onCategoryChanged(category)
+                            }
+                        },
+                    )
+                    Button(
+                        onClick = onSearch,
+                        modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp),
+                    ) { Text(text("browse", "Browse")) }
+                    TextButton(
+                        onClick = onHighSchool,
+                        modifier = Modifier.heightIn(min = 48.dp),
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_school),
+                            contentDescription = null,
+                            modifier = Modifier.size(18.dp),
+                        )
+                        Spacer(Modifier.width(8.dp))
+                        Text(text("highSchool", "High School"))
+                    }
+                }
+            }
+
+            item {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Row(
+                        modifier = Modifier.horizontalScroll(rememberScrollState()),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    ) {
+                        listOf(
+                            "Science & Engineering",
+                            "Coding & Robotics",
+                            "Makerspace & Fabrication",
+                        ).forEachIndexed { index, category ->
+                            val chipColor = when (index) {
+                                0 -> MaterialTheme.colorScheme.primaryContainer
+                                1 -> MaterialTheme.colorScheme.tertiary.copy(alpha = 0.25f)
+                                else -> MaterialTheme.colorScheme.error.copy(alpha = 0.18f)
+                            }
+                            FilterChip(
+                                selected = state.filters.category == category,
+                                onClick = { onCategoryShortcut(category) },
+                                leadingIcon = {
+                                    Icon(
+                                        painter = painterResource(
+                                            when (index) {
+                                                0 -> R.drawable.ic_science
+                                                1 -> R.drawable.ic_code
+                                                else -> R.drawable.ic_maker
+                                            },
+                                        ),
+                                        contentDescription = null,
+                                        modifier = Modifier.size(18.dp),
+                                    )
+                                },
+                                label = {
+                                    Text(OpportunityLocalization.categoryName(category, language, catalog))
+                                },
+                                colors = FilterChipDefaults.filterChipColors(
+                                    containerColor = chipColor,
+                                    labelColor = MaterialTheme.colorScheme.onSurface,
+                                    iconColor = MaterialTheme.colorScheme.onSurface,
+                                    selectedContainerColor = chipColor,
+                                    selectedLabelColor = MaterialTheme.colorScheme.onSurface,
+                                    selectedLeadingIconColor = MaterialTheme.colorScheme.onSurface,
+                                ),
+                                modifier = Modifier.heightIn(min = 48.dp),
+                            )
+                        }
+                    }
+                }
+            }
+
+            item {
+                FeedStatusRow(
+                    snapshot = state.snapshot,
+                    isRefreshing = state.isLoading || state.isRefreshing,
+                    resultCount = state.opportunities.size,
+                    onRefresh = onRefresh,
+                    text = text,
+                    language = language,
+                )
+            }
+            state.errorMessage?.let { message ->
+                item { ErrorBanner(message = message, showRetry = true, onRetry = onRefresh, text = text) }
+            }
+
+            item {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    Text(
+                        text = text("opportunities", "Featured opportunities"),
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = Modifier.semantics { heading() },
+                    )
+                }
+            }
+
+            when {
+                state.isLoading && state.snapshot == null -> item { LoadingPanel(text) }
+                featuredOpportunities.isEmpty() -> item {
+                    Text(
+                        text = text(
+                            "noOpportunities",
+                            "No matching opportunities. Try another search or filter.",
+                        ),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+                else -> items(
+                    items = featuredOpportunities,
+                    key = Opportunity::id,
+                ) { opportunity ->
+                    HomeActivityRow(
+                        opportunity = opportunity,
+                        onClick = { onSelectOpportunity(opportunity) },
+                        language = language,
+                        catalog = catalog,
+                    )
+                }
+            }
+
+            item {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(10.dp),
+                ) {
+                    Text(
+                        text = text("exploreMore", "Explore more"),
                         style = MaterialTheme.typography.titleLarge,
                         modifier = Modifier.semantics { heading() },
                     )
@@ -544,54 +764,89 @@ private fun HomeScreen(
                     }
                 }
             }
+        }
+    }
+}
 
-            item {
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
-                ) {
-                    Text(
-                        text = text("opportunities", "Featured opportunities"),
-                        style = MaterialTheme.typography.titleLarge,
-                        modifier = Modifier.semantics { heading() },
-                    )
-                    Text(
-                        text = text(
-                            "sourceDetails",
-                            "A few source-backed programs to get you started.",
-                        ),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
+@Composable
+private fun HomeFilterMenu(
+    label: String,
+    selected: String,
+    options: List<Pair<String, () -> Unit>>,
+    modifier: Modifier = Modifier,
+) {
+    var expanded by rememberSaveable { mutableStateOf(false) }
+    Box(modifier) {
+        OutlinedButton(
+            onClick = { expanded = true },
+            modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp),
+            contentPadding = PaddingValues(horizontal = 6.dp, vertical = 6.dp),
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(label, style = MaterialTheme.typography.labelSmall)
+                    Text(selected, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 }
+                Icon(
+                    painter = painterResource(R.drawable.ic_chevron_right),
+                    contentDescription = null,
+                    modifier = Modifier.size(18.dp).rotate(90f),
+                )
             }
+        }
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            modifier = Modifier.heightIn(max = 360.dp),
+        ) {
+            options.forEach { (optionLabel, onSelect) ->
+                DropdownMenuItem(
+                    text = { Text(optionLabel) },
+                    onClick = {
+                        expanded = false
+                        onSelect()
+                    },
+                )
+            }
+        }
+    }
+}
 
-            when {
-                state.isLoading && state.snapshot == null -> item { LoadingPanel(text) }
-                featuredOpportunities.isEmpty() -> item {
-                    Text(
-                        text = text(
-                            "noOpportunities",
-                            "Open Opportunities to search all verified listings.",
-                        ),
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                }
-                else -> items(
-                    items = featuredOpportunities,
-                    key = Opportunity::id,
-                ) { opportunity ->
-                    OpportunityCard(
-                        opportunity = opportunity,
-                        isFavorite = opportunity.id in state.favoriteIds,
-                        onDetails = { onSelectOpportunity(opportunity) },
-                        onToggleFavorite = { onToggleFavorite(opportunity.id) },
-                        language = language,
-                        catalog = catalog,
-                        text = text,
-                    )
-                }
-            }
+@Composable
+private fun HomeActivityRow(
+    opportunity: Opportunity,
+    onClick: () -> Unit,
+    language: AppLanguage,
+    catalog: AppStringCatalog,
+) {
+    val localized = remember(opportunity, language, catalog) {
+        OpportunityLocalization.resolve(opportunity, language, catalog)
+    }
+    Surface(
+        modifier = Modifier.fillMaxWidth().clickable(onClick = onClick),
+        color = MaterialTheme.colorScheme.surface,
+        shape = MaterialTheme.shapes.medium,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+    ) {
+        Column(
+            modifier = Modifier.padding(14.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp),
+        ) {
+            Text(localized.category, style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.primary)
+            Text(localized.title, style = MaterialTheme.typography.titleMedium,
+                maxLines = 2, overflow = TextOverflow.Ellipsis)
+            Text(
+                listOfNotNull(
+                    localized.organization,
+                    localized.city.takeIf(String::isNotBlank),
+                    opportunity.startDate?.let { formatDate(it, language) },
+                ).joinToString(" · "),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+            )
         }
     }
 }
@@ -602,12 +857,12 @@ private fun HomePathButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
 ) {
-    OutlinedButton(
+    StoryButton(
         onClick = onClick,
         modifier = modifier
             .heightIn(min = 52.dp)
             .padding(top = 0.dp),
-        shape = MaterialTheme.shapes.medium,
+        kind = StoryButtonKind.SECONDARY,
     ) {
         Text(label)
     }
@@ -734,6 +989,7 @@ internal fun localizedFilterLabels(
     relevance = text("sortBestMatch", "Best match"),
 )
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun BrowseScreen(
     state: BrowseUiState,
@@ -748,6 +1004,12 @@ private fun BrowseScreen(
     onQueryChanged: (String) -> Unit,
     onCategoryChanged: (String?) -> Unit,
     onOpenFilters: () -> Unit,
+    showMap: Boolean,
+    onMapViewChanged: (Boolean) -> Unit,
+    mapDisplayMode: String,
+    onMapDisplayModeChanged: (String) -> Unit,
+    selectedMapPinId: String?,
+    onMapPinSelected: (String) -> Unit,
     onClear: () -> Unit,
     onRefresh: () -> Unit,
     onRetry: () -> Unit,
@@ -763,6 +1025,19 @@ private fun BrowseScreen(
         }
         else -> state.opportunities
     }
+    val context = LocalContext.current
+    var websiteUnavailable by remember { mutableStateOf(false) }
+    val mapPins = remember(visibleOpportunities, language, catalog) {
+        visibleOpportunities.mapNotNull { opportunity ->
+            val localized = OpportunityLocalization.resolve(opportunity, language, catalog)
+            opportunity.toMapOpportunityPin(
+                displayTitle = localized.title,
+                displayOrganization = localized.organization,
+                displayLocation = listOf(localized.city, localized.region)
+                    .filter(String::isNotBlank).joinToString(", "),
+            )
+        }
+    }
     val activeFilterCount = opportunityFilterPanelActiveCount(state.filters)
     val hasFilters = state.query.isNotBlank() ||
         state.filters.hasActiveFilters ||
@@ -776,7 +1051,8 @@ private fun BrowseScreen(
             modifier = Modifier
                 .widthIn(max = AppScreenMaxWidth)
                 .padding(horizontal = AppScreenPadding)
-                .fillMaxHeight(),
+                .fillMaxHeight()
+                .testTag("browse-results"),
             contentPadding = PaddingValues(
                 top = AppScreenTopPadding,
                 bottom = 24.dp,
@@ -788,18 +1064,15 @@ private fun BrowseScreen(
                 mode = mode,
                 highSchoolFocus = highSchoolFocus,
                 shellText = shellText,
+                query = state.query,
             )
         }
 
         item {
             Card(
                 shape = MaterialTheme.shapes.medium,
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-                border = BorderStroke(
-                    1.dp,
-                    MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.55f),
-                ),
-                elevation = CardDefaults.cardElevation(defaultElevation = AppCardElevation),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
+                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
             ) {
                 Column(
                     modifier = Modifier
@@ -807,19 +1080,14 @@ private fun BrowseScreen(
                         .padding(horizontal = 16.dp, vertical = 14.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
-                    NearbyAndAlertsControls(
-                        filters = state.filters,
-                        nearbyLocationState = nearbyLocationState,
-                        onUseNearby = onUseNearby,
-                        onClearNearby = onClearNearby,
-                        alertsEnabled = alertsEnabled,
-                        onToggleAlerts = onToggleAlerts,
-                        text = shellText,
-                    )
                     OutlinedTextField(
                         value = state.query,
                         onValueChange = onQueryChanged,
                         modifier = Modifier.fillMaxWidth(),
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedContainerColor = MaterialTheme.colorScheme.surface,
+                            unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                        ),
                         shape = MaterialTheme.shapes.small,
                         label = { Text(shellText("search", "Search opportunities")) },
                         placeholder = {
@@ -834,7 +1102,7 @@ private fun BrowseScreen(
                         leadingIcon = {
                             Icon(
                                 painter = painterResource(R.drawable.ic_search),
-                                contentDescription = shellText("searchIcon", "Search"),
+                                contentDescription = null,
                             )
                         },
                         trailingIcon = {
@@ -851,21 +1119,40 @@ private fun BrowseScreen(
                         },
                     )
 
-                    OutlinedButton(
-                        onClick = onOpenFilters,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .heightIn(min = 52.dp),
-                        shape = MaterialTheme.shapes.medium,
+                    FlowRow(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
                     ) {
-                        Text(
-                            text = if (activeFilterCount == 0) {
-                                shellText("filters", "Filters")
-                            } else {
-                                "${shellText("filters", "Filters")} ($activeFilterCount)"
-                            },
+                        OutlinedButton(
+                            onClick = onOpenFilters,
+                            modifier = Modifier.widthIn(min = 96.dp).heightIn(min = 48.dp),
+                            shape = MaterialTheme.shapes.small,
+                        ) {
+                            Text(if (activeFilterCount == 0) shellText("filters", "Filters") else "${shellText("filters", "Filters")} ($activeFilterCount)")
+                        }
+                        FilterChip(
+                            selected = !showMap,
+                            onClick = { onMapViewChanged(false) },
+                            modifier = Modifier.widthIn(min = 80.dp).heightIn(min = 48.dp).testTag("browse-list-view"),
+                            label = { Text(shellText("list", "List")) },
+                        )
+                        FilterChip(
+                            selected = showMap,
+                            onClick = { onMapViewChanged(true) },
+                            modifier = Modifier.widthIn(min = 80.dp).heightIn(min = 48.dp).testTag("browse-map-view"),
+                            label = { Text(shellText("map", "Map")) },
                         )
                     }
+
+                    NearbyAndAlertsControls(
+                        filters = state.filters,
+                        nearbyLocationState = nearbyLocationState,
+                        onUseNearby = onUseNearby,
+                        onClearNearby = onClearNearby,
+                        alertsEnabled = alertsEnabled,
+                        onToggleAlerts = onToggleAlerts,
+                        text = shellText,
+                    )
 
                     if (state.categories.isNotEmpty()) {
                         Row(
@@ -887,6 +1174,7 @@ private fun BrowseScreen(
                                 FilterChip(
                                     selected = state.selectedCategory == category,
                                     onClick = { onCategoryChanged(category) },
+                                    modifier = Modifier.testTag("browse-category-$category"),
                                     shape = MaterialTheme.shapes.small,
                                     colors = browseFilterChipColors(
                                         selected = state.selectedCategory == category,
@@ -935,6 +1223,7 @@ private fun BrowseScreen(
                         resultCount = visibleOpportunities.size,
                         onRefresh = onRefresh,
                         text = shellText,
+                        language = language,
                     )
                 }
             }
@@ -944,14 +1233,34 @@ private fun BrowseScreen(
             item {
                 ErrorBanner(
                     message = message,
-                    showRetry = state.snapshot == null,
+                    showRetry = true,
                     onRetry = onRetry,
                     text = shellText,
                 )
             }
         }
 
-        if (state.isLoading && state.snapshot == null) {
+        if (!state.isLoading && !state.isRefreshing && visibleOpportunities.isEmpty() && state.errorMessage != null) {
+            item {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    StoryButton(
+                        onClick = { websiteUnavailable = !openHttps(context, OnlineBrowseUrl) },
+                        modifier = Modifier.testTag("browse-online"),
+                        kind = StoryButtonKind.SECONDARY,
+                    ) { Text(shellText("browseOnline", "Browse online")) }
+                    Text(shellText("opensWebsite", "Opens website"), style = MaterialTheme.typography.bodySmall)
+                    if (websiteUnavailable) {
+                        Text(
+                            shellText("websiteUnavailable", "The website could not be opened on this device."),
+                            color = MaterialTheme.colorScheme.error,
+                            modifier = Modifier.testTag("browse-online-unavailable"),
+                        )
+                    }
+                }
+            }
+        }
+
+        if ((state.isLoading || state.isRefreshing) && visibleOpportunities.isEmpty()) {
             item { LoadingPanel(text = shellText) }
         } else if (visibleOpportunities.isEmpty()) {
             item {
@@ -962,11 +1271,32 @@ private fun BrowseScreen(
                     text = shellText,
                 )
             }
+        } else if (showMap) {
+            item {
+                OpportunityMap3D(
+                    pins = mapPins,
+                    selectedPinId = selectedMapPinId,
+                    onPinSelected = { onMapPinSelected(it.id) },
+                    onShowDetails = { pin ->
+                        visibleOpportunities.firstOrNull { it.id == pin.id }?.let(onSelectOpportunity)
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                    strings = localizedMapStrings(catalog = catalog, language = language, text = shellText),
+                    offlineLabel = shellText("offlinePreview", "Offline preview"),
+                    displayMode = mapDisplayMode,
+                    onDisplayModeChanged = onMapDisplayModeChanged,
+                    loadingMessage = shellText("mapLoading", "Loading interactive map…"),
+                    unavailableMessage = shellText(
+                        "mapUnavailable",
+                        "Interactive map unavailable. Showing offline preview. Choose 3D or 2D to retry, or {list} to browse activities.",
+                    ).replace("{list}", shellText("list", "List")),
+                )
+                StoryButton(onClick = { onMapViewChanged(false) }, kind = StoryButtonKind.SECONDARY) {
+                    Text(shellText("list", "List"))
+                }
+            }
         } else {
-            items(
-                items = visibleOpportunities,
-                key = Opportunity::id,
-            ) { opportunity ->
+            items(items = visibleOpportunities, key = Opportunity::id) { opportunity ->
                 OpportunityCard(
                     opportunity = opportunity,
                     isFavorite = opportunity.id in state.favoriteIds,
@@ -982,65 +1312,47 @@ private fun BrowseScreen(
     }
 }
 
+internal fun localizedMapStrings(language: AppLanguage, text: (String, String) -> String) = OpportunityMapStrings(
+    mapTitle = text("map", "Map"),
+    singleVisibleFormat = "%1\$s ${text("visible", "visible")}",
+    multipleVisibleFormat = "%1\$s ${text("visible", "visible")}",
+    mapHint = text("offlineMapHint", "Offline schematic. Locations are approximate. Online programs and results without coordinates remain in the list."),
+    selectedLabel = text("selectedState", "Selected"),
+    notSelectedLabel = text("notSelectedState", "Not selected"),
+    markerPositionFormat = text("mapMarkerPosition", "Marker {index} of {count}").replace("{index}", "%1\$s").replace("{count}", "%2\$s"),
+    markerActionLabel = text("mapMarkerActionLabel", "Select opportunity"),
+    selectedOpportunityHeading = text("details", "Details"),
+    sourceDetailsHint = text("sourceDetails", "Confirm details with the provider."),
+    showDetailsAction = text("details", "Details"),
+    emptyTitle = text("noLocationsToMap", "No locations to map"),
+    emptyMessage = text("mapNoCoordinates", "These results have no physical locations to map. Use the list to see every result."),
+    numberLocale = Locale.forLanguageTag(language.localeTag),
+)
+
 @Composable
 private fun BrandHeader(
     mode: BrowseMode,
     highSchoolFocus: HighSchoolFocus,
     shellText: (String, String) -> String,
+    query: String,
 ) {
-    val title = when (mode) {
-        BrowseMode.OPPORTUNITIES -> shellText("navOpportunities", "Opportunities")
-        BrowseMode.HIGH_SCHOOL -> shellText("highSchool", "High School")
-    }
-    val subtitle = when (mode) {
-        BrowseMode.OPPORTUNITIES -> shellText(
-            "mission",
-            stringResource(R.string.browse_subtitle),
-        )
-        BrowseMode.HIGH_SCHOOL -> when (highSchoolFocus) {
-            HighSchoolFocus.ALL -> "Programs for teens, volunteer hours, co-op, SHSM, and mentorship."
-            HighSchoolFocus.VOLUNTEER -> "Free opportunities that can help with volunteer hours."
-            HighSchoolFocus.COOP -> "Free co-op and SHSM-connected opportunities for students."
-            HighSchoolFocus.MENTORSHIP -> "Free mentorship and career-connected opportunities."
-        }
-    }
-
-    Surface(
-        color = MaterialTheme.colorScheme.primaryContainer,
-        modifier = Modifier
-            .fillMaxWidth(),
-        shape = RoundedCornerShape(AppCardRadius),
-        tonalElevation = 2.dp,
-        shadowElevation = 1.dp,
+    Row(
+        modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        Row(
-            modifier = Modifier.padding(horizontal = 18.dp, vertical = 20.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
+        Text(
+            text = if (mode == BrowseMode.HIGH_SCHOOL) shellText("highSchool", "High School") else shellText("navOpportunities", "Opportunities"),
+            style = MaterialTheme.typography.headlineSmall,
+            modifier = Modifier.weight(1f).testTag("browse-screen-title").semantics { heading() },
+        )
+        if (LocalDensity.current.fontScale < 1.6f) {
             Image(
                 painter = painterResource(R.drawable.app_logo),
                 contentDescription = null,
                 contentScale = ContentScale.Fit,
-                modifier = Modifier
-                    .size(72.dp)
-                    .clip(RoundedCornerShape(18.dp)),
+                modifier = Modifier.width(88.dp).height(56.dp),
             )
-            Spacer(Modifier.width(16.dp))
-            Column(verticalArrangement = Arrangement.spacedBy(3.dp)) {
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.headlineSmall,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer,
-                    modifier = Modifier
-                        .testTag("browse-screen-title")
-                        .semantics { heading() },
-                )
-                Text(
-                    text = subtitle,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer,
-                )
-            }
         }
     }
 }
@@ -1052,70 +1364,37 @@ private fun FeedStatusRow(
     resultCount: Int,
     onRefresh: () -> Unit,
     text: (String, String) -> String,
+    language: AppLanguage,
 ) {
-    Surface(
-        color = MaterialTheme.colorScheme.surface,
-        shape = MaterialTheme.shapes.medium,
-        tonalElevation = 1.dp,
+    Column(
+        modifier = Modifier.fillMaxWidth().padding(12.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(10.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(10.dp),
-        ) {
-            Surface(
-                color = when (snapshot?.source) {
-                    OpportunityFeedSource.PRIMARY_NETWORK,
-                    OpportunityFeedSource.FALLBACK_NETWORK,
-                    -> MaterialTheme.colorScheme.secondaryContainer
-
-                    else -> MaterialTheme.colorScheme.surfaceVariant
-                },
-                shape = CircleShape,
-            ) {
-                Text(
-                    text = feedLabel(snapshot, text),
-                    style = MaterialTheme.typography.labelLarge,
-                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 7.dp),
-                )
-            }
-            Text(
-                text = resultSummary(snapshot, resultCount, text),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.weight(1f),
-            )
-            TextButton(
-                onClick = onRefresh,
-                enabled = !isRefreshing,
-                modifier = Modifier.heightIn(min = 48.dp),
-                shape = MaterialTheme.shapes.small,
-            ) {
-                if (isRefreshing) {
-                    CircularProgressIndicator(
-                        modifier = Modifier
-                            .size(20.dp)
-                            .semantics {
-                                contentDescription = text(
-                                    "checkingLiveSources",
-                                    "Refreshing opportunities",
-                                )
-                            },
-                        strokeWidth = 2.dp,
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Text("$resultCount ${text("visible", "available")}", style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.testTag("feed-result-count"))
+                snapshot?.let {
+                    Text(
+                        "${text("lastVerified", "Last checked")}: ${formatDate(it.lastUpdated.toString(), language)}",
+                        style = MaterialTheme.typography.bodySmall,
+                        modifier = Modifier.testTag("feed-last-verified-date"),
                     )
-                    Spacer(Modifier.width(8.dp))
                 }
-                Text(
-                    if (isRefreshing) {
-                        text("checkingLiveSources", "Refreshing")
-                    } else {
-                        text("refreshResearch", "Refresh")
-                    },
-                )
+            }
+            TextButton(onClick = onRefresh, enabled = !isRefreshing, modifier = Modifier.heightIn(min = 48.dp)) {
+                if (isRefreshing) {
+                    CircularProgressIndicator(modifier = Modifier.size(20.dp), strokeWidth = 2.dp)
+                } else {
+                    Text(text("refreshResearch", "Refresh"))
+                }
             }
         }
+        Text(
+            if (isRefreshing) text("checkingLiveSources", "Checking live sources") else feedLabel(snapshot, text),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
     }
 }
 
@@ -1127,20 +1406,6 @@ private fun browseFilterChipColors(selected: Boolean) = FilterChipDefaults.filte
     labelColor = MaterialTheme.colorScheme.onSurfaceVariant,
     iconColor = MaterialTheme.colorScheme.onSurfaceVariant,
 )
-
-private fun resultSummary(
-    snapshot: OpportunityFeedSnapshot?,
-    resultCount: Int,
-    text: (String, String) -> String,
-): String {
-    val visible = "$resultCount ${text("visible", "available")}".trim()
-    val declared = snapshot?.declaredRecordCount ?: return visible
-    return if (declared == resultCount) {
-        visible
-    } else {
-        "$visible • $declared ${text("lastVerified", "verified")}".trim()
-    }
-}
 
 private fun feedLabel(
     snapshot: OpportunityFeedSnapshot?,
@@ -1154,6 +1419,7 @@ private fun feedLabel(
     else -> text("previewDatabase", "Offline-ready")
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun OpportunityCard(
     opportunity: Opportunity,
@@ -1169,7 +1435,7 @@ private fun OpportunityCard(
         OpportunityLocalization.resolve(opportunity, language, catalog)
     }
     Card(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth().testTag("opportunity-card-${opportunity.id}"),
         shape = RoundedCornerShape(AppCardRadius),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.7f)),
@@ -1179,13 +1445,12 @@ private fun OpportunityCard(
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            Row(
+            FlowRow(
                 modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 CategoryPill(localized.category)
-                Spacer(Modifier.weight(1f))
                 FreePill(text("freeShort", "FREE"))
             }
             Text(
@@ -1200,7 +1465,7 @@ private fun OpportunityCard(
                 color = MaterialTheme.colorScheme.primary,
             )
             Text(
-                text = localized.summary,
+                text = localized.description,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 maxLines = 3,
@@ -1213,6 +1478,13 @@ private fun OpportunityCard(
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
+            OpportunitySchedule.range(opportunity.startDate, opportunity.endDate, Locale.forLanguageTag(language.localeTag))?.let { schedule ->
+                Text(
+                    text = "${text(if (opportunity.startDate == null) "endDate" else "date", "Date")}: $schedule",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.End),
@@ -1358,6 +1630,7 @@ private fun ErrorBanner(
                 TextButton(
                     onClick = onRetry,
                     shape = MaterialTheme.shapes.small,
+                    modifier = Modifier.testTag("feed-error-retry"),
                 ) {
                     Text(text("refreshResearch", "Try again"))
                 }
@@ -1420,8 +1693,9 @@ private fun EmptyPanel(
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun OpportunityDetailScreen(
+internal fun OpportunityDetailScreen(
     opportunity: Opportunity,
     isFavorite: Boolean,
     onBack: () -> Unit,
@@ -1431,6 +1705,7 @@ private fun OpportunityDetailScreen(
     text: (String, String) -> String,
 ) {
     val context = LocalContext.current
+    var calendarUnavailable by rememberSaveable(opportunity.id) { mutableStateOf(false) }
     val localized = remember(opportunity, language, catalog) {
         OpportunityLocalization.resolve(opportunity, language, catalog)
     }
@@ -1491,7 +1766,7 @@ private fun OpportunityDetailScreen(
                             Text(if (isFavorite) text("saved", "Saved") else text("save", "Save"))
                         }
                     }
-                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         CategoryPill(localized.category)
                         FreePill(text("freeShort", "FREE"))
                     }
@@ -1574,6 +1849,24 @@ private fun OpportunityDetailScreen(
                         modifier = Modifier.semantics { heading() },
                     )
 
+                    OutlinedButton(
+                        onClick = {
+                            calendarUnavailable = !OpportunityCalendar.open(
+                                context, opportunity, localized.title,
+                                localized.address?.takeIf(String::isNotBlank) ?: locationLabel(opportunity, localized),
+                                description = localized.description,
+                            )
+                        },
+                        modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp).testTag("opportunity-calendar"),
+                    ) { Text(text("addToCalendar", "Add to calendar")) }
+                    if (calendarUnavailable) {
+                        Text(
+                            text("calendarUnavailable", "No calendar app is available. You can still save this listing and check the provider’s dates."),
+                            color = MaterialTheme.colorScheme.error,
+                            modifier = Modifier.testTag("opportunity-calendar-unavailable"),
+                        )
+                    }
+
                     val registrationUrl = opportunity.registrationUrl ?: opportunity.sourceUrl
                     Button(
                         shape = MaterialTheme.shapes.medium,
@@ -1590,7 +1883,7 @@ private fun OpportunityDetailScreen(
                             .fillMaxWidth()
                             .heightIn(min = 52.dp),
                     ) {
-                        Text(text("registerApply", "Open registration"))
+                        Text(text(if (registrationUrl.trim() == opportunity.sourceUrl.trim()) "openProgramPage" else "registerApply", "Open program page"))
                     }
 
                     if (opportunity.address != null ||
@@ -1663,17 +1956,15 @@ private fun DetailFacts(
             DetailFactRow(text("region", "Location"), locationLabel(opportunity, localized))
             HorizontalDivider()
             DetailFactRow(text("ages", "Ages"), ageLabel(opportunity, text))
-            opportunity.startDate?.let { date ->
+            OpportunitySchedule.range(opportunity.startDate, opportunity.endDate, Locale.forLanguageTag(language.localeTag))?.let { schedule ->
                 HorizontalDivider()
-                DetailFactRow(text("date", "Starts"), formatDate(date, language))
+                DetailFactRow(text(if (opportunity.startDate == null) "endDate" else "date", "Date"), schedule)
             }
-            opportunity.endDate?.let { date ->
-                HorizontalDivider()
-                DetailFactRow(text("date", "Ends"), formatDate(date, language))
-            }
-            opportunity.deadline?.let { date ->
-                HorizontalDivider()
-                DetailFactRow(text("deadline", "Apply by"), formatDate(date, language))
+            if (OpportunitySchedule.hasDistinctDeadline(opportunity.startDate, opportunity.deadline)) {
+                OpportunitySchedule.dateTime(opportunity.deadline, Locale.forLanguageTag(language.localeTag))?.let { deadline ->
+                    HorizontalDivider()
+                    DetailFactRow(text("deadline", "Apply by"), deadline)
+                }
             }
             if (opportunity.languages.isNotEmpty()) {
                 HorizontalDivider()
@@ -1783,7 +2074,7 @@ private fun SupportScreen(text: (String, String) -> String) {
             verticalArrangement = Arrangement.spacedBy(14.dp),
         ) {
             item {
-                SupportHeroCard()
+                SupportHeroCard(text)
             }
             item {
                 Card(
@@ -1843,7 +2134,7 @@ private fun SupportScreen(text: (String, String) -> String) {
 }
 
 @Composable
-private fun SupportHeroCard() {
+private fun SupportHeroCard(text: (String, String) -> String) {
     Card(
         shape = RoundedCornerShape(AppCardRadius),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
@@ -1877,12 +2168,12 @@ private fun SupportHeroCard() {
                 }
             }
             Text(
-                "GTA FREE STEM support",
+                text("support", "Support"),
                 style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onSurface,
             )
             Text(
-                "Need us? We're here to help fix issues and improve the app together.",
+                text("supportHeading", "Built to be easier for students, parents, educators, and community groups."),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(horizontal = 4.dp),
@@ -1988,6 +2279,8 @@ private fun formatDate(raw: String, language: AppLanguage = AppLanguage.ENGLISH)
 private fun languageName(code: String, catalog: AppStringCatalog): String =
     AppLanguage.matching(code)?.let(catalog::metadata)?.nativeName
         ?: code.uppercase(Locale.ROOT)
+
+internal const val OnlineBrowseUrl = "https://gta-free-stem.pages.dev/opportunities/"
 
 private fun openHttps(context: Context, rawUrl: String): Boolean {
     val uri = runCatching { Uri.parse(rawUrl.trim()) }.getOrNull() ?: return false

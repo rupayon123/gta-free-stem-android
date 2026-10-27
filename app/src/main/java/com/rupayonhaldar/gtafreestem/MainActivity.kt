@@ -13,6 +13,8 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
+import androidx.core.view.WindowCompat
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.unit.LayoutDirection as ComposeLayoutDirection
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -86,6 +88,17 @@ class MainActivity : ComponentActivity() {
             val preferences by preferencesViewModel.uiState.collectAsStateWithLifecycle()
             val nearbyLocationState by nearbyLocationViewModel.state.collectAsStateWithLifecycle()
             val darkTheme = preferences.theme.resolveDarkTheme(isSystemInDarkTheme())
+            SideEffect {
+                // In-app appearance can differ from the system appearance used at launch.
+                WindowCompat.getInsetsController(window, window.decorView).apply {
+                    isAppearanceLightStatusBars = !darkTheme
+                    isAppearanceLightNavigationBars = !darkTheme
+                }
+                if (Build.VERSION.SDK_INT < 29) {
+                    @Suppress("DEPRECATION")
+                    window.navigationBarColor = if (darkTheme) 0xFF0E2129.toInt() else 0xFFFEFEFA.toInt()
+                }
+            }
             LaunchedEffect(preferences.resolvedLanguage) {
                 OpportunityNotificationPublisher.ensureChannel(
                     context = applicationContext,

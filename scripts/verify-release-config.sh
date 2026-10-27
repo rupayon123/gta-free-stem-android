@@ -16,7 +16,7 @@ EXPECTED_APPLICATION_ID=${EXPECTED_APPLICATION_ID:-com.rupayonhaldar.gtafreestem
 EXPECTED_COMPILE_SDK=${EXPECTED_COMPILE_SDK:-36}
 EXPECTED_TARGET_SDK=${EXPECTED_TARGET_SDK:-36}
 EXPECTED_MIN_SDK=${EXPECTED_MIN_SDK:-26}
-EXPECTED_VERSION_CODE=${EXPECTED_VERSION_CODE:-3}
+EXPECTED_VERSION_CODE=${EXPECTED_VERSION_CODE:-5}
 EXPECTED_VERSION_NAME=${EXPECTED_VERSION_NAME:-1.1.0}
 REQUIRE_SIGNING=${REQUIRE_SIGNING:-0}
 
@@ -215,19 +215,34 @@ else
   fail "source manifest and extraction rules must exclude local-only app data from backup and transfer"
 fi
 
+if ! gta_source_permissions=$(python3 - "$MANIFEST_FILE" <<'PY'
+import sys
+import xml.etree.ElementTree as ET
+android = '{http://schemas.android.com/apk/res/android}'
+tools = '{http://schemas.android.com/tools}'
+root = ET.parse(sys.argv[1]).getroot()
+for node in root:
+    if node.tag in ('uses-permission', 'uses-permission-sdk-23') and node.get(tools + 'node') != 'remove':
+        print(node.attrib[android + 'name'])
+PY
+); then
+  fail "source manifest permissions could not be parsed"
+  gta_source_permissions=''
+fi
+
 for expected_permission in \
   android.permission.INTERNET \
   android.permission.ACCESS_COARSE_LOCATION \
   android.permission.POST_NOTIFICATIONS
 do
-  if grep -Eq "<uses-permission[[:space:]][^>]*android:name=\"${expected_permission//./\\.}\"" "$MANIFEST_FILE"; then
+  if printf '%s\n' "$gta_source_permissions" | grep -Fqx "$expected_permission"; then
     pass "source manifest declares $expected_permission"
   else
     fail "source manifest is missing $expected_permission"
   fi
 done
 
-unexpected_permissions=$(sed -nE 's/.*<uses-permission[^>]*android:name="([^"]+)".*/\1/p' "$MANIFEST_FILE" | \
+unexpected_permissions=$(printf '%s\n' "$gta_source_permissions" | \
   grep -Fvx 'android.permission.INTERNET' | \
   grep -Fvx 'android.permission.ACCESS_COARSE_LOCATION' | \
   grep -Fvx 'android.permission.POST_NOTIFICATIONS' || true)

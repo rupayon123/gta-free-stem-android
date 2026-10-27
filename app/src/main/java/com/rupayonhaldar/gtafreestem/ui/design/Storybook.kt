@@ -1,7 +1,8 @@
 package com.rupayonhaldar.gtafreestem.ui.design
 
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.Spring
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -59,73 +60,13 @@ object StoryRadius {
 val StoryLavender = Color(0xFF8C80C7)
 val StoryOrange = Color(0xFFE87A33)
 
-private val LightGradient = listOf(
-    Color(0xFFEEF9F4),
-    Color(0xFFFBF9EC),
-    Color(0xFFF6F8F4),
-)
-private val DarkGradient = listOf(
-    Color(0xFF071116),
-    Color(0xFF091F26),
-    Color(0xFF0B1A21),
-)
-
 @Composable
 fun StorybookBackground(
     modifier: Modifier = Modifier,
     content: @Composable BoxScope.() -> Unit,
 ) {
-    val isDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
-    val colors = if (isDark) DarkGradient else LightGradient
-    val primaryGlow = MaterialTheme.colorScheme.primary.copy(
-        alpha = if (isDark) 0.07f else 0.10f,
-    )
-    val tertiaryGlow = MaterialTheme.colorScheme.tertiary.copy(
-        alpha = if (isDark) 0.035f else 0.07f,
-    )
-    Box(modifier = modifier.fillMaxSize()) {
-        Canvas(
-            modifier = Modifier
-                .matchParentSize()
-                .semantics { },
-        ) {
-            drawRect(
-                brush = Brush.linearGradient(
-                    colors = colors,
-                    start = Offset.Zero,
-                    end = Offset(size.width, size.height),
-                ),
-            )
-            drawOval(
-                brush = Brush.radialGradient(
-                    colors = listOf(
-                        primaryGlow,
-                        Color.Transparent,
-                    ),
-                    center = Offset(size.width * 0.92f, size.height * 0.05f),
-                    radius = size.minDimension * 0.55f,
-                ),
-                topLeft = Offset(size.width * 0.50f, -size.height * 0.20f),
-                size = Size(size.width * 0.75f, size.height * 0.65f),
-            )
-            drawOval(
-                brush = Brush.radialGradient(
-                    colors = listOf(
-                        tertiaryGlow,
-                        Color.Transparent,
-                    ),
-                    center = Offset(size.width * 0.08f, size.height * 0.92f),
-                    radius = size.minDimension * 0.50f,
-                ),
-                topLeft = Offset(-size.width * 0.45f, size.height * 0.62f),
-                size = Size(size.width * 0.90f, size.height * 0.55f),
-            )
-        }
-        CompositionLocalProvider(
-            LocalContentColor provides MaterialTheme.colorScheme.onBackground,
-        ) {
-            content()
-        }
+    Surface(modifier = modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
+        Box(content = content)
     }
 }
 
@@ -137,22 +78,15 @@ fun StoryCard(
     onClick: (() -> Unit)? = null,
     content: @Composable BoxScope.() -> Unit,
 ) {
-    val isDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
     val interactionSource = remember { MutableInteractionSource() }
     val pressed by interactionSource.collectIsPressedAsState()
     val scale by animateFloatAsState(
         targetValue = if (pressed && onClick != null) 0.985f else 1f,
-        animationSpec = tween(160),
+        animationSpec = spring(dampingRatio = 0.82f, stiffness = Spring.StiffnessMedium),
         label = "story-card-press",
     )
     val shape = RoundedCornerShape(cornerRadius)
-    val containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.97f)
-    val borderColor = if (isDark) {
-        Color.White.copy(alpha = 0.14f)
-    } else {
-        MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)
-    }
-    val elevation = if (isDark) 5.dp else 7.dp
+    val containerColor = MaterialTheme.colorScheme.surface
     val surfaceModifier = modifier.graphicsLayer {
         scaleX = scale
         scaleY = scale
@@ -164,8 +98,6 @@ fun StoryCard(
             shape = shape,
             color = containerColor,
             contentColor = MaterialTheme.colorScheme.onSurface,
-            border = BorderStroke(0.75.dp, borderColor),
-            shadowElevation = elevation,
         ) {
             Box(modifier = Modifier.padding(padding), content = content)
         }
@@ -176,8 +108,6 @@ fun StoryCard(
             shape = shape,
             color = containerColor,
             contentColor = MaterialTheme.colorScheme.onSurface,
-            border = BorderStroke(0.75.dp, borderColor),
-            shadowElevation = elevation,
             interactionSource = interactionSource,
         ) {
             Box(modifier = Modifier.padding(padding), content = content)
@@ -263,7 +193,7 @@ fun StoryButton(
     val pressed by interactionSource.collectIsPressedAsState()
     val scale by animateFloatAsState(
         targetValue = if (pressed) 0.985f else 1f,
-        animationSpec = tween(160),
+        animationSpec = spring(dampingRatio = 0.82f, stiffness = Spring.StiffnessMedium),
         label = "story-button-press",
     )
     val isDark = MaterialTheme.colorScheme.background.luminance() < 0.5f
