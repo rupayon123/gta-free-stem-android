@@ -346,7 +346,9 @@
     "opensWebsite": "Opens website",
     "websiteUnavailable": "The website could not be opened on this device.",
     "openProgramPage": "Open program page",
-    "addToCalendar": "Add to calendar"
+    "addToCalendar": "Add to calendar",
+    "mapLoading": "Loading interactive map…",
+    "mapUnavailable": "Interactive map unavailable. Showing offline preview. Choose 3D or 2D to retry, or {list} to browse activities."
   },
   "fr": {
     "browse": "Parcourir",
@@ -603,7 +605,9 @@
     "opensWebsite": "Ouvre le site Web",
     "websiteUnavailable": "Impossible d’ouvrir le site Web sur cet appareil.",
     "openProgramPage": "Ouvrir la page du programme",
-    "addToCalendar": "Ajouter au calendrier"
+    "addToCalendar": "Ajouter au calendrier",
+    "mapLoading": "Chargement de la carte interactive…",
+    "mapUnavailable": "Carte interactive indisponible. Un aperçu hors ligne est affiché. Choisissez 3D ou 2D pour réessayer, ou {list} pour parcourir les activités."
   },
   "zh": {
     "browse": "浏览",
@@ -860,7 +864,9 @@
     "opensWebsite": "打开网站",
     "websiteUnavailable": "无法在此设备上打开网站。",
     "openProgramPage": "打开活动页面",
-    "addToCalendar": "添加到日历"
+    "addToCalendar": "添加到日历",
+    "mapLoading": "正在加载互动地图…",
+    "mapUnavailable": "互动地图暂时不可用，正在显示离线预览。请选择 3D 或 2D 重试，或选择{list}浏览活动。"
   },
   "yue": {
     "browse": "瀏覽",
@@ -1117,7 +1123,9 @@
     "opensWebsite": "開啟網站",
     "websiteUnavailable": "無法喺呢部裝置開啟網站。",
     "openProgramPage": "開啟活動頁面",
-    "addToCalendar": "加入行事曆"
+    "addToCalendar": "加入行事曆",
+    "mapLoading": "載入緊互動地圖…",
+    "mapUnavailable": "互動地圖暫時用唔到，現正顯示離線預覽。揀 3D 或 2D 再試，或者揀{list}睇活動。"
   },
   "pa": {
     "browse": "ਬ੍ਰਾਊਜ਼",
@@ -1374,7 +1382,9 @@
     "opensWebsite": "ਵੈੱਬਸਾਈਟ ਖੁੱਲ੍ਹੇਗੀ",
     "websiteUnavailable": "ਇਸ ਡਿਵਾਈਸ ਉੱਤੇ ਵੈੱਬਸਾਈਟ ਨਹੀਂ ਖੁੱਲ੍ਹ ਸਕੀ।",
     "openProgramPage": "ਪ੍ਰੋਗਰਾਮ ਪੰਨਾ ਖੋਲ੍ਹੋ",
-    "addToCalendar": "ਕੈਲੰਡਰ ਵਿੱਚ ਸ਼ਾਮਲ ਕਰੋ"
+    "addToCalendar": "ਕੈਲੰਡਰ ਵਿੱਚ ਸ਼ਾਮਲ ਕਰੋ",
+    "mapLoading": "ਇੰਟਰਐਕਟਿਵ ਨਕਸ਼ਾ ਲੋਡ ਹੋ ਰਿਹਾ ਹੈ…",
+    "mapUnavailable": "ਇੰਟਰਐਕਟਿਵ ਨਕਸ਼ਾ ਉਪਲਬਧ ਨਹੀਂ ਹੈ। ਆਫ਼ਲਾਈਨ ਝਲਕ ਦਿਖਾਈ ਜਾ ਰਹੀ ਹੈ। ਮੁੜ ਕੋਸ਼ਿਸ਼ ਕਰਨ ਲਈ 3D ਜਾਂ 2D ਚੁਣੋ, ਜਾਂ ਗਤੀਵਿਧੀਆਂ ਵੇਖਣ ਲਈ {list} ਚੁਣੋ।"
   },
   "ur": {
     "browse": "دیکھیں",
@@ -1631,7 +1641,9 @@
     "opensWebsite": "ویب سائٹ کھلے گی",
     "websiteUnavailable": "اس آلے پر ویب سائٹ نہیں کھل سکی۔",
     "openProgramPage": "پروگرام کا صفحہ کھولیں",
-    "addToCalendar": "کیلنڈر میں شامل کریں"
+    "addToCalendar": "کیلنڈر میں شامل کریں",
+    "mapLoading": "انٹرایکٹو نقشہ لوڈ ہو رہا ہے…",
+    "mapUnavailable": "انٹرایکٹو نقشہ دستیاب نہیں۔ آف لائن منظر دکھایا جا رہا ہے۔ دوبارہ کوشش کے لیے 3D یا 2D، یا سرگرمیاں دیکھنے کے لیے {list} منتخب کریں۔"
   },
   "ta": {
     "browse": "உலாவு",
@@ -1888,7 +1900,9 @@
     "opensWebsite": "இணையதளத்தைத் திறக்கும்",
     "websiteUnavailable": "இந்தச் சாதனத்தில் இணையதளத்தைத் திறக்க முடியவில்லை.",
     "openProgramPage": "நிகழ்ச்சிப் பக்கத்தைத் திறக்கவும்",
-    "addToCalendar": "நாள்காட்டியில் சேர்க்கவும்"
+    "addToCalendar": "நாள்காட்டியில் சேர்க்கவும்",
+    "mapLoading": "ஊடாடும் வரைபடம் ஏற்றப்படுகிறது…",
+    "mapUnavailable": "ஊடாடும் வரைபடம் கிடைக்கவில்லை. இணையமில்லா முன்னோட்டம் காட்டப்படுகிறது. மீண்டும் முயல 3D அல்லது 2D ஐத் தேர்ந்தெடுக்கவும்; நிகழ்வுகளைக் காண {list} என்பதைத் தேர்ந்தெடுக்கவும்."
   },
   "tl": {
     "browse": "Mag-browse",
@@ -2145,7 +2159,9 @@
     "opensWebsite": "Bubuksan ang website",
     "websiteUnavailable": "Hindi mabuksan ang website sa device na ito.",
     "openProgramPage": "Buksan ang pahina ng programa",
-    "addToCalendar": "Idagdag sa kalendaryo"
+    "addToCalendar": "Idagdag sa kalendaryo",
+    "mapLoading": "Nilo-load ang interactive na mapa…",
+    "mapUnavailable": "Hindi available ang interactive na mapa. Ipinapakita ang offline na preview. Piliin ang 3D o 2D para subukan muli, o {list} para makita ang mga aktibidad."
   },
   "es": {
     "browse": "Explorar",
@@ -2402,7 +2418,9 @@
     "opensWebsite": "Abre el sitio web",
     "websiteUnavailable": "No se pudo abrir el sitio web en este dispositivo.",
     "openProgramPage": "Abrir la página del programa",
-    "addToCalendar": "Añadir al calendario"
+    "addToCalendar": "Añadir al calendario",
+    "mapLoading": "Cargando el mapa interactivo…",
+    "mapUnavailable": "El mapa interactivo no está disponible. Se muestra una vista previa sin conexión. Elige 3D o 2D para volver a intentarlo, o {list} para explorar las actividades."
   },
   "ar": {
     "browse": "تصفح",
@@ -2659,7 +2677,9 @@
     "opensWebsite": "يفتح الموقع الإلكتروني",
     "websiteUnavailable": "تعذّر فتح الموقع الإلكتروني على هذا الجهاز.",
     "openProgramPage": "افتح صفحة البرنامج",
-    "addToCalendar": "أضف إلى التقويم"
+    "addToCalendar": "أضف إلى التقويم",
+    "mapLoading": "جارٍ تحميل الخريطة التفاعلية…",
+    "mapUnavailable": "الخريطة التفاعلية غير متاحة. يتم عرض معاينة بلا اتصال. اختر 3D أو 2D للمحاولة مجددًا، أو {list} لاستعراض الأنشطة."
   },
   "fa": {
     "browse": "مرور",
@@ -2916,7 +2936,9 @@
     "opensWebsite": "وب‌سایت باز می‌شود",
     "websiteUnavailable": "وب‌سایت در این دستگاه باز نشد.",
     "openProgramPage": "باز کردن صفحه برنامه",
-    "addToCalendar": "افزودن به تقویم"
+    "addToCalendar": "افزودن به تقویم",
+    "mapLoading": "در حال بارگذاری نقشهٔ تعاملی…",
+    "mapUnavailable": "نقشهٔ تعاملی در دسترس نیست. پیش‌نمایش آفلاین نمایش داده می‌شود. برای تلاش دوباره 3D یا 2D و برای دیدن فعالیت‌ها {list} را انتخاب کنید."
   },
   "hi": {
     "browse": "ब्राउज़",
@@ -3173,7 +3195,9 @@
     "opensWebsite": "वेबसाइट खुलेगी",
     "websiteUnavailable": "इस डिवाइस पर वेबसाइट नहीं खुल सकी।",
     "openProgramPage": "कार्यक्रम का पेज खोलें",
-    "addToCalendar": "कैलेंडर में जोड़ें"
+    "addToCalendar": "कैलेंडर में जोड़ें",
+    "mapLoading": "इंटरैक्टिव नक्शा लोड हो रहा है…",
+    "mapUnavailable": "इंटरैक्टिव नक्शा उपलब्ध नहीं है। ऑफ़लाइन झलक दिखाई जा रही है। दोबारा कोशिश के लिए 3D या 2D चुनें, या गतिविधियाँ देखने के लिए {list} चुनें।"
   },
   "pt": {
     "browse": "Explorar",
@@ -3430,7 +3454,9 @@
     "opensWebsite": "Abre o site",
     "websiteUnavailable": "Não foi possível abrir o site neste dispositivo.",
     "openProgramPage": "Abrir a página do programa",
-    "addToCalendar": "Adicionar ao calendário"
+    "addToCalendar": "Adicionar ao calendário",
+    "mapLoading": "A carregar o mapa interativo…",
+    "mapUnavailable": "O mapa interativo está indisponível. É apresentada uma prévia offline. Escolha 3D ou 2D para tentar novamente, ou {list} para explorar as atividades."
   },
   "gu": {
     "browse": "બ્રાઉઝ",
@@ -3687,7 +3713,9 @@
     "opensWebsite": "વેબસાઇટ ખોલે છે",
     "websiteUnavailable": "આ ઉપકરણ પર વેબસાઇટ ખોલી શકાઈ નથી.",
     "openProgramPage": "કાર્યક્રમનું પૃષ્ઠ ખોલો",
-    "addToCalendar": "કૅલેન્ડરમાં ઉમેરો"
+    "addToCalendar": "કૅલેન્ડરમાં ઉમેરો",
+    "mapLoading": "ઇન્ટરેક્ટિવ નકશો લોડ થઈ રહ્યો છે…",
+    "mapUnavailable": "ઇન્ટરેક્ટિવ નકશો ઉપલબ્ધ નથી. ઑફલાઇન પૂર્વાવલોકન દેખાડવામાં આવે છે. ફરી પ્રયાસ કરવા 3D અથવા 2D પસંદ કરો, અથવા પ્રવૃત્તિઓ જોવા {list} પસંદ કરો."
   },
   "bn": {
     "browse": "ব্রাউজ",
@@ -3944,7 +3972,9 @@
     "opensWebsite": "ওয়েবসাইট খুলবে",
     "websiteUnavailable": "এই ডিভাইসে ওয়েবসাইট খোলা যায়নি।",
     "openProgramPage": "কর্মসূচির পৃষ্ঠা খুলুন",
-    "addToCalendar": "ক্যালেন্ডারে যোগ করুন"
+    "addToCalendar": "ক্যালেন্ডারে যোগ করুন",
+    "mapLoading": "ইন্টার‌্যাক্টিভ মানচিত্র লোড হচ্ছে…",
+    "mapUnavailable": "ইন্টার‌্যাক্টিভ মানচিত্র পাওয়া যাচ্ছে না। অফলাইন প্রিভিউ দেখানো হচ্ছে। আবার চেষ্টা করতে 3D বা 2D বাছুন, অথবা কার্যক্রম দেখতে {list} বাছুন।"
   },
   "ja": {
     "browse": "探す",
@@ -4201,7 +4231,9 @@
     "opensWebsite": "ウェブサイトを開きます",
     "websiteUnavailable": "このデバイスではウェブサイトを開けませんでした。",
     "openProgramPage": "プログラムのページを開く",
-    "addToCalendar": "カレンダーに追加"
+    "addToCalendar": "カレンダーに追加",
+    "mapLoading": "インタラクティブ地図を読み込み中…",
+    "mapUnavailable": "インタラクティブ地図を利用できません。オフラインのプレビューを表示しています。再試行するには 3D または 2D、活動を探すには{list}を選んでください。"
   },
   "ko": {
     "browse": "둘러보기",
@@ -4458,7 +4490,9 @@
     "opensWebsite": "웹사이트 열기",
     "websiteUnavailable": "이 기기에서 웹사이트를 열 수 없습니다.",
     "openProgramPage": "프로그램 페이지 열기",
-    "addToCalendar": "캘린더에 추가"
+    "addToCalendar": "캘린더에 추가",
+    "mapLoading": "대화형 지도를 불러오는 중…",
+    "mapUnavailable": "대화형 지도를 사용할 수 없습니다. 오프라인 미리보기를 표시합니다. 다시 시도하려면 3D 또는 2D를, 활동을 찾으려면 {list}을(를) 선택하세요."
   },
   "hu": {
     "browse": "Bongeszés",
@@ -4715,6 +4749,8 @@
     "opensWebsite": "Megnyitja a weboldalt",
     "websiteUnavailable": "A weboldal nem nyitható meg ezen az eszközön.",
     "openProgramPage": "Programoldal megnyitása",
-    "addToCalendar": "Hozzáadás a naptárhoz"
+    "addToCalendar": "Hozzáadás a naptárhoz",
+    "mapLoading": "Interaktív térkép betöltése…",
+    "mapUnavailable": "Az interaktív térkép nem érhető el. Offline előnézet látható. Az újrapróbálkozáshoz válassza a 3D vagy 2D nézetet, a programok böngészéséhez pedig a {list} lehetőséget."
   }
 }

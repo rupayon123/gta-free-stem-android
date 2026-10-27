@@ -1320,8 +1320,8 @@ private fun BrowseScreen(
                         loadingMessage = shellText("mapLoading", "Loading interactive map…"),
                         unavailableMessage = shellText(
                             "mapUnavailable",
-                            "Interactive map unavailable. Showing offline preview. Choose 3D or 2D to retry, or List to browse.",
-                        ),
+                            "Interactive map unavailable. Showing offline preview. Choose 3D or 2D to retry, or {list} to browse activities.",
+                        ).replace("{list}", shellText("list", "List")),
                     )
                 }
             } else {
