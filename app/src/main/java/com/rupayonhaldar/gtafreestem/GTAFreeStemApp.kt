@@ -1078,6 +1078,7 @@ private fun BrowseScreen(
                                 FilterChip(
                                     selected = state.selectedCategory == category,
                                     onClick = { onCategoryChanged(category) },
+                                    modifier = Modifier.testTag("browse-category-$category"),
                                     shape = MaterialTheme.shapes.small,
                                     colors = browseFilterChipColors(
                                         selected = state.selectedCategory == category,
