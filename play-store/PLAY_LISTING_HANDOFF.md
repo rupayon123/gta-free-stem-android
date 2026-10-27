@@ -15,12 +15,12 @@ Google Play has reviewed or published the candidate.
 
 ## October 27, 2026 candidate evidence snapshot
 
-- Reviewed source at preparation: `f8a6f94` (`1.1.0`, version code 3).
+- Reviewed runtime source: `13c6085` (descendant of the 232-test `f8a6f94` source) (`1.1.0`, version code 3).
 - Local JVM report: 232 tests, zero failures or errors. This does not prove a
   signed release or device behavior.
-- Runtime owner reports API 26: 45 instrumentation checks plus 3 focused checks
-  passed. API 36 verification remains pending at this snapshot; no full
-  two-platform completion is claimed.
+- Reviewed runtime logs for `13c6085`: 45/45 instrumentation cases and 3/3
+  reduced-motion cases passed on each of API 26 and API 36 emulators. These
+  development-APK results do not establish signed-release or physical-device acceptance.
 - Exact-candidate debug/release lint, CI, signed AAB/APK, merged signed
   permissions, native/R8/16 KB inspection, and upload require their own receipts.
 - Fresh Play Console review on October 27 still shows `1.0.1` (version code 2)
