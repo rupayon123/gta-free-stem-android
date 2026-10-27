@@ -7,6 +7,8 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import java.io.File
 import java.io.FileOutputStream
+import java.io.RandomAccessFile
+import com.rupayonhaldar.gtafreestem.data.io.MAX_FEED_BYTES
 import java.time.Instant
 import java.util.UUID
 import kotlinx.serialization.json.Json
@@ -86,6 +88,33 @@ class AndroidOpportunityFeedCacheRuntimeTest {
             assertTrue(executor.awaitTermination(5, TimeUnit.SECONDS))
             assertFalse(reading.isAlive)
         }
+    }
+
+    @Test
+    fun backupOnlyAfterInterruptedWriteRestoresTheLastGoodSnapshot() = withTemporaryFiles { context ->
+        val newer = feed("recovered-newer", "2026-08-15")
+        val older = feed("older-worker", "2026-08-14")
+        val base = File(context.filesDir, "opportunities-last-good.json")
+        File(base.path + ".bak").writeText(newer)
+        assertFalse(base.exists())
+        val cache = AndroidOpportunityFeedCache(context)
+        assertEquals(newer, cache.read())
+        assertEquals(newer, base.readText())
+        assertEquals(newer, cache.writeAndSelectLatest(older, now))
+        assertEquals(newer, AndroidOpportunityFeedCache(context).read())
+    }
+
+    @Test
+    fun oversizedPartialBaseCannotHideBackupFromAnOlderWriter() = withTemporaryFiles { context ->
+        val newer = feed("recovered-newer", "2026-08-15")
+        val older = feed("older-worker", "2026-08-14")
+        val base = File(context.filesDir, "opportunities-last-good.json")
+        File(base.path + ".bak").writeText(newer)
+        RandomAccessFile(base, "rw").use { it.setLength(MAX_FEED_BYTES.toLong() + 1) }
+        val cache = AndroidOpportunityFeedCache(context)
+        assertEquals(newer, cache.writeAndSelectLatest(older, now))
+        assertEquals(newer, cache.read())
+        assertEquals(newer, base.readText())
     }
 
     @Test

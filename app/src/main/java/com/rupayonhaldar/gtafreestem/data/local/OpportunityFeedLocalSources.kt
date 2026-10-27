@@ -38,7 +38,9 @@ internal class AndroidOpportunityFeedCache(
     override fun read(): String? = synchronized(fileLock) { readLocked() }
 
     private fun readLocked(): String? {
-        if (!file.baseFile.isFile || file.baseFile.length() > MAX_FEED_BYTES) return null
+        // AtomicFile.openRead restores a last-good .bak after an interrupted
+        // write. Inspecting the partial/missing base first bypasses recovery.
+        // The stream reader still enforces the byte limit and strict UTF-8.
         return runCatching { file.openRead().use { it.readUtf8Bounded() } }.getOrNull()
     }
 
