@@ -71,7 +71,6 @@ import com.rupayonhaldar.gtafreestem.data.local.LocalAccountDataDeletionCoordina
 import com.rupayonhaldar.gtafreestem.domain.model.Opportunity
 import com.rupayonhaldar.gtafreestem.domain.model.OpportunityFeedSnapshot
 import com.rupayonhaldar.gtafreestem.domain.model.OpportunityFeedSource
-import com.rupayonhaldar.gtafreestem.domain.search.OpportunitySearch
 import com.rupayonhaldar.gtafreestem.domain.search.OpportunitySearchFilters
 import com.rupayonhaldar.gtafreestem.localization.AppLanguage
 import com.rupayonhaldar.gtafreestem.localization.AppStringCatalog
@@ -407,13 +406,7 @@ private fun HomeScreen(
     catalog: AppStringCatalog,
     text: (String, String) -> String,
 ) {
-    val featuredOpportunities = remember(state.snapshot) {
-        OpportunitySearch.search(
-            opportunities = state.snapshot?.opportunities.orEmpty(),
-            query = "",
-            filters = OpportunitySearchFilters(),
-        ).take(3)
-    }
+    val featuredOpportunities = state.featuredOpportunities
     Box(
         modifier = Modifier.fillMaxHeight(),
         contentAlignment = Alignment.TopCenter,

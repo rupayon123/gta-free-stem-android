@@ -21,12 +21,17 @@ import com.rupayonhaldar.gtafreestem.domain.search.OpportunitySearchLimits
 import com.rupayonhaldar.gtafreestem.domain.search.OpportunitySearchOptions
 import com.rupayonhaldar.gtafreestem.domain.search.OpportunitySearchSort
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import kotlin.coroutines.coroutineContext
 
 enum class AppDestination {
     EXPLORE,
@@ -40,6 +45,7 @@ data class BrowseUiState(
     val isRefreshing: Boolean = false,
     val snapshot: OpportunityFeedSnapshot? = null,
     val opportunities: List<Opportunity> = emptyList(),
+    val featuredOpportunities: List<Opportunity> = emptyList(),
     val categories: List<String> = emptyList(),
     val query: String = "",
     val filters: OpportunitySearchFilters = OpportunitySearchFilters(),
@@ -64,6 +70,7 @@ class BrowseViewModel(
     private val favorites: FavoriteOpportunityStore,
     private val browseStateStore: BrowseSearchStateStore = BrowseSearchStateStore.NONE,
     private val initialSearchLanguage: AppLanguage = AppLanguage.ENGLISH,
+    private val searchDispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : ViewModel() {
     private val restoredBrowseState = runCatching(browseStateStore::read)
         .getOrDefault(BrowseSearchState())
@@ -82,6 +89,7 @@ class BrowseViewModel(
 
     private var loadJob: Job? = null
     private var refreshJob: Job? = null
+    private var searchJob: Job? = null
 
     init {
         load()
@@ -92,11 +100,13 @@ class BrowseViewModel(
         loadJob = viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, errorMessage = null) }
 
-            runCatching { repository.bootstrap() }
-                .onSuccess(::applySnapshot)
-                .onFailure { error ->
-                    if (error is CancellationException) throw error
-                }
+            try {
+                applySnapshot(repository.bootstrap())
+            } catch (error: CancellationException) {
+                throw error
+            } catch (_: Throwable) {
+                // The network refresh below can still provide the first usable snapshot.
+            }
 
             _uiState.update { it.copy(isLoading = false) }
             refresh(showProgress = false)
@@ -138,6 +148,7 @@ class BrowseViewModel(
     }
 
     fun setDestination(destination: AppDestination) {
+        val destinationChanged = _uiState.value.destination != destination
         _uiState.update {
             it.copy(
                 destination = destination,
@@ -145,7 +156,7 @@ class BrowseViewModel(
                 errorMessage = null,
             )
         }
-        recomputeResults()
+        if (destinationChanged) recomputeResults()
     }
 
     fun setSearchLanguage(language: AppLanguage) {
@@ -319,15 +330,19 @@ class BrowseViewModel(
         return cleared
     }
 
-    private fun applySnapshot(snapshot: OpportunityFeedSnapshot) {
+    private suspend fun applySnapshot(snapshot: OpportunityFeedSnapshot) {
+        val (filterOptions, featuredOpportunities) = withContext(searchDispatcher) {
+            OpportunitySearch.options(snapshot.opportunities) to
+                OpportunitySearch.search(snapshot.opportunities).take(3)
+        }
         favorites.reconcile(snapshot)
-        val filterOptions = OpportunitySearch.options(snapshot.opportunities)
         val savedLibraryState = readSavedLibraryState()
         _uiState.update {
             it.copy(
                 snapshot = snapshot,
                 categories = filterOptions.categories,
                 filterOptions = filterOptions,
+                featuredOpportunities = featuredOpportunities,
                 favoriteIds = savedLibraryState.ids,
                 savedSections = savedLibraryState.sections,
                 unresolvedSavedCount = savedLibraryState.unresolvedCount,
@@ -339,17 +354,23 @@ class BrowseViewModel(
 
     private fun recomputeResults() {
         val state = _uiState.value
-        val searched = repository.search(
-            query = state.query,
-            filters = state.filters,
-            language = state.searchLanguage,
-        )
-        val visible = if (state.destination == AppDestination.SAVED) {
-            searched.filter { it.id in state.favoriteIds }
-        } else {
-            searched
+        searchJob?.cancel()
+        searchJob = viewModelScope.launch {
+            val visible = withContext(searchDispatcher) {
+                val searched = repository.search(
+                    query = state.query,
+                    filters = state.filters,
+                    language = state.searchLanguage,
+                )
+                if (state.destination == AppDestination.SAVED) {
+                    searched.filter { it.id in state.favoriteIds }
+                } else {
+                    searched
+                }
+            }
+            coroutineContext.ensureActive()
+            _uiState.update { it.copy(opportunities = visible) }
         }
-        _uiState.update { it.copy(opportunities = visible) }
     }
 
     private fun updateFilters(

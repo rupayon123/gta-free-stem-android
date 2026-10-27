@@ -133,6 +133,7 @@ object OpportunitySearch {
                 language = language,
                 catalog = catalog,
                 origin = origin,
+                now = now,
             )
         }
         val filtered = candidates.filter { candidate ->
@@ -168,13 +169,13 @@ object OpportunitySearch {
             normalizedFilters.sort == OpportunitySearchSort.NEAREST && origin != null ->
                 compareBy<IndexedOpportunity> { candidate ->
                     candidate.distanceKm ?: Double.POSITIVE_INFINITY
-                }.thenBy { candidate -> candidate.dateValue(now) }
+                }.thenBy(IndexedOpportunity::dateValue)
                     .then(STABLE_TIE_ORDER)
             normalizedFilters.sort == OpportunitySearchSort.RELEVANCE && terms.isNotEmpty() ->
                 compareByDescending<IndexedOpportunity> { candidate -> candidate.relevance(terms) }
-                    .thenBy { candidate -> candidate.dateValue(now) }
+                    .thenBy(IndexedOpportunity::dateValue)
                     .then(STABLE_TIE_ORDER)
-            else -> compareBy<IndexedOpportunity> { candidate -> candidate.dateValue(now) }
+            else -> compareBy<IndexedOpportunity>(IndexedOpportunity::dateValue)
                 .then(STABLE_TIE_ORDER)
         }
         return filtered.sortedWith(comparator).map(IndexedOpportunity::result)
@@ -241,6 +242,7 @@ object OpportunitySearch {
         val language: AppLanguage,
         val catalog: AppStringCatalog?,
         val origin: SearchCoordinate?,
+        val now: Instant,
     ) {
         val searchableText: String by lazy(LazyThreadSafetyMode.NONE) {
             LocalizedOpportunitySearchIndex.normalizedText(opportunity, language, catalog)
@@ -267,13 +269,13 @@ object OpportunitySearch {
             queryTerms.count(normalizedField::contains) * weight
         }
 
-        fun dateValue(now: Instant): Instant {
+        val dateValue: Instant by lazy(LazyThreadSafetyMode.NONE) {
             val dates = listOf(
                 opportunity.startDate,
                 opportunity.deadline,
                 opportunity.endDate,
             ).mapNotNull(::scheduledInstant)
-            return dates.filterNot { it.isBefore(now) }.minOrNull()
+            dates.filterNot { it.isBefore(now) }.minOrNull()
                 ?: dates.maxOrNull()
                 ?: Instant.MAX
         }
