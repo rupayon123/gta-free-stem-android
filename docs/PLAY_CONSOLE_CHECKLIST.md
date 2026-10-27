@@ -1,5 +1,11 @@
 # Google Play Console Checklist
 
+> Current internal-update candidate: version 1.1.0, **version code 4**. Code 3
+> was uploaded only to an unpublished draft and is retained below as evidence
+> for that tested candidate. Code 4 adds the navigation-label wrapping fix;
+> its signed package and final navigation smoke require fresh receipts.
+
+
 Use this as an evidence checklist, not as proof of readiness. Requirements shown
 by the live Play Console take precedence. Last policy review: August 18, 2026.
 Keep account identifiers, contact details, identity evidence, tester identities,

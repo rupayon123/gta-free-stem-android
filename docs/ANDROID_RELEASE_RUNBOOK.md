@@ -1,5 +1,11 @@
 # Android Release Runbook
 
+> Current internal-update candidate: version 1.1.0, **version code 4**. Code 3
+> was uploaded only to an unpublished draft and is retained below as evidence
+> for that tested candidate. Code 4 adds the navigation-label wrapping fix;
+> its signed package and final navigation smoke require fresh receipts.
+
+
 This runbook prepares a GTA FREE STEM Android release candidate. It does not authorize an upload, staged rollout, production rollout, or publication.
 
 Policy notes were reviewed on August 18, 2026. Google Play requirements can change; confirm the live Play Console tasks and linked Google documentation before acting.
@@ -72,7 +78,7 @@ Official references:
 From the project root, run:
 
 ```bash
-EXPECTED_VERSION_CODE=3 EXPECTED_VERSION_NAME=1.1.0 \
+EXPECTED_VERSION_CODE=4 EXPECTED_VERSION_NAME=1.1.0 \
   ./scripts/verify-release-config.sh
 ```
 

@@ -1,5 +1,11 @@
 # Google Play listing handoff for v1.1.0
 
+> Current internal-update candidate: version 1.1.0, **version code 4**. Code 3
+> was uploaded only to an unpublished draft and is retained below as evidence
+> for that tested candidate. Code 4 adds the navigation-label wrapping fix;
+> its signed package and final navigation smoke require fresh receipts.
+
+
 > **Superseded release-evidence notice (August 20, 2026):** The August 19
 > screenshots, provenance hashes, signed AAB/APK identities, and recorded test
 > counts referenced by this handoff describe an earlier source snapshot, not
