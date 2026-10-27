@@ -1133,6 +1133,11 @@ private fun BrowseScreen(
                         },
                         strings = localizedMapStrings(catalog = catalog, language = language, text = shellText),
                         offlineLabel = shellText("offlinePreview", "Offline preview"),
+                        loadingMessage = shellText("mapLoading", "Loading interactive map…"),
+                        unavailableMessage = shellText(
+                            "mapUnavailable",
+                            "Interactive map unavailable. Showing offline preview. Choose 3D or 2D to retry, or List to browse.",
+                        ),
                     )
                 }
             } else {

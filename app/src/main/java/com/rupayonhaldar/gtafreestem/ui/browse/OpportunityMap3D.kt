@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -23,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
@@ -43,6 +45,7 @@ import org.maplibre.android.style.layers.CircleLayer
 import org.maplibre.android.style.layers.PropertyFactory
 import org.maplibre.android.style.layers.SymbolLayer
 import org.maplibre.android.style.sources.GeoJsonSource
+import kotlinx.coroutines.delay
 
 private const val STYLE_URL = "https://tiles.openfreemap.org/styles/liberty"
 private const val SOURCE_ID = "gta-physical-opportunities"
@@ -79,12 +82,22 @@ fun OpportunityMap3D(
     modifier: Modifier = Modifier,
     strings: OpportunityMapStrings = OpportunityMapStrings(),
     offlineLabel: String = "Offline preview",
+    loadingMessage: String = "Loading interactive map…",
+    unavailableMessage: String = "Interactive map unavailable. Showing offline preview. Choose 3D or 2D to retry, or List to browse.",
 ) {
     val locations = remember(pins) { nativeMapLocations(pins) }
     var showSchematic by rememberSaveable { mutableStateOf(false) }
     var mapFailed by remember { mutableStateOf(false) }
+    var styleReady by remember { mutableStateOf(false) }
     var cameraMode by rememberSaveable { mutableStateOf("3D") }
     val selectedPin = pins.firstOrNull { it.id == selectedPinId }
+
+    LaunchedEffect(showSchematic, mapFailed, styleReady, locations.isNotEmpty()) {
+        if (!showSchematic && !mapFailed && !styleReady && locations.isNotEmpty()) {
+            delay(15_000)
+            mapFailed = true
+        }
+    }
 
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Text(
@@ -100,13 +113,23 @@ fun OpportunityMap3D(
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             FilterChip(
                 selected = !showSchematic && !mapFailed && cameraMode == "3D",
-                onClick = { showSchematic = false; mapFailed = false; cameraMode = "3D" },
+                onClick = {
+                    if (showSchematic || mapFailed) styleReady = false
+                    showSchematic = false
+                    mapFailed = false
+                    cameraMode = "3D"
+                },
                 label = { Text("3D") },
                 modifier = Modifier.heightIn(min = 48.dp).testTag("map-3d-control"),
             )
             FilterChip(
                 selected = !showSchematic && !mapFailed && cameraMode == "2D",
-                onClick = { showSchematic = false; mapFailed = false; cameraMode = "2D" },
+                onClick = {
+                    if (showSchematic || mapFailed) styleReady = false
+                    showSchematic = false
+                    mapFailed = false
+                    cameraMode = "2D"
+                },
                 label = { Text("2D") },
                 modifier = Modifier.heightIn(min = 48.dp).testTag("map-2d-control"),
             )
@@ -124,6 +147,15 @@ fun OpportunityMap3D(
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
 
+        if (mapFailed) {
+            Text(
+                text = unavailableMessage,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.error,
+                modifier = Modifier.testTag("map-load-failure"),
+            )
+        }
+
         if (locations.isEmpty() || showSchematic || mapFailed) {
             OpportunityMap(
                 pins = pins,
@@ -140,7 +172,18 @@ fun OpportunityMap3D(
                     selectedPinId = selectedPinId,
                     onPinSelected = onPinSelected,
                     onLoadFailure = { mapFailed = true },
+                    onStyleReady = { styleReady = true },
                 )
+                if (!styleReady) {
+                    Column(
+                        modifier = Modifier.align(Alignment.Center),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                    ) {
+                        CircularProgressIndicator()
+                        Text(loadingMessage, style = MaterialTheme.typography.bodyMedium)
+                    }
+                }
             }
             selectedPin?.let { pin ->
                 Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
@@ -177,6 +220,7 @@ private fun NativeMapSurface(
     selectedPinId: String?,
     onPinSelected: (MapOpportunityPin) -> Unit,
     onLoadFailure: () -> Unit,
+    onStyleReady: () -> Unit,
 ) {
     val context = LocalContext.current
     val lifecycle = LocalLifecycleOwner.current.lifecycle
@@ -184,6 +228,7 @@ private fun NativeMapSurface(
     val currentSelectedPinId by rememberUpdatedState(selectedPinId)
     val currentOnPinSelected by rememberUpdatedState(onPinSelected)
     val currentOnLoadFailure by rememberUpdatedState(onLoadFailure)
+    val currentOnStyleReady by rememberUpdatedState(onStyleReady)
     var map by remember { mutableStateOf<MapLibreMap?>(null) }
     var source by remember { mutableStateOf<GeoJsonSource?>(null) }
 
@@ -213,6 +258,7 @@ private fun NativeMapSurface(
             readyMap.uiSettings.isRotateGesturesEnabled = true
             readyMap.uiSettings.isTiltGesturesEnabled = true
             readyMap.setStyle(STYLE_URL) { style ->
+                currentOnStyleReady()
                 val geoSource = GeoJsonSource(SOURCE_ID, locationsGeoJson(currentLocations))
                 style.addSource(geoSource)
                 style.addLayer(
