@@ -84,12 +84,20 @@ fun OpportunityMap3D(
     offlineLabel: String = "Offline preview",
     loadingMessage: String = "Loading interactive map…",
     unavailableMessage: String = "Interactive map unavailable. Showing offline preview. Choose 3D or 2D to retry, or List to browse.",
+    displayMode: String? = null,
+    onDisplayModeChanged: (String) -> Unit = {},
 ) {
     val locations = remember(pins) { nativeMapLocations(pins) }
-    var showSchematic by rememberSaveable { mutableStateOf(false) }
+    var localDisplayMode by rememberSaveable { mutableStateOf("3D") }
+    val effectiveMode = displayMode ?: localDisplayMode
+    val showSchematic = effectiveMode == "offline"
+    val cameraMode = if (effectiveMode == "2D") "2D" else "3D"
+    fun selectDisplayMode(mode: String) {
+        if (displayMode == null) localDisplayMode = mode
+        onDisplayModeChanged(mode)
+    }
     var mapFailed by remember { mutableStateOf(false) }
     var styleReady by remember { mutableStateOf(false) }
-    var cameraMode by rememberSaveable { mutableStateOf("3D") }
     val selectedPin = pins.firstOrNull { it.id == selectedPinId }
 
     LaunchedEffect(showSchematic, mapFailed, styleReady, locations.isNotEmpty()) {
@@ -115,9 +123,8 @@ fun OpportunityMap3D(
                 selected = !showSchematic && !mapFailed && cameraMode == "3D",
                 onClick = {
                     if (showSchematic || mapFailed) styleReady = false
-                    showSchematic = false
                     mapFailed = false
-                    cameraMode = "3D"
+                    selectDisplayMode("3D")
                 },
                 label = { Text("3D") },
                 modifier = Modifier.heightIn(min = 48.dp).testTag("map-3d-control"),
@@ -126,16 +133,15 @@ fun OpportunityMap3D(
                 selected = !showSchematic && !mapFailed && cameraMode == "2D",
                 onClick = {
                     if (showSchematic || mapFailed) styleReady = false
-                    showSchematic = false
                     mapFailed = false
-                    cameraMode = "2D"
+                    selectDisplayMode("2D")
                 },
                 label = { Text("2D") },
                 modifier = Modifier.heightIn(min = 48.dp).testTag("map-2d-control"),
             )
             FilterChip(
                 selected = showSchematic || mapFailed,
-                onClick = { showSchematic = true },
+                onClick = { selectDisplayMode("offline") },
                 label = { Text(offlineLabel) },
                 modifier = Modifier.heightIn(min = 48.dp).testTag("map-offline-control"),
             )

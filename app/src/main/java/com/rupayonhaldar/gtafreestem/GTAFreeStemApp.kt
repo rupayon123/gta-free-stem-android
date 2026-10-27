@@ -11,6 +11,8 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.BorderStroke
@@ -185,6 +187,7 @@ fun GTAFreeStemApp(
     var showingSavedOpportunities by rememberSaveable { mutableStateOf(false) }
     var showingFilters by rememberSaveable { mutableStateOf(false) }
     var browseShowsMap by rememberSaveable { mutableStateOf(false) }
+    var mapDisplayMode by rememberSaveable { mutableStateOf("3D") }
     var selectedMapPinId by rememberSaveable { mutableStateOf<String?>(null) }
     val selectedDestination = PrimaryDestination.valueOf(selectedDestinationName)
     val highSchoolFocus = HighSchoolFocus.valueOf(highSchoolFocusName)
@@ -347,6 +350,8 @@ fun GTAFreeStemApp(
                     onOpenFilters = { showingFilters = true },
                     showMap = browseShowsMap,
                     onMapViewChanged = { browseShowsMap = it },
+                    mapDisplayMode = mapDisplayMode,
+                    onMapDisplayModeChanged = { mapDisplayMode = it },
                     selectedMapPinId = selectedMapPinId,
                     onMapPinSelected = { selectedMapPinId = it },
                     onClear = viewModel::clearSearchAndFilters,
@@ -374,6 +379,8 @@ fun GTAFreeStemApp(
                     onOpenFilters = { showingFilters = true },
                     showMap = browseShowsMap,
                     onMapViewChanged = { browseShowsMap = it },
+                    mapDisplayMode = mapDisplayMode,
+                    onMapDisplayModeChanged = { mapDisplayMode = it },
                     selectedMapPinId = selectedMapPinId,
                     onMapPinSelected = { selectedMapPinId = it },
                     onClear = {
@@ -999,6 +1006,8 @@ private fun BrowseScreen(
     onOpenFilters: () -> Unit,
     showMap: Boolean,
     onMapViewChanged: (Boolean) -> Unit,
+    mapDisplayMode: String,
+    onMapDisplayModeChanged: (String) -> Unit,
     selectedMapPinId: String?,
     onMapPinSelected: (String) -> Unit,
     onClear: () -> Unit,
@@ -1018,8 +1027,6 @@ private fun BrowseScreen(
     }
     val context = LocalContext.current
     var websiteUnavailable by remember { mutableStateOf(false) }
-    var showMap by rememberSaveable { mutableStateOf(false) }
-    var selectedMapPinId by rememberSaveable { mutableStateOf<String?>(null) }
     val mapPins = remember(visibleOpportunities, language, catalog) {
         visibleOpportunities.mapNotNull { opportunity ->
             val localized = OpportunityLocalization.resolve(opportunity, language, catalog)
@@ -1266,79 +1273,39 @@ private fun BrowseScreen(
             }
         } else if (showMap) {
             item {
-                val pins = remember(visibleOpportunities, language, catalog) {
-                    visibleOpportunities.filterNot(Opportunity::virtual).mapNotNull { opportunity ->
-                        val localized = OpportunityLocalization.resolve(opportunity, language, catalog)
-                        opportunity.toMapOpportunityPin(
-                            displayTitle = localized.title,
-                            displayOrganization = localized.organization,
-                            displayLocation = locationLabel(opportunity, localized),
-                        )
-                    }
-                }
-                OpportunityMap(
-                    pins = pins,
+                OpportunityMap3D(
+                    pins = mapPins,
                     selectedPinId = selectedMapPinId,
                     onPinSelected = { onMapPinSelected(it.id) },
-                    onShowDetails = { pin -> visibleOpportunities.firstOrNull { it.id == pin.id }?.let(onSelectOpportunity) },
+                    onShowDetails = { pin ->
+                        visibleOpportunities.firstOrNull { it.id == pin.id }?.let(onSelectOpportunity)
+                    },
                     modifier = Modifier.fillMaxWidth(),
-                    strings = localizedMapStrings(language, shellText),
+                    strings = localizedMapStrings(catalog = catalog, language = language, text = shellText),
+                    offlineLabel = shellText("offlinePreview", "Offline preview"),
+                    displayMode = mapDisplayMode,
+                    onDisplayModeChanged = onMapDisplayModeChanged,
+                    loadingMessage = shellText("mapLoading", "Loading interactive map…"),
+                    unavailableMessage = shellText(
+                        "mapUnavailable",
+                        "Interactive map unavailable. Showing offline preview. Choose 3D or 2D to retry, or {list} to browse activities.",
+                    ).replace("{list}", shellText("list", "List")),
                 )
                 StoryButton(onClick = { onMapViewChanged(false) }, kind = StoryButtonKind.SECONDARY) {
                     Text(shellText("list", "List"))
                 }
             }
         } else {
-            item {
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    FilterChip(
-                        selected = !showMap,
-                        onClick = { showMap = false },
-                        label = { Text(shellText("list", "List")) },
-                        modifier = Modifier.heightIn(min = 48.dp).testTag("browse-list-view"),
-                    )
-                    FilterChip(
-                        selected = showMap,
-                        onClick = { showMap = true },
-                        label = { Text(shellText("map", "Map")) },
-                        modifier = Modifier.heightIn(min = 48.dp).testTag("browse-map-view"),
-                    )
-                }
-            }
-            if (showMap) {
-                item {
-                    OpportunityMap3D(
-                        pins = mapPins,
-                        selectedPinId = selectedMapPinId,
-                        onPinSelected = { selectedMapPinId = it.id },
-                        onShowDetails = { pin ->
-                            visibleOpportunities.firstOrNull { it.id == pin.id }
-                                ?.let(onSelectOpportunity)
-                        },
-                        strings = localizedMapStrings(catalog = catalog, language = language, text = shellText),
-                        offlineLabel = shellText("offlinePreview", "Offline preview"),
-                        loadingMessage = shellText("mapLoading", "Loading interactive map…"),
-                        unavailableMessage = shellText(
-                            "mapUnavailable",
-                            "Interactive map unavailable. Showing offline preview. Choose 3D or 2D to retry, or {list} to browse activities.",
-                        ).replace("{list}", shellText("list", "List")),
-                    )
-                }
-            } else {
-                items(
-                    items = visibleOpportunities,
-                    key = Opportunity::id,
-                ) { opportunity ->
-                    OpportunityCard(
-                        opportunity = opportunity,
-                        isFavorite = opportunity.id in state.favoriteIds,
-                        onDetails = { onSelectOpportunity(opportunity) },
-                        onToggleFavorite = { onToggleFavorite(opportunity.id) },
-                        language = language,
-                        catalog = catalog,
-                        text = shellText,
-                    )
-                }
+            items(items = visibleOpportunities, key = Opportunity::id) { opportunity ->
+                OpportunityCard(
+                    opportunity = opportunity,
+                    isFavorite = opportunity.id in state.favoriteIds,
+                    onDetails = { onSelectOpportunity(opportunity) },
+                    onToggleFavorite = { onToggleFavorite(opportunity.id) },
+                    language = language,
+                    catalog = catalog,
+                    text = shellText,
+                )
             }
         }
         }

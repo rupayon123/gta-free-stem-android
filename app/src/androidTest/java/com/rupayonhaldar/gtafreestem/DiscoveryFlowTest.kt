@@ -42,6 +42,7 @@ class DiscoveryFlowTest {
     private fun program(id: String = "toronto") = Opportunity(
         id = id, title = "Toronto Lab", organization = "Fixture Library", description = "A test-only science workshop.",
         category = "STEM", city = "Toronto", region = "Toronto", latitude = 43.6532, longitude = -79.3832,
+        address = "1 Fixture Lane, Toronto",
         ageMin = 0, ageMax = null, cost = "Free", sourceUrl = "https://example.org/fixture",
         startDate = "2099-10-26", endDate = "2099-10-26",
     )
@@ -59,6 +60,10 @@ class DiscoveryFlowTest {
         rule.onNodeWithTag("primary-navigation-opportunities").performClick()
         rule.onNode(hasSetTextAction()).performTextReplacement("Toronto Lab")
         rule.onNodeWithTag("browse-map-view").performScrollTo().performClick()
+        // Deterministic fallback-route coverage; live MapLibre gestures are
+        // checked separately on the installed candidate against real venues.
+        rule.onNodeWithTag("browse-results").performScrollToNode(hasTestTag("map-offline-control"))
+        rule.onNodeWithTag("map-offline-control").performClick()
         rule.onNodeWithTag("browse-results").performScrollToNode(hasTestTag(OpportunityMapTestTags.MAP))
         rule.onNodeWithTag(OpportunityMapTestTags.MAP).assertIsDisplayed()
         rule.onNodeWithTag(OpportunityMapTestTags.marker("toronto")).performClick()
@@ -69,6 +74,8 @@ class DiscoveryFlowTest {
         rule.onNodeWithTag("opportunity-calendar").performScrollTo().assertIsDisplayed()
         rule.onNodeWithText("Back").performScrollTo().performClick()
         rule.onNodeWithTag("browse-map-view").performScrollTo().assertIsSelected()
+        rule.onNodeWithTag("browse-results").performScrollToNode(hasTestTag("map-offline-control"))
+        rule.onNodeWithTag("map-offline-control").assertIsSelected()
         rule.onNodeWithTag("browse-results").performScrollToNode(hasTestTag(OpportunityMapTestTags.marker("toronto")))
         rule.onNodeWithTag(OpportunityMapTestTags.marker("toronto")).assertIsSelected()
         rule.onNodeWithTag("browse-list-view").performScrollTo().performClick()
@@ -86,6 +93,10 @@ class DiscoveryFlowTest {
         }
         rule.onNodeWithTag("primary-navigation-opportunities").performClick()
         rule.onNodeWithTag("browse-map-view").performScrollTo().performClick()
+        // Deterministic fallback-route coverage; live MapLibre gestures are
+        // checked separately on the installed candidate against real venues.
+        rule.onNodeWithTag("browse-results").performScrollToNode(hasTestTag("map-offline-control"))
+        rule.onNodeWithTag("map-offline-control").performClick()
         rule.onNodeWithTag("browse-results").performScrollToNode(hasTestTag(OpportunityMapTestTags.EMPTY))
         rule.onNodeWithTag(OpportunityMapTestTags.EMPTY).assertIsDisplayed()
         rule.onNodeWithTag("browse-list-view").performScrollTo().performClick()

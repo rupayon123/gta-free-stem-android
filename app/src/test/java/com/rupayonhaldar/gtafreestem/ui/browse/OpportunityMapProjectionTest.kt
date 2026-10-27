@@ -24,9 +24,11 @@ class OpportunityMapProjectionTest {
     }
 
     @Test
-    fun onlineEventsNeverBecomePhysicalPinsEvenWithMunicipalCoordinates() {
+    fun unconfirmedAndVirtualEventsNeverBecomePhysicalPinsEvenWithMunicipalCoordinates() {
         val municipalCoordinate = opportunity(latitude = 43.6532, longitude = -79.3832)
         assertNull(municipalCoordinate.copy(virtual = true).toMapOpportunityPin())
+        assertNull(municipalCoordinate.copy(address = null).toMapOpportunityPin())
+        assertNull(municipalCoordinate.copy(address = "  ").toMapOpportunityPin())
         assertNull(municipalCoordinate.copy(
             address = "Online event hosted by Toronto Public Library",
         ).toMapOpportunityPin())
@@ -146,6 +148,7 @@ class OpportunityMapProjectionTest {
         category = "Coding & Robotics",
         city = "Toronto",
         region = "Toronto",
+        address = "1 Fixture Lane, Toronto",
         latitude = latitude,
         longitude = longitude,
         ageMin = 13,

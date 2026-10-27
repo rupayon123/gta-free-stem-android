@@ -41,8 +41,8 @@ fun Opportunity.toMapOpportunityPin(
     // The public native export can omit `virtual` while retaining municipal-centre
     // fallback coordinates for online events. Neither is a physical venue pin.
     val normalizedAddress = address?.trim()?.lowercase().orEmpty()
-    if (virtual || normalizedAddress.startsWith("online event") ||
-        normalizedAddress == "online" || normalizedAddress == "virtual"
+    if (virtual || normalizedAddress.isEmpty() || normalizedAddress.startsWith("online") ||
+        normalizedAddress.startsWith("virtual")
     ) return null
     val resolvedLatitude = latitude ?: return null
     val resolvedLongitude = longitude ?: return null
