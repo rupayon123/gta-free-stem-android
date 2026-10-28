@@ -137,7 +137,8 @@ class DiscoveryFlowTest {
         rule.onNodeWithTag("opportunity-detail").assertIsDisplayed()
         rule.onNodeWithText("Save", substring = false).performScrollTo().performClick()
         rule.runOnIdle { assertTrue("toronto" in viewModel.uiState.value.favoriteIds) }
-        rule.onNodeWithTag("opportunity-calendar").performScrollTo().assertIsDisplayed()
+        rule.onNodeWithTag("opportunity-detail").performScrollToNode(hasTestTag("opportunity-calendar"))
+        rule.onNodeWithTag("opportunity-calendar").assertIsDisplayed()
         rule.onNodeWithText("Back").performScrollTo().performClick()
         rule.onNodeWithTag("browse-map-view").performScrollTo().assertIsSelected()
         rule.onNodeWithTag("browse-results").performScrollToNode(hasTestTag("map-offline-control"))
@@ -224,6 +225,54 @@ class DiscoveryFlowTest {
         rule.onNodeWithTag("opportunity-calendar-unavailable").performScrollTo().assertIsDisplayed()
     }
 
+    @Test fun providerPagePrecedesFullDescriptionAndSecondaryActions() {
+        rule.setContent {
+            DeviceConfigurationOverride(DeviceConfigurationOverride.ForcedSize(DpSize(360.dp, 800.dp))) {
+                MaterialTheme {
+                    OpportunityDetailScreen(
+                        program().copy(description = "A detailed provider description. ".repeat(30)),
+                        false, {}, {}, AppLanguage.ENGLISH, catalog, ::text,
+                    )
+                }
+            }
+        }
+
+        val provider = rule.onNodeWithText(text("openProgramPage", "Open program page"))
+        provider.assertIsDisplayed()
+        rule.onAllNodesWithText(text("openProgramPage", "Open program page")).assertCountEquals(1)
+        val details = rule.onNodeWithText(text("programDetails", "Program details"))
+        details.assertIsDisplayed()
+        assertTrue(provider.getUnclippedBoundsInRoot().bottom <= details.getUnclippedBoundsInRoot().top)
+        rule.onNodeWithTag("opportunity-detail").performScrollToNode(hasTestTag("opportunity-calendar"))
+        rule.onNodeWithTag("opportunity-calendar").assertIsDisplayed()
+    }
+
+    @Test fun virtualListingWithPhysicalFieldsNeverOffersOrLaunchesDirections() {
+        val virtual = program("virtual").copy(virtual = true)
+        var captured: Intent? = null
+        val handler = object : ContextWrapper(context) {
+            override fun startActivity(intent: Intent) {
+                captured = intent
+            }
+        }
+        rule.setContent {
+            CompositionLocalProvider(LocalContext provides handler) {
+                MaterialTheme {
+                    OpportunityDetailScreen(virtual, false, {}, {}, AppLanguage.ENGLISH, catalog, ::text)
+                }
+            }
+        }
+
+        rule.onNodeWithText(text("directions", "Get directions")).assertDoesNotExist()
+        rule.runOnIdle {
+            assertFalse(openDirections(handler, virtual))
+            assertNull(captured)
+            assertTrue(openDirections(handler, program()))
+            assertEquals(Intent.ACTION_VIEW, captured?.action)
+            assertEquals("geo", captured?.data?.scheme)
+        }
+    }
+
     @Test fun largeTextLandscapeKeepsMapControlsAndCalendarFallbackReachable() {
         val missingCalendar = object : ContextWrapper(context) {
             override fun startActivity(intent: Intent) { throw ActivityNotFoundException("Missing fixture handler") }
@@ -275,7 +324,7 @@ class DiscoveryFlowTest {
         rule.onNode(hasText("Toronto Lab") and !hasSetTextAction()).assertIsDisplayed()
     }
 
-    @Test fun largeTextPhonePreservesListingCategoryAndFreePromise() {
+    @Test fun largeTextPhonePreservesListingCategoryAndSourceCost() {
         rule.setContent {
             DeviceConfigurationOverride(DeviceConfigurationOverride.ForcedSize(DpSize(360.dp, 640.dp))) {
                 val density = LocalDensity.current
@@ -289,12 +338,12 @@ class DiscoveryFlowTest {
         rule.onNodeWithTag("primary-navigation-opportunities").performClick()
         rule.onNodeWithTag("browse-results").performScrollToNode(hasTestTag("opportunity-card-toronto"))
         val category = rule.onNode(hasText("Science & Engineering") and hasAnyAncestor(hasTestTag("opportunity-card-toronto")))
-        val price = rule.onNode(hasText("Free for everyone") and hasAnyAncestor(hasTestTag("opportunity-card-toronto")))
+        val price = rule.onNode(hasText("Free") and hasAnyAncestor(hasTestTag("opportunity-card-toronto")))
         category.performScrollTo().assertIsDisplayed()
         price.performScrollTo().assertIsDisplayed()
         val c = category.getUnclippedBoundsInRoot()
         val f = price.getUnclippedBoundsInRoot()
-        assertTrue("Category and free promise must not overlap", c.bottom <= f.top || c.right <= f.left)
+        assertTrue("Category and source cost must not overlap", c.bottom <= f.top || c.right <= f.left)
     }
 
     @Test fun failedEmptyFeedOffersExactWebsiteAndMissingHandlerFeedback() {

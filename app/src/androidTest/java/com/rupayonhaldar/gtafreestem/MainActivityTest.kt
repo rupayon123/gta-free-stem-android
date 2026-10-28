@@ -62,7 +62,7 @@ class MainActivityTest {
     fun primaryNavigationHasExactlyFiveDestinationsAndNavigates() {
         val destinations = listOf(
             "home" to "Home",
-            "opportunities" to "Opportunities",
+            "opportunities" to "Browse",
             "high_school" to "High School",
             "support" to "Support",
             "account" to "Profile",
@@ -79,13 +79,13 @@ class MainActivityTest {
         composeRule.onNodeWithTag("primary-navigation-opportunities").performClick()
         composeRule.onNode(hasSetTextAction()).performTextReplacement("")
         composeRule.onNodeWithTag("browse-screen-title")
-            .assertTextContains("Opportunities")
+            .assertTextContains("Browse")
             .assertIsDisplayed()
         composeRule.onNodeWithText("Filters").performClick()
         composeRule.onNodeWithTag("opportunity-filter-panel").assertIsDisplayed()
         composeRule.onNodeWithText("Back").performClick()
         composeRule.onNodeWithTag("browse-screen-title")
-            .assertTextContains("Opportunities")
+            .assertTextContains("Browse")
             .assertIsDisplayed()
 
         composeRule.onNodeWithTag("primary-navigation-high_school").performClick()
@@ -139,7 +139,7 @@ class MainActivityTest {
         // previous test/run so this assertion verifies the localized empty-state placeholder.
         composeRule.onNode(hasSetTextAction()).performTextReplacement("")
         composeRule.onNodeWithTag("browse-screen-title")
-            .assertTextContains(frenchState.text("navOpportunities"))
+            .assertTextContains(frenchState.text("browse"))
         composeRule.onNodeWithText(frenchState.text("searchPlaceholder")).assertIsDisplayed()
 
         composeRule.runOnIdle {
@@ -158,7 +158,7 @@ class MainActivityTest {
                 .assertTextContains(arabicState.text(destination.catalogKey))
         }
         composeRule.onNodeWithTag("browse-screen-title")
-            .assertTextContains(arabicState.text("navOpportunities"))
+            .assertTextContains(arabicState.text("browse"))
         composeRule.onNodeWithText(arabicState.text("searchPlaceholder")).assertIsDisplayed()
 
         val rootBounds = composeRule.onRoot().getUnclippedBoundsInRoot()
@@ -188,8 +188,15 @@ class MainActivityTest {
 
     @Test
     fun searchStateSurvivesPrimaryNavigation() {
-        composeRule.onNodeWithTag("primary-navigation-opportunities").performClick()
-        composeRule.onNode(hasSetTextAction()).performTextReplacement("Conservation Youth Corps")
+        composeRule.onNodeWithTag("home-search-field")
+            .performTextReplacement("Conservation Youth Corps")
+        composeRule.onNodeWithTag("home-search-submit").performClick()
+        composeRule.onNodeWithTag("browse-screen-title").assertIsDisplayed()
+        composeRule.onNode(hasSetTextAction()).assertTextContains(
+            "Conservation Youth Corps",
+            false,
+            true,
+        )
 
         composeRule.onNodeWithTag("primary-navigation-home").performClick()
         composeRule.onNodeWithTag("primary-navigation-opportunities").performClick()

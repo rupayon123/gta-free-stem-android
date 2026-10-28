@@ -263,7 +263,6 @@ class BrowseViewModel(
         it.copy(age = age, adultsOnly = adultsOnly)
     }
 
-    fun setLanguage(language: String?) = updateFilters { it.copy(language = language) }
 
     fun setSort(sort: OpportunitySearchSort) = updateFilters { it.copy(sort = sort) }
 

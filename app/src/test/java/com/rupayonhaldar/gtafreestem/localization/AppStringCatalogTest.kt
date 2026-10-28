@@ -14,7 +14,7 @@ class AppStringCatalogTest {
         assertEquals(18, AppLanguage.entries.size)
         assertEquals(AppLanguage.entries.toSet(), catalog.availableLanguages)
         assertEquals(AppLanguage.entries.toSet(), catalog.metadataLanguages)
-        assertEquals(257, catalog.sourceKeys.size)
+        assertEquals(258, catalog.sourceKeys.size)
 
         AppLanguage.entries.forEach { language ->
             val metadata = catalog.metadata(language)
@@ -59,6 +59,7 @@ class AppStringCatalogTest {
     fun `accessibility states and external action failures are translated in every language`() {
         val catalog = bundledCatalog()
         val requiredKeys = setOf(
+            "ageGuide",
             "selectedState",
             "notSelectedState",
             "mapMarkerPosition",

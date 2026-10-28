@@ -33,7 +33,7 @@ data class OpportunitySearchFilters(
     val category: String? = null,
     val age: Int? = null,
     val adultsOnly: Boolean = false,
-    val language: String? = null,
+    val language: String? = null, // Legacy persisted field; provider delivery language is unverified.
     val volunteerHoursOnly: Boolean = false,
     val coopOnly: Boolean = false,
     val mentorshipOnly: Boolean = false,
@@ -64,7 +64,7 @@ data class OpportunitySearchFilters(
             age = age?.takeIf {
                 it in 0..OpportunitySearchLimits.MAXIMUM_AGE && !adultsOnly
             },
-            language = language.normalizedSelection(),
+            language = null,
             latitude = coordinate?.latitude,
             longitude = coordinate?.longitude,
             distanceKm = distanceKm?.takeIf {
@@ -146,7 +146,6 @@ object OpportunitySearch {
                 matches(normalizedFilters.city, opportunity.city) &&
                 matchesCategory(normalizedFilters.category, opportunity) &&
                 matchesAge(normalizedFilters, opportunity) &&
-                matchesLanguage(normalizedFilters.language, opportunity) &&
                 (!normalizedFilters.volunteerHoursOnly || candidate.matchesAny(VOLUNTEER_TERMS) ||
                     opportunity.volunteerHoursEligible) &&
                 (!normalizedFilters.coopOnly || candidate.matchesAny(COOP_TERMS) ||
@@ -212,16 +211,6 @@ object OpportunitySearch {
         }
         val age = filters.age ?: return true
         return age >= opportunity.ageMin && (opportunity.ageMax == null || age <= opportunity.ageMax)
-    }
-
-    private fun matchesLanguage(expected: String?, opportunity: Opportunity): Boolean {
-        if (expected == null) return true
-        val normalizedExpected = normalizeLanguageTag(expected)
-        return opportunity.languages.any { actual ->
-            val normalizedActual = normalizeLanguageTag(actual)
-            normalizedActual == normalizedExpected ||
-                normalizedActual.substringBefore('-') == normalizedExpected.substringBefore('-')
-        }
     }
 
     private fun distinctSorted(values: List<String>): List<String> {
@@ -399,10 +388,6 @@ private fun haversineDistanceKm(from: SearchCoordinate, to: SearchCoordinate): D
 private fun String?.normalizedSelection(): String? = this
     ?.trim()
     ?.takeIf { it.isNotEmpty() && !it.equals("all", ignoreCase = true) }
-
-private fun normalizeLanguageTag(value: String): String = normalize(value)
-    .replace('_', '-')
-    .replace(" ", "")
 
 private fun normalize(value: String): String = Normalizer
     .normalize(value, Normalizer.Form.NFD)

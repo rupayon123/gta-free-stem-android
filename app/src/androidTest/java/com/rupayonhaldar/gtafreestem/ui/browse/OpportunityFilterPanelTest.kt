@@ -43,6 +43,8 @@ class OpportunityFilterPanelTest {
 
         composeRule.onNodeWithTag(OpportunityFilterPanelTestTags.ACTIVE_COUNT)
             .assertTextEquals("1 filter active")
+        composeRule.onNodeWithTag(OpportunityFilterPanelTestTags.LANGUAGE)
+            .assertDoesNotExist()
         composeRule.onNodeWithTag(OpportunityFilterPanelTestTags.REGION)
             .assertHeightIsAtLeast(48.dp)
             .performClick()

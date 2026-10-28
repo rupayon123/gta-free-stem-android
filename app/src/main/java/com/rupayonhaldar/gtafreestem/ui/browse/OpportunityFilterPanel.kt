@@ -166,14 +166,6 @@ fun OpportunityFilterPanel(
                         )
                     },
                 )
-                StringFilterDropdown(
-                    label = labels.language,
-                    selection = normalizedFilters.language,
-                    availableValues = options.languages,
-                    anyLabel = labels.any,
-                    testTag = OpportunityFilterPanelTestTags.LANGUAGE,
-                    onSelection = { updateFilters(normalizedFilters.copy(language = it)) },
-                )
             }
 
             HorizontalDivider()
@@ -342,7 +334,6 @@ fun opportunityFilterPanelActiveCount(filters: OpportunitySearchFilters): Int {
         normalized.city != null,
         normalized.category != null,
         normalized.age != null || normalized.adultsOnly,
-        normalized.language != null,
         normalized.volunteerHoursOnly,
         normalized.coopOnly,
         normalized.mentorshipOnly,

@@ -33,7 +33,7 @@ class MainActivityPreferencesTest {
     fun fiveNavigationLabelsUseCatalogWithStableProfileLabel() {
         val french = preferenceState(AppLanguage.FRENCH)
         assertEquals(
-            listOf("Accueil", "Occasions", "Secondaire", "Soutien", "Profil"),
+            listOf("Accueil", "Parcourir", "Secondaire", "Soutien", "Profil"),
             PrimaryDestination.entries.map(french::navigationLabel),
         )
 
@@ -121,7 +121,7 @@ class MainActivityPreferencesTest {
               },
               "en": {
                 "home": "Home",
-                "navOpportunities": "Opportunities",
+                "browse": "Browse",
                 "highSchool": "High School",
                 "support": "Support",
                 "account": "Profile",
@@ -137,7 +137,7 @@ class MainActivityPreferencesTest {
               },
               "fr": {
                 "home": "Accueil",
-                "navOpportunities": "Occasions",
+                "browse": "Parcourir",
                 "highSchool": "Secondaire",
                 "support": "Soutien",
                 "account": "Profil",

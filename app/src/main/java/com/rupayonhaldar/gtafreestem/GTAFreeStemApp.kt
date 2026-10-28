@@ -80,8 +80,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.paneTitle
+import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -491,7 +493,7 @@ private fun HomeScreen(
 ) {
     val focusManager = LocalFocusManager.current
     LaunchedEffect(Unit) { focusManager.clearFocus() }
-    val featuredOpportunities = state.opportunities.take(2)
+    val featuredOpportunities = state.opportunities.take(3)
     Box(
         modifier = Modifier.fillMaxHeight(),
         contentAlignment = Alignment.TopCenter,
@@ -510,7 +512,7 @@ private fun HomeScreen(
             item {
                 Column(
                     modifier = Modifier.fillMaxWidth().padding(top = 4.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    verticalArrangement = Arrangement.spacedBy(6.dp),
                 ) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
@@ -530,11 +532,9 @@ private fun HomeScreen(
                         )
                     }
                     Text(
-                        text = text(
-                            "mission",
-                            "Find real free STEM programs, library events, volunteer hours, co-op, SHSM, and youth opportunities across the GTA.",
-                        ),
+                        text = text("mission", "Find free STEM activities across the GTA."),
                         style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
             }
@@ -542,17 +542,12 @@ private fun HomeScreen(
             item {
                 Column(
                     modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(10.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
-                    Text(
-                        text = text("search", "Search"),
-                        style = MaterialTheme.typography.titleLarge,
-                        modifier = Modifier.semantics { heading() },
-                    )
                     OutlinedTextField(
                         value = state.query,
                         onValueChange = onQueryChanged,
-                        label = { Text(text("search", "Search")) },
+                        placeholder = { Text(text("searchPlaceholder", "Search STEM opportunities…")) },
                         leadingIcon = {
                             Icon(
                                 painter = painterResource(R.drawable.ic_search),
@@ -560,122 +555,97 @@ private fun HomeScreen(
                                 modifier = Modifier.size(20.dp),
                             )
                         },
+                        trailingIcon = {
+                            IconButton(
+                                onClick = onSearch,
+                                modifier = Modifier.size(48.dp).testTag("home-search-submit"),
+                            ) {
+                                Icon(
+                                    painter = painterResource(R.drawable.ic_chevron_right),
+                                    contentDescription = text("browse", "Browse"),
+                                )
+                            }
+                        },
                         singleLine = true,
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
                         keyboardActions = KeyboardActions(onSearch = { onSearch() }),
-                        modifier = Modifier.fillMaxWidth().testTag("home-search-field"),
+                        modifier = Modifier.fillMaxWidth().testTag("home-search-field").semantics {
+                            contentDescription = text("search", "Search")
+                        },
                     )
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    ) {
-                        HomeFilterMenu(
+                    val quickFilters = listOf(
+                        HomeFilterSpec(
                             label = text("city", "City"),
                             selected = state.filters.city ?: text("all", "All"),
-                            modifier = Modifier.weight(1f),
                             options = listOf(text("all", "All") to { onCityChanged(null) }) +
                                 state.filterOptions.cities.map { city -> city to { onCityChanged(city) } },
-                        )
-                        HomeFilterMenu(
+                        ),
+                        HomeFilterSpec(
                             label = text("age", "Age"),
                             selected = when {
                                 state.filters.adultsOnly -> "18+"
                                 state.filters.age != null -> state.filters.age.toString()
                                 else -> text("all", "All")
                             },
-                            modifier = Modifier.weight(1f),
                             options = listOf(text("all", "All") to { onAgeChanged(null, false) }) +
                                 (0..17).map { age -> age.toString() to { onAgeChanged(age, false) } } +
                                 listOf("18+" to { onAgeChanged(null, true) }),
-                        )
-                    }
-                    HomeFilterMenu(
-                        label = text("category", "Category"),
-                        selected = state.filters.category?.let { category ->
-                            OpportunityLocalization.categoryName(category, language, catalog)
-                        } ?: text("all", "All"),
-                        modifier = Modifier.fillMaxWidth(),
-                        options = listOf(text("all", "All") to {
-                            onCategoryChanged("")
-                        }) + state.filterOptions.categories.map { category ->
-                            OpportunityLocalization.categoryName(category, language, catalog) to {
-                                onCategoryChanged(category)
-                            }
-                        },
+                        ),
+                        HomeFilterSpec(
+                            label = text("category", "Category"),
+                            selected = state.filters.category?.let { category ->
+                                OpportunityLocalization.categoryName(category, language, catalog)
+                            } ?: text("all", "All"),
+                            options = listOf(text("all", "All") to { onCategoryChanged("") }) +
+                                state.filterOptions.categories.map { category ->
+                                    OpportunityLocalization.categoryName(category, language, catalog) to {
+                                        onCategoryChanged(category)
+                                    }
+                                },
+                        ),
                     )
-                    Button(
-                        onClick = onSearch,
-                        modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp),
-                    ) { Text(text("browse", "Browse")) }
-                    TextButton(
-                        onClick = onHighSchool,
-                        modifier = Modifier.heightIn(min = 48.dp),
-                    ) {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_school),
-                            contentDescription = null,
-                            modifier = Modifier.size(18.dp),
-                        )
-                        Spacer(Modifier.width(8.dp))
-                        Text(text("highSchool", "High School"))
-                    }
-                }
-            }
-
-            item {
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                ) {
-                    Row(
-                        modifier = Modifier.horizontalScroll(rememberScrollState()),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    ) {
-                        listOf(
-                            "Science & Engineering",
-                            "Coding & Robotics",
-                            "Makerspace & Fabrication",
-                        ).forEachIndexed { index, category ->
-                            val chipColor = when (index) {
-                                0 -> MaterialTheme.colorScheme.primaryContainer
-                                1 -> MaterialTheme.colorScheme.tertiary.copy(alpha = 0.25f)
-                                else -> MaterialTheme.colorScheme.error.copy(alpha = 0.18f)
+                    if (LocalDensity.current.fontScale >= 1.5f) {
+                        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            quickFilters.forEach { filter ->
+                                HomeFilterMenu(filter, modifier = Modifier.fillMaxWidth())
                             }
-                            FilterChip(
-                                selected = state.filters.category == category,
-                                onClick = { onCategoryShortcut(category) },
-                                leadingIcon = {
-                                    Icon(
-                                        painter = painterResource(
-                                            when (index) {
-                                                0 -> R.drawable.ic_science
-                                                1 -> R.drawable.ic_code
-                                                else -> R.drawable.ic_maker
-                                            },
-                                        ),
-                                        contentDescription = null,
-                                        modifier = Modifier.size(18.dp),
-                                    )
-                                },
-                                label = {
-                                    Text(OpportunityLocalization.categoryName(category, language, catalog))
-                                },
-                                colors = FilterChipDefaults.filterChipColors(
-                                    containerColor = chipColor,
-                                    labelColor = MaterialTheme.colorScheme.onSurface,
-                                    iconColor = MaterialTheme.colorScheme.onSurface,
-                                    selectedContainerColor = chipColor,
-                                    selectedLabelColor = MaterialTheme.colorScheme.onSurface,
-                                    selectedLeadingIconColor = MaterialTheme.colorScheme.onSurface,
-                                ),
-                                modifier = Modifier.heightIn(min = 48.dp),
-                            )
+                        }
+                    } else {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        ) {
+                            quickFilters.forEach { filter ->
+                                HomeFilterMenu(filter, modifier = Modifier.weight(1f))
+                            }
                         }
                     }
                 }
             }
 
             item {
-                FeedStatusRow(
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    listOf(
+                        "Science & Engineering",
+                        "Coding & Robotics",
+                        "Makerspace & Fabrication",
+                    ).forEachIndexed { index, category ->
+                        HomeCategoryShortcut(
+                            category = category,
+                            label = OpportunityLocalization.categoryName(category, language, catalog),
+                            selected = state.filters.category == category,
+                            onClick = { onCategoryShortcut(category) },
+                            modifier = Modifier.weight(1f).testTag("home-category-$index"),
+                        )
+                    }
+                }
+            }
+
+            item {
+                HomeFeedSummary(
                     snapshot = state.snapshot,
                     isRefreshing = state.isLoading || state.isRefreshing,
                     resultCount = state.opportunities.size,
@@ -686,19 +656,6 @@ private fun HomeScreen(
             }
             state.errorMessage?.let { message ->
                 item { ErrorBanner(message = message, showRetry = true, onRetry = onRefresh, text = text) }
-            }
-
-            item {
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
-                ) {
-                    Text(
-                        text = text("opportunities", "Featured opportunities"),
-                        style = MaterialTheme.typography.titleLarge,
-                        modifier = Modifier.semantics { heading() },
-                    )
-                }
             }
 
             when {
@@ -721,6 +678,7 @@ private fun HomeScreen(
                         onClick = { onSelectOpportunity(opportunity) },
                         language = language,
                         catalog = catalog,
+                        text = text,
                     )
                 }
             }
@@ -735,6 +693,18 @@ private fun HomeScreen(
                         style = MaterialTheme.typography.titleLarge,
                         modifier = Modifier.semantics { heading() },
                     )
+                    TextButton(
+                        onClick = onHighSchool,
+                        modifier = Modifier.heightIn(min = 48.dp),
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_school),
+                            contentDescription = null,
+                            modifier = Modifier.size(18.dp),
+                        )
+                        Spacer(Modifier.width(8.dp))
+                        Text(text("highSchool", "High School"))
+                    }
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(10.dp),
@@ -769,28 +739,57 @@ private fun HomeScreen(
 }
 
 @Composable
-private fun HomeFilterMenu(
+private fun HomeCategoryShortcut(
+    category: String,
     label: String,
-    selected: String,
-    options: List<Pair<String, () -> Unit>>,
+    selected: Boolean,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    Column(
+        modifier = modifier
+            .heightIn(min = 100.dp)
+            .clickable(onClick = onClick)
+            .semantics {
+                this.selected = selected
+                contentDescription = label
+            }
+            .padding(vertical = 4.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(6.dp),
+    ) {
+        CategoryMark(category, selected)
+        Text(label, style = MaterialTheme.typography.labelMedium, textAlign = TextAlign.Center)
+    }
+}
+
+private data class HomeFilterSpec(
+    val label: String,
+    val selected: String,
+    val options: List<Pair<String, () -> Unit>>,
+)
+
+@Composable
+private fun HomeFilterMenu(filter: HomeFilterSpec, modifier: Modifier = Modifier) {
     var expanded by rememberSaveable { mutableStateOf(false) }
     Box(modifier) {
         OutlinedButton(
             onClick = { expanded = true },
-            modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp),
-            contentPadding = PaddingValues(horizontal = 6.dp, vertical = 6.dp),
+            modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).semantics {
+                contentDescription = "${filter.label}: ${filter.selected}"
+            },
+            contentPadding = PaddingValues(horizontal = 8.dp, vertical = 4.dp),
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Column(modifier = Modifier.weight(1f)) {
-                    Text(label, style = MaterialTheme.typography.labelSmall)
-                    Text(selected, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    Text(filter.label, style = MaterialTheme.typography.labelSmall, maxLines = 1,
+                        overflow = TextOverflow.Ellipsis)
+                    Text(filter.selected, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 }
                 Icon(
                     painter = painterResource(R.drawable.ic_chevron_right),
                     contentDescription = null,
-                    modifier = Modifier.size(18.dp).rotate(90f),
+                    modifier = Modifier.size(16.dp).rotate(90f),
                 )
             }
         }
@@ -799,7 +798,7 @@ private fun HomeFilterMenu(
             onDismissRequest = { expanded = false },
             modifier = Modifier.heightIn(max = 360.dp),
         ) {
-            options.forEach { (optionLabel, onSelect) ->
+            filter.options.forEach { (optionLabel, onSelect) ->
                 DropdownMenuItem(
                     text = { Text(optionLabel) },
                     onClick = {
@@ -818,36 +817,99 @@ private fun HomeActivityRow(
     onClick: () -> Unit,
     language: AppLanguage,
     catalog: AppStringCatalog,
+    text: (String, String) -> String,
 ) {
     val localized = remember(opportunity, language, catalog) {
         OpportunityLocalization.resolve(opportunity, language, catalog)
     }
-    Surface(
-        modifier = Modifier.fillMaxWidth().clickable(onClick = onClick),
-        color = MaterialTheme.colorScheme.surface,
-        shape = MaterialTheme.shapes.medium,
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick)
+            .padding(vertical = 8.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
-        Column(
-            modifier = Modifier.padding(14.dp),
-            verticalArrangement = Arrangement.spacedBy(4.dp),
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalAlignment = Alignment.Top,
         ) {
-            Text(localized.category, style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.primary)
-            Text(localized.title, style = MaterialTheme.typography.titleMedium,
-                maxLines = 2, overflow = TextOverflow.Ellipsis)
-            Text(
-                listOfNotNull(
-                    localized.organization,
-                    localized.city.takeIf(String::isNotBlank),
-                    opportunity.startDate?.let { formatDate(it, language) },
-                ).joinToString(" · "),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis,
+            CategoryMark(opportunity.category)
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(3.dp),
+            ) {
+                Text(localized.category, style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.primary)
+                Text(localized.title, style = MaterialTheme.typography.titleMedium)
+                Text(localized.organization, style = MaterialTheme.typography.labelLarge)
+                OpportunitySchedule.range(
+                    opportunity.startDate,
+                    opportunity.endDate,
+                    Locale.forLanguageTag(language.localeTag),
+                )?.let { schedule ->
+                    Text(schedule, style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+                Text(
+                    listOf(locationLabel(opportunity, localized), ageLabel(opportunity, text))
+                        .filter(String::isNotBlank).joinToString(" · "),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                Text(localized.cost, style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.primary)
+            }
+            Icon(
+                painter = painterResource(R.drawable.ic_chevron_right),
+                contentDescription = null,
+                modifier = Modifier.size(18.dp),
             )
         }
+        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+    }
+}
+
+@Composable
+private fun CategoryMark(category: String, selected: Boolean = false) {
+    val icon = categoryIcon(category)
+    val colors = MaterialTheme.colorScheme
+    val container = when (icon) {
+        R.drawable.ic_code -> colors.secondaryContainer
+        R.drawable.ic_maker -> colors.tertiary.copy(alpha = 0.35f)
+        else -> colors.primaryContainer
+    }
+    val foreground = when (icon) {
+        R.drawable.ic_code -> colors.onSecondaryContainer
+        R.drawable.ic_maker -> colors.onSurface
+        else -> colors.onPrimaryContainer
+    }
+    Surface(
+        modifier = Modifier.size(48.dp),
+        shape = RoundedCornerShape(12.dp),
+        color = container,
+        contentColor = foreground,
+        border = if (selected) BorderStroke(2.dp, colors.primary) else null,
+    ) {
+        Box(contentAlignment = Alignment.Center) {
+            Icon(
+                painter = painterResource(icon),
+                contentDescription = null,
+                modifier = Modifier.size(26.dp),
+            )
+        }
+    }
+}
+
+private fun categoryIcon(category: String): Int {
+    val name = category.lowercase(Locale.ROOT)
+    return when {
+        "coding" in name || "robotic" in name || "digital" in name -> R.drawable.ic_code
+        "maker" in name || "fabrication" in name -> R.drawable.ic_maker
+        "volunteer" in name || "community" in name -> R.drawable.ic_group
+        "career" in name || "mentor" in name || "co-op" in name -> R.drawable.ic_briefcase
+        "science" in name || "engineering" in name || "stem" in name -> R.drawable.ic_science
+        else -> R.drawable.ic_bookmark_border
     }
 }
 
@@ -975,7 +1037,6 @@ internal fun localizedFilterLabels(
     city = text("city", "City"),
     category = text("category", "Category"),
     age = text("age", "Age"),
-    language = text("programLanguage", "Language"),
     any = text("any", "Any"),
     volunteerHours = text("volunteerHours", "Volunteer hours"),
     coop = text("coop", "Co-op"),
@@ -1069,16 +1130,13 @@ private fun BrowseScreen(
         }
 
         item {
-            Card(
-                shape = MaterialTheme.shapes.medium,
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
-                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 14.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
                     OutlinedTextField(
                         value = state.query,
@@ -1342,7 +1400,7 @@ private fun BrandHeader(
         horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         Text(
-            text = if (mode == BrowseMode.HIGH_SCHOOL) shellText("highSchool", "High School") else shellText("navOpportunities", "Opportunities"),
+            text = if (mode == BrowseMode.HIGH_SCHOOL) shellText("highSchool", "High School") else shellText("browse", "Browse"),
             style = MaterialTheme.typography.headlineSmall,
             modifier = Modifier.weight(1f).testTag("browse-screen-title").semantics { heading() },
         )
@@ -1352,6 +1410,58 @@ private fun BrandHeader(
                 contentDescription = null,
                 contentScale = ContentScale.Fit,
                 modifier = Modifier.width(88.dp).height(56.dp),
+            )
+        }
+    }
+}
+
+@Composable
+private fun HomeFeedSummary(
+    snapshot: OpportunityFeedSnapshot?,
+    isRefreshing: Boolean,
+    resultCount: Int,
+    onRefresh: () -> Unit,
+    text: (String, String) -> String,
+    language: AppLanguage,
+) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(2.dp),
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                text("opportunities", "Opportunities"),
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.weight(1f).semantics { heading() },
+            )
+            IconButton(
+                onClick = onRefresh,
+                enabled = !isRefreshing,
+                modifier = Modifier.size(48.dp),
+            ) {
+                if (isRefreshing) {
+                    CircularProgressIndicator(modifier = Modifier.size(20.dp), strokeWidth = 2.dp)
+                } else {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_refresh),
+                        contentDescription = text("refreshResearch", "Refresh"),
+                        modifier = Modifier.size(22.dp),
+                    )
+                }
+            }
+        }
+        Text(
+            "$resultCount ${text("visible", "available")} · ${if (isRefreshing) text("checkingLiveSources", "Checking live sources") else feedLabel(snapshot, text)}",
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.testTag("feed-result-count"),
+        )
+        snapshot?.let {
+            Text(
+                "${text("lastVerified", "Last checked")}: ${formatDate(it.lastUpdated.toString(), language)}",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.testTag("feed-last-verified-date"),
             )
         }
     }
@@ -1434,99 +1544,93 @@ private fun OpportunityCard(
     val localized = remember(opportunity, language, catalog) {
         OpportunityLocalization.resolve(opportunity, language, catalog)
     }
-    Card(
-        modifier = modifier.fillMaxWidth().testTag("opportunity-card-${opportunity.id}"),
-        shape = RoundedCornerShape(AppCardRadius),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.7f)),
-        elevation = CardDefaults.cardElevation(defaultElevation = AppCardElevation),
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .testTag("opportunity-card-${opportunity.id}")
+            .padding(vertical = 10.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
-        Column(
-            modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalAlignment = Alignment.Top,
         ) {
-            FlowRow(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
+            CategoryMark(opportunity.category)
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(6.dp),
             ) {
-                CategoryPill(localized.category)
-                FreePill(text("freeShort", "FREE"))
-            }
-            Text(
-                text = localized.title,
-                style = MaterialTheme.typography.titleLarge,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis,
-            )
-            Text(
-                text = localized.organization,
-                style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.primary,
-            )
-            Text(
-                text = localized.description,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                maxLines = 3,
-                overflow = TextOverflow.Ellipsis,
-            )
-            Text(
-                text = listOf(locationLabel(opportunity, localized), ageLabel(opportunity, text))
-                    .filter(String::isNotBlank)
-                    .joinToString("  •  "),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-            OpportunitySchedule.range(opportunity.startDate, opportunity.endDate, Locale.forLanguageTag(language.localeTag))?.let { schedule ->
-                Text(
-                    text = "${text(if (opportunity.startDate == null) "endDate" else "date", "Date")}: $schedule",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.End),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                OutlinedButton(
-                    onClick = onToggleFavorite,
-                    modifier = Modifier
-                        .weight(1.1f)
-                        .heightIn(min = 46.dp)
-                        .semantics {
-                            contentDescription = if (isFavorite) {
-                                "${text("saved", "Saved")}: ${localized.title}"
-                            } else {
-                                "${text("save", "Save")}: ${localized.title}"
-                            }
-                        },
+                FlowRow(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(4.dp),
                 ) {
-                    Icon(
-                        painter = painterResource(if (isFavorite) {
-                            R.drawable.ic_bookmark
-                        } else {
-                            R.drawable.ic_bookmark_border
-                        }),
-                        contentDescription = null,
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(if (isFavorite) text("saved", "Saved") else text("save", "Save"))
+                    Text(localized.category, style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.primary)
+                    Text(localized.cost, style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
-                Button(
-                    onClick = onDetails,
-                    modifier = Modifier
-                        .weight(1f)
-                        .heightIn(min = 46.dp)
-                        .semantics {
-                            contentDescription = "${text("details", "View details")}: ${localized.title}"
-                        },
-                ) {
-                    Text(text("details", "View details"))
-                }
+                Text(text = localized.title, style = MaterialTheme.typography.titleLarge)
+                Text(text = localized.organization, style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.primary)
             }
         }
+        Text(
+            text = localized.description,
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis,
+        )
+        OpportunitySchedule.range(
+            opportunity.startDate,
+            opportunity.endDate,
+            Locale.forLanguageTag(language.localeTag),
+        )?.let { schedule ->
+            Text(
+                text = "${text(if (opportunity.startDate == null) "endDate" else "date", "Date")}: $schedule",
+                style = MaterialTheme.typography.bodyMedium,
+            )
+        }
+        val age = ageLabel(opportunity, text)
+        Text(
+            text = listOf(locationLabel(opportunity, localized), age)
+                .filter(String::isNotBlank).joinToString(" · "),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        FlowRow(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            OutlinedButton(
+                onClick = onToggleFavorite,
+                modifier = Modifier.heightIn(min = 48.dp).semantics {
+                    contentDescription = if (isFavorite) {
+                        "${text("saved", "Saved")}: ${localized.title}"
+                    } else {
+                        "${text("save", "Save")}: ${localized.title}"
+                    }
+                },
+            ) {
+                Icon(
+                    painter = painterResource(if (isFavorite) R.drawable.ic_bookmark else R.drawable.ic_bookmark_border),
+                    contentDescription = null,
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(if (isFavorite) text("saved", "Saved") else text("save", "Save"))
+            }
+            Button(
+                onClick = onDetails,
+                modifier = Modifier.heightIn(min = 48.dp).semantics {
+                    contentDescription = "${text("details", "View details")}: ${localized.title}"
+                },
+            ) {
+                Text(text("details", "View details"))
+            }
+        }
+        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
     }
 }
 
@@ -1768,7 +1872,7 @@ internal fun OpportunityDetailScreen(
                     }
                     FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         CategoryPill(localized.category)
-                        FreePill(text("freeShort", "FREE"))
+                        FreePill(localized.cost)
                     }
                     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         Text(
@@ -1781,11 +1885,6 @@ internal fun OpportunityDetailScreen(
                             style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.primary,
                         )
-                        Text(
-                            text = localized.description,
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        )
                     }
                 }
             }
@@ -1796,36 +1895,34 @@ internal fun OpportunityDetailScreen(
                 opportunity = opportunity,
                 localized = localized,
                 language = language,
-                catalog = catalog,
                 text = text,
             )
         }
 
-        if (opportunity.communityFocus.isNotEmpty()) {
-            item {
-                DetailSection(
-                    title = text("equity", "Who it welcomes"),
-                    body = opportunity.communityFocus.joinToString(" • "),
-                )
+        item {
+            val registrationUrl = opportunity.registrationUrl ?: opportunity.sourceUrl
+            Button(
+                shape = MaterialTheme.shapes.medium,
+                onClick = {
+                    if (!openHttps(context, registrationUrl)) {
+                        Toast.makeText(
+                            context,
+                            text("registerApply", "This registration link is unavailable."),
+                            Toast.LENGTH_LONG,
+                        ).show()
+                    }
+                },
+                modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp),
+            ) {
+                Text(text(if (registrationUrl.trim() == opportunity.sourceUrl.trim()) "openProgramPage" else "registerApply", "Open program page"))
             }
         }
 
-        if (opportunity.accessibility.isNotEmpty()) {
-            item {
-                DetailSection(
-                    title = text("access", "Accessibility"),
-                    body = opportunity.accessibility.joinToString(" • "),
-                )
-            }
-        }
-
-        opportunity.commitment?.let { commitment ->
-            item {
-                DetailSection(
-                    title = text("commitment", "Commitment"),
-                    body = commitment,
-                )
-            }
+        item {
+            DetailSection(
+                title = text("programDetails", "Program details"),
+                body = localized.description,
+            )
         }
 
         item {
@@ -1867,28 +1964,9 @@ internal fun OpportunityDetailScreen(
                         )
                     }
 
-                    val registrationUrl = opportunity.registrationUrl ?: opportunity.sourceUrl
-                    Button(
-                        shape = MaterialTheme.shapes.medium,
-                        onClick = {
-                            if (!openHttps(context, registrationUrl)) {
-                                Toast.makeText(
-                                    context,
-                                    text("registerApply", "This registration link is unavailable."),
-                                    Toast.LENGTH_LONG,
-                                ).show()
-                            }
-                        },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .heightIn(min = 52.dp),
-                    ) {
-                        Text(text(if (registrationUrl.trim() == opportunity.sourceUrl.trim()) "openProgramPage" else "registerApply", "Open program page"))
-                    }
-
-                    if (opportunity.address != null ||
+                    if (!opportunity.virtual && (opportunity.address != null ||
                         (opportunity.latitude != null && opportunity.longitude != null)
-                    ) {
+                    )) {
                         OutlinedButton(
                             onClick = {
                                 if (!openDirections(context, opportunity)) {
@@ -1935,6 +2013,33 @@ internal fun OpportunityDetailScreen(
                 }
             }
         }
+
+        if (opportunity.communityFocus.isNotEmpty()) {
+            item {
+                DetailSection(
+                    title = text("equity", "Who it welcomes"),
+                    body = opportunity.communityFocus.joinToString(" • "),
+                )
+            }
+        }
+
+        if (opportunity.accessibility.isNotEmpty()) {
+            item {
+                DetailSection(
+                    title = text("access", "Accessibility"),
+                    body = opportunity.accessibility.joinToString(" • "),
+                )
+            }
+        }
+
+        opportunity.commitment?.let { commitment ->
+            item {
+                DetailSection(
+                    title = text("commitment", "Commitment"),
+                    body = commitment,
+                )
+            }
+        }
         }
     }
 }
@@ -1944,7 +2049,6 @@ private fun DetailFacts(
     opportunity: Opportunity,
     localized: LocalizedOpportunityText,
     language: AppLanguage,
-    catalog: AppStringCatalog,
     text: (String, String) -> String,
 ) {
     Card(
@@ -1954,8 +2058,10 @@ private fun DetailFacts(
     ) {
         Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
             DetailFactRow(text("region", "Location"), locationLabel(opportunity, localized))
-            HorizontalDivider()
-            DetailFactRow(text("ages", "Ages"), ageLabel(opportunity, text))
+            ageRange(opportunity)?.let { age ->
+                HorizontalDivider()
+                DetailFactRow(text("ageGuide", "Age guide"), age)
+            }
             OpportunitySchedule.range(opportunity.startDate, opportunity.endDate, Locale.forLanguageTag(language.localeTag))?.let { schedule ->
                 HorizontalDivider()
                 DetailFactRow(text(if (opportunity.startDate == null) "endDate" else "date", "Date"), schedule)
@@ -1965,15 +2071,6 @@ private fun DetailFacts(
                     HorizontalDivider()
                     DetailFactRow(text("deadline", "Apply by"), deadline)
                 }
-            }
-            if (opportunity.languages.isNotEmpty()) {
-                HorizontalDivider()
-                DetailFactRow(
-                    text("languages", "Languages"),
-                    opportunity.languages.joinToString(", ") { code ->
-                        languageName(code, catalog)
-                    },
-                )
             }
             if (opportunity.volunteerHoursEligible || opportunity.coopEligible) {
                 HorizontalDivider()
@@ -2252,12 +2349,14 @@ private fun locationLabel(
 private fun ageLabel(
     opportunity: Opportunity,
     text: (String, String) -> String = { _, fallback -> fallback },
-): String = when {
-    opportunity.ageMin <= 0 && opportunity.ageMax == null -> "All ages"
-    opportunity.ageMin <= 0 -> "Up to age ${opportunity.ageMax}"
-    opportunity.ageMax == null -> "${text("ages", "Ages")} ${opportunity.ageMin}+"
-    opportunity.ageMin == opportunity.ageMax -> "Age ${opportunity.ageMin}"
-    else -> "${text("ages", "Ages")} ${opportunity.ageMin}–${opportunity.ageMax}"
+): String = ageRange(opportunity)?.let { "${text("ageGuide", "Age guide")}: $it" }.orEmpty()
+
+private fun ageRange(opportunity: Opportunity): String? = when {
+    opportunity.ageMin <= 0 && opportunity.ageMax == null -> null
+    opportunity.ageMin <= 0 -> "0–${opportunity.ageMax}"
+    opportunity.ageMax == null -> "${opportunity.ageMin}+"
+    opportunity.ageMin == opportunity.ageMax -> "${opportunity.ageMin}"
+    else -> "${opportunity.ageMin}–${opportunity.ageMax}"
 }
 
 private fun formatDate(raw: String, language: AppLanguage = AppLanguage.ENGLISH): String {
@@ -2276,10 +2375,6 @@ private fun formatDate(raw: String, language: AppLanguage = AppLanguage.ENGLISH)
     }
 }
 
-private fun languageName(code: String, catalog: AppStringCatalog): String =
-    AppLanguage.matching(code)?.let(catalog::metadata)?.nativeName
-        ?: code.uppercase(Locale.ROOT)
-
 internal const val OnlineBrowseUrl = "https://gta-free-stem.pages.dev/opportunities/"
 
 private fun openHttps(context: Context, rawUrl: String): Boolean {
@@ -2288,7 +2383,8 @@ private fun openHttps(context: Context, rawUrl: String): Boolean {
     return launchExternal(context, Intent(Intent.ACTION_VIEW, uri).addCategory(Intent.CATEGORY_BROWSABLE))
 }
 
-private fun openDirections(context: Context, opportunity: Opportunity): Boolean {
+internal fun openDirections(context: Context, opportunity: Opportunity): Boolean {
+    if (opportunity.virtual) return false
     val label = opportunity.address ?: opportunity.title
     val geoUri = if (opportunity.latitude != null && opportunity.longitude != null) {
         Uri.parse(

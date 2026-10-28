@@ -33,6 +33,62 @@ import org.junit.Test
 @OptIn(ExperimentalCoroutinesApi::class)
 class BrowseViewModelTest {
     @Test
+    fun `restored unsupported program language is neutral while display locale and filters remain`() = runTest {
+        Dispatchers.setMain(StandardTestDispatcher(testScheduler))
+        try {
+            val stateStore = RecordingBrowseSearchStateStore(
+                restored = BrowseSearchState(
+                    query = "",
+                    filters = OpportunitySearchFilters(
+                        region = "Toronto",
+                        city = "Toronto",
+                        category = "Coding & Robotics",
+                        age = 12,
+                        language = "ja",
+                    ),
+                ),
+            )
+            val repository = RecordingRepository(snapshot(listOf(
+                opportunity(
+                    id = "english-source",
+                    category = "Coding & Robotics",
+                    region = "Toronto",
+                    city = "Toronto",
+                    languages = listOf("en"),
+                    ageMax = 14,
+                ),
+            )))
+            val viewModel = BrowseViewModel(
+                repository = repository,
+                favorites = EmptyFavorites(),
+                browseStateStore = stateStore,
+                initialSearchLanguage = AppLanguage.JAPANESE,
+                searchDispatcher = StandardTestDispatcher(testScheduler),
+            )
+
+            advanceUntilIdle()
+
+            val state = viewModel.uiState.value
+            assertEquals(AppLanguage.JAPANESE, state.searchLanguage)
+            assertEquals(null, state.filters.language)
+            assertEquals("Toronto", state.filters.region)
+            assertEquals("Toronto", state.filters.city)
+            assertEquals("Coding & Robotics", state.filters.category)
+            assertEquals(12, state.filters.age)
+            assertEquals(listOf("english-source"), state.opportunities.map(Opportunity::id))
+            assertEquals(AppLanguage.JAPANESE, repository.searches.last().third)
+
+            viewModel.setQuery("Program")
+            advanceUntilIdle()
+            assertEquals(null, stateStore.writes.last().filters.language)
+            assertEquals("Toronto", stateStore.writes.last().filters.city)
+        } finally {
+            advanceUntilIdle()
+            Dispatchers.resetMain()
+        }
+    }
+
+    @Test
     fun `rapid query edits publish only the latest search`() = runTest {
         Dispatchers.setMain(StandardTestDispatcher(testScheduler))
         try {
