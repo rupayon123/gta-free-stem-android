@@ -4,7 +4,21 @@ I'm building GTA FREE STEM to make free STEM programs easier to find across the 
 
 [iOS app](https://github.com/rupayon123/gta-free-stem-ios) · [Web app](https://github.com/rupayon123/gta-free-stem-opportunities) · [Try the website](https://gta-free-stem.pages.dev/)
 
-## The Android experience
+## Landing Home in development
+
+> Development **1.1.1 / build6 is not uploaded**. The existing internal Play release remains version1.1.0/code5.
+
+<table>
+<tr><th width="50%">Explore topics</th><th width="50%">Return to a saved search</th></tr>
+<tr><td align="center"><a href="docs/showcase/2026-10-28/home-exact-apk-light.png"><img src="docs/showcase/2026-10-28/home-exact-apk-light.png" alt="Android development Home with topic choices and Browse-all" width="300"></a></td><td align="center"><a href="docs/showcase/2026-10-28/home-exact-apk-saved.png"><img src="docs/showcase/2026-10-28/home-exact-apk-saved.png" alt="Android development Home with a locally saved Robotics search and its current match total" width="300"></a></td></tr>
+</table>
+
+Actual API36 emulator captures from installed source `e9a8c95f95db62ca6fd542d45d7532ad85f61896`. Home introduces topics; Browse keeps search and filters. Save independent named searches for different ages or interests and return for real matching-event updates. Searches stay on the device and do not automatically enable notifications. [Browse capture](docs/showcase/2026-10-28/browse-exact-apk.png) · [Source and image provenance](docs/showcase/2026-10-28/capture-receipt.json).
+
+The source passed244 unit tests and66 emulator tests. Wider general-library catalogue adoption, full-description translation, API26/physical-device checks and the new signed release remain unfinished. These are development previews, not proof of a newly available Play build.
+
+<details>
+<summary>Historical October25 API26 development screenshots</summary>
 
 <table>
   <tr><th width="50%">Home with current feed</th><th width="50%">Search and filters</th></tr>
@@ -21,11 +35,14 @@ I'm building GTA FREE STEM to make free STEM programs easier to find across the 
 
 These are unretouched **API 26 Android emulator** captures of an installed development APK from October 25, 2026. They use a public live feed and are neither Google Play screenshots nor physical-device signoff. Listing counts and dates change. [Capture provenance](docs/showcase/README.md).
 
+
+</details>
+
 ## Find and save an activity
 
-1. Tap **Search** or **Opportunities**. Enter an interest, library, or city; open **Filters** to narrow by age, category, and place.
+1. Tap **Browse**, choose a topic on Home, or open a saved search. Enter an interest, library, or city; open **Filters** to narrow by age, category, and place.
 2. Choose **List** or **Map** when location data is available. Open a result to read its schedule, age range, location, and original provider.
-3. Follow the provider link to confirm availability and any registration requirements. Save an activity for later on this device.
+3. Follow the provider link to confirm availability and any registration requirements. Save an activity for later, or use **Save search** in Browse to keep the current criteria under a name. Multiple saved searches can use different ages and interests; editing one requires an explicit update.
 4. Use **High School** to explore volunteer hours, co-op, SHSM, and mentorship. If the feed is offline, check the last-checked date and refresh when connected.
 
 ## About the app
