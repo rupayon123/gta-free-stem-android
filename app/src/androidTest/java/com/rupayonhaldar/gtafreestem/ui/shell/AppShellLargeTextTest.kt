@@ -217,7 +217,7 @@ class AppShellLargeTextTest {
             val tab = composeRule.onNodeWithTag("primary-navigation-${destination.name.lowercase()}")
             tab.assertIsDisplayed().performClick().assertIsSelected()
             val bounds = tab.getUnclippedBoundsInRoot()
-            assertTrue("$label requires a full touch target", bounds.height >= 48.dp && bounds.width >= 48.dp)
+            assertTrue("$label requires a full touch target", bounds.bottom - bounds.top >= 48.dp && bounds.right - bounds.left >= 48.dp)
             val layout = assertCompleteLabel(label, tab).textLayoutResult(label)
             for (line in 0 until layout.lineCount - 1) {
                 val end = layout.getLineEnd(line, visibleEnd = true)
