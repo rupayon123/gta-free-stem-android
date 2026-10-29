@@ -25,22 +25,30 @@ class SavedFilterPickerRuntimeTest {
             filters = OpportunitySearchFilters(city = "Toronto"), knownMatchingIds = emptyList())
         val state = mutableStateOf(BrowseUiState(savedSearches = listOf(SavedSearchSummary(entry, 0, 0))))
         var writes = 0
+        val scope = mutableStateOf("High School · Volunteer hours")
+        val scopedCount = mutableStateOf(3)
         compose.setContent {
             GTAFreeStemContentTheme(false) {
                 SavedFilterPicker(state.value,
                     onSelect = { state.value = state.value.copy(query = entry.query,
                         filters = entry.filters, activeSavedSearchId = entry.id) },
-                    onNew = { state.value = state.value.copy(query = "", filters = OpportunitySearchFilters(),
-                        activeSavedSearchId = null) },
+                    onNew = {
+                        state.value = state.value.copy(query = "", filters = OpportunitySearchFilters(),
+                            activeSavedSearchId = null)
+                        scope.value = "High School"
+                        scopedCount.value = 5
+                    },
                     onQueryChange = { state.value = state.value.copy(query = it) },
-                    onSave = { _, update -> if (update) writes++ }, text = { _, fallback -> fallback })
+                    onSave = { _, update -> if (update) writes++ }, text = { _, fallback -> fallback },
+                    resultCount = scopedCount.value, scopeLabel = scope.value)
             }
         }
         compose.onNodeWithTag("saved-filter-picker").performClick()
         compose.onNodeWithTag("saved-filter-robotics").performClick()
         compose.onNodeWithTag("filter-query").assertTextContains("robots")
         compose.onNodeWithTag("filter-live-criteria").assertTextContains("Toronto", substring = true)
-        compose.onNodeWithTag("filter-live-count").assertTextContains("0 matches")
+        compose.onNodeWithTag("filter-live-count").assertTextContains("3 matches")
+        compose.onNodeWithTag("filter-current-scope").assertTextContains("High School · Volunteer hours")
         compose.onNodeWithTag("filter-query").performTextReplacement("stars")
         compose.onNodeWithTag("filter-modified").assertExists()
         compose.runOnIdle { assertEquals(0, writes) }
@@ -49,6 +57,8 @@ class SavedFilterPickerRuntimeTest {
         compose.runOnIdle { assertEquals(1, writes) }
         compose.onNodeWithTag("filter-new").performClick()
         compose.onNodeWithTag("filter-modified").assertDoesNotExist()
+        compose.onNodeWithTag("filter-live-count").assertTextContains("5 matches")
+        compose.onNodeWithTag("filter-current-scope").assertTextContains("High School")
         compose.runOnIdle { assertEquals(null, state.value.activeSavedSearchId) }
     }
 }
