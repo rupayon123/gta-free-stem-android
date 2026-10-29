@@ -303,8 +303,12 @@ fun GTAFreeStemApp(
                 onSelectPreset = { viewModel.openSavedSearch(it) },
                 onNewFilter = {
                     viewModel.clearSearchAndFilters()
-                    highSchoolFocusName = HighSchoolFocus.ALL.name
+                    if (selectedDestination == PrimaryDestination.HIGH_SCHOOL) {
+                        highSchoolFocusName = HighSchoolFocus.ALL.name
+                    }
                 },
+                hasSectionFocus = selectedDestination == PrimaryDestination.HIGH_SCHOOL &&
+                    highSchoolFocus != HighSchoolFocus.ALL,
                 resultCount = if (selectedDestination == PrimaryDestination.HIGH_SCHOOL) {
                     state.opportunities.count { it.matchesHighSchoolFocus(highSchoolFocus) }
                 } else state.opportunities.size,
@@ -555,6 +559,7 @@ private fun FilterScreen(
     onQueryChanged: (String) -> Unit,
     onSaveFilter: (String, Boolean) -> Unit,
     resultCount: Int,
+    hasSectionFocus: Boolean,
     scopeLabel: String?,
     text: (String, String) -> String,
 ) {
@@ -606,7 +611,7 @@ private fun FilterScreen(
                 onFiltersChange = onFiltersChanged,
                 labels = localizedFilterLabels(text),
                 onReset = onNewFilter,
-                canResetOverride = state.filters.hasActiveFilters || state.query.isNotBlank() ||
+                canResetOverride = hasSectionFocus || state.filters.hasActiveFilters || state.query.isNotBlank() ||
                     state.activeSavedSearchId != null,
                 presetContent = {
                     SavedFilterPicker(state, onSelectPreset, onNewFilter, onQueryChanged, onSaveFilter, text,
