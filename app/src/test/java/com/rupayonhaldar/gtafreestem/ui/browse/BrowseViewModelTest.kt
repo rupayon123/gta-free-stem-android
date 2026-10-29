@@ -25,6 +25,9 @@ import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runCurrent
@@ -37,6 +40,93 @@ import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class BrowseViewModelTest {
+    @Test
+    fun `in panel preset replacement cancels stale result without navigation or refresh`() = runTest {
+        val dispatcher = StandardTestDispatcher(testScheduler)
+        Dispatchers.setMain(dispatcher)
+        try {
+            val repository = RecordingRepository(healthySnapshot(listOf(
+                opportunity("four", "STEM", "Toronto", "Toronto", listOf("en"), 5, ageMin = 4),
+                opportunity("sixteen", "STEM", "Toronto", "Toronto", listOf("en"), 17, ageMin = 16),
+            ), 1_000L))
+            val store = RecordingSavedSearchStore()
+            val vm = BrowseViewModel(repository, EmptyFavorites(), savedSearchStore = store,
+                searchDispatcher = dispatcher, savedSearchIoDispatcher = dispatcher)
+            advanceUntilIdle()
+            for (age in listOf(4, 16)) {
+                vm.setAge(age)
+                vm.saveCurrentSearch("Age $age")
+                advanceUntilIdle()
+            }
+            val ids = store.entries.map { it.id }
+            val requests = repository.refreshCalls
+            val published = mutableListOf<List<String>>()
+            backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+                vm.uiState.collect { published += it.opportunities.map(Opportunity::id) }
+            }
+            // Replace A while its synchronous local worker is returning; cancellation
+            // must prevent A's results being published into B's selected controls.
+            repository.onSearch = { filters ->
+                if (filters.age == 4) {
+                    repository.onSearch = null
+                    assertTrue(vm.openSavedSearch(ids[1]))
+                }
+            }
+            assertTrue(vm.openSavedSearch(ids[0]))
+            advanceUntilIdle()
+            assertEquals(ids[1], vm.uiState.value.activeSavedSearchId)
+            assertEquals(16, vm.uiState.value.filters.age)
+            assertEquals(listOf("sixteen"), vm.uiState.value.opportunities.map(Opportunity::id))
+            assertFalse(published.contains(listOf("four")))
+            assertEquals(AppDestination.EXPLORE, vm.uiState.value.destination)
+            assertEquals(requests, repository.refreshCalls)
+        } finally {
+            advanceUntilIdle()
+            Dispatchers.resetMain()
+        }
+    }
+
+    @Test
+    fun `manual filter edits require explicit update and reset detaches without deleting presets`() = runTest {
+        val dispatcher = StandardTestDispatcher(testScheduler)
+        Dispatchers.setMain(dispatcher)
+        try {
+            val repository = RecordingRepository(healthySnapshot(listOf(
+                opportunity("four", "STEM", "Toronto", "Toronto", listOf("en"), 5, ageMin = 4),
+                opportunity("sixteen", "STEM", "Toronto", "Toronto", listOf("en"), 17, ageMin = 16),
+            ), 1_000L))
+            val store = RecordingSavedSearchStore()
+            val vm = BrowseViewModel(repository, EmptyFavorites(), savedSearchStore = store,
+                searchDispatcher = dispatcher, savedSearchIoDispatcher = dispatcher)
+            advanceUntilIdle()
+            vm.setAge(4)
+            vm.saveCurrentSearch("Child")
+            advanceUntilIdle()
+            val original = store.entries.single()
+            val requests = repository.refreshCalls
+            vm.setFilters(OpportunitySearchFilters(age = 16))
+            advanceUntilIdle()
+            assertEquals(original.id, vm.uiState.value.activeSavedSearchId)
+            assertEquals(original, store.entries.single())
+            assertEquals(listOf("sixteen"), vm.uiState.value.opportunities.map(Opportunity::id))
+            vm.saveCurrentSearch("Teen", updateExisting = true)
+            advanceUntilIdle()
+            val updated = store.entries.single()
+            assertEquals(original.id, updated.id)
+            assertEquals(16, updated.filters.age)
+            vm.clearSearchAndFilters()
+            advanceUntilIdle()
+            assertEquals(null, vm.uiState.value.activeSavedSearchId)
+            assertEquals(OpportunitySearchFilters(), vm.uiState.value.filters)
+            assertEquals(setOf("four", "sixteen"), vm.uiState.value.opportunities.map(Opportunity::id).toSet())
+            assertEquals(listOf(updated), store.entries)
+            assertEquals(requests, repository.refreshCalls)
+        } finally {
+            advanceUntilIdle()
+            Dispatchers.resetMain()
+        }
+    }
+
     @Test
     fun `three named age searches retain independent counts across refresh view edit and delete`() = runTest {
         val dispatcher = StandardTestDispatcher(testScheduler)
@@ -691,10 +781,15 @@ class BrowseViewModelTest {
         var snapshot: OpportunityFeedSnapshot,
     ) : OpportunityRepository {
         val searches = mutableListOf<Triple<String, OpportunitySearchFilters, AppLanguage>>()
+        var refreshCalls = 0
+        var onSearch: ((OpportunitySearchFilters) -> Unit)? = null
 
         override suspend fun bootstrap(): OpportunityFeedSnapshot = snapshot
 
-        override suspend fun refresh(): OpportunityFeedSnapshot = snapshot
+        override suspend fun refresh(): OpportunityFeedSnapshot {
+            refreshCalls += 1
+            return snapshot
+        }
 
         override fun current(): OpportunityFeedSnapshot = snapshot
 
@@ -704,6 +799,7 @@ class BrowseViewModelTest {
             language: AppLanguage,
         ): List<Opportunity> {
             searches += Triple(query, filters, language)
+            onSearch?.invoke(filters)
             return OpportunitySearch.search(
                 opportunities = snapshot.opportunities,
                 query = query,
