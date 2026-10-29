@@ -118,6 +118,7 @@ import com.rupayonhaldar.gtafreestem.ui.browse.BrowseViewModel
 import com.rupayonhaldar.gtafreestem.ui.browse.OpportunityMap3D
 import com.rupayonhaldar.gtafreestem.ui.browse.toMapOpportunityPin
 import com.rupayonhaldar.gtafreestem.ui.browse.OpportunityFilterPanel
+import com.rupayonhaldar.gtafreestem.ui.browse.SavedFilterPicker
 import com.rupayonhaldar.gtafreestem.ui.browse.OpportunityFilterPanelLabels
 import com.rupayonhaldar.gtafreestem.ui.browse.opportunityFilterPanelActiveCount
 import com.rupayonhaldar.gtafreestem.ui.preferences.AccountPreferencesScreen
@@ -299,6 +300,10 @@ fun GTAFreeStemApp(
                 state = state,
                 onBack = { showingFilters = false },
                 onFiltersChanged = viewModel::setFilters,
+                onSelectPreset = { viewModel.openSavedSearch(it) },
+                onNewFilter = viewModel::clearSearchAndFilters,
+                onQueryChanged = viewModel::setQuery,
+                onSaveFilter = viewModel::saveCurrentSearch,
                 text = preferences::shellText,
             )
 
@@ -535,6 +540,10 @@ private fun FilterScreen(
     state: BrowseUiState,
     onBack: () -> Unit,
     onFiltersChanged: (OpportunitySearchFilters) -> Unit,
+    onSelectPreset: (String) -> Unit,
+    onNewFilter: () -> Unit,
+    onQueryChanged: (String) -> Unit,
+    onSaveFilter: (String, Boolean) -> Unit,
     text: (String, String) -> String,
 ) {
     Box(
@@ -584,7 +593,12 @@ private fun FilterScreen(
                 options = state.filterOptions,
                 onFiltersChange = onFiltersChanged,
                 labels = localizedFilterLabels(text),
-                onReset = { onFiltersChanged(OpportunitySearchFilters()) },
+                onReset = onNewFilter,
+                canResetOverride = state.filters.hasActiveFilters || state.query.isNotBlank() ||
+                    state.activeSavedSearchId != null,
+                presetContent = {
+                    SavedFilterPicker(state, onSelectPreset, onNewFilter, onQueryChanged, onSaveFilter, text)
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)
@@ -767,7 +781,7 @@ private fun BrowseScreen(
                             },
                             enabled = !state.filters.hasValidLocation,
                             modifier = Modifier.heightIn(min = 48.dp).testTag("browse-save-search"),
-                        ) { Text(shellText("saveSearch", "Save search")) }
+                        ) { Text(shellText("saveSearch", "Save filter")) }
                         if (activeSavedSearch != null) {
                             TextButton(
                                 onClick = {
@@ -776,7 +790,7 @@ private fun BrowseScreen(
                                 },
                                 enabled = !state.filters.hasValidLocation,
                                 modifier = Modifier.heightIn(min = 48.dp).testTag("browse-update-search"),
-                            ) { Text(shellText("updateSavedSearch", "Update saved search")) }
+                            ) { Text(shellText("updateSavedSearch", "Update filter")) }
                         }
                     }
                     if (mode == BrowseMode.OPPORTUNITIES && state.filters.hasValidLocation) {
@@ -788,14 +802,14 @@ private fun BrowseScreen(
                     }
                     if (mode == BrowseMode.OPPORTUNITIES) state.savedSearchFeedback?.let { feedback ->
                         val message = when (feedback) {
-                            SavedSearchFeedback.SAVED -> shellText("savedSearchSaved", "Search saved on this device.")
-                            SavedSearchFeedback.UPDATED -> shellText("savedSearchUpdated", "Saved search updated.")
-                            SavedSearchFeedback.DELETED -> shellText("savedSearchDeleted", "Saved search deleted.")
-                            SavedSearchFeedback.OPENED -> shellText("savedSearchOpened", "Saved search opened. New matches marked as viewed.")
+                            SavedSearchFeedback.SAVED -> shellText("savedSearchSaved", "Filter saved on this device.")
+                            SavedSearchFeedback.UPDATED -> shellText("savedSearchUpdated", "Saved filter updated.")
+                            SavedSearchFeedback.DELETED -> shellText("savedSearchDeleted", "Saved filter deleted.")
+                            SavedSearchFeedback.OPENED -> shellText("savedSearchOpened", "Saved filter applied. New matches marked as viewed.")
                             SavedSearchFeedback.INVALID_NAME -> shellText("savedSearchInvalidName", "Enter a name from 1 to 60 characters.")
-                            SavedSearchFeedback.LIMIT_REACHED -> shellText("savedSearchLimit", "You can save up to 16 searches on this device.")
+                            SavedSearchFeedback.LIMIT_REACHED -> shellText("savedSearchLimit", "You can save up to 16 filters on this device.")
                             SavedSearchFeedback.STORAGE_FAILED -> shellText("localSaveFailed", "That change could not be saved on this device.")
-                            SavedSearchFeedback.NOT_FOUND -> shellText("savedSearchNotFound", "That saved search is no longer available.")
+                            SavedSearchFeedback.NOT_FOUND -> shellText("savedSearchNotFound", "That saved filter is no longer available.")
                             SavedSearchFeedback.NEARBY_UNSUPPORTED -> shellText("nearbyNotSaved", "Nearby location cannot be saved. Choose a city or clear Nearby first.")
                         }
                         Text(message, style = MaterialTheme.typography.bodySmall,
@@ -998,8 +1012,8 @@ private fun BrowseScreen(
         AlertDialog(
             onDismissRequest = { saveDialogMode = null },
             title = {
-                Text(if (mode == "update") shellText("updateSavedSearch", "Update saved search")
-                    else shellText("saveSearch", "Save search"))
+                Text(if (mode == "update") shellText("updateSavedSearch", "Update filter")
+                    else shellText("saveSearch", "Save filter"))
             },
             text = {
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {

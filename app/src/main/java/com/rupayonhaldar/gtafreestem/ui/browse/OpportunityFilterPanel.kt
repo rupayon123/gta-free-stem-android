@@ -75,6 +75,8 @@ fun OpportunityFilterPanel(
     labels: OpportunityFilterPanelLabels = OpportunityFilterPanelLabels.English,
     onReset: () -> Unit = { onFiltersChange(OpportunitySearchFilters()) },
     showHeader: Boolean = true,
+    presetContent: (@Composable () -> Unit)? = null,
+    canResetOverride: Boolean? = null,
 ) {
     val normalizedFilters = filters.normalized()
     val activeFilterCount = opportunityFilterPanelActiveCount(normalizedFilters)
@@ -105,11 +107,13 @@ fun OpportunityFilterPanel(
             if (showHeader) {
                 FilterPanelHeader(
                     activeFilterCount = activeFilterCount,
-                    canReset = normalizedFilters != OpportunitySearchFilters(),
+                    canReset = canResetOverride ?: (normalizedFilters != OpportunitySearchFilters()),
                     labels = labels,
                     onReset = onReset,
                 )
             }
+
+            presetContent?.invoke()
 
             Card(
                 colors = CardDefaults.cardColors(
