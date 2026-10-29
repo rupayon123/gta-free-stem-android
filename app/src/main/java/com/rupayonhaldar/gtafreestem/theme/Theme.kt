@@ -56,6 +56,14 @@ private val DarkColorScheme = darkColorScheme(
     onError = Color(0xFF690005),
 )
 
+private val LightContentColorScheme = LightColorScheme.copy(
+    background = ContentCanvas,
+    surface = ContentSurface,
+    surfaceVariant = ContentSubtle,
+    secondaryContainer = TopicSky,
+    tertiaryContainer = TopicYellow,
+)
+
 private val AppShapes = Shapes(
     small = RoundedCornerShape(12.dp),
     medium = RoundedCornerShape(18.dp),
@@ -69,6 +77,17 @@ fun GTAFreeStemTheme(
 ) {
     MaterialTheme(
         colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme,
+        typography = AppTypography,
+        shapes = AppShapes,
+        content = content,
+    )
+}
+
+/** Applied only after bootstrap so the original loader palette and animation stay intact. */
+@Composable
+fun GTAFreeStemContentTheme(darkTheme: Boolean, content: @Composable () -> Unit) {
+    MaterialTheme(
+        colorScheme = if (darkTheme) DarkColorScheme else LightContentColorScheme,
         typography = AppTypography,
         shapes = AppShapes,
         content = content,

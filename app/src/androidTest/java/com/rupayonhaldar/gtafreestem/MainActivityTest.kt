@@ -2,6 +2,7 @@ package com.rupayonhaldar.gtafreestem
 
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.getUnclippedBoundsInRoot
 import androidx.compose.ui.test.hasText
@@ -188,10 +189,10 @@ class MainActivityTest {
 
     @Test
     fun searchStateSurvivesPrimaryNavigation() {
-        composeRule.onNodeWithTag("home-search-field")
-            .performTextReplacement("Conservation Youth Corps")
-        composeRule.onNodeWithTag("home-search-submit").performClick()
+        composeRule.onNodeWithTag("landing-home").assertIsDisplayed()
+        composeRule.onNodeWithTag("home-browse-all").performClick()
         composeRule.onNodeWithTag("browse-screen-title").assertIsDisplayed()
+        composeRule.onNode(hasSetTextAction()).performTextReplacement("Conservation Youth Corps")
         composeRule.onNode(hasSetTextAction()).assertTextContains(
             "Conservation Youth Corps",
             false,
@@ -205,6 +206,14 @@ class MainActivityTest {
             false,
             true,
         )
+    }
+
+    @Test
+    fun homeTopicOpensTheRealCategoryInBrowse() {
+        composeRule.onNodeWithTag("landing-home").assertIsDisplayed()
+        composeRule.onNodeWithTag("home-topic-Science & Engineering").performClick()
+        composeRule.onNodeWithTag("browse-screen-title").assertIsDisplayed()
+        composeRule.onNodeWithTag("browse-category-Science & Engineering").assertIsSelected()
     }
 
     @Test

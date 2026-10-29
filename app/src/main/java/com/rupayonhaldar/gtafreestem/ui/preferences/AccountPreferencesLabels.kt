@@ -88,6 +88,7 @@ internal class AccountPreferencesLabels(
     )
 
     val localDataTitle = text("localDataTitle", "Local data")
+    val deletingLocalData = text("deletingLocalData", "Deleting local data…")
     val localDataExplanation = text(
         "localDataExplanation",
         "Your profile, search history, saved opportunities, and alert history stay on this device. This action removes them and turns alerts off; language and theme stay.",
@@ -126,12 +127,12 @@ internal class AccountPreferencesLabels(
     fun deletionSuccess(hadProfile: Boolean): String = if (hadProfile) {
         text(
             "localDataDeletionSuccessWithProfile",
-            "Profile, saved opportunities, search history, and alert history deleted. Alerts are off.",
+            "Profile, named searches, saved opportunities, search history, and alert history deleted. Alerts are off.",
         )
     } else {
         text(
             "localDataDeletionSuccess",
-            "Saved opportunities, search history, and alert history deleted. Alerts are off.",
+            "Named searches, saved opportunities, search history, and alert history deleted. Alerts are off.",
         )
     }
 
@@ -139,6 +140,7 @@ internal class AccountPreferencesLabels(
         val remaining = buildList {
             if (!result.profileDeleted) add(text("profileData", "profile"))
             if (!result.searchHistoryDeleted) add(text("searchHistory", "search history"))
+            if (!result.namedSearchesDeleted) add(text("mySavedSearches", "saved searches"))
             if (!result.savedOpportunitiesDeleted) {
                 add(text("savedOpportunitiesData", "saved opportunities"))
             }

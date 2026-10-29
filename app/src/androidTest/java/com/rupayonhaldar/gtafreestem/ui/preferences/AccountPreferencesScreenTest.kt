@@ -2,6 +2,7 @@ package com.rupayonhaldar.gtafreestem.ui.preferences
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.hasAnyAncestor
@@ -9,6 +10,7 @@ import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
@@ -21,6 +23,7 @@ import com.rupayonhaldar.gtafreestem.data.local.DisplayNameSaveResult
 import com.rupayonhaldar.gtafreestem.data.local.LocalAccountDataDeletionResult
 import com.rupayonhaldar.gtafreestem.localization.AndroidAppStringCatalogLoader
 import com.rupayonhaldar.gtafreestem.localization.AppLanguage
+import kotlinx.coroutines.CompletableDeferred
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
@@ -30,6 +33,42 @@ import org.junit.runner.RunWith
 class AccountPreferencesScreenTest {
     @get:Rule
     val composeRule = createComposeRule()
+
+    @Test
+    fun deletionShowsProgressWhileStorageIsPending() {
+        val releaseDeletion = CompletableDeferred<Unit>()
+        composeRule.setContent {
+            MaterialTheme {
+                AccountPreferencesScreen(
+                    state = state(displayName = null),
+                    onSaveDisplayName = { DisplayNameSaveResult.SAVED },
+                    onClearProfile = { true },
+                    onLanguageSelected = { true },
+                    onThemeSelected = { true },
+                    onOpportunityAlertsPreferredChanged = { true },
+                    onOpenSavedLibrary = {},
+                    onDeleteAllLocalData = {
+                        releaseDeletion.await()
+                        successfulDeletion()
+                    },
+                    onOpenSupport = {},
+                    onOpenPrivacyPolicy = {},
+                    onOpenTerms = {},
+                )
+            }
+        }
+        composeRule.onNodeWithTag(AccountPreferencesTestTags.DELETE_LOCAL_DATA)
+            .performScrollTo().performClick()
+        composeRule.onNodeWithTag("local-action-confirm").performClick()
+        composeRule.onNodeWithTag("local-data-progress").assertIsDisplayed()
+        composeRule.runOnIdle { releaseDeletion.complete(Unit) }
+        composeRule.waitUntil(timeoutMillis = 5_000) {
+            composeRule.onAllNodesWithTag("local-data-progress").fetchSemanticsNodes().isEmpty()
+        }
+        composeRule.onAllNodesWithTag("local-data-progress").assertCountEquals(0)
+        composeRule.onNodeWithTag(AccountPreferencesTestTags.STATUS)
+            .performScrollTo().assertIsDisplayed()
+    }
 
     @Test
     fun localOnlyActionsAndWorkingAlertPreferenceAreVisibleAndCallable() {
@@ -49,7 +88,7 @@ class AccountPreferencesScreenTest {
                     onThemeSelected = { true },
                     onOpportunityAlertsPreferredChanged = { true },
                     onOpenSavedLibrary = { savedLibraryOpened = true },
-                    onDeleteAllLocalData = ::successfulDeletion,
+                    onDeleteAllLocalData = { successfulDeletion() },
                     onOpenSupport = {},
                     onOpenPrivacyPolicy = {},
                     onOpenTerms = {},
@@ -86,7 +125,7 @@ class AccountPreferencesScreenTest {
                     onThemeSelected = { true },
                     onOpportunityAlertsPreferredChanged = { true },
                     onOpenSavedLibrary = {},
-                    onDeleteAllLocalData = ::successfulDeletion,
+                    onDeleteAllLocalData = { successfulDeletion() },
                     onOpenSupport = {},
                     onOpenPrivacyPolicy = {},
                     onOpenTerms = {},
@@ -116,7 +155,7 @@ class AccountPreferencesScreenTest {
                     onThemeSelected = { true },
                     onOpportunityAlertsPreferredChanged = { true },
                     onOpenSavedLibrary = {},
-                    onDeleteAllLocalData = ::successfulDeletion,
+                    onDeleteAllLocalData = { successfulDeletion() },
                     onOpenSupport = {},
                     onOpenPrivacyPolicy = {},
                     onOpenTerms = {},
@@ -158,7 +197,7 @@ class AccountPreferencesScreenTest {
                         true
                     },
                     onOpenSavedLibrary = {},
-                    onDeleteAllLocalData = ::successfulDeletion,
+                    onDeleteAllLocalData = { successfulDeletion() },
                     onOpenSupport = {},
                     onOpenPrivacyPolicy = {},
                     onOpenTerms = {},

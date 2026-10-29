@@ -10,6 +10,10 @@ import com.rupayonhaldar.gtafreestem.data.local.FavoriteOpportunityStore
 import com.rupayonhaldar.gtafreestem.data.local.SavedOpportunitySections
 import com.rupayonhaldar.gtafreestem.data.local.SharedPreferencesBrowseSearchStateStore
 import com.rupayonhaldar.gtafreestem.data.local.SharedPreferencesFavoriteOpportunityStore
+import com.rupayonhaldar.gtafreestem.data.local.SavedSearchEntry
+import com.rupayonhaldar.gtafreestem.data.local.SavedSearchStore
+import com.rupayonhaldar.gtafreestem.data.local.SavedSearchSummary
+import com.rupayonhaldar.gtafreestem.data.local.SharedPreferencesSavedSearchStore
 import com.rupayonhaldar.gtafreestem.data.repository.OpportunityRepositories
 import com.rupayonhaldar.gtafreestem.domain.model.Opportunity
 import com.rupayonhaldar.gtafreestem.domain.model.OpportunityFeedSnapshot
@@ -20,6 +24,10 @@ import com.rupayonhaldar.gtafreestem.domain.search.OpportunitySearchFilters
 import com.rupayonhaldar.gtafreestem.domain.search.OpportunitySearchLimits
 import com.rupayonhaldar.gtafreestem.domain.search.OpportunitySearchOptions
 import com.rupayonhaldar.gtafreestem.domain.search.OpportunitySearchSort
+import com.rupayonhaldar.gtafreestem.domain.search.SavedSearchUpdatePolicy
+import com.rupayonhaldar.gtafreestem.localization.AndroidAppStringCatalogLoader
+import com.rupayonhaldar.gtafreestem.localization.AppStringCatalog
+import java.util.UUID
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -31,12 +39,19 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlin.coroutines.coroutineContext
 
 enum class AppDestination {
     EXPLORE,
     SAVED,
     ABOUT,
+}
+
+enum class SavedSearchFeedback {
+    SAVED, UPDATED, DELETED, OPENED, INVALID_NAME, LIMIT_REACHED, STORAGE_FAILED, NOT_FOUND,
+    NEARBY_UNSUPPORTED,
 }
 
 data class BrowseUiState(
@@ -58,6 +73,9 @@ data class BrowseUiState(
     val unresolvedSavedCount: Int = 0,
     val selectedOpportunity: Opportunity? = null,
     val errorMessage: String? = null,
+    val savedSearches: List<SavedSearchSummary> = emptyList(),
+    val activeSavedSearchId: String? = null,
+    val savedSearchFeedback: SavedSearchFeedback? = null,
 ) {
     /** Compatibility alias retained for the current category-chip UI. */
     val selectedCategory: String?
@@ -68,12 +86,16 @@ class BrowseViewModel(
     private val repository: OpportunityRepository,
     private val favorites: FavoriteOpportunityStore,
     private val browseStateStore: BrowseSearchStateStore = BrowseSearchStateStore.NONE,
+    private val savedSearchStore: SavedSearchStore = SavedSearchStore.NONE,
+    private val catalog: AppStringCatalog? = null,
     private val initialSearchLanguage: AppLanguage = AppLanguage.ENGLISH,
     private val searchDispatcher: CoroutineDispatcher = Dispatchers.Default,
+    private val savedSearchIoDispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : ViewModel() {
     private val restoredBrowseState = runCatching(browseStateStore::read)
         .getOrDefault(BrowseSearchState())
     private val restoredSavedLibraryState = readSavedLibraryState()
+    private var savedSearchEntries = runCatching(savedSearchStore::read).getOrDefault(emptyList())
     private val _uiState = MutableStateFlow(
         BrowseUiState(
             query = restoredBrowseState.query.take(OpportunitySearchLimits.MAXIMUM_QUERY_LENGTH),
@@ -82,6 +104,7 @@ class BrowseViewModel(
             favoriteIds = restoredSavedLibraryState.ids,
             savedSections = restoredSavedLibraryState.sections,
             unresolvedSavedCount = restoredSavedLibraryState.unresolvedCount,
+            savedSearches = savedSearchEntries.map(::SavedSearchSummary),
         ),
     )
     val uiState: StateFlow<BrowseUiState> = _uiState.asStateFlow()
@@ -89,6 +112,11 @@ class BrowseViewModel(
     private var loadJob: Job? = null
     private var refreshJob: Job? = null
     private var searchJob: Job? = null
+    private var savedSearchJob: Job? = null
+    @Volatile private var savedSearchGeneration = 0L
+    @Volatile private var clearingNamedSearches = false
+    private var pendingLocaleRebaseline = false
+    private val savedSearchWriteMutex = Mutex()
 
     init {
         load()
@@ -158,13 +186,16 @@ class BrowseViewModel(
     }
 
     fun setSearchLanguage(language: AppLanguage) {
+        val changed = _uiState.value.searchLanguage != language
         _uiState.update { state ->
             val normalizedLanguage = language
             if (state.searchLanguage == normalizedLanguage) state else {
                 state.copy(searchLanguage = normalizedLanguage)
             }
         }
+        if (changed && savedSearchEntries.isNotEmpty()) pendingLocaleRebaseline = true
         recomputeResults()
+        _uiState.value.snapshot?.let(::reconcileSavedSearches)
     }
 
     fun setQuery(query: String) {
@@ -191,25 +222,49 @@ class BrowseViewModel(
             it.copy(
                 query = "",
                 filters = OpportunitySearchFilters(),
+                activeSavedSearchId = null,
             )
         }
         persistBrowseState()
         recomputeResults()
     }
 
-    /** Deletes persisted browse history and resets the live query/filter/sort state on success. */
+    /** Deletes only the last Browse search, leaving explicitly named searches intact. */
     fun clearSearchHistory(): Boolean {
-        val cleared = runCatching(browseStateStore::clear).getOrDefault(false)
-        if (cleared) {
+        val browseCleared = runCatching(browseStateStore::clear).getOrDefault(false)
+        if (browseCleared) {
             _uiState.update {
                 it.copy(
                     query = "",
                     filters = OpportunitySearchFilters(),
+                    activeSavedSearchId = null,
                 )
             }
             recomputeResults()
         }
-        return cleared
+        return browseCleared
+    }
+
+    /** Deletes named searches, serialized with queued writes so a late save cannot restore them. */
+    suspend fun clearNamedSavedSearches(): Boolean {
+        clearingNamedSearches = true
+        invalidateSavedSearchWork()
+        return try {
+            val cleared = withContext(savedSearchIoDispatcher) {
+                savedSearchWriteMutex.withLock {
+                    runCatching(savedSearchStore::clear).getOrDefault(false)
+                }
+            }
+            if (cleared) {
+                savedSearchEntries = emptyList()
+                _uiState.update {
+                    it.copy(savedSearches = emptyList(), activeSavedSearchId = null)
+                }
+            }
+            cleared
+        } finally {
+            clearingNamedSearches = false
+        }
     }
 
     /** Replaces the complete filter selection in one state update and one persistence write. */
@@ -217,6 +272,216 @@ class BrowseViewModel(
         _uiState.update { it.copy(filters = filters.normalized()) }
         persistBrowseState()
         recomputeResults()
+    }
+
+    /** A named search is changed only by this explicit action, never by Browse field edits. */
+    fun saveCurrentSearch(name: String, updateExisting: Boolean = false) {
+        if (clearingNamedSearches) {
+            reportSavedSearchFeedback(SavedSearchFeedback.STORAGE_FAILED)
+            return
+        }
+        val normalizedName = name.trim()
+        if (normalizedName.length !in 1..60) {
+            reportSavedSearchFeedback(SavedSearchFeedback.INVALID_NAME)
+            return
+        }
+        val state = _uiState.value
+        if (state.filters.hasValidLocation) {
+            reportSavedSearchFeedback(SavedSearchFeedback.NEARBY_UNSUPPORTED)
+            return
+        }
+        val targetId = state.activeSavedSearchId.takeIf { updateExisting }
+        if (updateExisting && (targetId == null || savedSearchEntries.none { it.id == targetId })) {
+            reportSavedSearchFeedback(SavedSearchFeedback.NOT_FOUND)
+            return
+        }
+        if (!updateExisting && savedSearchEntries.size >= com.rupayonhaldar.gtafreestem.data.local.PersistentSavedSearchStore.MAX_SEARCHES) {
+            reportSavedSearchFeedback(SavedSearchFeedback.LIMIT_REACHED)
+            return
+        }
+        val generation = invalidateSavedSearchWork()
+        val snapshot = state.snapshot
+        val id = targetId ?: UUID.randomUUID().toString()
+        viewModelScope.launch {
+            val selectedFilters = state.filters.withoutTransientLocation().normalized()
+            val matches = if (snapshot != null) withContext(searchDispatcher) {
+                OpportunitySearch.search(
+                    snapshot.opportunities, state.query, selectedFilters,
+                    language = state.searchLanguage, catalog = catalog,
+                ).map(Opportunity::id)
+            } else emptyList()
+            coroutineContext.ensureActive()
+            if (generation != savedSearchGeneration) return@launch
+            val canBaseline = snapshot != null && SavedSearchUpdatePolicy.canCountUpdates(snapshot)
+            val entry = SavedSearchEntry(
+                id = id,
+                name = normalizedName,
+                query = state.query,
+                filters = selectedFilters,
+                knownMatchingIds = if (canBaseline) matches.distinct() else emptyList(),
+                hasBaseline = canBaseline,
+                lastProcessedRevisionEpochMillis = if (canBaseline) snapshot.publicationRevision?.toEpochMilli() else null,
+                lastKnownMatchCount = if (canBaseline) matches.size else null,
+            )
+            val revised = if (updateExisting) {
+                savedSearchEntries.map { if (it.id == id) entry else it }
+            } else savedSearchEntries + entry
+            val prior = savedSearchEntries
+            savedSearchEntries = revised
+            if (!writeSavedSearches(revised, generation)) {
+                if (generation == savedSearchGeneration) {
+                    savedSearchEntries = prior
+                    reportSavedSearchFeedback(SavedSearchFeedback.STORAGE_FAILED)
+                }
+                return@launch
+            }
+            if (generation != savedSearchGeneration) return@launch
+            savedSearchEntries = revised
+            _uiState.update { current ->
+                val summary = SavedSearchSummary(entry)
+                val summaries = if (updateExisting) {
+                    current.savedSearches.map { if (it.entry.id == id) summary else it }
+                } else current.savedSearches + summary
+                current.copy(
+                    activeSavedSearchId = id,
+                    savedSearches = summaries,
+                    savedSearchFeedback = if (updateExisting) SavedSearchFeedback.UPDATED else SavedSearchFeedback.SAVED,
+                )
+            }
+        }
+    }
+
+    fun openSavedSearch(id: String): Boolean {
+        if (clearingNamedSearches) return false
+        val entry = savedSearchEntries.firstOrNull { it.id == id } ?: run {
+            reportSavedSearchFeedback(SavedSearchFeedback.NOT_FOUND)
+            return false
+        }
+        val generation = invalidateSavedSearchWork()
+        val prior = savedSearchEntries
+        val priorSummaries = _uiState.value.savedSearches
+        val revised = savedSearchEntries.map {
+            if (it.id == id) it.copy(unreadMatchingIds = emptyList()) else it
+        }
+        savedSearchEntries = revised
+        _uiState.update { state ->
+            state.copy(
+                query = entry.query,
+                filters = entry.filters.normalized(),
+                activeSavedSearchId = id,
+                savedSearches = state.savedSearches.map { summary ->
+                    if (summary.entry.id == id) summary.copy(entry = revised.first { it.id == id }, newCount = 0)
+                    else summary
+                },
+                savedSearchFeedback = SavedSearchFeedback.OPENED,
+            )
+        }
+        persistBrowseState()
+        recomputeResults()
+        viewModelScope.launch {
+            if (!writeSavedSearches(revised, generation) && generation == savedSearchGeneration) {
+                savedSearchEntries = prior
+                _uiState.update { state ->
+                    state.copy(
+                        savedSearches = priorSummaries,
+                        savedSearchFeedback = SavedSearchFeedback.STORAGE_FAILED,
+                    )
+                }
+            }
+        }
+        return true
+    }
+
+    fun deleteSavedSearch(id: String): Boolean {
+        if (clearingNamedSearches) return false
+        if (savedSearchEntries.none { it.id == id }) {
+            reportSavedSearchFeedback(SavedSearchFeedback.NOT_FOUND)
+            return false
+        }
+        val generation = invalidateSavedSearchWork()
+        val prior = savedSearchEntries
+        val priorSummaries = _uiState.value.savedSearches
+        val revised = savedSearchEntries.filterNot { it.id == id }
+        savedSearchEntries = revised
+        _uiState.update { state ->
+            state.copy(
+                savedSearches = state.savedSearches.filterNot { it.entry.id == id },
+                activeSavedSearchId = state.activeSavedSearchId.takeUnless { it == id },
+                savedSearchFeedback = SavedSearchFeedback.DELETED,
+            )
+        }
+        viewModelScope.launch {
+            if (!writeSavedSearches(revised, generation) && generation == savedSearchGeneration) {
+                savedSearchEntries = prior
+                _uiState.update {
+                    it.copy(savedSearches = priorSummaries,
+                        savedSearchFeedback = SavedSearchFeedback.STORAGE_FAILED)
+                }
+            }
+        }
+        return true
+    }
+
+    private fun reportSavedSearchFeedback(feedback: SavedSearchFeedback) {
+        _uiState.update { it.copy(savedSearchFeedback = feedback) }
+    }
+
+    private fun invalidateSavedSearchWork(): Long {
+        savedSearchJob?.cancel()
+        savedSearchGeneration += 1
+        return savedSearchGeneration
+    }
+
+    private suspend fun writeSavedSearches(entries: List<SavedSearchEntry>, generation: Long): Boolean =
+        withContext(savedSearchIoDispatcher) {
+            savedSearchWriteMutex.withLock {
+                if (generation != savedSearchGeneration) return@withLock false
+                savedSearchStore.write(entries)
+            }
+        }
+
+    private fun reconcileSavedSearches(snapshot: OpportunityFeedSnapshot) {
+        if (clearingNamedSearches) return
+        val generation = invalidateSavedSearchWork()
+        val entries = savedSearchEntries.toList()
+        val previous = _uiState.value.savedSearches.associateBy { it.entry.id }
+        val language = _uiState.value.searchLanguage
+        val quietRebaseline = pendingLocaleRebaseline
+        if (entries.isEmpty()) return
+        savedSearchJob = viewModelScope.launch {
+            val summaries = withContext(searchDispatcher) {
+                val matching = entries.associate { entry ->
+                    entry.id to OpportunitySearch.search(
+                        snapshot.opportunities, entry.query, entry.filters,
+                        language = language, catalog = catalog,
+                    ).map(Opportunity::id)
+                }
+                SavedSearchUpdatePolicy.summarize(
+                    entries, matching, snapshot, previous,
+                    quietRebaseline = quietRebaseline,
+                )
+            }
+            coroutineContext.ensureActive()
+            if (generation != savedSearchGeneration) return@launch
+            val revised = summaries.map(SavedSearchSummary::entry)
+            savedSearchEntries = revised
+            if (revised != entries && !writeSavedSearches(revised, generation)) {
+                if (generation == savedSearchGeneration) {
+                    savedSearchEntries = entries
+                    reportSavedSearchFeedback(SavedSearchFeedback.STORAGE_FAILED)
+                }
+                return@launch
+            }
+            if (generation != savedSearchGeneration) return@launch
+            savedSearchEntries = revised
+            _uiState.update { it.copy(savedSearches = summaries) }
+            if (quietRebaseline && SavedSearchUpdatePolicy.canCountUpdates(snapshot) &&
+                summaries.all { summary ->
+                    summary.entry.lastProcessedRevisionEpochMillis ==
+                        snapshot.publicationRevision?.toEpochMilli()
+                }
+            ) pendingLocaleRebaseline = false
+        }
     }
 
     /** Applies an in-memory coarse fix; coordinates are deliberately excluded from persistence. */
@@ -354,6 +619,7 @@ class BrowseViewModel(
             )
         }
         recomputeResults()
+        reconcileSavedSearches(snapshot)
     }
 
     private fun recomputeResults() {
@@ -436,6 +702,8 @@ class BrowseViewModel(
                         repository = OpportunityRepositories.create(appContext),
                         favorites = SharedPreferencesFavoriteOpportunityStore(appContext),
                         browseStateStore = SharedPreferencesBrowseSearchStateStore(appContext),
+                        savedSearchStore = SharedPreferencesSavedSearchStore(appContext),
+                        catalog = AndroidAppStringCatalogLoader.load(appContext),
                     ) as T
                 }
             }

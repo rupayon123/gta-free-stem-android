@@ -17,4 +17,8 @@ data class OpportunityFeedSnapshot(
     /** Local fallbacks remain useful offline even after the remote freshness window. */
     val isStale: Boolean,
     val publicationRevision: Instant? = null,
+    /** Set by the repository after the whole payload passes feed validation. */
+    val validatedCatalog: Boolean = false,
+    /** Set only by the repository after validation of a complete accepted live publication. */
+    val acceptedComplete: Boolean = false,
 )
