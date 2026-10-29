@@ -18,7 +18,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
+import com.rupayonhaldar.gtafreestem.ui.design.GtaPrimaryButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -200,7 +200,7 @@ fun LandingHomeScreen(
 
 @Composable
 private fun BrowseAllButton(text: (String, String) -> String, onClick: () -> Unit) {
-    Button(
+    GtaPrimaryButton(
         onClick = onClick,
         modifier = Modifier.fillMaxWidth().heightIn(min = 54.dp).testTag("home-browse-all"),
     ) { Text(text("browseAll", "Browse all free activities")) }

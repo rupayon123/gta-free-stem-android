@@ -39,7 +39,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
+import com.rupayonhaldar.gtafreestem.ui.design.GtaPrimaryButton
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -1232,7 +1232,7 @@ private fun OpportunityCard(
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(if (isFavorite) text("saved", "Saved") else text("save", "Save"))
             }
-            Button(
+            GtaPrimaryButton(
                 onClick = onDetails,
                 modifier = Modifier.heightIn(min = 48.dp).semantics {
                     contentDescription = "${text("details", "View details")}: ${localized.title}"
@@ -1512,7 +1512,7 @@ internal fun OpportunityDetailScreen(
 
         item {
             val registrationUrl = opportunity.registrationUrl ?: opportunity.sourceUrl
-            Button(
+            GtaPrimaryButton(
                 shape = MaterialTheme.shapes.medium,
                 onClick = {
                     if (!openHttps(context, registrationUrl)) {
