@@ -20,7 +20,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -32,10 +31,11 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
+import com.rupayonhaldar.gtafreestem.ui.design.GtaObject
+import com.rupayonhaldar.gtafreestem.ui.design.artworkForCategory
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
@@ -46,20 +46,16 @@ import com.rupayonhaldar.gtafreestem.data.local.SavedSearchSummary
 import com.rupayonhaldar.gtafreestem.localization.AppLanguage
 import com.rupayonhaldar.gtafreestem.localization.AppStringCatalog
 import com.rupayonhaldar.gtafreestem.localization.OpportunityLocalization
-import com.rupayonhaldar.gtafreestem.theme.TopicCoral
-import com.rupayonhaldar.gtafreestem.theme.TopicSky
-import com.rupayonhaldar.gtafreestem.theme.TopicTeal
-import com.rupayonhaldar.gtafreestem.theme.TopicYellow
 import com.rupayonhaldar.gtafreestem.ui.browse.BrowseUiState
 import com.rupayonhaldar.gtafreestem.ui.browse.SavedSearchFeedback
 
-private data class Topic(val category: String, val icon: Int, val tint: androidx.compose.ui.graphics.Color)
+private data class Topic(val category: String)
 
 private val topics = listOf(
-    Topic("Science & Engineering", R.drawable.ic_science, TopicSky),
-    Topic("Coding & Robotics", R.drawable.ic_code, TopicTeal),
-    Topic("AI & Digital Media", R.drawable.ic_search, TopicYellow),
-    Topic("Makerspace & Fabrication", R.drawable.ic_maker, TopicCoral),
+    Topic("Science & Engineering"),
+    Topic("Coding & Robotics"),
+    Topic("AI & Digital Media"),
+    Topic("Makerspace & Fabrication"),
 )
 
 @Composable
@@ -225,20 +221,20 @@ private fun TopicTile(
     modifier: Modifier,
     onTopic: (String) -> Unit,
 ) {
-    val dark = MaterialTheme.colorScheme.background.luminance() < 0.5f
     val label = OpportunityLocalization.categoryName(topic.category, language, catalog)
     Surface(
         onClick = { onTopic(topic.category) },
         modifier = modifier.heightIn(min = 112.dp).testTag("home-topic-${topic.category}"),
-        shape = RoundedCornerShape(16.dp),
-        color = if (dark) MaterialTheme.colorScheme.surfaceVariant else topic.tint,
+        shape = MaterialTheme.shapes.medium,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
+        color = MaterialTheme.colorScheme.surface,
         contentColor = MaterialTheme.colorScheme.onBackground,
     ) {
         Column(
             modifier = Modifier.padding(14.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
-            Icon(painterResource(topic.icon), contentDescription = null, modifier = Modifier.size(28.dp))
+            GtaObject(artworkForCategory(topic.category), contentDescription = null, modifier = Modifier.size(48.dp))
             Text(label, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold,
                 maxLines = 3, overflow = TextOverflow.Ellipsis)
         }
@@ -276,7 +272,7 @@ private fun SavedSearchRow(
     }.joinToString(" · ").ifBlank { text("all", "All topics") }
     Surface(
         modifier = Modifier.fillMaxWidth().testTag("saved-search-${entry.id}"),
-        shape = RoundedCornerShape(14.dp),
+        shape = MaterialTheme.shapes.medium,
         color = MaterialTheme.colorScheme.surface,
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
     ) {

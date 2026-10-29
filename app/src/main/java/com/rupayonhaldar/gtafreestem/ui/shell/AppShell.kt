@@ -2,7 +2,9 @@ package com.rupayonhaldar.gtafreestem.ui.shell
 
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
+import com.rupayonhaldar.gtafreestem.ui.design.GtaObject
+import com.rupayonhaldar.gtafreestem.ui.design.GtaArtwork
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -118,7 +120,7 @@ private fun PrimaryNavigationBar(
                         modifier = Modifier.weight(1f).fillMaxHeight(),
                         color = if (selected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surface,
                         contentColor = if (selected) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurface,
-                        shape = RoundedCornerShape(16.dp),
+                        shape = MaterialTheme.shapes.small,
                     ) {
                         Column(
                             modifier = Modifier.testTag(destination.testTag)
@@ -173,7 +175,7 @@ private fun PrimarySideNavigation(
                 Surface(
                     color = if (selected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surface,
                     contentColor = if (selected) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurface,
-                    shape = RoundedCornerShape(16.dp),
+                    shape = MaterialTheme.shapes.small,
                 ) {
                     Column(
                         modifier = Modifier.fillMaxWidth().testTag(destination.testTag)
@@ -200,15 +202,21 @@ private fun PrimarySideNavigation(
 @Composable
 private fun DestinationIcon(destination: PrimaryDestination, selected: Boolean) {
     val scale by animateFloatAsState(
-        targetValue = if (selected) 1.10f else 1f,
-        animationSpec = spring(dampingRatio = 0.72f, stiffness = 380f),
+        targetValue = if (selected) 1.05f else 1f,
+        animationSpec = tween(durationMillis = 160),
         label = "destination-icon-${destination.name}",
     )
-    Icon(
-        painter = painterResource(destination.iconResource),
-        contentDescription = null,
-        modifier = Modifier.size(24.dp).graphicsLayer { scaleX = scale; scaleY = scale },
-    )
+    val modifier = Modifier.size(28.dp).graphicsLayer { scaleX = scale; scaleY = scale }
+    val artwork = when (destination) {
+        PrimaryDestination.HOME -> GtaArtwork.HOME
+        PrimaryDestination.OPPORTUNITIES -> GtaArtwork.EXPLORE
+        else -> null // Retain familiar semantic glyphs for routes without approved object artwork.
+    }
+    if (artwork != null) {
+        GtaObject(artwork, contentDescription = null, modifier = modifier, compact = true)
+    } else {
+        Icon(painterResource(destination.iconResource), contentDescription = null, modifier = modifier)
+    }
 }
 
 private val PrimaryDestination.testTag: String

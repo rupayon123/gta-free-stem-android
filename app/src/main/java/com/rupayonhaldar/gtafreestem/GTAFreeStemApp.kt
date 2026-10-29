@@ -78,6 +78,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
+import com.rupayonhaldar.gtafreestem.ui.design.GtaObject
+import com.rupayonhaldar.gtafreestem.ui.design.GtaArtwork
+import com.rupayonhaldar.gtafreestem.ui.design.artworkForCategory
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.heading
@@ -487,44 +490,15 @@ private enum class HighSchoolFocus(
 
 @Composable
 private fun CategoryMark(category: String, selected: Boolean = false) {
-    val icon = categoryIcon(category)
-    val colors = MaterialTheme.colorScheme
-    val container = when (icon) {
-        R.drawable.ic_code -> colors.secondaryContainer
-        R.drawable.ic_maker -> colors.tertiary.copy(alpha = 0.35f)
-        else -> colors.primaryContainer
-    }
-    val foreground = when (icon) {
-        R.drawable.ic_code -> colors.onSecondaryContainer
-        R.drawable.ic_maker -> colors.onSurface
-        else -> colors.onPrimaryContainer
-    }
     Surface(
-        modifier = Modifier.size(48.dp),
-        shape = RoundedCornerShape(12.dp),
-        color = container,
-        contentColor = foreground,
-        border = if (selected) BorderStroke(2.dp, colors.primary) else null,
+        modifier = Modifier.size(52.dp),
+        shape = MaterialTheme.shapes.small,
+        color = MaterialTheme.colorScheme.surface,
+        border = if (selected) BorderStroke(2.dp, MaterialTheme.colorScheme.primary) else null,
     ) {
         Box(contentAlignment = Alignment.Center) {
-            Icon(
-                painter = painterResource(icon),
-                contentDescription = null,
-                modifier = Modifier.size(26.dp),
-            )
+            GtaObject(artworkForCategory(category), contentDescription = null, modifier = Modifier.size(44.dp))
         }
-    }
-}
-
-private fun categoryIcon(category: String): Int {
-    val name = category.lowercase(Locale.ROOT)
-    return when {
-        "coding" in name || "robotic" in name || "digital" in name -> R.drawable.ic_code
-        "maker" in name || "fabrication" in name -> R.drawable.ic_maker
-        "volunteer" in name || "community" in name -> R.drawable.ic_group
-        "career" in name || "mentor" in name || "co-op" in name -> R.drawable.ic_briefcase
-        "science" in name || "engineering" in name || "stem" in name -> R.drawable.ic_science
-        else -> R.drawable.ic_bookmark_border
     }
 }
 
@@ -1249,10 +1223,12 @@ private fun OpportunityCard(
                     }
                 },
             ) {
-                Icon(
-                    painter = painterResource(if (isFavorite) R.drawable.ic_bookmark else R.drawable.ic_bookmark_border),
-                    contentDescription = null,
-                )
+                if (isFavorite) {
+                    GtaObject(GtaArtwork.SAVED, contentDescription = null,
+                        modifier = Modifier.size(24.dp), compact = true)
+                } else {
+                    Icon(painterResource(R.drawable.ic_bookmark_border), contentDescription = null)
+                }
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(if (isFavorite) text("saved", "Saved") else text("save", "Save"))
             }
