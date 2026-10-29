@@ -80,6 +80,18 @@ fun SavedFilterPicker(
             if (state.filters.girlsFocusedOnly) add(text("girls", "Girls-focused"))
             if (state.filters.indigenousFocusedOnly) add(text("indigenous", "Indigenous-focused"))
             if (state.filters.leadershipOnly) add(text("leadership", "Leadership"))
+            add(text("includeNewFinds", "Include new finds") + ": " +
+                if (state.filters.includeNewFinds) text("selectedState", "Selected")
+                else text("notSelectedState", "Not selected"))
+            state.filters.distanceKm?.let {
+                add(text("distanceRadius", "Distance radius: {km} km").replace("{km}", it.toString()))
+            }
+            val sortLabel = when (state.filters.sort) {
+                com.rupayonhaldar.gtafreestem.domain.search.OpportunitySearchSort.SOONEST -> text("sortSoonest", "Soonest")
+                com.rupayonhaldar.gtafreestem.domain.search.OpportunitySearchSort.NEAREST -> text("sortNearest", "Nearest")
+                com.rupayonhaldar.gtafreestem.domain.search.OpportunitySearchSort.RELEVANCE -> text("sortBestMatch", "Best match")
+            }
+            add(text("sortResults", "Sort results") + ": " + sortLabel)
         }
         Text(criteria.joinToString(" · ").ifBlank { text("any", "Any") },
             style = MaterialTheme.typography.bodyMedium, modifier = Modifier.testTag("filter-live-criteria"))
