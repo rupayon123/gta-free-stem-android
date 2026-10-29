@@ -28,6 +28,9 @@ enum class GtaArtwork(@param:DrawableRes val light: Int, @param:DrawableRes val 
     VOLUNTEER(R.drawable.gta_volunteer_illustration_light, R.drawable.gta_volunteer_illustration_dark, R.drawable.gta_volunteer_compact_light, R.drawable.gta_volunteer_compact_dark),
     CODE(R.drawable.gta_code_illustration_light, R.drawable.gta_code_illustration_dark, R.drawable.gta_code_compact_light, R.drawable.gta_code_compact_dark),
     ART(R.drawable.gta_art_illustration_light, R.drawable.gta_art_illustration_dark, R.drawable.gta_art_compact_light, R.drawable.gta_art_compact_dark),
+    SCHOOL(R.drawable.gta_school_illustration_light, R.drawable.gta_school_illustration_dark, R.drawable.gta_school_compact_light, R.drawable.gta_school_compact_dark),
+    SUPPORT(R.drawable.gta_support_illustration_light, R.drawable.gta_support_illustration_dark, R.drawable.gta_support_compact_light, R.drawable.gta_support_compact_dark),
+    PROFILE(R.drawable.gta_profile_illustration_light, R.drawable.gta_profile_illustration_dark, R.drawable.gta_profile_compact_light, R.drawable.gta_profile_compact_dark),
 }
 
 @Composable

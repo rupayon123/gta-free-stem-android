@@ -210,13 +210,11 @@ private fun DestinationIcon(destination: PrimaryDestination, selected: Boolean) 
     val artwork = when (destination) {
         PrimaryDestination.HOME -> GtaArtwork.HOME
         PrimaryDestination.OPPORTUNITIES -> GtaArtwork.EXPLORE
-        else -> null // Retain familiar semantic glyphs for routes without approved object artwork.
+        PrimaryDestination.HIGH_SCHOOL -> GtaArtwork.SCHOOL
+        PrimaryDestination.SUPPORT -> GtaArtwork.SUPPORT
+        PrimaryDestination.ACCOUNT -> GtaArtwork.PROFILE
     }
-    if (artwork != null) {
-        GtaObject(artwork, contentDescription = null, modifier = modifier, compact = true)
-    } else {
-        Icon(painterResource(destination.iconResource), contentDescription = null, modifier = modifier)
-    }
+    GtaObject(artwork, contentDescription = null, modifier = modifier, compact = true)
 }
 
 private val PrimaryDestination.testTag: String
