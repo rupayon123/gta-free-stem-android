@@ -37,6 +37,8 @@ fun SavedFilterPicker(
     onQueryChange: (String) -> Unit,
     onSave: (String, Boolean) -> Unit,
     text: (String, String) -> String,
+    resultCount: Int = state.opportunities.size,
+    scopeLabel: String? = null,
 ) {
     val active = state.savedSearches.firstOrNull { it.entry.id == state.activeSavedSearchId }?.entry
     val modified = active != null && (state.query != active.query ||
@@ -45,6 +47,10 @@ fun SavedFilterPicker(
     var dialog by rememberSaveable { mutableStateOf(false) }
     var name by rememberSaveable { mutableStateOf("") }
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        scopeLabel?.let {
+            Text(it, style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.testTag("filter-current-scope"))
+        }
         ExposedDropdownMenuBox(expanded, { expanded = it }, Modifier.fillMaxWidth()) {
             OutlinedTextField(
                 value = active?.name ?: text("newFilter", "New filter"), onValueChange = {}, readOnly = true,
@@ -95,7 +101,7 @@ fun SavedFilterPicker(
         }
         Text(criteria.joinToString(" · ").ifBlank { text("any", "Any") },
             style = MaterialTheme.typography.bodyMedium, modifier = Modifier.testTag("filter-live-criteria"))
-        Text("${state.opportunities.size} ${text("matches", "matches")}",
+        Text("$resultCount ${text("matches", "matches")}",
             style = MaterialTheme.typography.titleMedium,
             modifier = Modifier.testTag("filter-live-count").semantics { liveRegion = LiveRegionMode.Polite })
         state.savedSearchFeedback?.let { feedback ->

@@ -301,7 +301,17 @@ fun GTAFreeStemApp(
                 onBack = { showingFilters = false },
                 onFiltersChanged = viewModel::setFilters,
                 onSelectPreset = { viewModel.openSavedSearch(it) },
-                onNewFilter = viewModel::clearSearchAndFilters,
+                onNewFilter = {
+                    viewModel.clearSearchAndFilters()
+                    highSchoolFocusName = HighSchoolFocus.ALL.name
+                },
+                resultCount = if (selectedDestination == PrimaryDestination.HIGH_SCHOOL) {
+                    state.opportunities.count { it.matchesHighSchoolFocus(highSchoolFocus) }
+                } else state.opportunities.size,
+                scopeLabel = if (selectedDestination == PrimaryDestination.HIGH_SCHOOL) {
+                    preferences.shellText("highSchool", "High School") +
+                        (highSchoolFocus.catalogKey?.let { " · " + preferences.shellText(it, highSchoolFocus.label) } ?: "")
+                } else null,
                 onQueryChanged = viewModel::setQuery,
                 onSaveFilter = viewModel::saveCurrentSearch,
                 text = preferences::shellText,
@@ -544,6 +554,8 @@ private fun FilterScreen(
     onNewFilter: () -> Unit,
     onQueryChanged: (String) -> Unit,
     onSaveFilter: (String, Boolean) -> Unit,
+    resultCount: Int,
+    scopeLabel: String?,
     text: (String, String) -> String,
 ) {
     Box(
@@ -597,7 +609,8 @@ private fun FilterScreen(
                 canResetOverride = state.filters.hasActiveFilters || state.query.isNotBlank() ||
                     state.activeSavedSearchId != null,
                 presetContent = {
-                    SavedFilterPicker(state, onSelectPreset, onNewFilter, onQueryChanged, onSaveFilter, text)
+                    SavedFilterPicker(state, onSelectPreset, onNewFilter, onQueryChanged, onSaveFilter, text,
+                        resultCount = resultCount, scopeLabel = scopeLabel)
                 },
                 modifier = Modifier
                     .fillMaxWidth()
