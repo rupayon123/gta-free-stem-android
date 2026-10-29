@@ -5,6 +5,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.getUnclippedBoundsInRoot
+import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
@@ -20,9 +21,12 @@ import androidx.compose.ui.test.performTextReplacement
 import androidx.compose.ui.unit.dp
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.rupayonhaldar.gtafreestem.data.local.AppThemePreference
 import com.rupayonhaldar.gtafreestem.localization.AppLanguage
+import com.rupayonhaldar.gtafreestem.ui.browse.BrowseViewModel
 import com.rupayonhaldar.gtafreestem.ui.shell.PrimaryDestination
 import org.junit.After
 import org.junit.Assert.assertTrue
@@ -211,6 +215,22 @@ class MainActivityTest {
     @Test
     fun homeTopicOpensTheRealCategoryInBrowse() {
         composeRule.onNodeWithTag("landing-home").assertIsDisplayed()
+        // GTAFreeStemApp uses the activity owner and the default BrowseViewModel key.
+        // Refuse creation: this test must observe the existing app model, never seed or refresh it.
+        val browseViewModel = composeRule.runOnIdle {
+            ViewModelProvider(composeRule.activity, object : ViewModelProvider.Factory {
+                override fun <T : ViewModel> create(modelClass: Class<T>): T =
+                    error("The app's BrowseViewModel must already exist under its default key")
+            })[BrowseViewModel::class.java]
+        }
+        composeRule.waitUntil(timeoutMillis = 60_000) {
+            composeRule.runOnIdle {
+                "Science & Engineering" in browseViewModel.uiState.value.filterOptions.categories
+            }
+        }
+        // Saved filters can push this lazy item below the initial viewport.
+        composeRule.onNodeWithTag("landing-home")
+            .performScrollToNode(hasTestTag("home-topic-Science & Engineering"))
         composeRule.onNodeWithTag("home-topic-Science & Engineering").performClick()
         composeRule.onNodeWithTag("browse-screen-title").assertIsDisplayed()
         composeRule.onNodeWithTag("browse-category-Science & Engineering").assertIsSelected()
