@@ -4,18 +4,20 @@ I'm building GTA FREE STEM to make free STEM programs easier to find across the 
 
 [iOS app](https://github.com/rupayon123/gta-free-stem-ios) · [Web app](https://github.com/rupayon123/gta-free-stem-opportunities) · [Try the website](https://gta-free-stem.pages.dev/)
 
-## Landing Home in development
+## Home and saved filters
 
-> Development **1.1.1 / build6 is not uploaded**. The existing internal Play release remains version1.1.0/code5.
+**Version 1.1.1 / build 6 is available to the existing internal testers (October 29, 2026).** This is an internal testing release; public Google Play distribution and physical-phone acceptance remain separate milestones.
 
 <table>
-<tr><th width="50%">Explore topics</th><th width="50%">Return to a saved search</th></tr>
-<tr><td align="center"><a href="docs/showcase/2026-10-28/home-exact-apk-light.png"><img src="docs/showcase/2026-10-28/home-exact-apk-light.png" alt="Android development Home with topic choices and Browse-all" width="300"></a></td><td align="center"><a href="docs/showcase/2026-10-28/home-exact-apk-saved.png"><img src="docs/showcase/2026-10-28/home-exact-apk-saved.png" alt="Android development Home with a locally saved Robotics search and its current match total" width="300"></a></td></tr>
+<tr><th width="50%">A landing page for every age</th><th width="50%">Named filters and live results</th></tr>
+<tr><td align="center"><img src="docs/showcase/2026-10-29/home-light.png" alt="Android Home with Nunito typography, saved filters, illustrated topics and five navigation destinations" width="300"></td><td align="center"><img src="docs/showcase/2026-10-29/filters-large-dark.png" alt="Dark Filters screen at maximum text size with Saved filters dropdown and matching result count" width="300"></td></tr>
 </table>
 
-Actual API36 emulator captures from installed source `e9a8c95f95db62ca6fd542d45d7532ad85f61896`. Home introduces topics; Browse keeps search and filters. Save independent named searches for different ages or interests and return for real matching-event updates. Searches stay on the device and do not automatically enable notifications. [Browse capture](docs/showcase/2026-10-28/browse-exact-apk.png) · [Source and image provenance](docs/showcase/2026-10-28/capture-receipt.json).
+Home introduces topics and saved filters. Browse contains search, map/list views and a Filters panel. Choose a named filter inside that panel to apply its query, age and location criteria immediately; matching results update there. **Save filter** creates a named preset, and **Update filter** explicitly saves edits. Different presets can cover different children, ages and interests. Data stays on the device; saving does not automatically enable notifications.
 
-The source passed244 unit tests and66 emulator tests. Wider general-library catalogue adoption, full-description translation, API26/physical-device checks and the new signed release remain unfinished. These are development previews, not proof of a newly available Play build.
+These are unretouched API 36 emulator captures of the production UI used by build 6, not photographs of an owner's phone. [Screenshot provenance](docs/showcase/2026-10-29/capture-receipt.json). Nunito, original light/dark illustrations and the existing GTA logo/loader are included.
+
+Validation: 246 unit tests, release lint, focused API 26/36 navigation/artwork/filter checks and six main-activity cases on each platform passed. Maximum text, RTL, keyboard visibility and reduced-motion behavior were checked. [Current CI](https://github.com/rupayon123/gta-free-stem-android/actions). Physical-phone acceptance, wider catalogue adoption and full-description translations remain open.
 
 <details>
 <summary>Historical October25 API26 development screenshots</summary>
@@ -40,9 +42,9 @@ These are unretouched **API 26 Android emulator** captures of an installed devel
 
 ## Find and save an activity
 
-1. Tap **Browse**, choose a topic on Home, or open a saved search. Enter an interest, library, or city; open **Filters** to narrow by age, category, and place.
+1. Tap **Browse**, choose a topic on Home, or open a saved filter. Enter an interest, library, or city; open **Filters** to narrow by age, category, and place.
 2. Choose **List** or **Map** when location data is available. Open a result to read its schedule, age range, location, and original provider.
-3. Follow the provider link to confirm availability and any registration requirements. Save an activity for later, or use **Save search** in Browse to keep the current criteria under a name. Multiple saved searches can use different ages and interests; editing one requires an explicit update.
+3. Follow the provider link to confirm availability and any registration requirements. Save an activity for later, or use **Save filter** inside Filters to keep the current criteria under a name. Multiple saved filters can use different ages and interests; editing one requires an explicit update.
 4. Use **High School** to explore volunteer hours, co-op, SHSM, and mentorship. If the feed is offline, check the last-checked date and refresh when connected.
 
 ## About the app
@@ -53,9 +55,7 @@ There's no account to create, and no ads or analytics. Nearby search uses an app
 
 ## Development status
 
-I'm working on version 1.1.0. It isn't a public Google Play release. Version 1.0.1 was made available to internal testers only.
-
-The screenshots show an installed development APK at a recorded source revision. They do not establish that the current GitHub head builds or that the app is ready for Google Play. Check the linked CI and release checklist for current status.
+Version **1.1.1 / build 6** is available to the existing internal tester audience. No external testers were added. Its signed upload was accepted by Google Play on October 29, 2026; the source and screenshot evidence are linked above. An available update does not establish that it has been installed and tested on a physical phone.
 
 [Build status](https://github.com/rupayon123/gta-free-stem-android/actions) · [Release notes and checklist](docs/ANDROID_RELEASE_RUNBOOK.md) · [Previous verification records](verification/V1.1.0-LOCAL-VERIFICATION.md)
 

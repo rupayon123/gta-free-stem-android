@@ -1,0 +1,19 @@
+{
+  "capturedOn": "2026-10-29",
+  "surface": "Android API36 emulator; unretouched installed debug APK",
+  "productionUISource": "85a0391d6ca3125f8fc086390597fa02d129d125",
+  "signedReleaseSource": "a1fca45e9de02cb18d8fd7c4fa72e15a1b26b081",
+  "lineage": "Later commits change test readiness/accessors only; production UI unchanged. Captures are not of the signed Play binary or a physical phone.",
+  "files": [
+    {
+      "file": "home-light.png",
+      "sha256": "2730f41c6c20ff786a3aa875f46e9386ddc287fdf880416f70cad0dc0a425206",
+      "originalFilename": "en-light-1.0-home.png"
+    },
+    {
+      "file": "filters-large-dark.png",
+      "sha256": "9844b486ffd451f4524bbd5b742c41b56d6ee81d05058c951a6def2e20e31a48",
+      "originalFilename": "en-max-filters.png"
+    }
+  ]
+}
