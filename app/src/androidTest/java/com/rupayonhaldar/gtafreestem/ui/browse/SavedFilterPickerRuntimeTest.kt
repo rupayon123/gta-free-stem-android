@@ -2,6 +2,8 @@ package com.rupayonhaldar.gtafreestem.ui.browse
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.test.assertDoesNotExist
+import androidx.compose.ui.test.assertIsEnabled
+import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertExists
 import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -11,6 +13,7 @@ import androidx.compose.ui.test.performTextReplacement
 import com.rupayonhaldar.gtafreestem.data.local.SavedSearchEntry
 import com.rupayonhaldar.gtafreestem.data.local.SavedSearchSummary
 import com.rupayonhaldar.gtafreestem.domain.search.OpportunitySearchFilters
+import com.rupayonhaldar.gtafreestem.domain.search.OpportunitySearchOptions
 import com.rupayonhaldar.gtafreestem.theme.GTAFreeStemContentTheme
 import org.junit.Assert.assertEquals
 import org.junit.Rule
@@ -18,6 +21,28 @@ import org.junit.Test
 
 class SavedFilterPickerRuntimeTest {
     @get:Rule val compose = createComposeRule()
+
+    @Test
+    fun sectionOnlyFocusKeepsPanelResetEnabledUntilCleared() {
+        val focused = mutableStateOf(true)
+        compose.setContent {
+            GTAFreeStemContentTheme(false) {
+                OpportunityFilterPanel(filters = OpportunitySearchFilters(),
+                    options = OpportunitySearchOptions(), onFiltersChange = {},
+                    canResetOverride = focused.value,
+                    onReset = { focused.value = false },
+                    presetContent = {
+                        androidx.compose.material3.Text(
+                            if (focused.value) "High School · Volunteer hours · 3 matches"
+                            else "High School · 5 matches",
+                            modifier = androidx.compose.ui.Modifier.testTag("scope-preview"))
+                    })
+            }
+        }
+        compose.onNodeWithTag(OpportunityFilterPanelTestTags.RESET).assertIsEnabled().performClick()
+        compose.onNodeWithTag(OpportunityFilterPanelTestTags.RESET).assertIsNotEnabled()
+        compose.onNodeWithTag("scope-preview").assertTextContains("High School · 5 matches")
+    }
 
     @Test
     fun presetUpdatesTheOpenPanelAndRequiresExplicitSaveForEdits() {
