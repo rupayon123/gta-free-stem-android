@@ -149,7 +149,7 @@ private val AppScreenMaxWidth = 840.dp
 private val AppScreenPadding = 16.dp
 private val AppScreenTopPadding = 12.dp
 private val AppScreenSectionSpacing = 14.dp
-private val AppCardRadius = 18.dp
+private val AppCardRadius = 20.dp
 private val AppCardElevation = 0.dp
 
 data class AppPreferenceActions(
@@ -392,7 +392,6 @@ fun GTAFreeStemApp(
                     onRetry = viewModel::load,
                     onSelectOpportunity = viewModel::selectOpportunity,
                     onToggleFavorite = viewModel::toggleFavorite,
-                    onSaveSearch = viewModel::saveCurrentSearch,
                     language = preferences.resolvedLanguage,
                     catalog = preferences.catalog,
                     shellText = preferences::shellText,
@@ -425,7 +424,6 @@ fun GTAFreeStemApp(
                     onRetry = viewModel::load,
                     onSelectOpportunity = viewModel::selectOpportunity,
                     onToggleFavorite = viewModel::toggleFavorite,
-                    onSaveSearch = viewModel::saveCurrentSearch,
                     language = preferences.resolvedLanguage,
                     catalog = preferences.catalog,
                     shellText = preferences::shellText,
@@ -680,7 +678,6 @@ private fun BrowseScreen(
     onRetry: () -> Unit,
     onSelectOpportunity: (Opportunity) -> Unit,
     onToggleFavorite: (String) -> Unit,
-    onSaveSearch: (String, Boolean) -> Unit,
     language: AppLanguage,
     catalog: AppStringCatalog,
     shellText: (String, String) -> String,
@@ -693,11 +690,6 @@ private fun BrowseScreen(
     }
     val context = LocalContext.current
     var websiteUnavailable by remember { mutableStateOf(false) }
-    var saveDialogMode by rememberSaveable { mutableStateOf<String?>(null) }
-    var savedSearchName by rememberSaveable { mutableStateOf("") }
-    val activeSavedSearch = state.savedSearches.firstOrNull {
-        it.entry.id == state.activeSavedSearchId
-    }
     val mapPins = remember(visibleOpportunities, language, catalog) {
         visibleOpportunities.mapNotNull { opportunity ->
             val localized = OpportunityLocalization.resolve(opportunity, language, catalog)
@@ -787,30 +779,6 @@ private fun BrowseScreen(
                         },
                     )
 
-                    if (mode == BrowseMode.OPPORTUNITIES) Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        OutlinedButton(
-                            onClick = {
-                                savedSearchName = ""
-                                saveDialogMode = "new"
-                            },
-                            enabled = !state.filters.hasValidLocation,
-                            modifier = Modifier.heightIn(min = 48.dp).testTag("browse-save-search"),
-                        ) { Text(shellText("saveSearch", "Save filter")) }
-                        if (activeSavedSearch != null) {
-                            TextButton(
-                                onClick = {
-                                    savedSearchName = activeSavedSearch.entry.name
-                                    saveDialogMode = "update"
-                                },
-                                enabled = !state.filters.hasValidLocation,
-                                modifier = Modifier.heightIn(min = 48.dp).testTag("browse-update-search"),
-                            ) { Text(shellText("updateSavedSearch", "Update filter")) }
-                        }
-                    }
                     if (mode == BrowseMode.OPPORTUNITIES && state.filters.hasValidLocation) {
                         Text(
                             shellText("nearbyNotSaved", "Nearby location cannot be saved. Choose a city or clear Nearby first."),
@@ -846,13 +814,13 @@ private fun BrowseScreen(
                         ) {
                             Text(if (activeFilterCount == 0) shellText("filters", "Filters") else "${shellText("filters", "Filters")} ($activeFilterCount)")
                         }
-                        FilterChip(
+                        FilterChip(shape = MaterialTheme.shapes.small,
                             selected = !showMap,
                             onClick = { onMapViewChanged(false) },
                             modifier = Modifier.widthIn(min = 80.dp).heightIn(min = 48.dp).testTag("browse-list-view"),
                             label = { Text(shellText("list", "List")) },
                         )
-                        FilterChip(
+                        FilterChip(shape = MaterialTheme.shapes.small,
                             selected = showMap,
                             onClick = { onMapViewChanged(true) },
                             modifier = Modifier.widthIn(min = 80.dp).heightIn(min = 48.dp).testTag("browse-map-view"),
@@ -1026,41 +994,7 @@ private fun BrowseScreen(
         }
         }
     }
-    saveDialogMode?.let { mode ->
-        AlertDialog(
-            onDismissRequest = { saveDialogMode = null },
-            title = {
-                Text(if (mode == "update") shellText("updateSavedSearch", "Update filter")
-                    else shellText("saveSearch", "Save filter"))
-            },
-            text = {
-                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    OutlinedTextField(
-                        value = savedSearchName,
-                        onValueChange = { savedSearchName = it.take(60) },
-                        label = { Text(shellText("name", "Name")) },
-                        singleLine = true,
-                        modifier = Modifier.fillMaxWidth().testTag("saved-search-name"),
-                    )
-                    Text(shellText("savedSearchLocal", "Saved on this device. Browse changes only update it when you confirm here."),
-                        style = MaterialTheme.typography.bodySmall)
-                }
-            },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        onSaveSearch(savedSearchName, mode == "update")
-                        saveDialogMode = null
-                    },
-                    enabled = savedSearchName.trim().isNotEmpty(),
-                    modifier = Modifier.testTag("saved-search-confirm"),
-                ) { Text(if (mode == "update") shellText("update", "Update") else shellText("save", "Save")) }
-            },
-            dismissButton = {
-                TextButton(onClick = { saveDialogMode = null }) { Text(shellText("cancel", "Cancel")) }
-            },
-        )
-    }
+
 }
 
 internal fun localizedMapStrings(language: AppLanguage, text: (String, String) -> String) = OpportunityMapStrings(
@@ -1245,7 +1179,7 @@ private fun OpportunityCard(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            OutlinedButton(
+            OutlinedButton(shape = MaterialTheme.shapes.small,
                 onClick = onToggleFavorite,
                 modifier = Modifier.heightIn(min = 48.dp).semantics {
                     contentDescription = if (isFavorite) {
@@ -1545,7 +1479,7 @@ internal fun OpportunityDetailScreen(
         item {
             val registrationUrl = opportunity.registrationUrl ?: opportunity.sourceUrl
             GtaPrimaryButton(
-                shape = MaterialTheme.shapes.medium,
+                shape = MaterialTheme.shapes.small,
                 onClick = {
                     if (!openHttps(context, registrationUrl)) {
                         Toast.makeText(
@@ -1589,7 +1523,7 @@ internal fun OpportunityDetailScreen(
                         modifier = Modifier.semantics { heading() },
                     )
 
-                    OutlinedButton(
+                    OutlinedButton(shape = MaterialTheme.shapes.small,
                         onClick = {
                             calendarUnavailable = !OpportunityCalendar.open(
                                 context, opportunity, localized.title,

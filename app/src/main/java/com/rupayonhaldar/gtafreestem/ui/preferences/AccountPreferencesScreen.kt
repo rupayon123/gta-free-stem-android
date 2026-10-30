@@ -199,8 +199,8 @@ fun AccountPreferencesScreen(
                                 imeAction = ImeAction.Done,
                             ),
                             keyboardActions = KeyboardActions(onDone = { saveDisplayName() }),
-                        )
-                        Button(
+                         shape = MaterialTheme.shapes.small)
+                        Button(shape = MaterialTheme.shapes.small,
                             onClick = ::saveDisplayName,
                             enabled = displayNameDraft.isNotBlank(),
                             modifier = Modifier
@@ -226,7 +226,7 @@ fun AccountPreferencesScreen(
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
-                        OutlinedButton(
+                        OutlinedButton(shape = MaterialTheme.shapes.small,
                             onClick = onOpenSavedLibrary,
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -244,7 +244,7 @@ fun AccountPreferencesScreen(
 
                     PreferencesCard {
                         SectionHeading(labels.languageTitle)
-                        OutlinedButton(
+                        OutlinedButton(shape = MaterialTheme.shapes.small,
                             onClick = { languageDialogVisible = true },
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -605,7 +605,7 @@ private fun DestructiveOutlinedButton(
     onClick: () -> Unit,
     testTag: String,
 ) {
-    OutlinedButton(
+    OutlinedButton(shape = MaterialTheme.shapes.small,
         onClick = onClick,
         modifier = Modifier
             .fillMaxWidth()

@@ -2,12 +2,14 @@ package com.rupayonhaldar.gtafreestem.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Shapes
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.unit.dp
 
 private val ColorWhite = Color(0xFFFFFFFF)
@@ -93,14 +95,18 @@ private val DarkContentColorScheme = darkColorScheme(
     surfaceContainerHighest = Color(0xFF354B63),
     inverseSurface = Color(0xFFEAF1F8), inverseOnSurface = Color(0xFF19334B),
     inversePrimary = Color(0xFF2E7184),
-    surfaceVariant = Color(0xFF1D354B), onSurfaceVariant = Color(0xFFBCD0E1),
+    surfaceVariant = Color(0xFF1D354B), onSurfaceVariant = Color(0xFFAFC3D9),
     outline = Color(0xFF8BA3B7), outlineVariant = Color(0xFF4B6D87),
     error = Color(0xFFFFB4AB), onError = Color(0xFF690005),
 )
+/** Content-only topic surface shared with the approved iOS landing page. */
+internal val ColorScheme.topicContainer: Color
+    get() = if (background.luminance() < 0.5f) Color(0xFF23364C) else Color(0xFFE5F0F7)
+
 private val ContentShapes = Shapes(
-    small = RoundedCornerShape(topStart = 5.dp, topEnd = 8.dp, bottomEnd = 4.dp, bottomStart = 6.dp),
-    medium = RoundedCornerShape(topStart = 6.dp, topEnd = 9.dp, bottomEnd = 5.dp, bottomStart = 8.dp),
-    large = RoundedCornerShape(16.dp),
+    small = RoundedCornerShape(14.dp),
+    medium = RoundedCornerShape(20.dp),
+    large = RoundedCornerShape(24.dp),
 )
 
 private val AppShapes = Shapes(

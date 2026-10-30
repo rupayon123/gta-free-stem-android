@@ -20,6 +20,6 @@ fun GtaPrimaryButton(
     content: @Composable RowScope.() -> Unit,
 ) {
     Button(onClick = onClick, modifier = modifier.heightIn(min = 48.dp), enabled = enabled,
-        shape = shape, border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
+        shape = shape, border = BorderStroke(1.5.dp, MaterialTheme.colorScheme.primary),
         content = content)
 }

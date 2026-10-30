@@ -48,11 +48,12 @@ fun GtaObject(artwork: GtaArtwork, contentDescription: String?, modifier: Modifi
 internal fun artworkForCategory(category: String): GtaArtwork {
     val name = category.lowercase(java.util.Locale.ROOT)
     return when {
-        "coding" in name || "robotic" in name || "digital" in name || "technology" in name -> GtaArtwork.CODE
+        "coding" in name || "robotic" in name || "technology" in name -> GtaArtwork.CODE
+        "science" in name || "stem" in name -> GtaArtwork.SCIENCE
+        "digital" in name -> GtaArtwork.IDEAS
         "engineering" in name || "maker" in name || "fabrication" in name -> GtaArtwork.ENGINEERING
         "volunteer" in name || "community" in name -> GtaArtwork.VOLUNTEER
         "art" in name || "design" in name -> GtaArtwork.ART
-        "science" in name || "stem" in name -> GtaArtwork.SCIENCE
         "career" in name || "mentor" in name || "co-op" in name -> GtaArtwork.IDEAS
         else -> GtaArtwork.LIBRARY
     }

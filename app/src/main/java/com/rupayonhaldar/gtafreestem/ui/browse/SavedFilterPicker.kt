@@ -2,7 +2,8 @@ package com.rupayonhaldar.gtafreestem.ui.browse
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.material3.AlertDialog
@@ -28,7 +29,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 
 /** Preset selection stays inside Filters. Only the explicit save dialog writes a preset. */
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun SavedFilterPicker(
     state: BrowseUiState,
@@ -45,6 +46,7 @@ fun SavedFilterPicker(
         state.filters.normalized() != active.filters.normalized())
     var expanded by rememberSaveable { mutableStateOf(false) }
     var dialog by rememberSaveable { mutableStateOf(false) }
+    var saveAsNew by rememberSaveable { mutableStateOf(false) }
     var name by rememberSaveable { mutableStateOf("") }
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         scopeLabel?.let {
@@ -58,6 +60,7 @@ fun SavedFilterPicker(
                 trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
                 modifier = Modifier.fillMaxWidth().testTag("saved-filter-picker")
                     .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
+                shape = MaterialTheme.shapes.small,
             )
             ExposedDropdownMenu(expanded, { expanded = false }) {
                 DropdownMenuItem(text = { Text(text("newFilter", "New filter")) },
@@ -71,7 +74,7 @@ fun SavedFilterPicker(
         }
         OutlinedTextField(value = state.query, onValueChange = onQueryChange,
             label = { Text(text("search", "Search")) }, singleLine = true,
-            modifier = Modifier.fillMaxWidth().testTag("filter-query"))
+            modifier = Modifier.fillMaxWidth().testTag("filter-query"), shape = MaterialTheme.shapes.small)
         val criteria = buildList {
             state.filters.region?.let { add("${text("region", "Region")}: $it") }
             state.filters.city?.let { add("${text("city", "City")}: $it") }
@@ -121,25 +124,29 @@ fun SavedFilterPicker(
         }
         if (modified) Text(text("filterModified", "Changed — update to keep these choices"),
             style = MaterialTheme.typography.bodySmall, modifier = Modifier.testTag("filter-modified"))
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            TextButton(onClick = { name = active?.name.orEmpty(); dialog = true },
+        FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            TextButton(onClick = { saveAsNew = active == null; name = active?.name.orEmpty(); dialog = true },
                 modifier = Modifier.heightIn(min = 48.dp).testTag("filter-save")) {
                 Text(if (active == null) text("saveSearch", "Save filter")
                     else text("updateSavedSearch", "Update filter"))
             }
+            if (active != null) TextButton(
+                onClick = { saveAsNew = true; name = ""; dialog = true },
+                modifier = Modifier.heightIn(min = 48.dp).testTag("filter-save-as-new"),
+            ) { Text(text("saveSearch", "Save filter")) }
             TextButton(onClick = onNew, modifier = Modifier.heightIn(min = 48.dp).testTag("filter-new")) {
                 Text(text("newFilter", "New filter"))
             }
         }
     }
     if (dialog) AlertDialog(onDismissRequest = { dialog = false },
-        title = { Text(if (active == null) text("saveSearch", "Save filter") else text("updateSavedSearch", "Update filter")) },
+        title = { Text(if (saveAsNew) text("saveSearch", "Save filter") else text("updateSavedSearch", "Update filter")) },
         text = { Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
             OutlinedTextField(name, { name = it.take(60) }, singleLine = true,
-                label = { Text(text("name", "Name")) }, modifier = Modifier.testTag("filter-name"))
+                label = { Text(text("name", "Name")) }, modifier = Modifier.testTag("filter-name"), shape = MaterialTheme.shapes.small)
             Text(text("savedSearchLocal", "Saved on this device. Changes are kept only when you confirm."))
         } },
-        confirmButton = { TextButton(onClick = { onSave(name, active != null); dialog = false },
+        confirmButton = { TextButton(onClick = { onSave(name, !saveAsNew && active != null); dialog = false },
             enabled = name.trim().isNotEmpty(), modifier = Modifier.testTag("filter-save-confirm")) {
                 Text(text("save", "Save"))
             } },

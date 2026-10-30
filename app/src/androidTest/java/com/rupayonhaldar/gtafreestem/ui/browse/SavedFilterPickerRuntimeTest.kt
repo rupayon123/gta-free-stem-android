@@ -22,6 +22,34 @@ class SavedFilterPickerRuntimeTest {
     @get:Rule val compose = createComposeRule()
 
     @Test
+    fun savingEditedChoicesAsNewDoesNotOverwriteTheSelectedPreset() {
+        val entry = SavedSearchEntry(id = "original", name = "Robotics", query = "robots",
+            filters = OpportunitySearchFilters(city = "Toronto"), knownMatchingIds = emptyList())
+        val writes = mutableListOf<Pair<String, Boolean>>()
+        val state = BrowseUiState(query = "edited query", filters = entry.filters,
+            savedSearches = listOf(SavedSearchSummary(entry)), activeSavedSearchId = entry.id)
+        compose.setContent {
+            GTAFreeStemContentTheme(false) {
+                SavedFilterPicker(state, onSelect = {}, onNew = {}, onQueryChange = {},
+                    onSave = { name, update -> writes.add(name to update) }, text = { _, fallback -> fallback })
+            }
+        }
+        compose.onNodeWithTag("filter-save-as-new").performClick()
+        compose.onNodeWithTag("filter-name").performTextReplacement("New interests")
+        compose.runOnIdle { assertEquals(emptyList<Pair<String, Boolean>>(), writes) }
+        compose.onNodeWithTag("filter-save-confirm").performClick()
+        compose.onNodeWithTag("filter-query").assertTextContains("edited query")
+        compose.runOnIdle {
+            assertEquals(listOf("New interests" to false), writes)
+            assertEquals("robots", entry.query)
+            assertEquals("original", state.activeSavedSearchId)
+        }
+        compose.onNodeWithTag("filter-save").performClick()
+        compose.onNodeWithTag("filter-save-confirm").performClick()
+        compose.runOnIdle { assertEquals(listOf("New interests" to false, "Robotics" to true), writes) }
+    }
+
+    @Test
     fun sectionOnlyFocusKeepsPanelResetEnabledUntilCleared() {
         val focused = mutableStateOf(true)
         compose.setContent {

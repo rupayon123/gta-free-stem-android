@@ -19,6 +19,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
 import com.rupayonhaldar.gtafreestem.ui.design.GtaPrimaryButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -41,6 +42,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.rupayonhaldar.gtafreestem.theme.topicContainer
 import com.rupayonhaldar.gtafreestem.R
 import com.rupayonhaldar.gtafreestem.data.local.SavedSearchSummary
 import com.rupayonhaldar.gtafreestem.localization.AppLanguage
@@ -50,13 +52,6 @@ import com.rupayonhaldar.gtafreestem.ui.browse.BrowseUiState
 import com.rupayonhaldar.gtafreestem.ui.browse.SavedSearchFeedback
 
 private data class Topic(val category: String)
-
-private val topics = listOf(
-    Topic("Science & Engineering"),
-    Topic("Coding & Robotics"),
-    Topic("AI & Digital Media"),
-    Topic("Makerspace & Fabrication"),
-)
 
 @Composable
 fun LandingHomeScreen(
@@ -70,9 +65,7 @@ fun LandingHomeScreen(
     onDeleteSavedSearch: (String) -> Unit,
 ) {
     var pendingDeleteId by rememberSaveable { mutableStateOf<String?>(null) }
-    val availableTopics = topics.filter { topic ->
-        topic.category in state.filterOptions.categories
-    }
+    val availableTopics = availableHomeTopics(state.filterOptions.categories).map(::Topic)
     val saved = state.savedSearches.asReversed()
 
     LazyColumn(
@@ -87,7 +80,7 @@ fun LandingHomeScreen(
                     androidx.compose.foundation.Image(
                         painter = painterResource(R.drawable.app_logo),
                         contentDescription = null,
-                        modifier = Modifier.size(54.dp),
+                        modifier = Modifier.size(48.dp),
                     )
                     Text("GTA FREE STEM", style = MaterialTheme.typography.titleLarge,
                         color = MaterialTheme.colorScheme.onBackground,
@@ -100,11 +93,6 @@ fun LandingHomeScreen(
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.testTag("home-welcome"),
                 )
-                Text(
-                    text("mission", "Free activities across the GTA for every age."),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
             }
         }
 
@@ -115,7 +103,6 @@ fun LandingHomeScreen(
                     onOpen = { onOpenSavedSearch(summary.entry.id) },
                     onDelete = { pendingDeleteId = summary.entry.id })
             }
-            item { BrowseAllButton(text, onBrowseAll) }
         }
 
         item {
@@ -151,7 +138,7 @@ fun LandingHomeScreen(
             }
         }
 
-        if (saved.isEmpty()) item { BrowseAllButton(text, onBrowseAll) }
+        item { BrowseAllButton(text, onBrowseAll) }
 
         if (saved.isEmpty()) {
             item {
@@ -224,19 +211,22 @@ private fun TopicTile(
     val label = OpportunityLocalization.categoryName(topic.category, language, catalog)
     Surface(
         onClick = { onTopic(topic.category) },
-        modifier = modifier.heightIn(min = 112.dp).testTag("home-topic-${topic.category}"),
-        shape = MaterialTheme.shapes.medium,
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
-        color = MaterialTheme.colorScheme.surface,
+        modifier = modifier.heightIn(min = 130.dp).testTag("home-topic-${topic.category}"),
+        shape = RoundedCornerShape(18.dp),
+        color = MaterialTheme.colorScheme.topicContainer,
         contentColor = MaterialTheme.colorScheme.onBackground,
     ) {
         Column(
-            modifier = Modifier.padding(14.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp),
+            modifier = Modifier.padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(14.dp),
         ) {
-            GtaObject(artworkForCategory(topic.category), contentDescription = null, modifier = Modifier.size(48.dp))
-            Text(label, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold,
-                maxLines = 3, overflow = TextOverflow.Ellipsis)
+            GtaObject(artworkForCategory(topic.category), contentDescription = null, modifier = Modifier.size(42.dp))
+            Row(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalAlignment = Alignment.Top) {
+                Text(label, modifier = Modifier.weight(1f), style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold)
+                Icon(painterResource(R.drawable.ic_chevron_right), contentDescription = null,
+                    modifier = Modifier.size(18.dp))
+            }
         }
     }
 }

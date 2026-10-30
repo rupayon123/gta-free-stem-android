@@ -409,14 +409,14 @@ private fun DistanceRadiusChoices(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
-        FilterChip(
+        FilterChip(shape = MaterialTheme.shapes.small,
             selected = selectedDistance == null,
             onClick = { onDistanceSelected(null) },
             label = { Text(labels.any) },
             modifier = Modifier.heightIn(min = MinimumTouchTarget),
         )
         listOf(5, 10, 25, 50, 100).forEach { distance ->
-            FilterChip(
+            FilterChip(shape = MaterialTheme.shapes.small,
                 selected = selectedDistance == distance,
                 onClick = { onDistanceSelected(distance) },
                 label = { Text(labels.distanceRadius(distance)) },

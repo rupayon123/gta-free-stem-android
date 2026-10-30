@@ -79,7 +79,8 @@ class MainActivityTest {
                 .assertTextContains(label)
         }
 
-        composeRule.onNodeWithText("Find free library events", substring = true).assertIsDisplayed()
+        composeRule.onNodeWithTag("home-welcome")
+            .assertTextContains("Free things to learn, make and explore").assertIsDisplayed()
 
         composeRule.onNodeWithTag("primary-navigation-opportunities").performClick()
         composeRule.onNode(hasSetTextAction()).performTextReplacement("")
