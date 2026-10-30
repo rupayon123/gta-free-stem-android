@@ -52,6 +52,7 @@ internal fun artworkForCategory(category: String): GtaArtwork {
         "science" in name || "stem" in name -> GtaArtwork.SCIENCE
         "digital" in name -> GtaArtwork.IDEAS
         "engineering" in name || "maker" in name || "fabrication" in name -> GtaArtwork.ENGINEERING
+        "library" in name -> GtaArtwork.LIBRARY
         "volunteer" in name || "community" in name -> GtaArtwork.VOLUNTEER
         "art" in name || "design" in name -> GtaArtwork.ART
         "career" in name || "mentor" in name || "co-op" in name -> GtaArtwork.IDEAS

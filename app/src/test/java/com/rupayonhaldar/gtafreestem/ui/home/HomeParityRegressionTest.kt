@@ -13,6 +13,8 @@ class HomeParityRegressionTest {
         assertEquals(GtaArtwork.CODE, artworkForCategory("Coding & Robotics"))
         assertEquals(GtaArtwork.ENGINEERING, artworkForCategory("Makerspace & Fabrication"))
         assertEquals(GtaArtwork.SCIENCE, artworkForCategory("  SCIENCE & ENGINEERING  "))
+        assertEquals(GtaArtwork.LIBRARY, artworkForCategory("Library & Community"))
+        assertEquals(GtaArtwork.VOLUNTEER, artworkForCategory("Community Volunteering"))
     }
 
     @Test fun homeUsesOnlyAvailableCategoriesAndDoesNotHideExtraAvailableTopics() {
