@@ -87,7 +87,9 @@ class MainActivityTest {
         composeRule.onNodeWithTag("browse-screen-title")
             .assertTextContains("Browse")
             .assertIsDisplayed()
-        composeRule.onNodeWithText("Filters").performClick()
+        composeRule.onNodeWithTag("browse-results")
+            .performScrollToNode(hasText("Filters", substring = true))
+        composeRule.onNodeWithText("Filters", substring = true).assertIsDisplayed().performClick()
         composeRule.onNodeWithTag("opportunity-filter-panel").assertIsDisplayed()
         composeRule.onNodeWithText("Back").performClick()
         composeRule.onNodeWithTag("browse-screen-title")
@@ -139,7 +141,8 @@ class MainActivityTest {
             composeRule.onNodeWithTag("primary-navigation-${destination.name.lowercase()}")
                 .assertTextContains(frenchState.text(destination.catalogKey))
         }
-        composeRule.onNodeWithText(frenchState.text("mission")).assertIsDisplayed()
+        composeRule.onNodeWithTag("home-welcome")
+            .assertTextContains(frenchState.text("homeWelcome")).assertIsDisplayed()
         composeRule.onNodeWithTag("primary-navigation-opportunities").performClick()
         // The browse query is intentionally persisted on-device. Clear any value left by a
         // previous test/run so this assertion verifies the localized empty-state placeholder.
@@ -195,7 +198,9 @@ class MainActivityTest {
     @Test
     fun searchStateSurvivesPrimaryNavigation() {
         composeRule.onNodeWithTag("landing-home").assertIsDisplayed()
-        composeRule.onNodeWithTag("home-browse-all").performClick()
+        composeRule.onNodeWithTag("landing-home")
+            .performScrollToNode(hasTestTag("home-browse-all"))
+        composeRule.onNodeWithTag("home-browse-all").assertIsDisplayed().performClick()
         composeRule.onNodeWithTag("browse-screen-title").assertIsDisplayed()
         composeRule.onNode(hasSetTextAction()).performTextReplacement("Conservation Youth Corps")
         composeRule.onNode(hasSetTextAction()).assertTextContains(
