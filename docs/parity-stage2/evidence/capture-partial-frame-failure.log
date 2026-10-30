@@ -1,0 +1,7 @@
+Owned-device preferences/settings restored.
+Traceback (most recent call last):
+  File "/tmp/gta-stage2-parity/capture-followup-frames.py", line 59, in <module>
+    scroll_for('New filter');screen('active-preset-new-action-max-dark')
+  File "/tmp/gta-stage2-parity/capture-followup-frames.py", line 23, in scroll_for
+    raise RuntimeError('Could not scroll to '+label)
+RuntimeError: Could not scroll to New filter

@@ -1,0 +1,106 @@
+{
+  "status": "Scoped native QA passed; release/Play availability owned by coordinator and not claimed here",
+  "productionSource": "3ef86a033fe2f4c141028988bfaa5fac37ee6d79",
+  "runtimeTestSource": "dee36488ba84758c96bb3a90b20413cf9eb4ee76",
+  "packagingMetadataSource": "475ebcbdfce186b15fbfb67a7b245861956d44c2",
+  "packagingMetadata": "7 / 1.1.2; metadata-only after runtime source; signing/build verification separate",
+  "debugApplicationApkSha256": "b29554eda291369d6ac9df3820e20ebe95c4844be3215be62ffd9fc0746f2698",
+  "debugInstrumentationApkSha256": "af2a473ab2027bb91a8dffb395fbef4213233d02f3fe465d0503a0b5200ca22e",
+  "checks": {
+    "unitTests": 248,
+    "unitFailures": 0,
+    "unitErrors": 0,
+    "unitSkipped": 0,
+    "releaseLint": "PASS",
+    "packages": "PASS",
+    "modernInitial": {
+      "tests": 38,
+      "failures": 3,
+      "source": "3ef86a0",
+      "seconds": 121.41,
+      "retained": true,
+      "passed": 35
+    },
+    "modernCorrected": {
+      "tests": 6,
+      "failures": 0,
+      "source": "dee3648",
+      "seconds": 33.995,
+      "unchangedNonMainCasesAlreadyPassed": 32
+    },
+    "api26Final": {
+      "tests": 38,
+      "failures": 0,
+      "source": "dee3648",
+      "seconds": 41.831
+    }
+  },
+  "corrections": [
+    {
+      "finding": "MainActivity expectations still referenced removed mission paragraph, old CTA position and uncounted Filters literal",
+      "change": "Rendered French homeWelcome assertion, actual lazy-list scroll/display then original navigation/query assertions, counted Filters action preserving panel/Back checks",
+      "productionChanged": false
+    },
+    {
+      "finding": "Capture helper dismissed a prefilled Update dialog using a stale keyboard flag",
+      "change": "Removed only unnecessary harness Back; actual save-as-new/reselect/Update/New/relaunch flow then passed",
+      "productionChanged": false
+    },
+    {
+      "finding": "Initial maximum-text frame helper accepted a partial label and later overscrolled actions",
+      "change": "Retained unaccepted attempts; measured visible viewport and bidirectional scroll exposed complete EN/ZH labels and all three active-preset actions",
+      "productionChanged": false
+    }
+  ],
+  "preservedBehaviors": [
+    "Exact Nunito and19 original artwork roles",
+    "Original logo and loader",
+    "Existing adaptive navigation and IME behavior",
+    "Saved archives, explicit Update, Save-as-new-current-choices, New detachment and normal relaunch",
+    "No catalogue adoption or HighSchool content changes"
+  ],
+  "runtimeTerminal": {
+    "modernEmulatorExit": 0,
+    "api26EmulatorExit": 0,
+    "settingsAndPreferencesRestored": true,
+    "onlyOneHeavyWorkloadAtOnce": true,
+    "optionalOldCaptureExit": 130,
+    "optionalOldCaptureReason": "Coordinator explicitly requested immediate slot release after full38 pass",
+    "oldCapturedFrameSubset": [
+      "Home light",
+      "topics light",
+      "Browse light",
+      "details light",
+      "Filters light"
+    ],
+    "oldAdditionalDarkMaxScreenshotsCompleted": false
+  },
+  "limitations": [
+    "Physical Android phone installation/journey unverified",
+    "API26 optional extra dark/max capture was interrupted and is not called a completed visual matrix; final38 tests and modern accepted frames cover scoped gate",
+    "Emulator tests do not prove Play installation or release-signed device behavior",
+    "Code7 availability must be confirmed separately by coordinator"
+  ],
+  "rawEvidenceRoot": "/tmp/gta-stage2-parity",
+  "artifactSha256": {
+    "screenshots/ai-large-dark.png": "bea28ea7f12eaf6619229d09d1edcde7125d5c51086ef61102af01a72d481d5d",
+    "screenshots/saved-filter-actions-large-dark.png": "185b3a8536ed3635deaf9d07d7b9f7b783a72ea588e856d6a737cccb7299e531",
+    "screenshots/home-light.png": "938262ba731e8b83097c50e106aa67a821d18fd68956dc49c623f96cba34baaf",
+    "screenshots/home-api26-light.png": "5431b24c0324ce2d32a22c89ce5a0589096565418175aa9101b845aa3a11350b",
+    "screenshots/chinese-large-dark.png": "bdc348a2471c46290243ffbadcffa8a1fc3e021c299395d880fcb98be687cec2",
+    "screenshots/science-large-dark.png": "07a429b444420641244eaeeff3a98c12c669badeb3d9b240cc82c431ec845014",
+    "screenshots/home-dark.png": "0bafdd27d7f7ab76a38e9243a4cd3773b6be5ce5ba07ffc4b5f1640d4cd675ab",
+    "evidence/optional-api26-capture-interrupted.log": "9c92ece5a2da23f06b102008cd13ed26856c9f5f2b8d2f246038ea634ebe53f3",
+    "evidence/capture-initial-harness-failure.log": "b186f2814c5bb2bd6c45d7a1e46df1793b33c5b462f4d627b91ae1198f2029aa",
+    "evidence/modern-original-38.log": "68078b4bc49f315c8dc1af6e5c8b26351b556afe4e3cf625a5813192a7fbfa74",
+    "evidence/test-contract-compile.log": "1e83dda22131fcb5e369ec8e761b21905e7379357bc7f0b95fca7c3af591f94e",
+    "evidence/capture-partial-frame-failure.log": "a4a872fcab8753191d75828750b531c9f1c8b5e7c5041891d9eaf111d61c46b3",
+    "evidence/unit-lint-packages-final.log": "32cce4a5aa24c9120c9d6bd1bcacc2a9164ab807ac1b813f60ce81146d9f0299",
+    "evidence/api26-test-restoration.json": "93f789428cd53d10ba5cee24c4fed1645b416710a088eaddd233ba13947d9fca",
+    "evidence/modern-native-flow-assertions.json": "d4536e250db4a3dc37416b57dc6570559916d30f8e13d51314669553a0d13a07",
+    "evidence/api26-capture-restoration.json": "c6f910524390547452e7d2586191ff8ee847962c03a22b26e447eb76b64b5371",
+    "evidence/api26-final-38.log": "89b6906944f5681513727d67b99ec2a51274f7be6f613bfa90eac80277cbe71d",
+    "evidence/modern-restoration.json": "c6f910524390547452e7d2586191ff8ee847962c03a22b26e447eb76b64b5371",
+    "evidence/modern-corrected-main6.log": "d43e765444d2bee51cf226701ad26f8f15b26a7052deb962d4469a9d359c74c3"
+  }
+}

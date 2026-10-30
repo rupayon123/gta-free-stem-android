@@ -1,0 +1,7 @@
+Owned-device preferences/settings restored.
+Traceback (most recent call last):
+  File "/tmp/gta-stage2-parity/capture-modern.py", line 61, in <module>
+    edit('Search','robotics');dismiss_keyboard();scroll_for('Update filter');tap('Update filter');dismiss_keyboard();tap('Save');updated=next(e for e in entries() if e['name']=='Parity original');assert updated['id']==original['id'] and updated['query']=='robotics';screen('filter-original-updated')
+  File "/tmp/gta-stage2-parity/capture-modern.py", line 14, in tap
+    root=tree();nodes=find(root,label,contains);assert nodes,'Missing visible label: '+label
+AssertionError: Missing visible label: Save
