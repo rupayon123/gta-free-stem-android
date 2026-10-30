@@ -6,18 +6,18 @@ I'm building GTA FREE STEM to make free STEM programs easier to find across the 
 
 ## Home and saved filters
 
-**Version 1.1.1 / build 6 is available to the existing internal testers (October 29, 2026).** This is an internal testing release; public Google Play distribution and physical-phone acceptance remain separate milestones.
+**Version 1.1.2 / build 7 is available to the existing internal testers (October 30, 2026).** This is an internal testing release; public Google Play distribution and physical-phone acceptance remain separate milestones.
 
 <table>
 <tr><th width="50%">A landing page for every age</th><th width="50%">Named filters and live results</th></tr>
-<tr><td align="center"><img src="docs/showcase/2026-10-29/home-light.png" alt="Android Home with Nunito typography, saved filters, illustrated topics and five navigation destinations" width="300"></td><td align="center"><img src="docs/showcase/2026-10-29/filters-large-dark.png" alt="Dark Filters screen at maximum text size with Saved filters dropdown and matching result count" width="300"></td></tr>
+<tr><td align="center"><img src="docs/parity-stage2/screenshots/home-light.png" alt="Android Home with Nunito typography, saved filters, illustrated topics and five navigation destinations" width="300"></td><td align="center"><img src="docs/parity-stage2/screenshots/saved-filter-actions-large-dark.png" alt="Dark Filters screen at maximum text size with separate Update filter, Save filter and New filter actions" width="300"></td></tr>
 </table>
 
 Home introduces topics and saved filters. Browse contains search, map/list views and a Filters panel. Choose a named filter inside that panel to apply its query, age and location criteria immediately; matching results update there. **Save filter** creates a named preset, and **Update filter** explicitly saves edits. Different presets can cover different children, ages and interests. Data stays on the device; saving does not automatically enable notifications.
 
-These are unretouched API 36 emulator captures of the production UI used by build 6, not photographs of an owner's phone. [Screenshot provenance](docs/showcase/2026-10-29/capture-receipt.json). Nunito, original light/dark illustrations and the existing GTA logo/loader are included.
+These are unretouched API 36 emulator captures of the production UI used by build 7, not photographs of an owner's phone. [Screenshot provenance, raw checks and limitations](docs/parity-stage2/qa-receipt.json). Nunito, original light/dark illustrations and the existing GTA logo/loader are included.
 
-Validation: 246 unit tests, release lint, focused API 26/36 navigation/artwork/filter checks and six main-activity cases on each platform passed. Maximum text, RTL, keyboard visibility and reduced-motion behavior were checked. [Current CI](https://github.com/rupayon123/gta-free-stem-android/actions). Physical-phone acceptance, wider catalogue adoption and full-description translations remain open.
+Validation: 248 unit tests, release lint, signed-package checks and all 38 API 26 screen tests passed. API 36 passed the unchanged flows and the corrected six-case main-activity class; the original three test failures remain documented. Maximum text, RTL, keyboard visibility and reduced-motion behavior were checked. [Detailed QA evidence](docs/parity-stage2/README.md). [Current CI](https://github.com/rupayon123/gta-free-stem-android/actions). Physical-phone acceptance, wider catalogue adoption and full-description translations remain open.
 
 <details>
 <summary>Historical October25 API26 development screenshots</summary>
@@ -45,17 +45,17 @@ These are unretouched **API 26 Android emulator** captures of an installed devel
 1. Tap **Browse**, choose a topic on Home, or open a saved filter. Enter an interest, library, or city; open **Filters** to narrow by age, category, and place.
 2. Choose **List** or **Map** when location data is available. Open a result to read its schedule, age range, location, and original provider.
 3. Follow the provider link to confirm availability and any registration requirements. Save an activity for later, or use **Save filter** inside Filters to keep the current criteria under a name. Multiple saved filters can use different ages and interests; editing one requires an explicit update.
-4. Use **High School** to explore volunteer hours, co-op, SHSM, and mentorship. If the feed is offline, check the last-checked date and refresh when connected.
+4. **High School** currently narrows activity discovery for students. A purpose-built volunteering, learning and careers hub with an actual-hours notebook is being developed; this build does not provide a verified volunteer-role directory or certify school hours. If the feed is offline, check its last-checked date and refresh when connected.
 
 ## About the app
 
-Search programs by location, age, category, and language. The High School section focuses on volunteer hours, co-op, SHSM, and mentorship. Saved opportunities, profile preferences, and optional new-match alerts stay on your device.
+Search programs by location, age, category, and language. The current High School section is student-focused activity discovery; the wider volunteering and programme rebuild is unfinished. Saved opportunities, profile preferences, and optional new-match alerts stay on your device.
 
 There's no account to create, and no ads or analytics. Nearby search uses an approximate location only when you ask for it. Program links open the provider's website.
 
 ## Development status
 
-Version **1.1.1 / build 6** is available to the existing internal tester audience. No external testers were added. Its signed upload was accepted by Google Play on October 29, 2026; the source and screenshot evidence are linked above. An available update does not establish that it has been installed and tested on a physical phone.
+Version **1.1.2 / build 7** is available to the existing internal tester audience. No external testers were added. Play Console confirmed availability on October 30, 2026 at 00:12 EDT; the source and screenshot evidence are linked above. An available update does not establish that it has been installed and tested on a physical phone.
 
 [Build status](https://github.com/rupayon123/gta-free-stem-android/actions) · [Release notes and checklist](docs/ANDROID_RELEASE_RUNBOOK.md) · [Previous verification records](verification/V1.1.0-LOCAL-VERIFICATION.md)
 
