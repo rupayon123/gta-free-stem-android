@@ -20,3 +20,12 @@ internal val Night = Color(0xFF071116)
 internal val NightCard = Color(0xFF0E2129)
 internal val LightOutline = Color(0xFF617071)
 internal val DarkOutline = Color(0xFF8FA5A6)
+
+// Content-only palette. The launch experience continues to use the original scheme above.
+internal val ContentCanvas = Color(0xFFF8FCFF)
+internal val ContentSurface = Color(0xFFFFFFFF)
+internal val ContentSubtle = Color(0xFFEAF5FA)
+internal val TopicSky = Color(0xFFDCEFFD)
+internal val TopicTeal = Color(0xFFD9F1ED)
+internal val TopicYellow = Color(0xFFFFE9A8)
+internal val TopicCoral = Color(0xFFFFE2D9)

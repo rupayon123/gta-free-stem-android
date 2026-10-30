@@ -1,0 +1,27 @@
+{
+  "date": "2026-10-28",
+  "sourceCommit": "e9a8c95f95db62ca6fd542d45d7532ad85f61896",
+  "apkSha256": "9a3b604fbb46b98ff571566f811db368737a83c58fcb8aab6943d5831ec635c2",
+  "device": "API36 GTA emulator,1080x2340",
+  "frames": [
+    {
+      "file": "home-exact-apk-light.png",
+      "sha256": "60ba26c05a19802fcbae761f46685a56dc8e0f9263d7f888abeaa23abfc7fc86"
+    },
+    {
+      "file": "home-exact-apk-saved.png",
+      "sha256": "9a42cc492a95a4b8250f017e7c2e038b113c70aabc569a387ddf2c0a885005d6"
+    },
+    {
+      "file": "browse-exact-apk.png",
+      "sha256": "17257d3f1bbd7d108f6738344820b107a7c550866a4ec22f5da41fd163e900f0"
+    }
+  ],
+  "kind": "Unmodified screenshots from installed debug APK, actual public feed",
+  "limits": [
+    "Development1.1.1/code6 has not been uploaded.",
+    "Result totals reflect capture time, not permanent availability or complete general-library coverage.",
+    "Robotics saved search was created during the test walkthrough; no seeded family profiles or fixture listings.",
+    "No physical-device, API26, translated-provider-content or signed-release acceptance established."
+  ]
+}

@@ -1,11 +1,14 @@
 # Android Release Runbook
 
-> Current internal-update candidate: version 1.1.0, **version code 5**. Code 3
-> was uploaded only to an unpublished draft and is retained below as evidence
-> for that tested candidate. Code 4 added the tested navigation-label fix;
-> code 5 also restores the original GTA logo in Browse. Its signed package
-> and focused branding smoke require fresh receipts.
-
+> Current candidate: **1.1.2, version code 7**, packaging source `475ebcb`.
+> It contains reviewed UI source `3ef86a0` and test-only corrections `dee3648`.
+> Signed AAB/APK verification passed October 30, 2026. Play Console explicitly
+> reports **Available to internal testers**, released October 30 at 00:12 EDT.
+> This supersedes code 6 / 1.1.1 for the existing internal audience. Installation
+> and a core journey on a physical Android phone remain unverified.
+> The existing developer account and owner-only tester list are reused.
+> Do not create another account, add a card, pay a registration fee or expand
+> tester access for this update. Older candidate snapshots below are history.
 
 This runbook prepares a GTA FREE STEM Android release candidate. It does not authorize an upload, staged rollout, production rollout, or publication.
 
@@ -40,7 +43,8 @@ Policy notes were reviewed on August 18, 2026. Google Play requirements can chan
 - Intended application ID: `com.rupayonhaldar.gtafreestem`
 - Initial release: `versionName` `1.0`, `versionCode` 1
 - Historical internal-test update: `versionName` `1.0.1`, `versionCode` 2
-- Current local parity candidate: `versionName` `1.1.0`, `versionCode` 3
+- Current local parity candidate: `versionName` `1.1.2`, `versionCode` 7
+- Confirmed available internal release: `versionName` `1.1.2`, `versionCode` 7 (October 30, 00:12 EDT; explicit Console status)
 - SDK baseline: compile/target 36, minimum 26
 - Distribution artifact: Android App Bundle (`.aab`)
 - Signing: a private upload key held by the developer, plus mandatory Play App Signing for a new Play app
@@ -60,7 +64,7 @@ Changing the application ID after the first Play upload creates a different app.
 ## Gate 1: Account and policy prerequisites
 
 1. Confirm whether the Play Console account is Personal or Organization and complete every identity/contact verification task shown in the console.
-2. Budget for the current one-time USD $25 full-distribution registration fee. Google does not list an annual Play Console fee.
+2. This project already has a developer account. Reuse it; no registration payment, new paid service or card is authorized for the update. The account-creation guidance linked below is historical reference, not an instruction to create or pay for another account.
 3. If the account is a new Personal account, complete the real-device verification task when shown. Google currently requires a non-rooted physical Android device running Android 10 or later for that flow.
 4. If the Personal account was created after November 13, 2023, plan for the production-access gate: a closed test with at least 12 testers continuously opted in for at least 14 days, followed by Google's production-access application.
 5. Complete Android developer verification and package registration in the Play Console. The September 30, 2026 enforcement starts with certified-device installs in Brazil, Indonesia, Singapore, and Thailand; do not wait for enforcement to complete the account task.
@@ -79,11 +83,10 @@ Official references:
 From the project root, run:
 
 ```bash
-EXPECTED_VERSION_CODE=5 EXPECTED_VERSION_NAME=1.1.0 \
-  ./scripts/verify-release-config.sh
+./scripts/verify-release-config.sh
 ```
 
-Resolve every failure deliberately. At minimum, inspect the final values in `app/build.gradle.kts` for:
+The reviewed version is fixed inside the verifier; environment overrides cannot bless an older package. Update the app metadata and verifier together for each approved release. Resolve every failure deliberately. At minimum, inspect the final values in `app/build.gradle.kts` for:
 
 - `applicationId = "com.rupayonhaldar.gtafreestem"`
 - `compileSdk = 36`

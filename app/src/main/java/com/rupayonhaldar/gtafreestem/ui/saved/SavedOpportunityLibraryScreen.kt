@@ -537,7 +537,7 @@ private fun SavedOpportunityCard(
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth()) {
-                Button(
+                Button(shape = MaterialTheme.shapes.small,
                     onClick = onOpenDetail,
                     modifier = Modifier
                         .weight(1f)
@@ -549,7 +549,7 @@ private fun SavedOpportunityCard(
                 ) {
                     Text(labels.details, textAlign = TextAlign.Center)
                 }
-                OutlinedButton(
+                OutlinedButton(shape = MaterialTheme.shapes.small,
                     onClick = onRemove,
                     modifier = Modifier
                         .weight(1f)

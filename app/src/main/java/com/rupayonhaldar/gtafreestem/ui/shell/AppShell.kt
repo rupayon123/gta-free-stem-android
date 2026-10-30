@@ -2,7 +2,9 @@ package com.rupayonhaldar.gtafreestem.ui.shell
 
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
+import com.rupayonhaldar.gtafreestem.ui.design.GtaObject
+import com.rupayonhaldar.gtafreestem.ui.design.GtaArtwork
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -39,9 +41,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.Hyphens
 import androidx.compose.ui.text.style.LineBreak
@@ -55,7 +60,7 @@ enum class PrimaryDestination(
     @param:DrawableRes val iconResource: Int,
 ) {
     HOME("home", "Home", R.drawable.ic_home),
-    OPPORTUNITIES("navOpportunities", "Discover", R.drawable.ic_search),
+    OPPORTUNITIES("browse", "Browse", R.drawable.ic_search),
     HIGH_SCHOOL("highSchool", "School", R.drawable.ic_school),
     SUPPORT("support", "Help", R.drawable.ic_support),
     ACCOUNT("account", "Profile", R.drawable.ic_account),
@@ -104,40 +109,66 @@ private fun PrimaryNavigationBar(
     onDestinationSelected: (PrimaryDestination) -> Unit,
     destinationLabel: (PrimaryDestination) -> String,
 ) {
-    Surface(color = MaterialTheme.colorScheme.surface) {
-        Column(modifier = Modifier.testTag("primary-navigation-bar").navigationBarsPadding()) {
-            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
-            Row(
-                modifier = Modifier.fillMaxWidth().height(IntrinsicSize.Min).selectableGroup()
-                    .padding(horizontal = 4.dp, vertical = 6.dp),
-                horizontalArrangement = Arrangement.spacedBy(2.dp),
+    val density = LocalDensity.current
+    val textMeasurer = rememberTextMeasurer()
+    val labelStyle = MaterialTheme.typography.labelSmall
+    BoxWithConstraints {
+        // At accessibility sizes, give words their natural width instead of squeezing
+        // five labels into equal fifths. Measure bold too so selecting a tab cannot split it.
+        val largeText = density.fontScale > 1.3f
+        val columns = if (largeText) {
+            val longestWordPx = PrimaryDestination.entries.maxOf { destination ->
+                destinationLabel(destination).split(Regex("\\s+")).maxOf { word ->
+                    textMeasurer.measure(
+                        AnnotatedString(word),
+                        style = labelStyle.copy(fontWeight = FontWeight.Bold),
+                        softWrap = false,
+                    ).size.width
+                }
+            }
+            val wordWidth = with(density) { longestWordPx.toDp() }
+            ((maxWidth - 8.dp) / (wordWidth + 16.dp)).toInt().coerceIn(1, 3)
+        } else PrimaryDestination.entries.size
+        Surface(color = MaterialTheme.colorScheme.surface) {
+            Column(
+                modifier = Modifier.testTag("primary-navigation-bar").navigationBarsPadding()
+                    .selectableGroup(),
             ) {
-                PrimaryDestination.entries.forEach { destination ->
-                    val selected = selectedDestination == destination
-                    Surface(
-                        modifier = Modifier.weight(1f).fillMaxHeight(),
-                        color = if (selected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surface,
-                        contentColor = if (selected) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurface,
-                        shape = RoundedCornerShape(16.dp),
+                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+                PrimaryDestination.entries.chunked(columns).forEach { destinations ->
+                    Row(
+                        modifier = Modifier.fillMaxWidth().height(IntrinsicSize.Min)
+                            .padding(horizontal = 4.dp, vertical = 6.dp),
+                        horizontalArrangement = Arrangement.spacedBy(if (largeText) 8.dp else 2.dp),
                     ) {
-                        Column(
-                            modifier = Modifier.testTag(destination.testTag)
-                                .selectable(selected = selected, role = Role.Tab, onClick = { onDestinationSelected(destination) })
-                                .heightIn(min = 56.dp).padding(horizontal = 2.dp, vertical = 8.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.spacedBy(4.dp),
-                        ) {
-                            DestinationIcon(destination, selected)
-                            Text(
-                                text = destinationLabel(destination),
-                                modifier = Modifier.fillMaxWidth(),
-                                style = MaterialTheme.typography.labelSmall.copy(
-                                    lineBreak = LineBreak.Heading,
-                                    hyphens = Hyphens.Auto,
-                                ),
-                                fontWeight = if (selected) FontWeight.Bold else FontWeight.Medium,
-                                textAlign = TextAlign.Center,
-                            )
+                        destinations.forEach { destination ->
+                            val selected = selectedDestination == destination
+                            Surface(
+                                modifier = Modifier.weight(1f).fillMaxHeight(),
+                                color = if (selected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surface,
+                                contentColor = if (selected) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurface,
+                                shape = MaterialTheme.shapes.small,
+                            ) {
+                                Column(
+                                    modifier = Modifier.testTag(destination.testTag)
+                                        .selectable(selected = selected, role = Role.Tab, onClick = { onDestinationSelected(destination) })
+                                        .heightIn(min = 56.dp).padding(horizontal = 2.dp, vertical = 8.dp),
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    verticalArrangement = Arrangement.spacedBy(4.dp),
+                                ) {
+                                    DestinationIcon(destination, selected)
+                                    Text(
+                                        text = destinationLabel(destination),
+                                        modifier = Modifier.fillMaxWidth(),
+                                        style = labelStyle.copy(
+                                            lineBreak = LineBreak.Heading,
+                                            hyphens = if (largeText) Hyphens.None else Hyphens.Auto,
+                                        ),
+                                        fontWeight = if (selected) FontWeight.Bold else FontWeight.Medium,
+                                        textAlign = TextAlign.Center,
+                                    )
+                                }
+                            }
                         }
                     }
                 }
@@ -173,7 +204,7 @@ private fun PrimarySideNavigation(
                 Surface(
                     color = if (selected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surface,
                     contentColor = if (selected) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurface,
-                    shape = RoundedCornerShape(16.dp),
+                    shape = MaterialTheme.shapes.small,
                 ) {
                     Column(
                         modifier = Modifier.fillMaxWidth().testTag(destination.testTag)
@@ -200,15 +231,19 @@ private fun PrimarySideNavigation(
 @Composable
 private fun DestinationIcon(destination: PrimaryDestination, selected: Boolean) {
     val scale by animateFloatAsState(
-        targetValue = if (selected) 1.10f else 1f,
-        animationSpec = spring(dampingRatio = 0.72f, stiffness = 380f),
+        targetValue = if (selected) 1.05f else 1f,
+        animationSpec = tween(durationMillis = 160),
         label = "destination-icon-${destination.name}",
     )
-    Icon(
-        painter = painterResource(destination.iconResource),
-        contentDescription = null,
-        modifier = Modifier.size(24.dp).graphicsLayer { scaleX = scale; scaleY = scale },
-    )
+    val modifier = Modifier.size(28.dp).graphicsLayer { scaleX = scale; scaleY = scale }
+    val artwork = when (destination) {
+        PrimaryDestination.HOME -> GtaArtwork.HOME
+        PrimaryDestination.OPPORTUNITIES -> GtaArtwork.EXPLORE
+        PrimaryDestination.HIGH_SCHOOL -> GtaArtwork.SCHOOL
+        PrimaryDestination.SUPPORT -> GtaArtwork.SUPPORT
+        PrimaryDestination.ACCOUNT -> GtaArtwork.PROFILE
+    }
+    GtaObject(artwork, contentDescription = null, modifier = modifier, compact = true)
 }
 
 private val PrimaryDestination.testTag: String

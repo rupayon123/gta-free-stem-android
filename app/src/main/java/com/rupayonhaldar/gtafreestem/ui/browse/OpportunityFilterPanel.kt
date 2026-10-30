@@ -75,6 +75,8 @@ fun OpportunityFilterPanel(
     labels: OpportunityFilterPanelLabels = OpportunityFilterPanelLabels.English,
     onReset: () -> Unit = { onFiltersChange(OpportunitySearchFilters()) },
     showHeader: Boolean = true,
+    presetContent: (@Composable () -> Unit)? = null,
+    canResetOverride: Boolean? = null,
 ) {
     val normalizedFilters = filters.normalized()
     val activeFilterCount = opportunityFilterPanelActiveCount(normalizedFilters)
@@ -105,11 +107,13 @@ fun OpportunityFilterPanel(
             if (showHeader) {
                 FilterPanelHeader(
                     activeFilterCount = activeFilterCount,
-                    canReset = normalizedFilters != OpportunitySearchFilters(),
+                    canReset = canResetOverride ?: (normalizedFilters != OpportunitySearchFilters()),
                     labels = labels,
                     onReset = onReset,
                 )
             }
+
+            presetContent?.invoke()
 
             Card(
                 colors = CardDefaults.cardColors(
@@ -165,14 +169,6 @@ fun OpportunityFilterPanel(
                             ),
                         )
                     },
-                )
-                StringFilterDropdown(
-                    label = labels.language,
-                    selection = normalizedFilters.language,
-                    availableValues = options.languages,
-                    anyLabel = labels.any,
-                    testTag = OpportunityFilterPanelTestTags.LANGUAGE,
-                    onSelection = { updateFilters(normalizedFilters.copy(language = it)) },
                 )
             }
 
@@ -342,7 +338,6 @@ fun opportunityFilterPanelActiveCount(filters: OpportunitySearchFilters): Int {
         normalized.city != null,
         normalized.category != null,
         normalized.age != null || normalized.adultsOnly,
-        normalized.language != null,
         normalized.volunteerHoursOnly,
         normalized.coopOnly,
         normalized.mentorshipOnly,
@@ -414,14 +409,14 @@ private fun DistanceRadiusChoices(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
-        FilterChip(
+        FilterChip(shape = MaterialTheme.shapes.small,
             selected = selectedDistance == null,
             onClick = { onDistanceSelected(null) },
             label = { Text(labels.any) },
             modifier = Modifier.heightIn(min = MinimumTouchTarget),
         )
         listOf(5, 10, 25, 50, 100).forEach { distance ->
-            FilterChip(
+            FilterChip(shape = MaterialTheme.shapes.small,
                 selected = selectedDistance == distance,
                 onClick = { onDistanceSelected(distance) },
                 label = { Text(labels.distanceRadius(distance)) },

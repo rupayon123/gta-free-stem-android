@@ -198,4 +198,7 @@ private fun com.rupayonhaldar.gtafreestem.data.feed.ValidatedOpportunityFeed.toS
     declaredRecordCount = declaredRecordCount,
     isStale = isStale,
     publicationRevision = publicationRevision,
+    validatedCatalog = true,
+    acceptedComplete = source == OpportunityFeedSource.PRIMARY_NETWORK ||
+        source == OpportunityFeedSource.FALLBACK_NETWORK,
 )

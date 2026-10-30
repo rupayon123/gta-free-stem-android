@@ -29,7 +29,8 @@ class OpportunityFilterPanelContractTest {
             sort = OpportunitySearchSort.RELEVANCE,
         )
 
-        assertEquals(14, opportunityFilterPanelActiveCount(filters))
+        assertEquals(13, opportunityFilterPanelActiveCount(filters))
+        assertNull(filters.normalized().language)
         assertEquals(0, opportunityFilterPanelActiveCount(OpportunitySearchFilters()))
     }
 

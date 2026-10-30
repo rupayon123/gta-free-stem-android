@@ -6,6 +6,8 @@ import com.rupayonhaldar.gtafreestem.data.local.FavoriteOpportunityStore
 import com.rupayonhaldar.gtafreestem.data.local.SavedOpportunityEntry
 import com.rupayonhaldar.gtafreestem.data.local.SavedOpportunityReconciliation
 import com.rupayonhaldar.gtafreestem.data.local.SavedOpportunitySections
+import com.rupayonhaldar.gtafreestem.data.local.SavedSearchEntry
+import com.rupayonhaldar.gtafreestem.data.local.SavedSearchStore
 import com.rupayonhaldar.gtafreestem.domain.model.Opportunity
 import com.rupayonhaldar.gtafreestem.domain.model.OpportunityFeedSnapshot
 import com.rupayonhaldar.gtafreestem.domain.model.OpportunityFeedSource
@@ -16,10 +18,16 @@ import com.rupayonhaldar.gtafreestem.domain.search.OpportunitySearchLimits
 import com.rupayonhaldar.gtafreestem.domain.search.OpportunitySearchSort
 import com.rupayonhaldar.gtafreestem.localization.AppLanguage
 import java.time.Instant
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
+import kotlinx.coroutines.async
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runCurrent
@@ -32,6 +40,282 @@ import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class BrowseViewModelTest {
+    @Test
+    fun `in panel preset replacement cancels stale result without navigation or refresh`() = runTest {
+        val dispatcher = StandardTestDispatcher(testScheduler)
+        Dispatchers.setMain(dispatcher)
+        try {
+            val repository = RecordingRepository(healthySnapshot(listOf(
+                opportunity("four", "STEM", "Toronto", "Toronto", listOf("en"), 5, ageMin = 4),
+                opportunity("sixteen", "STEM", "Toronto", "Toronto", listOf("en"), 17, ageMin = 16),
+            ), 1_000L))
+            val store = RecordingSavedSearchStore()
+            val vm = BrowseViewModel(repository, EmptyFavorites(), savedSearchStore = store,
+                searchDispatcher = dispatcher, savedSearchIoDispatcher = dispatcher)
+            advanceUntilIdle()
+            for (age in listOf(4, 16)) {
+                vm.setAge(age)
+                vm.saveCurrentSearch("Age $age")
+                advanceUntilIdle()
+            }
+            val ids = store.entries.map { it.id }
+            val requests = repository.refreshCalls
+            val published = mutableListOf<List<String>>()
+            backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+                vm.uiState.collect { published += it.opportunities.map(Opportunity::id) }
+            }
+            // Replace A while its synchronous local worker is returning; cancellation
+            // must prevent A's results being published into B's selected controls.
+            repository.onSearch = { filters ->
+                if (filters.age == 4) {
+                    repository.onSearch = null
+                    assertTrue(vm.openSavedSearch(ids[1]))
+                }
+            }
+            assertTrue(vm.openSavedSearch(ids[0]))
+            advanceUntilIdle()
+            assertEquals(ids[1], vm.uiState.value.activeSavedSearchId)
+            assertEquals(16, vm.uiState.value.filters.age)
+            assertEquals(listOf("sixteen"), vm.uiState.value.opportunities.map(Opportunity::id))
+            assertFalse(published.contains(listOf("four")))
+            assertEquals(AppDestination.EXPLORE, vm.uiState.value.destination)
+            assertEquals(requests, repository.refreshCalls)
+        } finally {
+            advanceUntilIdle()
+            Dispatchers.resetMain()
+        }
+    }
+
+    @Test
+    fun `manual filter edits require explicit update and reset detaches without deleting presets`() = runTest {
+        val dispatcher = StandardTestDispatcher(testScheduler)
+        Dispatchers.setMain(dispatcher)
+        try {
+            val repository = RecordingRepository(healthySnapshot(listOf(
+                opportunity("four", "STEM", "Toronto", "Toronto", listOf("en"), 5, ageMin = 4),
+                opportunity("sixteen", "STEM", "Toronto", "Toronto", listOf("en"), 17, ageMin = 16),
+            ), 1_000L))
+            val store = RecordingSavedSearchStore()
+            val vm = BrowseViewModel(repository, EmptyFavorites(), savedSearchStore = store,
+                searchDispatcher = dispatcher, savedSearchIoDispatcher = dispatcher)
+            advanceUntilIdle()
+            vm.setAge(4)
+            vm.saveCurrentSearch("Child")
+            advanceUntilIdle()
+            val original = store.entries.single()
+            val requests = repository.refreshCalls
+            vm.setFilters(OpportunitySearchFilters(age = 16))
+            advanceUntilIdle()
+            assertEquals(original.id, vm.uiState.value.activeSavedSearchId)
+            assertEquals(original, store.entries.single())
+            assertEquals(listOf("sixteen"), vm.uiState.value.opportunities.map(Opportunity::id))
+            vm.saveCurrentSearch("Teen", updateExisting = true)
+            advanceUntilIdle()
+            val updated = store.entries.single()
+            assertEquals(original.id, updated.id)
+            assertEquals(16, updated.filters.age)
+            vm.clearSearchAndFilters()
+            advanceUntilIdle()
+            assertEquals(null, vm.uiState.value.activeSavedSearchId)
+            assertEquals(OpportunitySearchFilters(), vm.uiState.value.filters)
+            assertEquals(setOf("four", "sixteen"), vm.uiState.value.opportunities.map(Opportunity::id).toSet())
+            assertEquals(listOf(updated), store.entries)
+            assertEquals(requests, repository.refreshCalls)
+        } finally {
+            advanceUntilIdle()
+            Dispatchers.resetMain()
+        }
+    }
+
+    @Test
+    fun `three named age searches retain independent counts across refresh view edit and delete`() = runTest {
+        val dispatcher = StandardTestDispatcher(testScheduler)
+        Dispatchers.setMain(dispatcher)
+        try {
+            val repository = RecordingRepository(healthySnapshot(listOf(
+                opportunity("four-A", "Science & Engineering", "Toronto", "Toronto", listOf("en"), 5, ageMin = 4),
+                opportunity("ten-A", "Science & Engineering", "Toronto", "Toronto", listOf("en"), 11, ageMin = 10),
+                opportunity("sixteen-A", "Science & Engineering", "Toronto", "Toronto", listOf("en"), 17, ageMin = 16),
+            ), 1_000L))
+            val store = RecordingSavedSearchStore()
+            val viewModel = BrowseViewModel(
+                repository = repository, favorites = EmptyFavorites(), savedSearchStore = store,
+                searchDispatcher = dispatcher, savedSearchIoDispatcher = dispatcher,
+            )
+            advanceUntilIdle()
+            for (age in listOf(4, 10, 16)) {
+                viewModel.setAge(age)
+                viewModel.saveCurrentSearch("Age $age")
+                advanceUntilIdle()
+            }
+            assertEquals(3, store.entries.size)
+            assertEquals(listOf(1, 1, 1), viewModel.uiState.value.savedSearches.map { it.matchCount })
+            assertTrue(store.entries.all { it.hasBaseline && it.unreadMatchingIds.isEmpty() })
+
+            repository.snapshot = healthySnapshot(repository.snapshot.opportunities + listOf(
+                opportunity("four-B", "Science & Engineering", "Toronto", "Toronto", listOf("en"), 5, ageMin = 4),
+                opportunity("sixteen-B", "Science & Engineering", "Toronto", "Toronto", listOf("en"), 17, ageMin = 16),
+            ), 2_000L)
+            viewModel.refresh()
+            advanceUntilIdle()
+            assertEquals(listOf(2, 1, 2), viewModel.uiState.value.savedSearches.map { it.matchCount })
+            assertEquals(listOf(1, 0, 1), viewModel.uiState.value.savedSearches.map { it.newCount })
+
+            val firstId = store.entries.first().id
+            assertTrue(viewModel.openSavedSearch(firstId))
+            advanceUntilIdle()
+            assertEquals(4, viewModel.uiState.value.filters.age)
+            assertEquals(0, viewModel.uiState.value.savedSearches.first().newCount)
+            assertTrue(store.entries.first().unreadMatchingIds.isEmpty())
+
+            viewModel.setAge(10)
+            assertEquals(4, store.entries.first().filters.age)
+            viewModel.saveCurrentSearch("Age 10 revised", updateExisting = true)
+            advanceUntilIdle()
+            assertEquals(3, store.entries.size)
+            assertEquals(10, store.entries.first().filters.age)
+            assertEquals("Age 10 revised", store.entries.first().name)
+            assertEquals(0, viewModel.uiState.value.savedSearches.first { it.entry.id == firstId }.newCount)
+
+            assertTrue(viewModel.deleteSavedSearch(store.entries.last().id))
+            advanceUntilIdle()
+            assertEquals(2, store.entries.size)
+            assertEquals(2, viewModel.uiState.value.savedSearches.size)
+        } finally {
+            advanceUntilIdle()
+            Dispatchers.resetMain()
+        }
+    }
+
+    @Test
+    fun `nearby cannot silently persist and named searches survive Browse history clear`() = runTest {
+        val dispatcher = StandardTestDispatcher(testScheduler)
+        Dispatchers.setMain(dispatcher)
+        try {
+            val store = RecordingSavedSearchStore()
+            val viewModel = BrowseViewModel(
+                repository = RecordingRepository(healthySnapshot(listOf(
+                    opportunity("A", "Coding & Robotics", "Toronto", "Toronto", listOf("en"), 18),
+                ), 1_000L)),
+                favorites = EmptyFavorites(), savedSearchStore = store,
+                searchDispatcher = dispatcher, savedSearchIoDispatcher = dispatcher,
+            )
+            advanceUntilIdle()
+            viewModel.setNearbyLocation(43.65, -79.38)
+            viewModel.saveCurrentSearch("Nearby")
+            advanceUntilIdle()
+            assertTrue(store.entries.isEmpty())
+            assertEquals(SavedSearchFeedback.NEARBY_UNSUPPORTED, viewModel.uiState.value.savedSearchFeedback)
+            viewModel.clearNearbyLocation()
+            viewModel.saveCurrentSearch("Robotics")
+            advanceUntilIdle()
+            assertEquals(1, store.entries.size)
+            assertTrue(viewModel.clearSearchHistory())
+            assertEquals(1, store.entries.size)
+            store.clearResult = false
+            assertFalse(viewModel.clearNamedSavedSearches())
+            assertEquals(1, store.entries.size)
+            store.clearResult = true
+            assertTrue(viewModel.clearNamedSavedSearches())
+            assertTrue(store.entries.isEmpty())
+            assertTrue(viewModel.uiState.value.savedSearches.isEmpty())
+        } finally {
+            advanceUntilIdle()
+            Dispatchers.resetMain()
+        }
+    }
+
+    @Test
+    fun `delete waits off main for an in-flight write and prevents resurrection`() = runTest {
+        val dispatcher = StandardTestDispatcher(testScheduler)
+        Dispatchers.setMain(dispatcher)
+        val store = BlockingSavedSearchStore()
+        try {
+            val viewModel = BrowseViewModel(
+                repository = RecordingRepository(healthySnapshot(listOf(
+                    opportunity("A", "Coding & Robotics", "Toronto", "Toronto", listOf("en"), 18),
+                ), 1_000L)),
+                favorites = EmptyFavorites(), savedSearchStore = store,
+                searchDispatcher = dispatcher,
+            )
+            advanceUntilIdle()
+            viewModel.saveCurrentSearch("Robotics")
+            runCurrent()
+            assertTrue("Save did not reach disk write", store.writeEntered.await(3, TimeUnit.SECONDS))
+
+            val deletion = async { viewModel.clearNamedSavedSearches() }
+            runCurrent()
+            assertFalse(deletion.isCompleted)
+            viewModel.setQuery("still responsive")
+            assertEquals("still responsive", viewModel.uiState.value.query)
+            store.releaseWrite.countDown()
+            assertTrue(deletion.await())
+            advanceUntilIdle()
+            assertTrue(store.entries.isEmpty())
+            assertTrue(viewModel.uiState.value.savedSearches.isEmpty())
+        } finally {
+            store.releaseWrite.countDown()
+            advanceUntilIdle()
+            Dispatchers.resetMain()
+        }
+    }
+
+    @Test
+    fun `restored unsupported program language is neutral while display locale and filters remain`() = runTest {
+        Dispatchers.setMain(StandardTestDispatcher(testScheduler))
+        try {
+            val stateStore = RecordingBrowseSearchStateStore(
+                restored = BrowseSearchState(
+                    query = "",
+                    filters = OpportunitySearchFilters(
+                        region = "Toronto",
+                        city = "Toronto",
+                        category = "Coding & Robotics",
+                        age = 12,
+                        language = "ja",
+                    ),
+                ),
+            )
+            val repository = RecordingRepository(snapshot(listOf(
+                opportunity(
+                    id = "english-source",
+                    category = "Coding & Robotics",
+                    region = "Toronto",
+                    city = "Toronto",
+                    languages = listOf("en"),
+                    ageMax = 14,
+                ),
+            )))
+            val viewModel = BrowseViewModel(
+                repository = repository,
+                favorites = EmptyFavorites(),
+                browseStateStore = stateStore,
+                initialSearchLanguage = AppLanguage.JAPANESE,
+                searchDispatcher = StandardTestDispatcher(testScheduler),
+            )
+
+            advanceUntilIdle()
+
+            val state = viewModel.uiState.value
+            assertEquals(AppLanguage.JAPANESE, state.searchLanguage)
+            assertEquals(null, state.filters.language)
+            assertEquals("Toronto", state.filters.region)
+            assertEquals("Toronto", state.filters.city)
+            assertEquals("Coding & Robotics", state.filters.category)
+            assertEquals(12, state.filters.age)
+            assertEquals(listOf("english-source"), state.opportunities.map(Opportunity::id))
+            assertEquals(AppLanguage.JAPANESE, repository.searches.last().third)
+
+            viewModel.setQuery("Program")
+            advanceUntilIdle()
+            assertEquals(null, stateStore.writes.last().filters.language)
+            assertEquals("Toronto", stateStore.writes.last().filters.city)
+        } finally {
+            advanceUntilIdle()
+            Dispatchers.resetMain()
+        }
+    }
+
     @Test
     fun `rapid query edits publish only the latest search`() = runTest {
         Dispatchers.setMain(StandardTestDispatcher(testScheduler))
@@ -494,13 +778,18 @@ class BrowseViewModelTest {
     }
 
     private class RecordingRepository(
-        private val snapshot: OpportunityFeedSnapshot,
+        var snapshot: OpportunityFeedSnapshot,
     ) : OpportunityRepository {
         val searches = mutableListOf<Triple<String, OpportunitySearchFilters, AppLanguage>>()
+        var refreshCalls = 0
+        var onSearch: ((OpportunitySearchFilters) -> Unit)? = null
 
         override suspend fun bootstrap(): OpportunityFeedSnapshot = snapshot
 
-        override suspend fun refresh(): OpportunityFeedSnapshot = snapshot
+        override suspend fun refresh(): OpportunityFeedSnapshot {
+            refreshCalls += 1
+            return snapshot
+        }
 
         override fun current(): OpportunityFeedSnapshot = snapshot
 
@@ -510,6 +799,7 @@ class BrowseViewModelTest {
             language: AppLanguage,
         ): List<Opportunity> {
             searches += Triple(query, filters, language)
+            onSearch?.invoke(filters)
             return OpportunitySearch.search(
                 opportunities = snapshot.opportunities,
                 query = query,
@@ -659,6 +949,46 @@ class BrowseViewModelTest {
         isStale = false,
     )
 
+    private fun healthySnapshot(opportunities: List<Opportunity>, revision: Long) =
+        snapshot(opportunities).copy(
+            source = OpportunityFeedSource.PRIMARY_NETWORK,
+            publicationRevision = Instant.ofEpochMilli(revision),
+            validatedCatalog = true,
+            acceptedComplete = true,
+        )
+
+    private class RecordingSavedSearchStore : SavedSearchStore {
+        var entries = emptyList<SavedSearchEntry>()
+        var clearResult = true
+        override fun read() = entries
+        override fun write(entries: List<SavedSearchEntry>): Boolean {
+            this.entries = entries
+            return true
+        }
+        override fun clear(): Boolean {
+            if (!clearResult) return false
+            entries = emptyList()
+            return true
+        }
+    }
+
+    private class BlockingSavedSearchStore : SavedSearchStore {
+        val writeEntered = CountDownLatch(1)
+        val releaseWrite = CountDownLatch(1)
+        @Volatile var entries = emptyList<SavedSearchEntry>()
+        override fun read() = entries
+        override fun write(entries: List<SavedSearchEntry>): Boolean {
+            writeEntered.countDown()
+            if (!releaseWrite.await(5, TimeUnit.SECONDS)) return false
+            this.entries = entries
+            return true
+        }
+        override fun clear(): Boolean {
+            entries = emptyList()
+            return true
+        }
+    }
+
     private fun opportunity(
         id: String,
         category: String,
@@ -667,6 +997,7 @@ class BrowseViewModelTest {
         languages: List<String>,
         ageMax: Int?,
         tags: List<String> = emptyList(),
+        ageMin: Int = 8,
     ) = Opportunity(
         id = id,
         title = "Program $id",
@@ -677,7 +1008,7 @@ class BrowseViewModelTest {
         city = city,
         region = region,
         endDate = "2027-12-31",
-        ageMin = 8,
+        ageMin = ageMin,
         ageMax = ageMax,
         languages = languages,
         cost = "Free",

@@ -1,0 +1,72 @@
+
+com.rupayonhaldar.gtafreestem.MainActivityTest:...
+Error in selectedLanguageLocalizesFiveDestinationsAndMirrorsRtlNavigation(com.rupayonhaldar.gtafreestem.MainActivityTest):
+java.lang.AssertionError: Assert failed: The component with Text + InputText + EditableText contains 'Découvrez des événements gratuits en bibliothèque, des ateliers créatifs et des activités STIM dans le Grand Toronto, pour les enfants, les familles et les adultes.' (ignoreCase: false) is not displayed!
+	at androidx.compose.ui.test.AssertionsKt.assertIsDisplayed(Assertions.kt:34)
+	at com.rupayonhaldar.gtafreestem.MainActivityTest.selectedLanguageLocalizesFiveDestinationsAndMirrorsRtlNavigation(MainActivityTest.kt:142)
+
+Error in searchStateSurvivesPrimaryNavigation(com.rupayonhaldar.gtafreestem.MainActivityTest):
+java.lang.AssertionError: Failed to inject touch input.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (TestTag = 'home-browse-all')
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+	at androidx.compose.ui.test.ActionsKt.performTouchInput(Actions.kt:401)
+	at androidx.compose.ui.test.AndroidActions.performClickImpl(Actions.android.kt:23)
+	at androidx.compose.ui.test.ActionsKt.performClick(Actions.kt:59)
+	at com.rupayonhaldar.gtafreestem.MainActivityTest.searchStateSurvivesPrimaryNavigation(MainActivityTest.kt:198)
+
+Error in primaryNavigationHasExactlyFiveDestinationsAndNavigates(com.rupayonhaldar.gtafreestem.MainActivityTest):
+java.lang.AssertionError: Failed to inject touch input.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (Text + InputText + EditableText contains 'Filters' (ignoreCase: false))
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+	at androidx.compose.ui.test.ActionsKt.performTouchInput(Actions.kt:401)
+	at androidx.compose.ui.test.AndroidActions.performClickImpl(Actions.android.kt:23)
+	at androidx.compose.ui.test.ActionsKt.performClick(Actions.kt:59)
+	at com.rupayonhaldar.gtafreestem.MainActivityTest.primaryNavigationHasExactlyFiveDestinationsAndNavigates(MainActivityTest.kt:90)
+
+com.rupayonhaldar.gtafreestem.ui.shell.AppShellLargeTextTest:.....
+com.rupayonhaldar.gtafreestem.ui.design.GtaArtworkRuntimeTest:.
+com.rupayonhaldar.gtafreestem.ui.browse.SavedFilterPickerRuntimeTest:...
+com.rupayonhaldar.gtafreestem.DiscoveryFlowTest:..............
+com.rupayonhaldar.gtafreestem.ScreenTransitionTest:.
+com.rupayonhaldar.gtafreestem.ui.preferences.AccountPreferencesScreenTest:.....
+com.rupayonhaldar.gtafreestem.ui.saved.SavedOpportunityLibraryScreenTest:...
+
+Time: 121.41
+There were 3 failures:
+1) selectedLanguageLocalizesFiveDestinationsAndMirrorsRtlNavigation(com.rupayonhaldar.gtafreestem.MainActivityTest)
+java.lang.AssertionError: Assert failed: The component with Text + InputText + EditableText contains 'Découvrez des événements gratuits en bibliothèque, des ateliers créatifs et des activités STIM dans le Grand Toronto, pour les enfants, les familles et les adultes.' (ignoreCase: false) is not displayed!
+	at androidx.compose.ui.test.AssertionsKt.assertIsDisplayed(Assertions.kt:34)
+	at com.rupayonhaldar.gtafreestem.MainActivityTest.selectedLanguageLocalizesFiveDestinationsAndMirrorsRtlNavigation(MainActivityTest.kt:142)
+2) searchStateSurvivesPrimaryNavigation(com.rupayonhaldar.gtafreestem.MainActivityTest)
+java.lang.AssertionError: Failed to inject touch input.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (TestTag = 'home-browse-all')
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+	at androidx.compose.ui.test.ActionsKt.performTouchInput(Actions.kt:401)
+	at androidx.compose.ui.test.AndroidActions.performClickImpl(Actions.android.kt:23)
+	at androidx.compose.ui.test.ActionsKt.performClick(Actions.kt:59)
+	at com.rupayonhaldar.gtafreestem.MainActivityTest.searchStateSurvivesPrimaryNavigation(MainActivityTest.kt:198)
+3) primaryNavigationHasExactlyFiveDestinationsAndNavigates(com.rupayonhaldar.gtafreestem.MainActivityTest)
+java.lang.AssertionError: Failed to inject touch input.
+Reason: Expected exactly '1' node but could not find any node that satisfies: (Text + InputText + EditableText contains 'Filters' (ignoreCase: false))
+
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow(SemanticsNodeInteraction.kt:178)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchOneOrThrow$default(SemanticsNodeInteraction.kt:150)
+	at androidx.compose.ui.test.SemanticsNodeInteraction.fetchSemanticsNode(SemanticsNodeInteraction.kt:84)
+	at androidx.compose.ui.test.ActionsKt.performTouchInput(Actions.kt:401)
+	at androidx.compose.ui.test.AndroidActions.performClickImpl(Actions.android.kt:23)
+	at androidx.compose.ui.test.ActionsKt.performClick(Actions.kt:59)
+	at com.rupayonhaldar.gtafreestem.MainActivityTest.primaryNavigationHasExactlyFiveDestinationsAndNavigates(MainActivityTest.kt:90)
+
+FAILURES!!!
+Tests run: 38,  Failures: 3
+
+

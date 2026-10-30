@@ -2,8 +2,10 @@ package com.rupayonhaldar.gtafreestem
 
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.getUnclippedBoundsInRoot
+import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.hasSetTextAction
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
@@ -19,9 +21,12 @@ import androidx.compose.ui.test.performTextReplacement
 import androidx.compose.ui.unit.dp
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.rupayonhaldar.gtafreestem.data.local.AppThemePreference
 import com.rupayonhaldar.gtafreestem.localization.AppLanguage
+import com.rupayonhaldar.gtafreestem.ui.browse.BrowseViewModel
 import com.rupayonhaldar.gtafreestem.ui.shell.PrimaryDestination
 import org.junit.After
 import org.junit.Assert.assertTrue
@@ -62,7 +67,7 @@ class MainActivityTest {
     fun primaryNavigationHasExactlyFiveDestinationsAndNavigates() {
         val destinations = listOf(
             "home" to "Home",
-            "opportunities" to "Opportunities",
+            "opportunities" to "Browse",
             "high_school" to "High School",
             "support" to "Support",
             "account" to "Profile",
@@ -74,18 +79,21 @@ class MainActivityTest {
                 .assertTextContains(label)
         }
 
-        composeRule.onNodeWithText("Find free library events", substring = true).assertIsDisplayed()
+        composeRule.onNodeWithTag("home-welcome")
+            .assertTextContains("Free things to learn, make and explore").assertIsDisplayed()
 
         composeRule.onNodeWithTag("primary-navigation-opportunities").performClick()
         composeRule.onNode(hasSetTextAction()).performTextReplacement("")
         composeRule.onNodeWithTag("browse-screen-title")
-            .assertTextContains("Opportunities")
+            .assertTextContains("Browse")
             .assertIsDisplayed()
-        composeRule.onNodeWithText("Filters").performClick()
+        composeRule.onNodeWithTag("browse-results")
+            .performScrollToNode(hasText("Filters", substring = true))
+        composeRule.onNodeWithText("Filters", substring = true).assertIsDisplayed().performClick()
         composeRule.onNodeWithTag("opportunity-filter-panel").assertIsDisplayed()
         composeRule.onNodeWithText("Back").performClick()
         composeRule.onNodeWithTag("browse-screen-title")
-            .assertTextContains("Opportunities")
+            .assertTextContains("Browse")
             .assertIsDisplayed()
 
         composeRule.onNodeWithTag("primary-navigation-high_school").performClick()
@@ -133,13 +141,14 @@ class MainActivityTest {
             composeRule.onNodeWithTag("primary-navigation-${destination.name.lowercase()}")
                 .assertTextContains(frenchState.text(destination.catalogKey))
         }
-        composeRule.onNodeWithText(frenchState.text("mission")).assertIsDisplayed()
+        composeRule.onNodeWithTag("home-welcome")
+            .assertTextContains(frenchState.text("homeWelcome")).assertIsDisplayed()
         composeRule.onNodeWithTag("primary-navigation-opportunities").performClick()
         // The browse query is intentionally persisted on-device. Clear any value left by a
         // previous test/run so this assertion verifies the localized empty-state placeholder.
         composeRule.onNode(hasSetTextAction()).performTextReplacement("")
         composeRule.onNodeWithTag("browse-screen-title")
-            .assertTextContains(frenchState.text("navOpportunities"))
+            .assertTextContains(frenchState.text("browse"))
         composeRule.onNodeWithText(frenchState.text("searchPlaceholder")).assertIsDisplayed()
 
         composeRule.runOnIdle {
@@ -158,7 +167,7 @@ class MainActivityTest {
                 .assertTextContains(arabicState.text(destination.catalogKey))
         }
         composeRule.onNodeWithTag("browse-screen-title")
-            .assertTextContains(arabicState.text("navOpportunities"))
+            .assertTextContains(arabicState.text("browse"))
         composeRule.onNodeWithText(arabicState.text("searchPlaceholder")).assertIsDisplayed()
 
         val rootBounds = composeRule.onRoot().getUnclippedBoundsInRoot()
@@ -188,8 +197,17 @@ class MainActivityTest {
 
     @Test
     fun searchStateSurvivesPrimaryNavigation() {
-        composeRule.onNodeWithTag("primary-navigation-opportunities").performClick()
+        composeRule.onNodeWithTag("landing-home").assertIsDisplayed()
+        composeRule.onNodeWithTag("landing-home")
+            .performScrollToNode(hasTestTag("home-browse-all"))
+        composeRule.onNodeWithTag("home-browse-all").assertIsDisplayed().performClick()
+        composeRule.onNodeWithTag("browse-screen-title").assertIsDisplayed()
         composeRule.onNode(hasSetTextAction()).performTextReplacement("Conservation Youth Corps")
+        composeRule.onNode(hasSetTextAction()).assertTextContains(
+            "Conservation Youth Corps",
+            false,
+            true,
+        )
 
         composeRule.onNodeWithTag("primary-navigation-home").performClick()
         composeRule.onNodeWithTag("primary-navigation-opportunities").performClick()
@@ -198,6 +216,30 @@ class MainActivityTest {
             false,
             true,
         )
+    }
+
+    @Test
+    fun homeTopicOpensTheRealCategoryInBrowse() {
+        composeRule.onNodeWithTag("landing-home").assertIsDisplayed()
+        // GTAFreeStemApp uses the activity owner and the default BrowseViewModel key.
+        // Refuse creation: this test must observe the existing app model, never seed or refresh it.
+        val browseViewModel = composeRule.runOnIdle {
+            ViewModelProvider(composeRule.activity, object : ViewModelProvider.Factory {
+                override fun <T : ViewModel> create(modelClass: Class<T>): T =
+                    error("The app's BrowseViewModel must already exist under its default key")
+            })[BrowseViewModel::class.java]
+        }
+        composeRule.waitUntil(timeoutMillis = 60_000) {
+            composeRule.runOnIdle {
+                "Science & Engineering" in browseViewModel.uiState.value.filterOptions.categories
+            }
+        }
+        // Saved filters can push this lazy item below the initial viewport.
+        composeRule.onNodeWithTag("landing-home")
+            .performScrollToNode(hasTestTag("home-topic-Science & Engineering"))
+        composeRule.onNodeWithTag("home-topic-Science & Engineering").performClick()
+        composeRule.onNodeWithTag("browse-screen-title").assertIsDisplayed()
+        composeRule.onNodeWithTag("browse-category-Science & Engineering").assertIsSelected()
     }
 
     @Test

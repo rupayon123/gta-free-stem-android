@@ -29,6 +29,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -44,6 +45,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -62,10 +64,13 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import com.rupayonhaldar.gtafreestem.data.local.AppThemePreference
 import com.rupayonhaldar.gtafreestem.data.local.DisplayNameSaveResult
 import com.rupayonhaldar.gtafreestem.data.local.LocalAccountDataDeletionResult
 import com.rupayonhaldar.gtafreestem.localization.AppLanguage
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.launch
 
 private val PreferenceScreenTopPadding = 16.dp
 private val PreferenceCardSpacing = 14.dp
@@ -84,7 +89,7 @@ fun AccountPreferencesScreen(
     onThemeSelected: (AppThemePreference) -> Boolean,
     onOpportunityAlertsPreferredChanged: (Boolean) -> Boolean,
     onOpenSavedLibrary: () -> Unit,
-    onDeleteAllLocalData: () -> LocalAccountDataDeletionResult,
+    onDeleteAllLocalData: suspend () -> LocalAccountDataDeletionResult,
     onOpenSupport: () -> Unit,
     onOpenPrivacyPolicy: () -> Unit,
     onOpenTerms: () -> Unit,
@@ -92,12 +97,15 @@ fun AccountPreferencesScreen(
 ) {
     val labels = remember(state) { AccountPreferencesLabels(state) }
     val focusManager = LocalFocusManager.current
+    val scope = rememberCoroutineScope()
+    val screenScrollState = rememberScrollState()
     var displayNameDraft by rememberSaveable { mutableStateOf(state.displayName.orEmpty()) }
     var lastAppliedDisplayName by rememberSaveable { mutableStateOf(state.displayName) }
     var displayNameError by rememberSaveable { mutableStateOf<String?>(null) }
     var statusMessage by rememberSaveable(state.resolvedLanguage) { mutableStateOf<String?>(null) }
     var languageDialogVisible by rememberSaveable { mutableStateOf(false) }
     var confirmation by rememberSaveable { mutableStateOf<PendingConfirmation?>(null) }
+    var deletingLocalData by remember { mutableStateOf(false) }
 
     LaunchedEffect(state.displayName) {
         if (state.displayName != lastAppliedDisplayName) {
@@ -138,7 +146,7 @@ fun AccountPreferencesScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
+                    .verticalScroll(screenScrollState)
                     .testTag(AccountPreferencesTestTags.SCREEN),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
@@ -191,8 +199,8 @@ fun AccountPreferencesScreen(
                                 imeAction = ImeAction.Done,
                             ),
                             keyboardActions = KeyboardActions(onDone = { saveDisplayName() }),
-                        )
-                        Button(
+                         shape = MaterialTheme.shapes.small)
+                        Button(shape = MaterialTheme.shapes.small,
                             onClick = ::saveDisplayName,
                             enabled = displayNameDraft.isNotBlank(),
                             modifier = Modifier
@@ -218,7 +226,7 @@ fun AccountPreferencesScreen(
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
-                        OutlinedButton(
+                        OutlinedButton(shape = MaterialTheme.shapes.small,
                             onClick = onOpenSavedLibrary,
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -236,7 +244,7 @@ fun AccountPreferencesScreen(
 
                     PreferencesCard {
                         SectionHeading(labels.languageTitle)
-                        OutlinedButton(
+                        OutlinedButton(shape = MaterialTheme.shapes.small,
                             onClick = { languageDialogVisible = true },
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -319,7 +327,7 @@ fun AccountPreferencesScreen(
                             } else {
                                 labels.deleteProfileAndLocalData
                             },
-                            onClick = { confirmation = PendingConfirmation.DELETE_LOCAL_DATA },
+                            onClick = { if (!deletingLocalData) confirmation = PendingConfirmation.DELETE_LOCAL_DATA },
                             testTag = AccountPreferencesTestTags.DELETE_LOCAL_DATA,
                         )
                     }
@@ -375,23 +383,46 @@ fun AccountPreferencesScreen(
                 onConfirm = {
                     confirmation = null
                     val hadProfile = state.displayName != null
-                    val result = runCatching(onDeleteAllLocalData).getOrElse {
-                        LocalAccountDataDeletionResult(
-                            profileDeleted = false,
-                            searchHistoryDeleted = false,
-                            savedOpportunitiesDeleted = false,
-                        )
-                    }
-                    if (result.profileDeleted) displayNameDraft = ""
-                    statusMessage = if (result.allLocalAccountDataDeleted) {
-                        labels.deletionSuccess(hadProfile)
-                    } else {
-                        labels.deletionFailure(result)
+                    deletingLocalData = true
+                    scope.launch {
+                        val result = try {
+                            onDeleteAllLocalData()
+                        } catch (error: CancellationException) {
+                            throw error
+                        } catch (_: Throwable) {
+                            LocalAccountDataDeletionResult(
+                                profileDeleted = false,
+                                searchHistoryDeleted = false,
+                                savedOpportunitiesDeleted = false,
+                                localAlertsDeleted = false,
+                                namedSearchesDeleted = false,
+                            )
+                        }
+                        if (result.profileDeleted) displayNameDraft = ""
+                        statusMessage = if (result.allLocalAccountDataDeleted) {
+                            labels.deletionSuccess(hadProfile)
+                        } else {
+                            labels.deletionFailure(result)
+                        }
+                        screenScrollState.animateScrollTo(0)
+                        deletingLocalData = false
                     }
                 },
             )
 
             null -> Unit
+        }
+        if (deletingLocalData) Dialog(onDismissRequest = {}) {
+            Surface(shape = MaterialTheme.shapes.medium) {
+                Row(
+                    modifier = Modifier.padding(24.dp).testTag("local-data-progress"),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    CircularProgressIndicator()
+                    Text(labels.deletingLocalData)
+                }
+            }
         }
     }
 }
@@ -574,7 +605,7 @@ private fun DestructiveOutlinedButton(
     onClick: () -> Unit,
     testTag: String,
 ) {
-    OutlinedButton(
+    OutlinedButton(shape = MaterialTheme.shapes.small,
         onClick = onClick,
         modifier = Modifier
             .fillMaxWidth()
@@ -699,7 +730,7 @@ private fun ConfirmLocalActionDialog(
         confirmButton = {
             TextButton(
                 onClick = onConfirm,
-                modifier = Modifier.heightIn(min = 48.dp),
+                modifier = Modifier.heightIn(min = 48.dp).testTag("local-action-confirm"),
                 colors = ButtonDefaults.textButtonColors(
                     contentColor = MaterialTheme.colorScheme.error,
                 ),

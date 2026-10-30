@@ -1,0 +1,17 @@
+Owned-device preferences/settings restored.
+Traceback (most recent call last):
+  File "/tmp/gta-stage2-parity/capture-api26.py", line 73, in <module>
+    sh('cmd','uimode','night','yes');tap('Home');screen('home-dark');sh('settings','put','system','font_scale','2.0');launch();tap('Home');center_label('Science & Engineering');screen('science-complete-max-dark')
+  File "/tmp/gta-stage2-parity/capture-api26.py", line 9, in screen
+    root=tree();(out/(name+'.xml')).write_bytes(E.tostring(root))
+  File "/tmp/gta-stage2-parity/capture-api26.py", line 7, in tree
+    sh('uiautomator','dump','/sdcard/gta-stage2.xml');xml=sh('cat','/sdcard/gta-stage2.xml');(out/'last-window.xml').write_text(xml);return E.fromstring(xml)
+  File "/tmp/gta-stage2-parity/capture-api26.py", line 5, in sh
+    def sh(*args):return subprocess.check_output(a+['shell',*args],text=True)
+  File "/Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/subprocess.py", line 424, in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+  File "/Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/subprocess.py", line 507, in run
+    stdout, stderr = process.communicate(input, timeout=timeout)
+  File "/Applications/Xcode.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/subprocess.py", line 1121, in communicate
+    stdout = self.stdout.read()
+KeyboardInterrupt

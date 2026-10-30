@@ -51,7 +51,7 @@ class ScreenTransitionTest {
         val homePane = SemanticsMatcher.expectValue(SemanticsProperties.PaneTitle, "Home")
         val opportunitiesPane = SemanticsMatcher.expectValue(
             SemanticsProperties.PaneTitle,
-            "Opportunities",
+            "Browse",
         )
 
         composeRule.onAllNodes(homePane, useUnmergedTree = true).assertCountEquals(1)

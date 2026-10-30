@@ -11,7 +11,7 @@ import org.junit.Test
 
 class BrowseSearchStateStoreTest {
     @Test
-    fun `query every filter and sort survive a JSON persistence round trip`() {
+    fun `query supported filters and sort survive a JSON persistence round trip`() {
         val persistence = InMemoryPersistence()
         val first = PersistentBrowseSearchStateStore(persistence)
         val expected = BrowseSearchState(
@@ -40,8 +40,26 @@ class BrowseSearchStateStoreTest {
         assertTrue(first.write(expected))
         val restored = PersistentBrowseSearchStateStore(persistence).read()
 
-        assertEquals(expected, restored)
+        assertEquals(expected.copy(filters = expected.filters.copy(language = null)), restored)
         assertTrue(persistence.stateJson.orEmpty().contains("\"schemaVersion\":1"))
+    }
+
+    @Test
+    fun `legacy program language is cleared on restore without discarding other search choices`() {
+        val persistence = InMemoryPersistence(
+            """{"schemaVersion":1,"query":"robotics","filters":{"region":"Toronto","city":"Toronto","category":"Coding & Robotics","age":12,"language":"ja"}}""",
+        )
+        val store = PersistentBrowseSearchStateStore(persistence)
+
+        val restored = store.read()
+        assertEquals("robotics", restored.query)
+        assertEquals("Toronto", restored.filters.region)
+        assertEquals("Toronto", restored.filters.city)
+        assertEquals("Coding & Robotics", restored.filters.category)
+        assertEquals(12, restored.filters.age)
+        assertNull(restored.filters.language)
+        assertTrue(store.write(restored))
+        assertFalse(persistence.stateJson.orEmpty().contains("\"language\":\"ja\""))
     }
 
     @Test

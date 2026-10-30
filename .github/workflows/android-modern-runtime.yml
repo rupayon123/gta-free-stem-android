@@ -45,6 +45,23 @@ jobs:
           [[ "$EXPECTED_SOURCE_SHA" =~ ^[0-9a-f]{40}$ ]]
           test "$(git rev-parse HEAD)" = "$EXPECTED_SOURCE_SHA"
           test "$CANDIDATE_SOURCE_SHA" = "$EXPECTED_SOURCE_SHA"
+          # A newly tracked app source or test must be explicitly reviewed and hashed.
+          python3 - <<'PY'
+          from pathlib import Path
+          import subprocess
+
+          manifest = Path('.github/native-ci-source.sha256')
+          entries = [line.split('  ', 1)[1] for line in manifest.read_text().splitlines()]
+          if len(entries) != len(set(entries)):
+              raise SystemExit('Duplicate path in reviewed-source manifest')
+          required = set(subprocess.check_output(
+              ['git', 'ls-files', 'app/src', 'app/build.gradle.kts', 'scripts/verify-release-config.sh'],
+              text=True,
+          ).splitlines())
+          missing = sorted(required - set(entries))
+          if missing:
+              raise SystemExit('Unreviewed source files missing from manifest: ' + ', '.join(missing))
+          PY
           sha256sum -c .github/native-ci-source.sha256
           case "$API_LEVEL" in 35|36) ;; *) exit 1 ;; esac
           test -z "$(git status --porcelain)"

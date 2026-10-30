@@ -1,11 +1,13 @@
 package com.rupayonhaldar.gtafreestem.ui.shell
 
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.test.DeviceConfigurationOverride
 import androidx.compose.ui.test.ForcedSize
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.getUnclippedBoundsInRoot
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
@@ -18,6 +20,7 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import com.rupayonhaldar.gtafreestem.theme.GTAFreeStemTheme
+import com.rupayonhaldar.gtafreestem.theme.GTAFreeStemContentTheme
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Rule
@@ -179,6 +182,48 @@ class AppShellLargeTextTest {
             composeRule.runOnIdle {
                 assertEquals(destination, selectedDestination)
             }
+        }
+    }
+
+    @Test
+    fun approvedContentFontKeepsEnglishNavigationWordsWholeAtMaximumText() {
+        val labels = mapOf(
+            PrimaryDestination.HOME to "Home",
+            PrimaryDestination.OPPORTUNITIES to "Browse",
+            PrimaryDestination.HIGH_SCHOOL to "High School",
+            PrimaryDestination.SUPPORT to "Support",
+            PrimaryDestination.ACCOUNT to "Profile",
+        )
+        val selected = mutableStateOf(PrimaryDestination.OPPORTUNITIES)
+        composeRule.setContent {
+            DeviceConfigurationOverride(DeviceConfigurationOverride.ForcedSize(DpSize(360.dp, 640.dp))) {
+                val density = LocalDensity.current
+                CompositionLocalProvider(LocalDensity provides Density(density.density, fontScale = 2f)) {
+                    GTAFreeStemTheme {
+                        GTAFreeStemContentTheme(darkTheme = true) {
+                            AdaptiveAppShell(
+                                selectedDestination = selected.value,
+                                onDestinationSelected = { selected.value = it },
+                                showNavigation = true,
+                                destinationLabel = labels::getValue,
+                            ) {}
+                        }
+                    }
+                }
+            }
+        }
+        PrimaryDestination.entries.forEach { destination ->
+            val label = labels.getValue(destination)
+            val tab = composeRule.onNodeWithTag("primary-navigation-${destination.name.lowercase()}")
+            tab.assertIsDisplayed().performClick().assertIsSelected()
+            val bounds = tab.getUnclippedBoundsInRoot()
+            assertTrue("$label requires a full touch target", bounds.bottom - bounds.top >= 48.dp && bounds.right - bounds.left >= 48.dp)
+            val layout = assertCompleteLabel(label, tab).textLayoutResult(label)
+            for (line in 0 until layout.lineCount - 1) {
+                val end = layout.getLineEnd(line, visibleEnd = true)
+                assertTrue("$label must wrap between words, never inside one", end == label.length || label[end].isWhitespace())
+            }
+            composeRule.runOnIdle { assertEquals(destination, selected.value) }
         }
     }
 

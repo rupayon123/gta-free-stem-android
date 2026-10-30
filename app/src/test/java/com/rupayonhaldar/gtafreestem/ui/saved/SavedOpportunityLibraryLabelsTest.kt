@@ -8,6 +8,7 @@ import com.rupayonhaldar.gtafreestem.localization.AppStringCatalog
 import java.io.File
 import java.time.Instant
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
@@ -54,6 +55,7 @@ class SavedOpportunityLibraryLabelsTest {
         assertEquals("Biblioteca Central", card.organization)
         assertEquals("Construye un robot sin costo.", card.summary)
         assertTrue(card.facts.any { fact -> fact.label == "Costo" && fact.value == "Gratis" })
+        assertFalse(card.facts.any { fact -> fact.label == "Idiomas" })
         assertEquals("Laptop provided", entry.opportunity.equipment)
         assertEquals(opportunity, entry.opportunity)
     }

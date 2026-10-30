@@ -61,7 +61,6 @@ internal class SavedOpportunityLibraryLabels(
     val ends = text("endDate", "Ends")
     val deadline = text("deadline", "Deadline")
     val cost = text("cost", "Cost")
-    val languages = text("languages", "Languages")
     val virtual = text("virtual", "Virtual")
     val savedOnLabel = text("savedOn", "Saved")
 
@@ -125,12 +124,6 @@ internal class SavedOpportunityLibraryLabels(
     fun opportunityDate(raw: String): String =
         OpportunitySchedule.dateTime(raw, Locale.forLanguageTag(language.localeTag)) ?: raw
 
-    fun languageName(rawTag: String): String {
-        val knownLanguage = AppLanguage.matching(rawTag)
-        return knownLanguage?.let(catalog::metadata)?.nativeName
-            ?: rawTag.trim().ifEmpty { rawTag }
-    }
-
     private fun text(
         key: String,
         englishFallback: String,
@@ -174,7 +167,9 @@ internal fun savedOpportunityCardText(
                 .ifBlank { if (opportunity.virtual) labels.virtual else "" }
         }
         if (location.isNotBlank()) add(SavedOpportunityFact(labels.location, location))
-        add(SavedOpportunityFact(labels.ages, ageRange(opportunity)))
+        ageRange(opportunity)?.let { age ->
+            add(SavedOpportunityFact(labels.ages, age))
+        }
         opportunity.startDate?.nonBlank()?.let { date ->
             add(SavedOpportunityFact(labels.starts, labels.opportunityDate(date)))
         }
@@ -189,17 +184,6 @@ internal fun savedOpportunityCardText(
         localized.cost.nonBlank()?.let { cost ->
             add(SavedOpportunityFact(labels.cost, cost))
         }
-        opportunity.languages
-            .mapNotNull(String::nonBlank)
-            .takeIf(List<String>::isNotEmpty)
-            ?.let { languageTags ->
-                add(
-                    SavedOpportunityFact(
-                        labels.languages,
-                        languageTags.joinToString(", ", transform = labels::languageName),
-                    ),
-                )
-            }
     }
     return SavedOpportunityCardText(
         title = localized.title,
@@ -220,7 +204,8 @@ internal fun archiveStatusExplanation(
     labels.expiredOrInactiveExplanation()
 }
 
-private fun ageRange(opportunity: Opportunity): String = when {
+private fun ageRange(opportunity: Opportunity): String? = when {
+    opportunity.ageMin <= 0 && opportunity.ageMax == null -> null
     opportunity.ageMax == null -> "${opportunity.ageMin}+"
     opportunity.ageMax == opportunity.ageMin -> opportunity.ageMin.toString()
     else -> "${opportunity.ageMin}–${opportunity.ageMax}"

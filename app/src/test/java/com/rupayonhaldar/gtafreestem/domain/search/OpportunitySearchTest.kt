@@ -104,7 +104,7 @@ class OpportunitySearchTest {
     }
 
     @Test
-    fun `region city category exact age and language filters combine with AND`() {
+    fun `region city category and exact age filters combine with AND`() {
         val match = opportunity(
             id = "match",
             region = "Toronto",
@@ -121,7 +121,6 @@ class OpportunitySearchTest {
             city = "TORONTO",
             category = "coding & robotics",
             age = 12,
-            language = "fr",
         )
 
         assertEquals(
@@ -156,23 +155,15 @@ class OpportunitySearchTest {
     }
 
     @Test
-    fun `language matching accepts locale aliases but not a different language`() {
-        val opportunity = opportunity("mandarin", languages = listOf("zh-Hans", "en-CA"))
+    fun `legacy program language selection cannot hide an otherwise matching listing`() {
+        val englishSource = opportunity("english-source", languages = listOf("en"))
+        val filters = OpportunitySearchFilters(language = "ja")
 
+        assertEquals(null, filters.normalized().language)
         assertEquals(
-            listOf("mandarin"),
-            OpportunitySearch.search(
-                listOf(opportunity),
-                filters = OpportunitySearchFilters(language = "zh"),
-                now = now,
-            ).map(Opportunity::id),
-        )
-        assertTrue(
-            OpportunitySearch.search(
-                listOf(opportunity),
-                filters = OpportunitySearchFilters(language = "fr"),
-                now = now,
-            ).isEmpty(),
+            listOf("english-source"),
+            OpportunitySearch.search(listOf(englishSource), filters = filters, now = now)
+                .map(Opportunity::id),
         )
     }
 
